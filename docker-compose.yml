@@ -1,0 +1,41 @@
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./docker-volumes/postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - microservices-banking
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - microservices-banking
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    hostname: redis
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB;FLUSHALL
+    networks:
+      - microservices-banking
+
+networks:
+  microservices-banking:
+    driver: bridge
+
+volumes:
+  docker-volumes:

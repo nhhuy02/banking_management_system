@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: banking-account-service
+          uri: http://localhost:6700
+          predicates:
+            - Path=/api/v1/bank-accounts/**
+
+server:
+  port: 9999
