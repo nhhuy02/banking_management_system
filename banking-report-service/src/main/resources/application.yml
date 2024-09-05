@@ -1,0 +1,13 @@
+service:
+  config-service:
+    endpoint: http://localhost
+    port: 8888
+
+server:
+  port: 8086
+
+spring:
+  application:
+    name: banking-report-service
+  config:
+    import: optional:configserver:${service.config-service.endpoint}:${service.config-service.port}
