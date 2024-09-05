@@ -12,6 +12,20 @@ services:
     restart: unless-stopped
     networks:
       - microservices-banking
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./docker-volumes/mysql:/data/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - microservices-banking
+
 
   zipkin:
     container_name: zipkin
@@ -33,6 +47,37 @@ services:
     networks:
       - microservices-banking
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+    networks:
+      - microservices-banking
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./docker-volumes/kafka:/data/kafka
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
+    networks:
+      - microservices-banking
 networks:
   microservices-banking:
     driver: bridge
