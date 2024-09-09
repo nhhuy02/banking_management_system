@@ -1,5 +1,6 @@
 package com.ctv_it.klb.dto.fetch.response;
 
+import com.ctv_it.klb.dto.base.RepaymentScheduleInfoDTO;
 import com.ctv_it.klb.dto.base.TransactionInfoDTO;
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +15,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FetchTransactionServiceResponseDTO {
+public class FetchLoanServiceResponseDTO {
 
   private UUID accountId;
-  List<TransactionInfoDTO> transactions;
+  List<RepaymentScheduleInfoDTO> repaymentSchedules;
 }

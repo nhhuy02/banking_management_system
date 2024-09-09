@@ -17,5 +17,5 @@ import lombok.ToString;
 public class FetchAccountServiceResponseDTO {
 
   private UUID customerId;
-  List<AccountInfoDTO> accountInfoDTOS;
+  List<AccountInfoDTO> accounts;
 }

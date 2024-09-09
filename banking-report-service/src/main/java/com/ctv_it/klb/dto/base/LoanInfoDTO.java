@@ -1,5 +1,6 @@
 package com.ctv_it.klb.dto.base;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +19,8 @@ import lombok.ToString;
 public class LoanInfoDTO {
   private UUID loanId;
   private String loanType;
-  private double outstandingBalance;
-  private double interestRate;
+  private BigDecimal outstandingBalance;
+  private BigDecimal interestRate;
   private int loanTerm;
   private LocalDate startDate;
   private LocalDate endDate;
