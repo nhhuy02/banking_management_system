@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.request.filter;
+package com.ctv_it.klb.dto.filter;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
