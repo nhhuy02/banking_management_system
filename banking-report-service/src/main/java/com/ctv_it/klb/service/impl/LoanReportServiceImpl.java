@@ -1,5 +1,6 @@
 package com.ctv_it.klb.service.impl;
 
+import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.LoanReportDTO;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.ReportService;
@@ -13,7 +14,7 @@ public class LoanReportServiceImpl implements ReportService<LoanReportDTO> {
 
   @Override
   public LoanReportDTO generate(Map<String, Object> filters) {
-    log.info("LoanReportServiceImpl called");
+    log.info(Translator.toLocale("CALLED", "LoanReportServiceImpl"));
     return null;
   }
 

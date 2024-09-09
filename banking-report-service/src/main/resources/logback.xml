@@ -5,11 +5,7 @@
         <Pattern>
           %white(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %green(%C): %msg%n%throwable
         </Pattern>
-        <maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern>
         <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
-        <maskPattern>\"password\"\s*:\s*\"(.*?)\"</maskPattern>
-        <maskPattern>\"Token\"\s*:\s*\"(.*?)\"</maskPattern>
-        <maskPattern>\"authorization\"\s*:\s*\"(.*?)\"</maskPattern>
       </layout>
     </encoder>
   </appender>
@@ -18,15 +14,12 @@
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
       <layout class="com.ctv_it.klb.util.MaskingPatternLayout">
         <Pattern>%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable</Pattern>
-        <maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern>
         <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
-        <maskPattern>\"Token\"\s*:\s*\"(.*?)\"</maskPattern>
-        <maskPattern>\"authorization\"\s*:\s*\"(.*?)\"</maskPattern>
       </layout>
     </encoder>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logs/report-service--%d{yyyy-MM-dd}--v%i.log</fileNamePattern>
+      <fileNamePattern>./banking-report-service/logs/report-service--%d{yyyy-MM-dd}--v%i.log</fileNamePattern>
       <maxHistory>100</maxHistory>
       <timeBasedFileNamingAndTriggeringPolicy
         class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
