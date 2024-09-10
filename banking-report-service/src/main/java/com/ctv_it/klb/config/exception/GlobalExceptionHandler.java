@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  // Not Found (404)
   @ExceptionHandler(NotFoundExceptionCustomize.class)
   public ResponseEntity<ErrorResponseDTO> handleNotFoundException(
       NotFoundExceptionCustomize ex, HttpServletRequest request) {
@@ -33,7 +32,6 @@ public class GlobalExceptionHandler {
             .build());
   }
 
-  // Conflict (409)
   @ExceptionHandler(ConflictExceptionCustomize.class)
   public ResponseEntity<ErrorResponseDTO> handleConflictException(
       ConflictExceptionCustomize ex, HttpServletRequest request) {
@@ -48,7 +46,6 @@ public class GlobalExceptionHandler {
             .build());
   }
 
-  // BadRequest (400)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -62,7 +59,6 @@ public class GlobalExceptionHandler {
       // Resolve the default message to the localized message
       String localizedMessage = Translator.toLocale(defaultMessage);
 
-      // Add the localized message to errors map
       errors.put(field, localizedMessage);
     }
 
@@ -87,6 +83,20 @@ public class GlobalExceptionHandler {
             .url(request.getServletPath())
             .code(HttpStatus.BAD_REQUEST.value())
             .details(ex.getErrors())
+            .build());
+  }
+
+  @ExceptionHandler(InternalError.class)
+  public ResponseEntity<ErrorResponseDTO> handleInternalError(
+      InternalError ex, HttpServletRequest request) {
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(ErrorResponseDTO.builder()
+            .status(getErrorStatus())
+            .message(ex.getMessage())
+            .url(request.getServletPath())
+            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .details(null)
             .build());
   }
 
