@@ -1,14 +1,14 @@
 package com.ctv_it.klb.config.exception;
 
 import com.ctv_it.klb.config.i18n.Translator;
+import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
             .message(ex.getMessage())
             .url(request.getServletPath())
             .code(HttpStatus.NOT_FOUND.value())
-            .details(ex.getErrors())
+            .errors(ex.getErrors())
             .build());
   }
 
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
             .message(ex.getMessage())
             .url(request.getServletPath())
             .code(HttpStatus.CONFLICT.value())
-            .details(ex.getErrors())
+            .errors(ex.getErrors())
             .build());
   }
 
@@ -50,26 +50,23 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-    Map<String, Object> errors = new HashMap<>();
+    List<ErrorDetailDTO> errors = ex.getBindingResult().getFieldErrors().stream()
+        .map(fieldError -> ErrorDetailDTO.builder()
+            .field(fieldError.getField())
+            .rejectedValue(fieldError.getRejectedValue())
+            .message(Translator.toLocale(fieldError.getDefaultMessage()))
+            .build())
+        .collect(Collectors.toList());
 
-    for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-      String field = fieldError.getField();
-      String defaultMessage = fieldError.getDefaultMessage();
+    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+        .status(getErrorStatus())
+        .message(Translator.toLocale("error.invalid.data"))
+        .url(request.getServletPath())
+        .code(HttpStatus.BAD_REQUEST.value())
+        .errors(errors)
+        .build();
 
-      // Resolve the default message to the localized message
-      String localizedMessage = Translator.toLocale(defaultMessage);
-
-      errors.put(field, localizedMessage);
-    }
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body(ErrorResponseDTO.builder()
-            .status(getErrorStatus())
-            .message(Translator.toLocale("error.invalid.data"))
-            .url(request.getServletPath())
-            .code(HttpStatus.BAD_REQUEST.value())
-            .details(errors)
-            .build());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   @ExceptionHandler(InvalidExceptionCustomize.class)
@@ -82,7 +79,7 @@ public class GlobalExceptionHandler {
             .message(ex.getMessage())
             .url(request.getServletPath())
             .code(HttpStatus.BAD_REQUEST.value())
-            .details(ex.getErrors())
+            .errors(ex.getErrors())
             .build());
   }
 
@@ -96,7 +93,7 @@ public class GlobalExceptionHandler {
             .message(ex.getMessage())
             .url(request.getServletPath())
             .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .details(null)
+            .errors(null)
             .build());
   }
 
