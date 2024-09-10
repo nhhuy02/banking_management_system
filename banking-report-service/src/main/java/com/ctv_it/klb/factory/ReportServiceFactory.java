@@ -16,15 +16,15 @@ public class ReportServiceFactory {
   public ReportServiceFactory(List<ReportService<?>> reportServices) {
     this.reportServiceMap = reportServices.stream()
         .collect(Collectors.toMap(
-            service -> service.getReportType().name().toLowerCase(),
+            service -> service.getReportType().name(),
             service -> service));
   }
 
   public ReportService<?> getReportService(String reportType) {
-    ReportService<?> reportService = reportServiceMap.get(reportType.toLowerCase());
-    if (reportService == null) {
-      throw new IllegalArgumentException("Invalid ReportType: " + reportType);
-    }
-    return reportService;
+    return reportServiceMap.get(reportType);
+  }
+
+  public String getReportServiceTypes() {
+    return reportServiceMap.keySet().toString();
   }
 }

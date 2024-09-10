@@ -1,6 +1,8 @@
 package com.ctv_it.klb.service.impl;
 
-import com.ctv_it.klb.dto.LoanReportDTO;
+import com.ctv_it.klb.config.i18n.Translator;
+import com.ctv_it.klb.dto.base.LoanReportDTO;
+import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.ReportService;
 import java.util.Map;
@@ -12,8 +14,8 @@ import org.springframework.stereotype.Service;
 public class LoanReportServiceImpl implements ReportService<LoanReportDTO> {
 
   @Override
-  public LoanReportDTO generate(Map<String, Object> filters) {
-    log.info("LoanReportServiceImpl called");
+  public LoanReportDTO generate(ReportFilterDTO filterDTO) {
+    log.info(Translator.toLocale("CALLED", "LoanReportServiceImpl"));
     return null;
   }
 

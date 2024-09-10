@@ -1,0 +1,40 @@
+<configuration>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="Console">
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="com.ctv_it.klb.util.MaskingPatternLayout">
+        <Pattern>
+          %white(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %green(%C): %msg%n%throwable
+        </Pattern>
+        <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
+      </layout>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RollingFile">
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="com.ctv_it.klb.util.MaskingPatternLayout">
+        <Pattern>%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable</Pattern>
+        <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
+      </layout>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>./banking-report-service/logs/report-service--%d{yyyy-MM-dd}--v%i.log</fileNamePattern>
+      <maxHistory>100</maxHistory>
+      <timeBasedFileNamingAndTriggeringPolicy
+        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <logger additivity="false" level="trace" name="com.example.logback">
+    <appender-ref ref="RollingFile"/>
+    <appender-ref ref="Console"/>
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="RollingFile"/>
+    <appender-ref ref="Console"/>
+  </root>
+</configuration>

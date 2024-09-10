@@ -1,18 +1,16 @@
 package com.ctv_it.klb.dto.response;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @ToString(callSuper = true)
 public class ErrorResponseDTO extends BaseResponseDTO {
 
-  private String errorCode;
-  private String details;
+  private List<ErrorDetailDTO> errors;
 }
