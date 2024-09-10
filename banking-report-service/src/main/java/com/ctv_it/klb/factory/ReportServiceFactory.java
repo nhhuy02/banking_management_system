@@ -1,6 +1,5 @@
 package com.ctv_it.klb.factory;
 
-import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
 import com.ctv_it.klb.service.ReportService;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +21,10 @@ public class ReportServiceFactory {
   }
 
   public ReportService<?> getReportService(String reportType) {
-    ReportService<?> reportService = reportServiceMap.get(reportType);
-    if (reportService == null) {
-      throw new InvalidExceptionCustomize(
-          Map.of("reportType", reportType,
-              "acceptedReportTypes", reportServiceMap.keySet()));
-    }
-    return reportService;
+    return reportServiceMap.get(reportType);
+  }
+
+  public String getReportServiceTypes() {
+    return reportServiceMap.keySet().toString();
   }
 }
