@@ -6,6 +6,7 @@ import com.ctv_it.klb.dto.response.SuccessResponseDTO;
 import com.ctv_it.klb.factory.ReportServiceFactory;
 import com.ctv_it.klb.service.ReportService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +24,21 @@ public class ReportController {
 
   @PostMapping("")
   public ResponseEntity<?> generateReport(HttpServletRequest request,
-      @RequestBody ReportRequestDTO requestDTO) {
+      @Valid @RequestBody ReportRequestDTO requestDTO) {
 
-    ReportService<?> reportService = reportServiceFactory.getReportService(requestDTO.getType());
+    ReportService<?> reportService = reportServiceFactory.getReportService(
+        requestDTO.getReportType());
 
-    Object report = reportService.generate(requestDTO.getFilters());
+    Object report = reportService.generate(requestDTO.getReportFilters());
 
-    return ResponseEntity.ok(SuccessResponseDTO.<Object>builder()
+    SuccessResponseDTO successResponseDTO = SuccessResponseDTO.builder()
         .status(Translator.toLocale("status.successfully"))
         .code(HttpStatus.OK.value())
         .url(request.getServletPath())
         .data(report)
-        .build());
+        .build();
+
+    return ResponseEntity.ok(successResponseDTO);
   }
+
 }

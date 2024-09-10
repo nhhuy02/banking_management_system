@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString(callSuper = true)
-public class SuccessResponseDTO<T> extends BaseResponseDTO {
+public class SuccessResponseDTO extends BaseResponseDTO {
 
-  T data;
+  Object data;
 }
