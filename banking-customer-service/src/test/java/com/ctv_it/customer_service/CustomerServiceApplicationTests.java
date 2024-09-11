@@ -1,13 +1,13 @@
-package com.ojt.klb;
+package com.ctv_it.customer_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BankingCustomerServiceApplicationTests {
+class CustomerServiceApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
