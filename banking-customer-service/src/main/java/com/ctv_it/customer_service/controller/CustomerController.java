@@ -2,6 +2,7 @@ package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
+import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomerService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -28,54 +28,60 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<?> getCustomerByAccount(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<CustomerDto>> getCustomerByAccount(@PathVariable Long accountId) {
         logger.info("Get customer by account id {}", accountId);
         Optional<CustomerDto> customerDto = customerService.getCustomerByAccountId(accountId);
         if (customerDto.isPresent()) {
-            return ResponseEntity.ok(customerDto.get());
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Customer found for account ID: " + accountId , true, customerDto.get());
+            return ResponseEntity.ok(response);
         } else {
             logger.warn("Not found for account ID: {}", accountId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found found for account ID: " + accountId);
-
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Not found for account ID: " + accountId, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
-
     @GetMapping("/byId/{Id}")
-    public ResponseEntity<?> getCustomerById(@PathVariable Long Id) {
+    public ResponseEntity<ApiResponse<CustomerDto>> getCustomerById(@PathVariable Long Id) {
         logger.info("Get customer by id {}", Id);
         Optional<CustomerDto> customerDto = customerService.getCustomerById(Id);
         if (customerDto.isPresent()) {
-            return ResponseEntity.ok(customerDto.get());
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Customer found for customer ID: " + Id, true, customerDto.get());
+            return ResponseEntity.ok(response);
         } else {
             logger.warn("Not found for customer ID: {}", Id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found for customer ID: " + Id);
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Not found for customer ID: " + Id, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
+    public ResponseEntity<ApiResponse<List<CustomerDto>>> getAllCustomers() {
         List<CustomerDto> customers = customerService.getAllCustomers();
-        return ResponseEntity.ok(customers);
+        ApiResponse<List<CustomerDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Customers retrieved", true, customers);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{accountId}")
-    public ResponseEntity<String> updateCustomer(
+    public ResponseEntity<ApiResponse<String>> updateCustomer(
             @PathVariable Long accountId,
             @Valid @RequestBody CustomerUpdateDto customerUpdateDto) {
         try {
             customerService.updateCustomer(accountId, customerUpdateDto);
             String successMessage = "Customer with accountId " + accountId + " updated successfully.";
             logger.info(successMessage);
-            return ResponseEntity.ok(successMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), successMessage, true, null);
+            return ResponseEntity.ok(response);
         } catch (EntityNotFoundException ex) {
             String errorMessage = "Customer with accountId " + accountId + " not found.";
             logger.warn(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception ex) {
             String errorMessage = "An error occurred while updating the customer.";
             logger.warn("Error updating customer with accountId {}", accountId);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

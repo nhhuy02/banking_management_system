@@ -2,6 +2,7 @@ package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.KycDto;
 import com.ctv_it.customer_service.dto.KycResponseDto;
+import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.KycService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -28,29 +29,33 @@ public class KycController {
     private KycService kycService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateKyc(@PathVariable Long id, @Valid @RequestBody KycDto updatedKyc) {
+    public ResponseEntity<ApiResponse<String>> updateKyc(@PathVariable Long id, @Valid @RequestBody KycDto updatedKyc) {
         try {
             KycDto kyc = kycService.updateKyc(id, updatedKyc);
             String successMessage = "KYC with ID " + id + " updated successfully.";
             logger.info(successMessage);
-            return ResponseEntity.ok(successMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), successMessage, true, null);
+            return ResponseEntity.ok(response);
         } catch (EntityNotFoundException ex) {
             String errorMessage = "KYC with ID " + id + " not found.";
             logger.warn(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (MethodArgumentNotValidException ex) {
             String errorMessage = "Validation failed: " + ex.getBindingResult().getAllErrors().toString();
             logger.warn(errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (Exception ex) {
             String errorMessage = "An error occurred while updating KYC.";
             logger.error("Error updating KYC with ID " + id, ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getKycById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<KycResponseDto>> getKycById(@PathVariable Long id) {
         logger.info("Fetching KYC details for id: {}", id);
 
         Optional<KycResponseDto> kycResponseDtoOptional = kycService.getKycById(id);
@@ -61,17 +66,17 @@ public class KycController {
             if (kycResponseDto.getVerificationStatus().equals("pending") &&
                     (kycResponseDto.getDocumentType() == null && kycResponseDto.getDocumentNumber() == null)) {
                 logger.warn("KYC details for id: {} are incomplete, requires update.", id);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("KYC details are incomplete. Please update your KYC information.");
+                ApiResponse<KycResponseDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "KYC details are incomplete. Please update your KYC information.", false, null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             } else {
                 logger.info("Successfully fetched KYC details for id: {}", id);
-                return ResponseEntity.ok(kycResponseDto);
+                ApiResponse<KycResponseDto> response = new ApiResponse<>(HttpStatus.OK.value(), "KYC details retrieved successfully", true, kycResponseDto);
+                return ResponseEntity.ok(response);
             }
         } else {
             logger.warn("KYC not found for id: {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("KYC not found with id: " + id);
+            ApiResponse<KycResponseDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "KYC not found with id: " + id, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }
-
