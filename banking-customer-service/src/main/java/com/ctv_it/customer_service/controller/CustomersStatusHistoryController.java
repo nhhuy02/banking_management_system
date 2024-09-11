@@ -1,6 +1,7 @@
 package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.CustomersStatusHistoryDto;
+import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,26 +23,30 @@ public class CustomersStatusHistoryController {
     private CustomersStatusHistoryService customersStatusHistoryService;
 
     @GetMapping("/{customerId}/latest")
-    public ResponseEntity<?> getLatestStatusByCustomerId(@PathVariable Long customerId) {
+    public ResponseEntity<ApiResponse<CustomersStatusHistoryDto>> getLatestStatusByCustomerId(@PathVariable Long customerId) {
         logger.info("Received request to get latest status for customer ID: {}", customerId);
         Optional<CustomersStatusHistoryDto> dto = customersStatusHistoryService.getLatestStatusByCustomerId(customerId);
         if (dto.isPresent()) {
-            return ResponseEntity.ok(dto.get());
+            ApiResponse<CustomersStatusHistoryDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Latest status found", true, dto.get());
+            return ResponseEntity.ok(response);
         } else {
             logger.warn("No latest status found for customer ID: {}", customerId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No latest status found for customer ID: " + customerId);
+            ApiResponse<CustomersStatusHistoryDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "No latest status found for customer ID: " + customerId, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @GetMapping("/{customerId}/all")
-    public ResponseEntity<?> getAllStatusByCustomerId(@PathVariable Long customerId) {
+    public ResponseEntity<ApiResponse<List<CustomersStatusHistoryDto>>> getAllStatusByCustomerId(@PathVariable Long customerId) {
         logger.info("Received request to get all statuses for customer ID: {}", customerId);
         Optional<List<CustomersStatusHistoryDto>> dto = customersStatusHistoryService.getAllStatusByCustomerId(customerId);
         if (dto.isPresent() && !dto.get().isEmpty()) {
-            return ResponseEntity.ok(dto.get());
+            ApiResponse<List<CustomersStatusHistoryDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Statuses found", true, dto.get());
+            return ResponseEntity.ok(response);
         } else {
             logger.warn("No statuses found for customer ID: {}", customerId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find any statuses for customer ID: " + customerId);
+            ApiResponse<List<CustomersStatusHistoryDto>> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "No statuses found for customer ID: " + customerId, false, null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }
