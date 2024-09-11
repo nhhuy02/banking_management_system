@@ -13,8 +13,8 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public abstract class BaseResponseDTO {
 
-  protected String status;
-  protected int code;
+  protected boolean success;
+  protected int status;
   protected String message;
   protected String url;
   @Builder.Default

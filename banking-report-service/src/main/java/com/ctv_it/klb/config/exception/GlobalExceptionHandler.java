@@ -24,10 +24,10 @@ public class GlobalExceptionHandler {
     log.error("Not found exception: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(ErrorResponseDTO.builder()
-            .status(getErrorStatus())
+            .success(Boolean.FALSE)
             .message(ex.getMessage())
             .url(request.getServletPath())
-            .code(HttpStatus.NOT_FOUND.value())
+            .status(HttpStatus.NOT_FOUND.value())
             .errors(ex.getErrors())
             .build());
   }
@@ -38,10 +38,10 @@ public class GlobalExceptionHandler {
     log.error("Conflict exception: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.CONFLICT)
         .body(ErrorResponseDTO.builder()
-            .status(getErrorStatus())
+            .success(Boolean.FALSE)
             .message(ex.getMessage())
             .url(request.getServletPath())
-            .code(HttpStatus.CONFLICT.value())
+            .status(HttpStatus.CONFLICT.value())
             .errors(ex.getErrors())
             .build());
   }
@@ -59,10 +59,10 @@ public class GlobalExceptionHandler {
         .collect(Collectors.toList());
 
     ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
-        .status(getErrorStatus())
+        .success(Boolean.FALSE)
         .message(Translator.toLocale("error.invalid.data"))
         .url(request.getServletPath())
-        .code(HttpStatus.BAD_REQUEST.value())
+        .status(HttpStatus.BAD_REQUEST.value())
         .errors(errors)
         .build();
 
@@ -75,10 +75,10 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(ErrorResponseDTO.builder()
-            .status(getErrorStatus())
+            .success(Boolean.FALSE)
             .message(ex.getMessage())
             .url(request.getServletPath())
-            .code(HttpStatus.BAD_REQUEST.value())
+            .status(HttpStatus.BAD_REQUEST.value())
             .errors(ex.getErrors())
             .build());
   }
@@ -89,15 +89,11 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ErrorResponseDTO.builder()
-            .status(getErrorStatus())
+            .success(Boolean.FALSE)
             .message(ex.getMessage())
             .url(request.getServletPath())
-            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .errors(null)
             .build());
-  }
-
-  private String getErrorStatus() {
-    return Translator.toLocale("status.unsuccessfully");
   }
 }

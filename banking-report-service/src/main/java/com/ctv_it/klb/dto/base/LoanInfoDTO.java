@@ -17,15 +17,18 @@ import lombok.ToString;
 @Setter
 @ToString
 public class LoanInfoDTO {
-  private UUID loanId;
+
+  private UUID id;
   private String loanType;
   private BigDecimal amount;
   private BigDecimal interestRate;
   private int loanTerm;
   private LocalDate startDate;
   private LocalDate endDate;
+  private LocalDate maturityDate;
   private LocalDate repaymentSchedule;
   private int loanTermPaid;
   private BigDecimal amountPaid;
   private String status;
+  private BigDecimal latePaymentPenalty;
 }

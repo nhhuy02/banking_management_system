@@ -1,12 +1,10 @@
-package com.ctv_it.klb.dto.fetch.response;
+package com.ctv_it.klb.dto;
 
 import com.ctv_it.klb.dto.base.AccountInfoDTO;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,8 +12,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FetchAccountServiceResponseDTO {
+public class AccountReportDTO {
 
   private UUID customerId;
-  List<AccountInfoDTO> accounts;
+  private int total;
+  private Map<String, AccountInfoDTO> accounts; // keys = account types
 }
