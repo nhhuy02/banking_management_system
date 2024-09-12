@@ -11,3 +11,7 @@ spring:
     name: banking-report-service
   config:
     import: optional:configserver:${service.config-service.endpoint}:${service.config-service.port}
+
+logging:
+  level:
+    root: INFO

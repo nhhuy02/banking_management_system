@@ -1,18 +1,15 @@
 package com.ctv_it.klb.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Setter
 @Getter
 @ToString(callSuper = true)
-public class SuccessResponseDTO<T> extends BaseResponseDTO {
+public class SuccessResponseDTO extends BaseResponseDTO {
 
-  T data;
-
+  Object data;
 }

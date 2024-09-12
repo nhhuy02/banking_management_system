@@ -1,20 +1,21 @@
 package com.ctv_it.klb.dto.request;
 
-import java.util.Map;
-import lombok.AllArgsConstructor;
+import com.ctv_it.klb.dto.filter.ReportFilterDTO;
+import com.ctv_it.klb.dto.sort.ReportSortDTO;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 @Getter
 @Setter
 @ToString
 public class ReportRequestDTO {
 
-  private String type;
-  private Map<String, Object> filters;
-  private Map<String, String> sorting;
+  @NotBlank(message = "error.invalid.blank")
+  private String reportType;
+  private ReportFilterDTO reportFilters;
+  private ReportSortDTO reportSorting;
 }
