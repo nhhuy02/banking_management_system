@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class BankingAccountServiceApplication {
+public class BankingTransactionServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BankingAccountServiceApplication.class, args);
+        SpringApplication.run(BankingTransactionServiceApplication.class, args);
     }
 
 }
