@@ -3,29 +3,45 @@ package com.ojt.klb.config;
 import com.ojt.klb.model.Account;
 import com.ojt.klb.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Configuration
-public class DataLoader {
+@Component
+public class DataLoader implements CommandLineRunner {
 
-    @Bean
-    public CommandLineRunner demoData(AccountRepository accountRepository) {
-        return (args) -> {
-            // Kiểm tra nếu không có tài khoản nào trong cơ sở dữ liệu
-            if (accountRepository.count() == 0) {
-                // Tạo một số dữ liệu tài khoản mẫu
-                Account account1 = new Account(null, 1L, "SAVINGS", new BigDecimal("1000.00"), "active");
-                Account account2 = new Account(null, 2L, "CHECKING", new BigDecimal("2000.00"), "active");
-                Account account3 = new Account(null, 3L, "CREDIT", new BigDecimal("3000.00"), "active");
+    private final AccountRepository accountRepository;
 
-                // Lưu dữ liệu vào cơ sở dữ liệu
-                accountRepository.save(account1);
-                accountRepository.save(account2);
-                accountRepository.save(account3);
-            }
-        };
+    public DataLoader(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        loadAccounts();
+    }
+
+    private void loadAccounts() {
+        if (accountRepository.count() == 0) { // Check if accounts already exist
+            Account account1 = new Account(
+                    1L,
+                    "CHECKING",
+                    "USD",
+                    "Branch1",
+                    "0000001");
+            account1.setAvailableBalance(new BigDecimal("1000.00"));
+            accountRepository.save(account1);
+
+            Account account2 = new Account(
+                    2L,
+                    "SAVINGS",
+                    "USD",
+                    "Branch2",
+                    "0000002");
+            account2.setAvailableBalance(new BigDecimal("2000.00"));
+            accountRepository.save(account2);
+
+            // Add more accounts as needed
+        }
     }
 }

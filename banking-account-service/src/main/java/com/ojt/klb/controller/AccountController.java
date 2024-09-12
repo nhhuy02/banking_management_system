@@ -9,12 +9,14 @@ import com.ojt.klb.model.Account;
 import com.ojt.klb.request.AccountRequest;
 import com.ojt.klb.response.AccountResponse;
 import com.ojt.klb.service.AccountService;
+import com.ojt.klb.util.ApiResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/accounts")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AccountController {
 
     @Autowired
@@ -22,40 +24,41 @@ public class AccountController {
 
     // Lấy danh sách tất cả tài khoản
     @GetMapping
-    public ResponseEntity<List<AccountResponse>> getAllAccounts() {
+    public ResponseEntity<ApiResponse<List<AccountResponse>>> getAllAccounts() {
         List<Account> accounts = accountService.getAllAccounts();
         List<AccountResponse> accountResponses = accounts.stream()
                 .map(AccountResponse::new)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(accountResponses);
+        return ResponseEntity.ok(ApiResponse.success(accountResponses));
     }
 
     // Lấy thông tin tài khoản theo ID
     @GetMapping("/{accountId}")
-    public ResponseEntity<AccountResponse> getAccount(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<AccountResponse>> getAccount(@PathVariable Long accountId) {
         Account account = accountService.getAccountById(accountId);
-        return ResponseEntity.ok(new AccountResponse(account));
+        return ResponseEntity.ok(ApiResponse.success(new AccountResponse(account)));
     }
 
     // Mở tài khoản mới
     @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+    public ResponseEntity<ApiResponse<AccountResponse>> createAccount(@RequestBody AccountRequest request) {
         Account account = accountService.createAccount(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AccountResponse(account));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(new AccountResponse(account)));
     }
 
     // Cập nhật thông tin tài khoản
     @PutMapping("/{accountId}")
-    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long accountId,
+    public ResponseEntity<ApiResponse<AccountResponse>> updateAccount(@PathVariable Long accountId,
             @RequestBody AccountRequest request) {
         Account account = accountService.updateAccount(accountId, request);
-        return ResponseEntity.ok(new AccountResponse(account));
+        return ResponseEntity.ok(ApiResponse.success(new AccountResponse(account)));
     }
 
     // Đóng tài khoản
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> closeAccount(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<Void>> closeAccount(@PathVariable Long accountId) {
         accountService.closeAccount(accountId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

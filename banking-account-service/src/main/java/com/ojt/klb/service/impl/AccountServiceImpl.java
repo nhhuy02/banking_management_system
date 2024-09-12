@@ -9,6 +9,7 @@ import com.ojt.klb.request.AccountRequest;
 import com.ojt.klb.service.AccountService;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -16,11 +17,23 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    private static final Random RANDOM = new Random();
+    private static final int ACCOUNT_NUMBER_LENGTH = 7;
+
     @Override
     public Account createAccount(AccountRequest request) {
         Account account = new Account();
         account.setCustomerId(request.getCustomerId());
-        account.setType(request.getAccountType());
+        account.setType(request.getType());
+        account.setStatus("active");
+
+        // Generate a unique 7-digit account number
+        String accountNumber;
+        do {
+            accountNumber = generateAccountNumber();
+        } while (accountRepository.existsByAccountNumber(accountNumber)); // Ensure uniqueness
+
+        account.setAccountNumber(accountNumber);
         return accountRepository.save(account);
     }
 
@@ -28,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(Long accountId, AccountRequest request) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        account.setType(request.getAccountType());
+        account.setStatus(request.getStatus());
         return accountRepository.save(account);
     }
 
@@ -49,5 +62,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
+    }
+
+    private String generateAccountNumber() {
+        int number = RANDOM.nextInt((int) Math.pow(10, ACCOUNT_NUMBER_LENGTH - 1));
+        return String.format("%0" + ACCOUNT_NUMBER_LENGTH + "d", number);
     }
 }
