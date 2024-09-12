@@ -5,16 +5,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.Random;
 
 @RequiredArgsConstructor
-public class Utils {
+public class AccountUtils {
     private static final Random RANDOM = new Random();
 
-    public static String generateCardNumber(){
-        return generateRandomNumber(16);
+    public static String generateAccountNumber(){
+        return "3420" + generateRandomNumber(8);
     }
 
-    public static String generateCVV(){
-        return generateRandomNumber(3);
-    }
 
     private static String generateRandomNumber(int len) {
         StringBuilder number = new StringBuilder();
