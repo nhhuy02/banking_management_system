@@ -14,11 +14,12 @@ import lombok.ToString;
 @ToString
 public class AccountInfoDTO {
 
-  private UUID uuid;
+  private UUID id;
+  private String holeName;
   private String type;
   private String number;
-  private BigDecimal accountingBalance;
   private String currency;
+  private BigDecimal accountingBalance;
   private BigDecimal availableBalance;
   private String branch;
   private String status;

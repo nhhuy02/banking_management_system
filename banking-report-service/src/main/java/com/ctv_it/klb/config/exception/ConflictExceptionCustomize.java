@@ -3,7 +3,6 @@ package com.ctv_it.klb.config.exception;
 import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import java.util.List;
-import java.util.Map;
 
 public class ConflictExceptionCustomize extends BaseExceptionCustomize {
 

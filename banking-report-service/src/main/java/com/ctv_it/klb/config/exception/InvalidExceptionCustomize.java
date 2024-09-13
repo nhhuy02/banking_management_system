@@ -6,10 +6,6 @@ import java.util.List;
 
 public class InvalidExceptionCustomize extends BaseExceptionCustomize {
 
-  public InvalidExceptionCustomize(String msg, List<ErrorDetailDTO> errors) {
-    super(msg, errors);
-  }
-
   public InvalidExceptionCustomize(List<ErrorDetailDTO> errors) {
     super(Translator.toLocale("error.invalid.data"), errors);
   }

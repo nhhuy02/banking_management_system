@@ -1,4 +1,4 @@
-package com.ctv_it.klb.util;
+package com.ctv_it.klb.util.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
