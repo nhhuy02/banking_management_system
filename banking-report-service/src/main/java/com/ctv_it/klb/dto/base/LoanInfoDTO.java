@@ -3,7 +3,7 @@ package com.ctv_it.klb.dto.base;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class LoanInfoDTO {
 
-  private UUID id;
+  private Long id;
   private String loanType;
   private BigDecimal amount;
   private BigDecimal interestRate;

@@ -23,8 +23,4 @@ public class ReportServiceFactory {
   public ReportService<?> getReportService(String reportType) {
     return reportServiceMap.get(reportType);
   }
-
-  public String getReportServiceTypes() {
-    return reportServiceMap.keySet().toString();
-  }
 }

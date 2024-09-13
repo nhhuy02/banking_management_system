@@ -1,7 +1,7 @@
 <configuration>
   <appender class="ch.qos.logback.core.ConsoleAppender" name="Console">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-      <layout class="com.ctv_it.klb.util.MaskingPatternLayout">
+      <layout class="com.ctv_it.klb.util.MaskingPatternLayoutUtils">
         <Pattern>
           %white(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %green(%C): %msg%n%throwable
         </Pattern>
@@ -12,7 +12,7 @@
 
   <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RollingFile">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-      <layout class="com.ctv_it.klb.util.MaskingPatternLayout">
+      <layout class="com.ctv_it.klb.util.MaskingPatternLayoutUtils">
         <Pattern>%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable</Pattern>
         <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
       </layout>

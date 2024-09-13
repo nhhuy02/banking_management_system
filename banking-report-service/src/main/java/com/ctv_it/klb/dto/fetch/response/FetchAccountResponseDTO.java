@@ -2,7 +2,7 @@ package com.ctv_it.klb.dto.fetch.response;
 
 import com.ctv_it.klb.dto.base.AccountInfoDTO;
 import java.util.List;
-import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +16,6 @@ import lombok.ToString;
 @ToString
 public class FetchAccountResponseDTO {
 
-  private UUID customerId;
+  private Long customerId;
   List<AccountInfoDTO> accounts;
 }

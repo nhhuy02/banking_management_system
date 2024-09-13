@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-public class MaskingPatternLayout extends PatternLayout {
+public class MaskingPatternLayoutUtils extends PatternLayout {
 
   private final List<String> maskPatterns = new ArrayList<>();
   private Pattern multilinePattern;
