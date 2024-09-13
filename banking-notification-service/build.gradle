@@ -37,6 +37,8 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 // https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail
 	implementation group: 'com.sun.mail', name: 'jakarta.mail', version: '2.0.1'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
 
 	compileOnly 'org.projectlombok:lombok'
