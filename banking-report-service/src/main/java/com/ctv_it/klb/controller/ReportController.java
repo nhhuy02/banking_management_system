@@ -44,8 +44,8 @@ public class ReportController {
     Object report = reportService.generate(requestDTO.getReportFilters());
 
     SuccessResponseDTO successResponseDTO = SuccessResponseDTO.builder()
-        .status(Translator.toLocale("status.successfully"))
-        .code(HttpStatus.OK.value())
+        .success(Boolean.TRUE)
+        .status(HttpStatus.OK.value())
         .url(request.getServletPath())
         .data(report)
         .build();

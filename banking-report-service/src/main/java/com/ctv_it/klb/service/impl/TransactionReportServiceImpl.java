@@ -1,7 +1,7 @@
 package com.ctv_it.klb.service.impl;
 
 import com.ctv_it.klb.config.i18n.Translator;
-import com.ctv_it.klb.dto.base.TransactionReportDTO;
+import com.ctv_it.klb.dto.TransactionReportDTO;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.ReportService;

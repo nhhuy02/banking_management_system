@@ -13,16 +13,6 @@ public abstract class BaseExceptionCustomize extends RuntimeException {
 
   protected List<ErrorDetailDTO> errors;
 
-  public BaseExceptionCustomize() {
-    super();
-    this.errors = null;
-  }
-
-  public BaseExceptionCustomize(String msg) {
-    super(msg);
-    this.errors = null;
-  }
-
   public BaseExceptionCustomize(String msg, List<ErrorDetailDTO> errors) {
     super(msg);
     this.errors = errors;
