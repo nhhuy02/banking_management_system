@@ -12,6 +12,24 @@ spring:
   config:
     import: optional:configserver:${service.config-service.endpoint}:${service.config-service.port}
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/${openapi.api-version}/open-api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/${openapi.api-version}/swagger-ui.html # http://localhost:8086/api/v1/swagger-ui/index.html
+
+openapi:
+  api-version: v1
+  service:
+    api-docs: report-service
+    serverUrl: ${service.config-service.endpoint}:${server.port}
+    title: KLB - Core banking - Report service Open API docs
+    version: 1.0.0
+    description: Report service API Docs
+    serverName:
+
 logging:
   level:
     root: INFO

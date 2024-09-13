@@ -2,7 +2,7 @@ package com.ctv_it.klb.dto.base;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class TransactionInfoDTO {
 
-  private UUID id;
+  private Long id;
   private AccountInfoDTO sourceAccount;
   private AccountInfoDTO destinationAccount;
   private LocalDateTime date;

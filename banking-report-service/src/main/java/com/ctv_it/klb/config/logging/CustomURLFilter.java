@@ -9,7 +9,6 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,13 +20,13 @@ public class CustomURLFilter implements Filter {
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
       FilterChain filterChain) throws IOException, ServletException {
 
-    String requestId = UUID.randomUUID().toString();
+    Long requestId = System.currentTimeMillis();
     servletRequest.setAttribute(REQUEST_ID, requestId);
     logRequest((HttpServletRequest) servletRequest, requestId);
     filterChain.doFilter(servletRequest, servletResponse);
   }
 
-  private void logRequest(HttpServletRequest request, String requestId) {
+  private void logRequest(HttpServletRequest request, Object requestId) {
     if (request != null) {
       StringBuilder data = new StringBuilder();
       data.append("\nLOGGING REQUEST-----------------------------------\n").append("[REQUEST-ID]: ")

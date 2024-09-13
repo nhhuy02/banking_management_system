@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class BigDecimalAdapter extends TypeAdapter<BigDecimal> {
+public class BigDecimalAdapterUtils extends TypeAdapter<BigDecimal> {
 
   @Override
   public void write(JsonWriter jsonWriter, BigDecimal bigDecimal) throws IOException {

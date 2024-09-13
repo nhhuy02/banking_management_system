@@ -1,8 +1,8 @@
 package com.ctv_it.klb.util;
 
-import com.ctv_it.klb.util.adapter.BigDecimalAdapter;
-import com.ctv_it.klb.util.adapter.LocalDateAdapter;
-import com.ctv_it.klb.util.adapter.LocalDateTimeAdapter;
+import com.ctv_it.klb.util.adapter.BigDecimalAdapterUtils;
+import com.ctv_it.klb.util.adapter.LocalDateAdapterUtils;
+import com.ctv_it.klb.util.adapter.LocalDateTimeAdapterUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.math.BigDecimal;
@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 public class GsonParserUtils {
 
   private static final Gson gson = new GsonBuilder()
-      .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-      .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-      .registerTypeAdapter(BigDecimal.class, new BigDecimalAdapter())
+      .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapterUtils())
+      .registerTypeAdapter(LocalDate.class, new LocalDateAdapterUtils())
+      .registerTypeAdapter(BigDecimal.class, new BigDecimalAdapterUtils())
       .setPrettyPrinting()
       .create();
 

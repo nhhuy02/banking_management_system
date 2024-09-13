@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1'
     implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 }
 
 dependencyManagement {
