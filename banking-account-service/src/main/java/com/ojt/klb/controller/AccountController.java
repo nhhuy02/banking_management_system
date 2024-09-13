@@ -1,61 +1,75 @@
 package com.ojt.klb.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.ojt.klb.model.dto.AccountDto;
+import com.ojt.klb.model.dto.AccountStatusUpdate;
+import com.ojt.klb.model.dto.external.TransactionResponse;
+import com.ojt.klb.model.dto.response.Response;
+import com.ojt.klb.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.ojt.klb.model.Account;
-import com.ojt.klb.request.AccountRequest;
-import com.ojt.klb.response.AccountResponse;
-import com.ojt.klb.service.AccountService;
-
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/accounts")
+@RequiredArgsConstructor
+@RequestMapping(value = "api/v1/accounts")
 public class AccountController {
+    private final AccountService accountService;
 
-    @Autowired
-    private AccountService accountService;
-
-    // Lấy danh sách tất cả tài khoản
-    @GetMapping
-    public ResponseEntity<List<AccountResponse>> getAllAccounts() {
-        List<Account> accounts = accountService.getAllAccounts();
-        List<AccountResponse> accountResponses = accounts.stream()
-                .map(AccountResponse::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(accountResponses);
-    }
-
-    // Lấy thông tin tài khoản theo ID
-    @GetMapping("/{accountId}")
-    public ResponseEntity<AccountResponse> getAccount(@PathVariable Long accountId) {
-        Account account = accountService.getAccountById(accountId);
-        return ResponseEntity.ok(new AccountResponse(account));
-    }
-
-    // Mở tài khoản mới
     @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
-        Account account = accountService.createAccount(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AccountResponse(account));
+    public ResponseEntity<?> createAccount(@RequestBody AccountDto accountDto){
+        Long data = accountService.createAccount(accountDto);
+        return ResponseEntity.ok(new Response(200, "Created account successfully", true, data));
     }
 
-    // Cập nhật thông tin tài khoản
-    @PutMapping("/{accountId}")
-    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long accountId,
-            @RequestBody AccountRequest request) {
-        Account account = accountService.updateAccount(accountId, request);
-        return ResponseEntity.ok(new AccountResponse(account));
+    @PatchMapping
+    public ResponseEntity<?> updateAccountStatus(@RequestParam String accountNumber, @RequestBody AccountStatusUpdate accountStatusUpdate) {
+        this.accountService.updateStatus(accountNumber, accountStatusUpdate);
+        return ResponseEntity.ok(new Response(200, "Updated account status successfully", true));
     }
 
-    // Đóng tài khoản
-    @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> closeAccount(@PathVariable Long accountId) {
-        accountService.closeAccount(accountId);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<?> readAccountByAccountNumber(@RequestParam String accountNumber) {
+        var data = accountService.readAccountByAccountNumber(accountNumber);
+        return ResponseEntity.ok(new Response(200, "Get account successfully", true, data));
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateAccount(@RequestParam String accountNumber, @RequestBody AccountDto accountDto) {
+        this.accountService.updateAccount(accountNumber, accountDto);
+        return ResponseEntity.ok(new Response(200, "Update account successfully", true));
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<?> accountBalance(@RequestParam String accountNumber) {
+        String data = accountService.getBalance(accountNumber);
+        return ResponseEntity.ok(new Response(200, "Get balance successfully", true, data));
+    }
+
+    @GetMapping("/{accountId}/transactions")
+    public ResponseEntity<?> getTransactionsFromAccountId(@PathVariable String accountId) {
+        List<TransactionResponse> data = accountService.getTransactionsFromAccountId(accountId);
+        return ResponseEntity.ok(new Response(200, "Get transaction successfully", true, data));
+    }
+
+    @PutMapping("/closure")
+    public ResponseEntity<?> closeAccount(@RequestParam String accountNumber) {
+        this.accountService.closeAccount(accountNumber);
+        return ResponseEntity.ok(new Response(200, "Closed account successfully", true));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> readAccountByUserId(@PathVariable Long userId){
+        AccountDto data = accountService.readAccountByUserId(userId);
+        return ResponseEntity.ok(new Response(200, "Get account by user successfully", true, data));
+    }
+
+    @PutMapping("/{accountNumber}/amount")
+    public ResponseEntity<?> updateBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount) {
+        this.accountService.updateBalance(accountNumber, amount);
+        return ResponseEntity.ok(new Response(200, "Updated balance successfully", true));
+    }
+
 }

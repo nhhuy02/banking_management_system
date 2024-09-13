@@ -1,18 +1,21 @@
 package com.ojt.klb.service;
 
+import com.ojt.klb.model.dto.AccountDto;
+import com.ojt.klb.model.dto.AccountStatusUpdate;
+import com.ojt.klb.model.dto.external.TransactionResponse;
+import com.ojt.klb.model.dto.response.Response;
+
+import java.math.BigDecimal;
 import java.util.List;
 
-import com.ojt.klb.model.Account;
-import com.ojt.klb.request.AccountRequest;
-
 public interface AccountService {
-    Account createAccount(AccountRequest request);
-
-    Account updateAccount(Long accountId, AccountRequest request);
-
-    void closeAccount(Long accountId);
-
-    Account getAccountById(Long accountId);
-
-    List<Account> getAllAccounts();
+    Long createAccount(AccountDto accountDto);
+    void updateStatus(String accountNumber, AccountStatusUpdate accountStatusUpdate);
+    AccountDto readAccountByAccountNumber(String accountNumber);
+    void updateAccount(String accountNumber, AccountDto accountDto);
+    String getBalance(String accountNumber);
+    List<TransactionResponse> getTransactionsFromAccountId(String accountId);
+    Response closeAccount(String accountNumber);
+    AccountDto readAccountByUserId(Long userId);
+    void updateBalance(String accountNumber, BigDecimal amount);
 }
