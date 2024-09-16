@@ -16,5 +16,5 @@ public class AccountReportDTO {
 
   private Long customerId;
   private int total;
-  private Map<String, AccountInfoDTO> accounts; // keys = account types
+  private Map<String, AccountInfoDTO> accounts;
 }

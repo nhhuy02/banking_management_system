@@ -19,6 +19,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpServerErrorException.InternalServerError;
 
 @Slf4j
 @RestControllerAdvice
@@ -107,7 +108,7 @@ public class GlobalExceptionHandler {
             .build());
   }
 
-  @ExceptionHandler({InternalError.class, ServerError.class})
+  @ExceptionHandler({InternalError.class, ServerError.class, InternalServerError.class})
   public ResponseEntity<ErrorResponseDTO> handleInternalError(
       Exception ex, HttpServletRequest request) {
 
@@ -118,7 +119,6 @@ public class GlobalExceptionHandler {
             .message(Translator.toLocale("error.internal-server"))
             .url(request.getServletPath())
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .errors(null)
             .build());
   }
 
@@ -129,7 +129,7 @@ public class GlobalExceptionHandler {
     ErrorDetailDTO errorDetail = extractErrorDetails(ex);
 
     ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
-        .success(false)
+        .success(Boolean.FALSE)
         .message(Translator.toLocale("error.invalid.data"))
         .url(request.getServletPath())
         .status(HttpStatus.BAD_REQUEST.value())
@@ -174,13 +174,11 @@ public class GlobalExceptionHandler {
 
       return ErrorDetailDTO.builder()
           .field(field)
-          .rejectedValue(null)
           .message(message)
           .build();
     } else {
       return ErrorDetailDTO.builder()
           .field("request")
-          .rejectedValue(null)
           .message("Malformed JSON request")
           .build();
     }

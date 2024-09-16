@@ -5,7 +5,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import java.util.Collections;
 import java.util.List;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,15 +60,15 @@ public class OpenAPI3Configuration {
   }
 
   private List<Server> serversConfig() {
-    return List.of(
+    return Collections.singletonList(
         new Server().url(serverUrl).description(serverName)
     );
   }
 
   private Components componentsConfig() {
     return new Components()
-        .addParameters("Accept-Language", languageAcceptHeaderParameterConfig());
-//        .addSecuritySchemes("bearerAuth", bearerAuthHeaderSecuritySchemeConfig());
+        .addParameters("Accept-Language", languageAcceptHeaderParameterConfig())
+        .addSecuritySchemes("bearerAuth", bearerAuthHeaderSecuritySchemeConfig());
   }
 
   private Parameter languageAcceptHeaderParameterConfig() {
@@ -81,10 +83,10 @@ public class OpenAPI3Configuration {
             .addEnumItem("vi"));
   }
 
-//  private SecurityScheme bearerAuthHeaderSecuritySchemeConfig() {
-//    return new SecurityScheme()
-//        .type(SecurityScheme.Type.HTTP)
-//        .scheme("bearer")
-//        .bearerFormat("JWT");
-//  }
+  private SecurityScheme bearerAuthHeaderSecuritySchemeConfig() {
+    return new SecurityScheme()
+        .type(SecurityScheme.Type.HTTP)
+        .scheme("bearer")
+        .bearerFormat("JWT");
+  }
 }
