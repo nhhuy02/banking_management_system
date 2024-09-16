@@ -1,8 +1,8 @@
 spring:
   application:
     name: banking-account-service
-  # config:
-  #   import: optional:configserver:http://localhost:8888
+  config:
+    import: optional:configserver:http://localhost:8888
   datasource:
     url: jdbc:mysql://localhost:3307/klb?createDatabaseIfNotExist=true
     username: root

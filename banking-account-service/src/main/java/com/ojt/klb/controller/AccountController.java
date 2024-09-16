@@ -19,13 +19,15 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<?> createAccount(@RequestBody AccountDto accountDto){
+    public ResponseEntity<?> createAccount(@RequestBody AccountDto accountDto) {
+
         Long data = accountService.createAccount(accountDto);
         return ResponseEntity.ok(new Response(200, "Created account successfully", true, data));
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateAccountStatus(@RequestParam String accountNumber, @RequestBody AccountStatusUpdate accountStatusUpdate) {
+    public ResponseEntity<?> updateAccountStatus(@RequestParam String accountNumber,
+            @RequestBody AccountStatusUpdate accountStatusUpdate) {
         this.accountService.updateStatus(accountNumber, accountStatusUpdate);
         return ResponseEntity.ok(new Response(200, "Updated account status successfully", true));
     }
@@ -61,9 +63,9 @@ public class AccountController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> readAccountByUserId(@PathVariable Long userId){
-        AccountDto data = accountService.readAccountByUserId(userId);
-        return ResponseEntity.ok(new Response(200, "Get account by user successfully", true, data));
+    public ResponseEntity<?> readAccountsByUserId(@PathVariable Long userId) {
+        List<AccountDto> data = accountService.readAccountsByUserId(userId);
+        return ResponseEntity.ok(new Response(200, "Get accounts by user successfully", true, data));
     }
 
     @PutMapping("/{accountNumber}/amount")
