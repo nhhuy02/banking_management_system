@@ -6,6 +6,7 @@ import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.BadRequestException;
 import java.rmi.ServerError;
@@ -108,7 +109,7 @@ public class GlobalExceptionHandler {
             .build());
   }
 
-  @ExceptionHandler({InternalError.class, ServerError.class, InternalServerError.class})
+  @ExceptionHandler({InternalServerError.class, InternalError.class, ServerError.class})
   public ResponseEntity<ErrorResponseDTO> handleInternalError(
       Exception ex, HttpServletRequest request) {
 
@@ -142,7 +143,34 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
+  @ExceptionHandler(UnrecognizedPropertyException.class)
+  public ResponseEntity<ErrorResponseDTO> handleUnrecognizedPropertyException(
+      UnrecognizedPropertyException ex, HttpServletRequest request) {
+
+    String unrecognizedField = ex.getPropertyName();
+    String message = String.format("Unrecognized field '%s' in request", unrecognizedField);
+
+    ErrorDetailDTO errorDetail = ErrorDetailDTO.builder()
+        .field(unrecognizedField)
+        .message(message)
+        .build();
+
+    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+        .success(Boolean.FALSE)
+        .message(Translator.toLocale("error.invalid.data"))
+        .url(request.getServletPath())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .errors(Collections.singletonList(errorDetail))
+        .build();
+
+    log.error("Unrecognized field exception: {}", message);
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
   private ErrorDetailDTO extractErrorDetails(HttpMessageNotReadableException ex) {
+    ErrorDetailDTO errorDetail;
+
     if (ex.getCause() instanceof InvalidFormatException ife) {
       String field = ife.getPath().stream()
           .map(Reference::getFieldName)
@@ -155,11 +183,15 @@ public class GlobalExceptionHandler {
 
       String message = String.format("Cannot convert value '%s' to %s", rejectedValue, targetType);
 
-      return ErrorDetailDTO.builder()
+      errorDetail = ErrorDetailDTO.builder()
           .field(field)
           .rejectedValue(rejectedValue)
           .message(message)
           .build();
+
+      log.error(
+          "InvalidFormatException: Field: {}, Rejected Value: {}, Target Type: {}, Message: {}",
+          field, rejectedValue, targetType, message);
     } else if (ex.getCause() instanceof MismatchedInputException mie) {
       String field = mie.getPath().stream()
           .map(Reference::getFieldName)
@@ -172,16 +204,22 @@ public class GlobalExceptionHandler {
         message += mie.getMessage();
       }
 
-      return ErrorDetailDTO.builder()
+      errorDetail = ErrorDetailDTO.builder()
           .field(field)
           .message(message)
           .build();
+
+      log.error("MismatchedInputException: Field: {}, Message: {}", field, message);
     } else {
-      return ErrorDetailDTO.builder()
+      errorDetail = ErrorDetailDTO.builder()
           .field("request")
           .message("Malformed JSON request")
           .build();
-    }
-  }
 
+      log.error("Malformed JSON request: {}", "Malformed JSON request");
+      log.error("HttpMessageNotReadableException: {}", ex.getMessage(), ex);
+    }
+
+    return errorDetail;
+  }
 }

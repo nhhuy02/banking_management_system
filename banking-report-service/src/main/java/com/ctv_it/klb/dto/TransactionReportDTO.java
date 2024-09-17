@@ -7,5 +7,5 @@ import java.util.List;
 public class TransactionReportDTO {
 
   private Long customerId;
-  private List<TransactionInfoDTO> transactionType;
+  private List<TransactionInfoDTO> transactions;
 }

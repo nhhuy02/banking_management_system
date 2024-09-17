@@ -15,5 +15,5 @@ import lombok.ToString;
 public class LoanReportDTO {
 
   private Long customerId;
-  Map<String, LoanInfoDTO> loans; // keys = loan status
+  Map<String, LoanInfoDTO> loans; // keys: account type
 }

@@ -5,10 +5,12 @@ import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+@NoArgsConstructor
 @SuperBuilder
 @Setter
 @Getter

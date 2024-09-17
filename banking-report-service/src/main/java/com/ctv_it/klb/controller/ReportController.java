@@ -61,6 +61,7 @@ public class ReportController {
   @PostMapping("/generate")
   public ResponseEntity<?> generate(HttpServletRequest request,
       @Valid @RequestBody ReportRequestDTO reportRequestDTO) {
+    log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
     ReportService<?> reportService = reportServiceFactory.getReportService(
         reportRequestDTO.getReportType());
