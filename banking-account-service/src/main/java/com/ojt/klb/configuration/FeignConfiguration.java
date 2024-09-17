@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class FeignConfiguration extends FeignClientProperties.FeignClientConfiguration {
 
     /**
-     * Returns a new instance of ErrorDecoder that is used to decode errors from a Feign client.
+     * Returns a new instance of ErrorDecoder that is used to decode errors from a
+     * Feign client.
      *
      * @return a new instance of ErrorDecoder
      */

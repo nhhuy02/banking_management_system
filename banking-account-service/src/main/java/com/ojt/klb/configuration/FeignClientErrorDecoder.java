@@ -21,9 +21,10 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
 
         GlobalException globalException = extractGlobalException(response);
 
-        log.info("response status: "+response.status());
+        log.info("response status: " + response.status());
         if (response.status() == 400) {
-            log.error("Error in request went through feign client: {}", globalException.getErrorMessage() + " - " + globalException.getErrorCode());
+            log.error("Error in request went through feign client: {}",
+                    globalException.getErrorMessage() + " - " + globalException.getErrorCode());
             return globalException;
         }
         log.error("general exception went through feign client");
@@ -46,7 +47,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
         } catch (IOException e) {
             log.error("IO Exception while reading exception message", e);
         } finally {
-            if (!Objects.isNull(reader)){
+            if (!Objects.isNull(reader)) {
                 try {
                     reader.close();
                 } catch (IOException e) {

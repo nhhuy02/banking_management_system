@@ -1,4 +1,5 @@
 package com.ojt.klb.external;
+
 import com.ojt.klb.model.dto.external.TransactionResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import com.ojt.klb.configuration.FeignConfiguration;
