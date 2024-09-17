@@ -39,6 +39,9 @@ dependencies {
 	implementation group: 'com.sun.mail', name: 'jakarta.mail', version: '2.0.1'
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+// https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
+	implementation group: 'org.springframework.kafka', name: 'spring-kafka', version: '3.2.3'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 
 	compileOnly 'org.projectlombok:lombok'
