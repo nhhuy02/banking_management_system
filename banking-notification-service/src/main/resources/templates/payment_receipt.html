@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +47,7 @@
             text-align: center;
         }
         .footer a {
-            color: #4caf50;
+            color: #0066cc;
             text-decoration: none;
         }
     </style>
@@ -64,31 +64,31 @@
     <table class="transaction-info">
         <tr>
             <th>Ngày, giờ giao dịch</th>
-            <td>21:35 Chủ Nhật 15/09/2024</td>
+            <td th:text="${transactionDate}">21:35 Chủ Nhật 15/09/2024</td>
         </tr>
         <tr>
             <th>Số lệnh giao dịch</th>
-            <td>7045834124</td>
+            <td th:text="${transId}">7045834124</td>
         </tr>
         <tr>
             <th>Tài khoản nguồn</th>
-            <td>0371000517238</td>
+            <td th:text="${sendAccount}">0371000517238</td>
         </tr>
         <tr>
             <th>Tài khoản người hưởng</th>
-            <td>1048512158</td>
+            <td th:text="${receiveAccount}">1048512158</td>
         </tr>
         <tr>
             <th>Tên người hưởng</th>
-            <td>VU VAN TU</td>
+            <td th:text="${recipientName}">VU VAN TU</td>
         </tr>
         <tr>
             <th>Tên ngân hàng hưởng</th>
-            <td>Vietcombank</td>
+            <td th:text="${bankName}">Vietcombank</td>
         </tr>
         <tr>
             <th>Số tiền</th>
-            <td>2,269,540 VND</td>
+            <td th:text="${amount}">2,269,540 VND</td>
         </tr>
         <tr>
             <th>Loại phí</th>
@@ -100,12 +100,12 @@
         </tr>
         <tr>
             <th>Nội dung chuyển tiền</th>
-            <td>d1276488426679248896</td>
+            <td th:text="${content}">d1276488426679248896</td>
         </tr>
     </table>
 
     <div class="footer">
-        <p>Tham khảo hướng dẫn sử dụng <a href="http://localhost:5173/login">EIGHTBANK</a></p>
+        <p>Tham khảo hướng dẫn sử dụng <a href="http://localhost:5173/login"><strong>EIGHT BANK</strong></a></p>
     </div>
 </div>
 

@@ -1,8 +1,9 @@
 package com.ojt.klb.baking_notification_service.service.impl;
 
-import com.ojt.klb.baking_notification_service.dto.CustomerData;
+import com.ojt.klb.baking_notification_service.dto.consumer.CustomerData;
 import com.ojt.klb.baking_notification_service.dto.NotificationDTO;
 import com.ojt.klb.baking_notification_service.dto.Response.ListResponse;
+import com.ojt.klb.baking_notification_service.dto.Response.ResponseMessage;
 import com.ojt.klb.baking_notification_service.entity.NotificationTemplate;
 import com.ojt.klb.baking_notification_service.repository.NotificationRepository;
 import com.ojt.klb.baking_notification_service.repository.NotificationTemplateRepository;
@@ -33,18 +34,15 @@ public class NotificationImpl implements NotificationService {
     @KafkaListener(topics = "customer-otp-topic", groupId = "group_id")
     public String sendMail(CustomerData customerData) {
         String email = customerData.getEmail();
-        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName("Đăng ký");
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
         String subject ="[NoReply-JD]"+ notificationTemplate.getSubjectTemplate();
         String body = notificationTemplate.getBodyTemplate();
-//        if (email != null && !email.isEmpty()) {
-//            notificationService.sendMail(email);
-//        }
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", customerData.getCustomerName());
         variables.put("verificationCode", customerData.getOtpCode());
 
         // Gửi email với template
-        return mailConfig.send(email, subject, "register_verification_template", variables);
+        return mailConfig.send(email, subject, "otp_verification_template", variables);
 
     }
 
