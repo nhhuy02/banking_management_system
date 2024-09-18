@@ -1,4 +1,7 @@
 package com.ojt.klb.repository;
 
-public interface TransactionRepository {
+import com.ojt.klb.model.entity.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 }
