@@ -5,6 +5,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+**/docker/mongodb/data/
+**/docker/mysql/data/
+**/volume-data/mysql_keycloak_data/
+
 ### STS ###
 .apt_generated
 .classpath

@@ -9,9 +9,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionResponse {
+public class Response {
 
-    private String responseCode;
-
+    private int status;
     private String message;
+    private boolean success;
+    private Object data;
+
+    public Response(int status, String message, boolean success) {
+        this.status = status;
+        this.message = message;
+        this.success = success;
+    }
 }

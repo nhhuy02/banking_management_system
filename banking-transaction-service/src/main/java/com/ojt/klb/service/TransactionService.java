@@ -1,4 +1,12 @@
 package com.ojt.klb.service;
 
-public class TransactionService {
+import com.ojt.klb.model.request.InternalTransferRequest;
+import com.ojt.klb.model.response.Response;
+
+import java.math.BigDecimal;
+
+public interface TransactionService {
+    public Response handleDeposit(String accountNumber, BigDecimal amount);
+    public Response handleWithdraw(String accountNumber, BigDecimal amount);
+    public Response internalFundTransfer(InternalTransferRequest request);
 }

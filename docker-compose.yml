@@ -12,6 +12,7 @@ services:
     restart: unless-stopped
     networks:
       - microservices-banking
+
   mysql:
     container_name: mysql
     image: mysql:latest
