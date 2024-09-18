@@ -21,18 +21,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "API quản lí thông báo")
+@RequestMapping("/api/v1/api/v1/notificationService")
 public class NotificationController {
-    private final String root = "api/v1/NotificationService";
 
     @Autowired
     private NotificationService notificationService;
     @Autowired
     private NotificationTemplateService notificationTemplateService;
-    @GetMapping(value = {root +"/test"})
-    public Response<String> testAPI(HttpServletRequest httpRequest){
-        return new Response<String>().withData("test response");
-
-    }
 
     @Operation(summary = "API thêm mới, cập nhật thông báo")
     @ApiResponses(value = {
@@ -41,7 +36,7 @@ public class NotificationController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
 
-    @PostMapping(value = {root +"/createOrUpdateNotificationTemplate"})
+    @PostMapping("/createOrUpdateNotificationTemplate")
     public Response<Long> createOrUpdateNotificationTemplate(HttpServletRequest httpRequest,
                                                              @RequestParam(required = false) Long notificationTemplateId,
                                                              @RequestBody NotificationTemplateRequest request){
@@ -50,7 +45,7 @@ public class NotificationController {
 
     }
 
-    @PostMapping(value = {root +"/findById"})
+    @PostMapping("/findById")
     public Response<NotificationTemplate> find(HttpServletRequest httpRequest,
                                                @RequestParam(required = true) Long notificationTemplateId
                                                                              ){
@@ -60,7 +55,7 @@ public class NotificationController {
     }
 
 
-    @GetMapping(value = {root +"/getAllNotification"})
+    @GetMapping(value = {"/getAllNotification"})
     public Response<ListResponse<NotificationDTO>> getAll(HttpServletRequest httpRequest,
                                                           @RequestParam(required = true) Long customerId,
                                                           @SortDefault.SortDefaults({@SortDefault(sort = "sendDate", direction = Sort.Direction.DESC)})

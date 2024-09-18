@@ -1,12 +1,12 @@
 package com.ojt.klb.baking_notification_service.service;
 
-import com.ojt.klb.baking_notification_service.dto.CustomerData;
+import com.ojt.klb.baking_notification_service.dto.consumer.CustomerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerProducer {
+public class CustomerProducerTest {
     private static final String TOPIC = "customer-otp-topic";
 
 

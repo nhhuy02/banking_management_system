@@ -1,4 +1,4 @@
-package com.ojt.klb.baking_notification_service.dto;
+package com.ojt.klb.baking_notification_service.dto.consumer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CustomerData {
-    private String customerId;
+    private Long customerId;
     private String customerName;
     private String email;
     private String otpCode;

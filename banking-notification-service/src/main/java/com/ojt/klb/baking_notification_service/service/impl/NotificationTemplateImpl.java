@@ -29,10 +29,6 @@ public class NotificationTemplateImpl implements NotificationTemplateService {
             notificationTemplate.setTemplateName(request.getTemplateName());
         } else {
 
-//            notificationTemplate = repository.findById(id).orElseThrow(() ->
-//
-//                    new ValidateException(ResponseMessage.ERROR)
-//            );
             notificationTemplate = repository.findById(id).orElse(null);
             if (notificationTemplate == null) {
                 return response.withError(ResponseMessage.ERROR);
