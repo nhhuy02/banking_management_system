@@ -66,6 +66,7 @@ public class KycServiceImpl implements KycService {
                         existingKyc.setVerificationDate(Instant.now());
                     }
 
+                    existingKyc.setUpdatedAt(Instant.now());
                     Kyc updatedKyc = kycRepository.save(existingKyc);
                     return kycMapper.toDto(updatedKyc);
                 })

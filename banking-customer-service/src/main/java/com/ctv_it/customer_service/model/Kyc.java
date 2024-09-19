@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Getter
@@ -36,7 +37,7 @@ public class Kyc {
     private String documentImageUrl;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     private Instant createdAt;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
