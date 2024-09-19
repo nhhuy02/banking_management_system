@@ -67,16 +67,19 @@ public class CustomerController {
             @PathVariable Long accountId,
             @Valid @RequestBody CustomerUpdateDto customerUpdateDto) {
         try {
-            customerService.updateCustomer(accountId, customerUpdateDto);
-            String successMessage = "Customer with accountId " + accountId + " updated successfully.";
-            logger.info(successMessage);
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), successMessage, true, null);
-            return ResponseEntity.ok(response);
-        } catch (EntityNotFoundException ex) {
-            String errorMessage = "Customer with accountId " + accountId + " not found.";
-            logger.warn(errorMessage);
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            Optional<CustomerDto> updatedCustomerOptional = customerService.updateCustomer(accountId, customerUpdateDto);
+
+            if (updatedCustomerOptional.isPresent()) {
+                String successMessage = "Customer with accountId " + accountId + " updated successfully.";
+                logger.info(successMessage);
+                ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), successMessage, true, null);
+                return ResponseEntity.ok(response);
+            } else {
+                String errorMessage = "Customer with accountId " + accountId + " not found.";
+                logger.warn(errorMessage);
+                ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
         } catch (Exception ex) {
             String errorMessage = "An error occurred while updating the customer.";
             logger.warn("Error updating customer with accountId {}", accountId);

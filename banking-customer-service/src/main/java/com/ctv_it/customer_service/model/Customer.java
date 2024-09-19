@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -28,7 +29,7 @@ public class Customer {
     private String fullName;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth; // Thêm trường ngày sinh
+    private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")

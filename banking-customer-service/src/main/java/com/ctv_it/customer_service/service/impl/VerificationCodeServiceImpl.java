@@ -1,5 +1,6 @@
 package com.ctv_it.customer_service.service.impl;
 
+import com.ctv_it.customer_service.dto.OtpEmailRequestDto;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.VerificationCode;
@@ -10,9 +11,11 @@ import com.ctv_it.customer_service.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -31,6 +34,11 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate;
+
+    private static final String TOPIC = "otp-email-topic";
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -65,7 +73,16 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         logger.info("Verification code saved for customer ID: {}", customerId);
 
         //send code
-        emailService.sendCode(email, "Banking", "Your verification code is: " + code);
+        //emailService.sendCode(email, "Banking", "Your verification code is: " + code);
+
+        OtpEmailRequestDto otpEmailRequestDto = new OtpEmailRequestDto();
+        otpEmailRequestDto.setCustomerId(customerId);
+        otpEmailRequestDto.setCustomerName(customer.get().getFullName());
+        otpEmailRequestDto.setEmail(email);
+        otpEmailRequestDto.setOtpCode(code);
+        otpEmailRequestDto.setTimeToLiveCode("5 minutes");
+        kafkaTemplate.send(TOPIC, otpEmailRequestDto);
+        logger.info("Sent otp email to Kafka topic {}", TOPIC);
 
         VerificationCodeDto dto = new VerificationCodeDto();
         dto.setCustomerId(customerId);

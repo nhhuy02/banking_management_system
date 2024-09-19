@@ -51,6 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Customer customer = customerOptional.get();
+        logger.info("Fetched customer by Id: {}", customer.getId());
         CustomerDto customerDto = customerMapper.toDto(customer);
 
         populateAdditionalCustomerInfo(customerDto, customer);
@@ -102,22 +103,13 @@ public class CustomerServiceImpl implements CustomerService {
 
             Optional<Customer> customerOptional = customerRepository.findByAccountId(accountId);
             if (customerOptional.isEmpty()) {
+                logger.warn("Customer with accountId: {} not found", accountId);
                 return Optional.empty();
             }
 
             Customer customer = customerOptional.get();
+            customer.setUpdatedAt(Instant.now());
             customerMapper.updateCustomerFromDto(customerUpdateDto, customer);
-
-            // Create and save KYC
-            Kyc newKyc = new Kyc();
-            newKyc.setVerificationStatus(Kyc.VerificationStatus.pending);
-            newKyc.setCreatedAt(Instant.now());
-            Kyc savedKyc = kycService.saveKyc(newKyc);
-            logger.info("Saved KYC with ID: {}", savedKyc.getId());
-            // Assign KYC to customer
-            customer.setKyc(savedKyc);
-            logger.info("Set Kyc with ID: {}", customer.getKyc().getId());
-
 
             // Save customer with the updated KYC reference
             Customer updatedCustomer = customerRepository.save(customer);
@@ -130,7 +122,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             // Create and save status history
             CustomersStatusHistory statusHistory = new CustomersStatusHistory();
-            statusHistory.setCustomer(updatedCustomer); // Ensure customer is correctly set
+            statusHistory.setCustomer(updatedCustomer);
             statusHistory.setStatus(CustomersStatusHistory.Status.active);
 
             // Log the customer ID before saving status history
