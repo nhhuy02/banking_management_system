@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class TransactionReportServiceImpl implements ReportService<TransactionReportDTO> {
 
   @Override
-  public TransactionReportDTO generate(ReportRequestDTO reportRequestDTO) {
+  public TransactionReportDTO report(ReportRequestDTO reportRequestDTO) {
     log.info(Translator.toLocale("CALLED", "TransactionReportServiceImpl"));
     return null;
   }

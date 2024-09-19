@@ -3,6 +3,8 @@ package com.ctv_it.klb.config.exception;
 import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
@@ -222,4 +224,51 @@ public class GlobalExceptionHandler {
 
     return errorDetail;
   }
+
+  @ExceptionHandler(JsonProcessingException.class)
+  public ResponseEntity<ErrorResponseDTO> handleJsonProcessingException(
+      JsonProcessingException ex, HttpServletRequest request) {
+
+    log.error("JSON processing exception: {}", ex.getMessage());
+
+    ErrorDetailDTO errorDetail = ErrorDetailDTO.builder()
+        .field("json")
+        .message(Translator.toLocale("error.invalid.json"))
+        .build();
+
+    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+        .success(Boolean.FALSE)
+        .message(Translator.toLocale("error.invalid.data"))
+        .url(request.getServletPath())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .errors(Collections.singletonList(errorDetail))
+        .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
+  @ExceptionHandler(JsonMappingException.class)
+  public ResponseEntity<ErrorResponseDTO> handleJsonMappingException(
+      JsonMappingException ex, HttpServletRequest request) {
+
+    List<ErrorDetailDTO> errors = ex.getPath().stream()
+        .map(ref -> ErrorDetailDTO.builder()
+            .field(ref.getFieldName())
+            .message("Error mapping field " + ref.getFieldName())
+            .build())
+        .collect(Collectors.toList());
+
+    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+        .success(Boolean.FALSE)
+        .message(Translator.toLocale("error.invalid.data"))
+        .url(request.getServletPath())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .errors(errors)
+        .build();
+
+    log.error("JsonMappingException: {}", errors);
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
 }

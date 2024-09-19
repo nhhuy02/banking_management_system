@@ -5,7 +5,7 @@ import com.ctv_it.klb.enumeration.ReportType;
 
 public interface ReportService<T> {
 
-  T generate(ReportRequestDTO reportRequestDTO);
+  T report(ReportRequestDTO reportRequestDTO);
 
   ReportType getReportType();
 }

@@ -4,7 +4,8 @@ import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.LoanFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO;
-import com.ctv_it.klb.util.ReportRequestDTODeserializer;
+import com.ctv_it.klb.util.ReportRequestDTODeserializerUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +19,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@JsonDeserialize(using = ReportRequestDTODeserializer.class)
+@JsonDeserialize(using = ReportRequestDTODeserializerUtils.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReportRequestDTO {
 
   @NotNull(message = "error.invalid.null")

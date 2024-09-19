@@ -58,8 +58,8 @@ public class ReportController {
           )
       )
   })
-  @PostMapping("/generate")
-  public ResponseEntity<?> generate(HttpServletRequest request,
+  @PostMapping("")
+  public ResponseEntity<?> report(HttpServletRequest request,
       @Valid @RequestBody ReportRequestDTO reportRequestDTO) {
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
@@ -72,7 +72,7 @@ public class ReportController {
       throw new InternalError("");
     }
 
-    Object report = reportService.generate(reportRequestDTO);
+    Object report = reportService.report(reportRequestDTO);
 
     SuccessResponseDTO successResponseDTO = SuccessResponseDTO.builder()
         .url(request.getServletPath())

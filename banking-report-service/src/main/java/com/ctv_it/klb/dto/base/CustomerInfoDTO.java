@@ -17,4 +17,5 @@ public class CustomerInfoDTO {
   private String phoneNumber;
   private String address;
   private String nationalId;
+  private String email;
 }

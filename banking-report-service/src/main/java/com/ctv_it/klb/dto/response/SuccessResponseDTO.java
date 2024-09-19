@@ -17,6 +17,7 @@ public class SuccessResponseDTO extends BaseResponseDTO {
 
   @Schema(
       name = "data",
+      description = "Return a list of data",
       oneOf = {AccountReportDTO.class, LoanReportDTO.class, TransactionReportDTO.class}
   )
   Object data;
