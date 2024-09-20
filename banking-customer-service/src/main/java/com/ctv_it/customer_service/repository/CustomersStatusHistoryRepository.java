@@ -18,5 +18,6 @@ public interface CustomersStatusHistoryRepository extends JpaRepository<Customer
     @Query("SELECT c FROM CustomersStatusHistory c WHERE c.customer.id = :customerId")
     List<CustomersStatusHistory> findAllByCustomerId(@Param("customerId") Long customerId);
 
+    Optional<CustomersStatusHistory> findByCustomerId(Long customerId);
 }
 

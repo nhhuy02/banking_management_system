@@ -1,42 +1,27 @@
 package com.ojt.klb.baking_notification_service.dto.Response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
 public abstract class BaseResponse<T> {
+
+    @JsonProperty("success")
     private Boolean success = true;
 
-    /**
-     * Status code parameter which return to client
-     */
+    @JsonProperty("code")
     private Integer statusCode = ResponseMessage.SUCCESSFUL.statusCode();
 
-    /**
-     * Status value parameter which return to client
-     */
+    @JsonProperty("message")
     private String statusValue = ResponseMessage.SUCCESSFUL.statusCodeValue();
 
-    /**
-     * ExcuteDate parameter which return to client. Default is current time.
-     */
+    @JsonProperty("executeDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime executeDate = LocalDateTime.now();
 
-    /**
-     * Data type T: parameter which return to client. Default is null.
-     */
+    @JsonProperty("data")
     protected T data = null;
 
-
-
-    /**
-     * Validate data passing
-     *
-     * @param data       T
-     * @param statusCode : status code if error
-     * @param            statusValue: status value if error
-     */
     public void validated(T data, Integer statusCode, String statusValue) {
         if (data == null) {
             setFailure(statusCode, statusValue);

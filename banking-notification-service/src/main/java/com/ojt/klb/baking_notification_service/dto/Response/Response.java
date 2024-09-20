@@ -1,8 +1,17 @@
 package com.ojt.klb.baking_notification_service.dto.Response;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.ojt.klb.baking_notification_service.core.StringUtils;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Response<D> extends BaseResponse<D> {
+
     public Response<D> withData(D data) {
         this.setData(data);
         return this;
@@ -14,9 +23,9 @@ public class Response<D> extends BaseResponse<D> {
             if (args != null && args.length > 0 && msgValue.contains("%s")) {
                 msgValue = String.format(msgValue, args);
             }
-        }catch (Exception e){
-            System.out.println(msgValue);
-            //just warning
+        } catch (Exception e) {
+            // Log the error instead of printing to standard output
+            Logger.getLogger(Response.class.getName()).log(Level.WARNING, msgValue, e);
         }
         this.setFailure(msg.statusCode(), msgValue);
         return this;
@@ -27,9 +36,9 @@ public class Response<D> extends BaseResponse<D> {
             if (StringUtils.stringNotNullOrEmpty(message) && statusCode != null) {
                 this.setFailure(statusCode, message);
             }
-        }catch (Exception e){
-            System.out.println(message);
-            //just warning
+        } catch (Exception e) {
+            // Log the error instead of printing to standard output
+            Logger.getLogger(Response.class.getName()).log(Level.WARNING, message, e);
         }
         return this;
     }
