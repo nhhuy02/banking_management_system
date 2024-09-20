@@ -1,4 +1,4 @@
-package com.ctv_it.klb.util.FakeMockServices;
+package com.ctv_it.klb.util.mock;
 
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,12 @@
-package com.ctv_it.klb.util.FakeMockServices;
+package com.ctv_it.klb.util.mock;
 
 import com.ctv_it.klb.dto.base.AccountInfoDTO;
 import com.ctv_it.klb.dto.base.LoanInfoDTO;
 import com.ctv_it.klb.dto.base.TransactionInfoDTO;
-import com.ctv_it.klb.dto.fetch.response.FetchAccountDataDTO;
-import com.ctv_it.klb.dto.fetch.response.FetchCustomerDataDTO;
-import com.ctv_it.klb.dto.fetch.response.FetchLoanDataDTO;
-import com.ctv_it.klb.dto.fetch.response.FetchTransactionDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchLoanDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchTransactionDataDTO;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class FakeDataGenerator {
+public class MockDataService {
 
   private static List<FetchCustomerDataDTO> fetchCustomerDatumDTOS;
   private static List<FetchAccountDataDTO> fetchAccountDatumDTOS;
@@ -26,11 +26,11 @@ public class FakeDataGenerator {
   private static List<FetchTransactionDataDTO> fetchTransactionDatumDTOS;
   private static final Random RANDOM = new Random();
 
-  private static FakeDataGenerator instance;
+  private static MockDataService instance;
 
-  public static FakeDataGenerator initInstance() {
+  public static MockDataService initInstance() {
     if (instance == null) {
-      instance = new FakeDataGenerator();
+      instance = new MockDataService();
       fetchCustomerDatumDTOS = initCustomerResponses();
       fetchAccountDatumDTOS = initAccountResponses();
       fetchLoanDatumDTOS = initLoanResponses();
@@ -79,13 +79,13 @@ public class FakeDataGenerator {
     List<AccountInfoDTO> accounts = IntStream.range(1, 11).mapToObj(
         i -> AccountInfoDTO.builder()
             .id((long) i)
-            .type(RANDOM.nextBoolean() ? "Saving" : "Checking")
+            .type((i % 2 == 0) ? "Saving" : "Checking")
             .number(String.format("%10d", RANDOM.nextInt(1000000000)))
             .currency("VND")
             .accountingBalance(new BigDecimal(RANDOM.nextInt(10000000)))
             .availableBalance(new BigDecimal(RANDOM.nextInt(10000000)))
             .branch("Branch " + (RANDOM.nextInt(3) + 1))
-            .status("Active")
+            .status((i % 2 == 0) ? "Active" : "Lock")
             .openingDate(LocalDate.now().minusDays(RANDOM.nextInt(365 * 5)))
             .build()
     ).collect(Collectors.toList());
@@ -109,7 +109,7 @@ public class FakeDataGenerator {
     List<LoanInfoDTO> loans = IntStream.range(1, 11).mapToObj(
         i -> LoanInfoDTO.builder()
             .id((long) i)
-            .loanType(RANDOM.nextBoolean() ? "Home" : "Car")
+            .loanType((i % 2 == 0) ? "Home" : "Car")
             .amount(new BigDecimal(RANDOM.nextInt(10000000)))
             .interestRate(new BigDecimal(RANDOM.nextInt(10) + 1))
             .loanTerm(RANDOM.nextInt(30) + 1)
@@ -119,7 +119,7 @@ public class FakeDataGenerator {
             .repaymentSchedule(LocalDate.now().plusMonths(RANDOM.nextInt(12)))
             .loanTermPaid(RANDOM.nextInt(12))
             .amountPaid(new BigDecimal(RANDOM.nextInt(1000000)))
-            .status("Active")
+            .status((i % 2 == 0) ? "Active" : "Expired")
             .latePaymentPenalty(new BigDecimal(RANDOM.nextInt(5000)))
             .build()
     ).toList();
@@ -152,7 +152,7 @@ public class FakeDataGenerator {
             .type(RANDOM.nextBoolean() ? "withdraw" : "deposit")
             .category(RANDOM.nextBoolean() ? "shopping" : "salary")
             .description("Transaction description " + i)
-            .status("completed")
+            .status(RANDOM.nextBoolean() ? "success" : "Failed")
             .updatedAt(LocalDateTime.now())
             .note("Note " + i)
             .fee(new BigDecimal(RANDOM.nextInt(100)))

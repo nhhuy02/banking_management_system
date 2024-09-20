@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.fetch.response;
+package com.ctv_it.klb.dto.fetch.response.data;
 
 import com.ctv_it.klb.dto.base.CustomerInfoDTO;
 import lombok.Getter;

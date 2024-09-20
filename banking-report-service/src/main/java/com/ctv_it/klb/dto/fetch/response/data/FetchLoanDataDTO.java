@@ -1,8 +1,7 @@
-package com.ctv_it.klb.dto.fetch.response;
+package com.ctv_it.klb.dto.fetch.response.data;
 
 import com.ctv_it.klb.dto.base.LoanInfoDTO;
 import java.util.List;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +15,5 @@ public class FetchLoanDataDTO {
 
   private Long customerId;
   private Long accountId;
-  List<LoanInfoDTO> loans;
+  private List<LoanInfoDTO> loans;
 }

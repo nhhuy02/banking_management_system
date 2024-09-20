@@ -1,8 +1,8 @@
-package com.ctv_it.klb.util.FakeMockServices;
+package com.ctv_it.klb.util.mock;
 
 import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
 import com.ctv_it.klb.dto.base.AccountInfoDTO;
-import com.ctv_it.klb.dto.fetch.response.FetchAccountDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.util.FilterRangeUtils;
@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountFetchService {
+public class MockFetchAccountService {
 
   public FetchAccountDataDTO filter(Long customerId, AccountFilterDTO accountFilterDTO) {
-    List<AccountInfoDTO> filteredAccounts = FakeDataGenerator.initInstance().getAccountResponseDTO()
+    List<AccountInfoDTO> filteredAccounts = MockDataService.initInstance().getAccountResponseDTO()
         .stream()
         .filter(customer -> Objects.equals(customer.getCustomerId(), customerId))
         .flatMap(fa -> fa.getAccounts().stream())
