@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            /*background-color: #0044cc;*/
             color: white;
             padding: 10px;
             text-align: center;
@@ -46,10 +45,12 @@
             color: #333333;
         }
         .footer {
-            text-align: center;
             margin-top: 20px;
-            color: #777777;
-            font-size: 12px;
+            text-align: center;
+        }
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
         }
         .button {
             display: inline-block;
@@ -65,24 +66,34 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2Flogo-blue%20(1).svg?alt=media&token=7c5741df-726f-42a5-b2df-755a27d634c7" alt="Logo Bank">
-        <h1>Nhắc nhở thanh toán</h1>
-    </div>
-    <div class="content">
-        <p>Kính gửi <strong>[Customer Name]</strong>,</p>
-        <p>Chúng tôi xin thông báo rằng kỳ hạn thanh toán của bạn cho khoản vay tại <strong>EIGHT BANK</strong> số Hợp Đồng: <strong>[Số HĐ]</strong> sẽ đến hạn vào ngày <strong>[Ngày đến hạn]</strong>.</p>
-        <p>Vui lòng thực hiện thanh toán trước ngày này để tránh phát sinh lãi suất trễ hạn và các khoản phí khác.</p>
-        <p>Nếu bạn đã thanh toán, vui lòng bỏ qua thông báo này.</p>
-        <p>Chúng tôi trân trọng cảm ơn sự hợp tác của bạn.</p>
-        <p>Trân trọng,<br>
-            <strong>EIGHT BANK</strong></p>
-        <p><a href="[Link thanh toán]" class="button">Thanh toán ngay</a></p>
-    </div>
-    <div class="footer">
-        <p>Đây là email tự động, vui lòng không trả lời. Mọi thắc mắc, xin liên hệ với bộ phận chăm sóc khách hàng qua số điện thoại [Số liên hệ] hoặc email [Email liên hệ].</p>
-    </div>
-</div>
+<table style="width: 100%; max-width: 800px; margin: 20px auto;  border: 1px solid #ddd;">
+    <tr>
+        <td style="text-align: center;">
+            <div class="container">
+                <div class="header">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2FEIGHT%20BANK.png?alt=media&token=34615cbe-189f-4d27-8a88-ba5819452403" alt="Logo Bank">
+                    <h1>Nhắc nhở thanh toán</h1>
+                </div>
+                <div class="content">
+                    <p>Kính gửi <strong th:text="${customerName}">[Customer Name]</strong>,</p>
+                    <p>Chúng tôi xin thông báo rằng kỳ hạn thanh toán của bạn cho khoản vay tại <strong style="color: #0066cc;">EIGHT BANK</strong>.</p>
+                    <p>Số Hợp Đồng: <strong th:text="${contractNumber}">[Số HĐ]</strong></p>
+                    <p>Khoản tiền thanh toán: <strong th:text="${amounts}">[...]</strong></p>
+                    <p>Sẽ đến hạn vào ngày <strong th:text="${deadline}">[Ngày đến hạn]</strong>.</p>
+                    <p>Nếu bạn đã thanh toán, vui lòng bỏ qua thông báo này.</p>
+                    <p>Chúng tôi trân trọng cảm ơn sự hợp tác của bạn.</p>
+                    <p>Trân trọng,<br>
+                        <strong style="color: #0066cc;">EIGHT BANK</strong></p>
+                    <div style="text-align: center;">
+                        <a href="[Link thanh toán]" class="button">Thanh toán ngay</a>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>Tham khảo hướng dẫn sử dụng <a href="http://localhost:5173/login"><strong>EIGHT BANK</strong></a></p>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

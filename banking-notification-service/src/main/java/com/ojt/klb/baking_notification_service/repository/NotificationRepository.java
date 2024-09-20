@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    @Query(value = "select new com.ojt.klb.baking_notification_service.dto.NotificationDTO(n.customerId,nt.bodyTemplate,nt.subjectTemplate,nt.templateName ,n.sendDate) " +
+    @Query(value = "select new com.ojt.klb.baking_notification_service.dto.NotificationDTO(n.customerId,n.content,nt.subjectTemplate,nt.templateName ,n.sendDate) " +
             "from Notification  n  join NotificationTemplate nt " +
             "on n.notificationTemplateId= nt.id" +
             " where  1 = 1 and n.customerId = :customerId")
