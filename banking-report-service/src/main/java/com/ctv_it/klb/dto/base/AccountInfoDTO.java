@@ -2,20 +2,18 @@ package com.ctv_it.klb.dto.base;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @ToString
 public class AccountInfoDTO {
 
   private Long id;
-  private String holeName;
   private String type;
   private String number;
   private String currency;

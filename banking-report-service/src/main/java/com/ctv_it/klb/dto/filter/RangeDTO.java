@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RangeFilterDTO<T> implements Serializable {
+public class RangeDTO<T> implements Serializable {
 
   private T min;
   private T max;

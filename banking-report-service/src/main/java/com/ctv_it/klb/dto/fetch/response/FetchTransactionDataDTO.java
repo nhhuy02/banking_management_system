@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FetchTransactionResponseDTO {
+public class FetchTransactionDataDTO {
 
   private Long customerId;
   List<TransactionInfoDTO> transactions;

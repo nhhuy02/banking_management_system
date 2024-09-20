@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.http.HttpStatus;
 
 @SuperBuilder
 @Getter
@@ -13,10 +14,11 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public abstract class BaseResponseDTO {
 
-  protected boolean success;
-  protected int status;
-  protected String message;
-  protected String url;
+  @Builder.Default
+  protected boolean success = Boolean.TRUE;
+  @Builder.Default
+  protected int status = HttpStatus.OK.value();
   @Builder.Default
   protected LocalDateTime timestamp = LocalDateTime.now();
+  protected String url;
 }

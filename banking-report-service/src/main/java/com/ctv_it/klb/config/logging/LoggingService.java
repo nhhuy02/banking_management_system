@@ -1,6 +1,5 @@
 package com.ctv_it.klb.config.logging;
 
-import com.ctv_it.klb.util.GsonParserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ public class LoggingService {
       return;
     }
     Object requestId = httpServletRequest.getAttribute(REQUEST_ID);
-    String sanitizedBody = GsonParserUtils.parseObjectToString(body);
+    String sanitizedBody = GsonParser.parseObjectToString(body);
 
     log.info("\nLOGGING REQUEST BODY-----------------------------------");
     log.info("[REQUEST-ID]: {}", requestId);
@@ -31,7 +30,7 @@ public class LoggingService {
       return;
     }
     Object requestId = httpServletRequest.getAttribute(REQUEST_ID);
-    String sanitizedBody = GsonParserUtils.parseObjectToString(body);
+    String sanitizedBody = GsonParser.parseObjectToString(body);
 
     log.info("\nLOGGING RESPONSE-----------------------------------");
     log.info("[REQUEST-ID]: {}", requestId);

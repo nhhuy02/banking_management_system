@@ -1,4 +1,4 @@
-package com.ctv_it.klb.util.adapter;
+package com.ctv_it.klb.config.logging.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class BigDecimalAdapterUtils extends TypeAdapter<BigDecimal> {
+public class BigDecimalAdapter extends TypeAdapter<BigDecimal> {
 
   @Override
   public void write(JsonWriter jsonWriter, BigDecimal bigDecimal) throws IOException {

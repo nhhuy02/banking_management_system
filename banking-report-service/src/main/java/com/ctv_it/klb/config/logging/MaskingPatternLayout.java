@@ -1,4 +1,4 @@
-package com.ctv_it.klb.util;
+package com.ctv_it.klb.config.logging;
 
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-public class MaskingPatternLayoutUtils extends PatternLayout {
+public class MaskingPatternLayout extends PatternLayout {
 
   private final List<String> maskPatterns = new ArrayList<>();
   private Pattern multilinePattern;

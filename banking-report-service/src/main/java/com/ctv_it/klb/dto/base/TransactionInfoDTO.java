@@ -15,8 +15,8 @@ import lombok.ToString;
 public class TransactionInfoDTO {
 
   private Long id;
-  private AccountInfoDTO sourceAccount;
-  private AccountInfoDTO destinationAccount;
+  private Long sourceAccountId;
+  private Long destinationAccountId;
   private LocalDateTime date;
   private BigDecimal amount;
   private BigDecimal balanceBeforeTransaction;
