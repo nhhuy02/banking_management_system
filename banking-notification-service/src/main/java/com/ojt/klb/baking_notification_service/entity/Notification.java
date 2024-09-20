@@ -33,4 +33,9 @@ public class Notification extends BaseEntity {
     @ColumnComment("ID của mẫu thông báo")
     private Long notificationTemplateId;
 
+    @Column(name = "content")
+    @ColumnComment("Nội dung")
+    private String content;
+
+
 }
