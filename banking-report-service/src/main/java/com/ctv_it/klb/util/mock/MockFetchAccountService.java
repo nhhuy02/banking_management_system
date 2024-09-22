@@ -1,11 +1,13 @@
 package com.ctv_it.klb.util.mock;
 
 import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
-import com.ctv_it.klb.dto.base.AccountInfoDTO;
+import com.ctv_it.klb.config.i18n.Translator;
+import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
-import com.ctv_it.klb.util.FilterRangeUtils;
+import com.ctv_it.klb.util.FilterRangeUtil;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,31 +38,36 @@ public class MockFetchAccountService {
 
     boolean checkOpeningDateRange = Boolean.TRUE;
 
-    if (FilterRangeUtils.isValid(filters.getOpeningDateRange())) {
-      checkOpeningDateRange = FilterRangeUtils.isWithin(account.getOpeningDate(),
+    // check range
+    try {
+      checkOpeningDateRange = FilterRangeUtil.isWithin(
+          account.getOpeningDate(),
           filters.getOpeningDateRange());
-    } else {
+    } catch (InvalidExceptionCustomize ex) {
       throw new InvalidExceptionCustomize(
-          List.of(ErrorDetailDTO.builder()
-              .field("reportFilters.openingDateRange.max")
-              .rejectedValue(filters.getOpeningDateRange().getMax())
-              .message("max("
-                  + filters.getOpeningDateRange().getMax() + ") < min("
-                  + filters.getOpeningDateRange().getMin() + ")")
-              .build()));
+          Collections.singletonList(
+              ErrorDetailDTO.builder()
+                  .field("filters.range.max")
+                  .rejectedValue(filters.getOpeningDateRange().getMax())
+                  .message(
+                      Translator.toLocale(
+                          "error.invalid.range-3",
+                          filters.getOpeningDateRange().getMax(),
+                          "<",
+                          filters.getOpeningDateRange().getMin())
+                  ).build()));
     }
 
-    // Filter by account type
+    // check type
     boolean matchesType = Optional.ofNullable(filters.getAccountType())
         .map(type -> type.equalsIgnoreCase(account.getType()))
         .orElse(true);
 
-    // Filter by account status
+    // check status
     boolean matchesStatus = Optional.ofNullable(filters.getAccountStatus())
         .map(type -> type.equalsIgnoreCase(account.getStatus()))
         .orElse(true);
 
     return checkOpeningDateRange && matchesType && matchesStatus;
   }
-
 }

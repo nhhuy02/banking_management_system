@@ -1,15 +1,15 @@
 package com.ctv_it.klb.dto.request;
 
+import com.ctv_it.klb.config.validation.FieldName;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.LoanFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO;
-import com.ctv_it.klb.util.ReportRequestDTODeserializerUtils;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ctv_it.klb.enumeration.ReportFormat;
+import com.ctv_it.klb.enumeration.ReportType;
+import com.ctv_it.klb.util.ReportRequestDTODeserializerUtil;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,16 +19,18 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@JsonDeserialize(using = ReportRequestDTODeserializerUtils.class)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(using = ReportRequestDTODeserializerUtil.class)
 public class ReportRequestDTO {
 
-  @NotNull(message = "error.invalid.null")
+  @FieldName("customerId")
   private Long customerId;
 
-  @NotBlank(message = "error.invalid.blank")
-  @Schema(description = "Allowable values: ['ACCOUNT', 'TRANSACTION', 'LOAN']")
-  private String reportType;
+  @Schema(implementation = ReportType.class)
+  @FieldName("reportType")
+  private ReportType reportType;
+
+  @Schema(implementation = ReportFormat.class)
+  private ReportFormat reportFormat;
 
   @Schema(
       description = """

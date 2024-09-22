@@ -6,7 +6,7 @@ import com.ojt.klb.exception.GlobalException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtil;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -38,7 +38,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
 
         try {
             reader = response.body().asReader(StandardCharsets.UTF_8);
-            String result = IOUtils.toString(reader);
+            String result = IOUtil.toString(reader);
             log.error(result);
             ObjectMapper mapper = new ObjectMapper();
             mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

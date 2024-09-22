@@ -1,11 +1,11 @@
-package com.ojt.klb.Utils;
+package com.ojt.klb.Util;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.Random;
 
 @RequiredArgsConstructor
-public class AccountUtils {
+public class AccountUtil {
     private static final Random RANDOM = new Random();
 
     public static String generateAccountNumber(){

@@ -2,6 +2,8 @@
 
   <!-- Define common patterns as properties -->
   <property name="maskPattern" value="&quot;phoneNumber&quot;\s*:\s*&quot;(.*?)&quot;"/>
+  <property name="maskPattern" value="&quot;email&quot;\s*:\s*&quot;(.*?)&quot;"/>
+  <property name="maskPattern" value="&quot;nationalId&quot;\s*:\s*&quot;(.*?)&quot;"/>
   <property name="pattern" value="%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable"/>
 
   <!-- Console Appender -->

@@ -1,6 +1,6 @@
 package com.ojt.klb.service.impl;
 
-import com.ojt.klb.Utils.AccountUtils;
+import com.ojt.klb.Util.AccountUtil;
 import com.ojt.klb.exception.*;
 import com.ojt.klb.external.TransactionService;
 // import com.ojt.klb.external.UserService;
@@ -16,7 +16,7 @@ import com.ojt.klb.repository.AccountRepository;
 import com.ojt.klb.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanUtil;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +63,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public String generateUniqueAccountNumber() {
-        String accountNumber = AccountUtils.generateAccountNumber();
+        String accountNumber = AccountUtil.generateAccountNumber();
         while (accountRepository.existsByAccountNumber(accountNumber)) {
-            accountNumber = AccountUtils.generateAccountNumber();
+            accountNumber = AccountUtil.generateAccountNumber();
         }
 
         return accountNumber;
@@ -107,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
     public void updateAccount(String accountNumber, AccountDto accountDto) {
         accountRepository.findAccountByAccountNumber(accountNumber)
                 .map(account -> {
-                    BeanUtils.copyProperties(accountDto, account);
+                    BeanUtil.copyProperties(accountDto, account);
                     return accountRepository.save(account);
                 })
                 .orElseThrow(() -> new ResourceNotFound("Account not found on the server"));

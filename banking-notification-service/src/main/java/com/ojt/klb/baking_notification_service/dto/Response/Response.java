@@ -3,7 +3,7 @@ package com.ojt.klb.baking_notification_service.dto.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.ojt.klb.baking_notification_service.core.StringUtils;
+import com.ojt.klb.baking_notification_service.core.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class Response<D> extends BaseResponse<D> {
 
     public Response<D> withError(Integer statusCode, String message) {
         try {
-            if (StringUtils.stringNotNullOrEmpty(message) && statusCode != null) {
+            if (StringUtil.stringNotNullOrEmpty(message) && statusCode != null) {
                 this.setFailure(statusCode, message);
             }
         } catch (Exception e) {

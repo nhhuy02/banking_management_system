@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.2'
 }
 
 dependencyManagement {

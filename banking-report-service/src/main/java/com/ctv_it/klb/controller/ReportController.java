@@ -3,7 +3,6 @@ package com.ctv_it.klb.controller;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import com.ctv_it.klb.dto.response.SuccessResponseDTO;
-import com.ctv_it.klb.factory.ReportServiceFactory;
 import com.ctv_it.klb.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Report", description = "Endpoints for generate and export report")
 public class ReportController {
 
-  private final ReportServiceFactory reportServiceFactory;
+  private final ReportService reportService;
 
 
   @Operation(summary = "Generate report", description = "Generates a report based on the report type specified.")
@@ -60,26 +58,13 @@ public class ReportController {
   })
   @PostMapping("")
   public ResponseEntity<?> report(HttpServletRequest request,
-      @Valid @RequestBody ReportRequestDTO reportRequestDTO) {
+      @RequestBody ReportRequestDTO reportRequestDTO) {
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
-    ReportService<?> reportService = reportServiceFactory.getReportService(
-        reportRequestDTO.getReportType());
-
-    if (reportService == null) {
-      log.error("ReportServiceFactory not found reportServiceImpl for reportType with value '{}'",
-          reportRequestDTO.getReportType());
-      throw new InternalError("");
-    }
-
-    Object report = reportService.report(reportRequestDTO);
-
-    SuccessResponseDTO successResponseDTO = SuccessResponseDTO.builder()
-        .url(request.getServletPath())
-        .data(report)
-        .build();
-
-    return ResponseEntity.ok(successResponseDTO);
+    return ResponseEntity.ok(
+        SuccessResponseDTO.builder()
+            .url(request.getServletPath())
+            .data(reportService.report(reportRequestDTO))
+            .build());
   }
-
 }

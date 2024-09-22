@@ -1,6 +1,6 @@
 package com.ojt.klb.baking_notification_service.core;
 
-public class StringUtils {
+public class StringUtil {
     public static final String SPACE = " ";
     public static final String EMPTY = "";
     public static boolean stringNotNullOrEmpty(String value) {

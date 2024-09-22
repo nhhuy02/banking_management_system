@@ -11,7 +11,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 @Configuration
 public class LocaleResolver extends AcceptHeaderLocaleResolver implements WebMvcConfigurer {
 
-  List<Locale> LOCALES = List.of(Locale.of("en"), Locale.of("vi"));
+  List<Locale> LOCALES = List.of(Locale.forLanguageTag("en"), Locale.forLanguageTag("vi"));
 
   @Override
   public Locale resolveLocale(HttpServletRequest request) {
@@ -20,5 +20,4 @@ public class LocaleResolver extends AcceptHeaderLocaleResolver implements WebMvc
         ? Locale.US
         : Locale.lookup(Locale.LanguageRange.parse(languageHeader), LOCALES);
   }
-
 }

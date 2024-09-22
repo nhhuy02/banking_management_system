@@ -2,9 +2,9 @@ package com.ojt.klb.baking_notification_service.core;
 
 import java.beans.PropertyDescriptor;
 
-public class ObjectUtils {
+public class ObjectUtil {
     public static Object callGetter(Object obj, String fieldName) {
-        if(obj != null && StringUtils.stringNotNullOrEmpty(fieldName)){
+        if(obj != null && StringUtil.stringNotNullOrEmpty(fieldName)){
             try {
                 return new PropertyDescriptor(fieldName, obj.getClass()).getReadMethod().invoke(obj);
             } catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.ctv_it.klb.dto.fetch.response.data;
 
-import com.ctv_it.klb.dto.base.TransactionInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

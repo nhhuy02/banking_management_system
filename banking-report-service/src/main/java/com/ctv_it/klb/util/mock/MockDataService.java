@@ -1,8 +1,8 @@
 package com.ctv_it.klb.util.mock;
 
-import com.ctv_it.klb.dto.base.AccountInfoDTO;
-import com.ctv_it.klb.dto.base.LoanInfoDTO;
-import com.ctv_it.klb.dto.base.TransactionInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.LoanInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchLoanDataDTO;
