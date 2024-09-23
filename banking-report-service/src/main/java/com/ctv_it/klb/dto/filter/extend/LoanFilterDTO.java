@@ -1,6 +1,5 @@
 package com.ctv_it.klb.dto.filter.extend;
 
-import com.ctv_it.klb.config.validation.FieldName;
 import com.ctv_it.klb.dto.filter.RangeDTO;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,14 +18,9 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "Filter for loan reports")
 public class LoanFilterDTO extends ReportFilterDTO {
 
-  @FieldName("loanType")
   private String loanType;
-  @FieldName("loanStatus")
   private String loanStatus;
-  @FieldName("loanRepaymentScheduleRange")
   private RangeDTO<LocalDate> loanRepaymentScheduleRange;
-  @FieldName("loanStartDateRange")
   private RangeDTO<LocalDate> loanStartDateRange;
-  @FieldName("loanEndDateRange")
   private RangeDTO<LocalDate> loanEndDateRange;
 }

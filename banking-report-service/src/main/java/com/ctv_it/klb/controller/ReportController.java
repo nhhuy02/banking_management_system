@@ -30,41 +30,21 @@ public class ReportController {
 
 
   @Operation(summary = "Generate report", description = "Generates a report based on the report type specified.")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200",
-          description = """
-               Successfully generated the report.
-               The response data will be one of the following based on the report type:
-                - `ACCOUNT` -> AccountReportDTO
-                - `LOAN` -> LoanReportDTO
-                - `TRANSACTION` -> TransactionReportDTO
-              """,
-          content = @Content(
-              mediaType = "application/json",
-              schema = @Schema(implementation = SuccessResponseDTO.class)
-          )
-      ), @ApiResponse(responseCode = "400", description = "Bad request",
-      content = @Content(
-          mediaType = "application/json",
-          schema = @Schema(implementation = ErrorResponseDTO.class)
-      )
-  ),
-      @ApiResponse(responseCode = "500", description = "Internal server error",
-          content = @Content(
-              mediaType = "application/json",
-              schema = @Schema(implementation = ErrorResponseDTO.class)
-          )
-      )
-  })
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = """
+       Successfully generated the report.
+       The response data will be one of the following based on the report type:
+        - `ACCOUNT` -> AccountReportDTO
+        - `LOAN` -> LoanReportDTO
+        - `TRANSACTION` -> TransactionReportDTO
+      """, content = @Content(mediaType = "application/json", schema = @Schema(implementation = SuccessResponseDTO.class))),
+      @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))),
+      @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))})
   @PostMapping("")
   public ResponseEntity<?> report(HttpServletRequest request,
       @RequestBody ReportRequestDTO reportRequestDTO) {
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
-    return ResponseEntity.ok(
-        SuccessResponseDTO.builder()
-            .url(request.getServletPath())
-            .data(reportService.report(reportRequestDTO))
-            .build());
+    return ResponseEntity.ok(SuccessResponseDTO.builder().url(request.getServletPath())
+        .data(reportService.report(reportRequestDTO)).build());
   }
 }

@@ -34,16 +34,21 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       throws IOException {
 
     JsonNode node = p.getCodec().readTree(p);
-    log.info("Deserializing node: {}", node.toString());
-    checkForUnrecognizedFields(node, ReportRequestDTO.class);
+    log.info("Deserializing node: {}", node.toPrettyString());
 
     long customerId = getCustomerId(node);
     ReportType type = getType(node);
     ReportFormat format = getFormat(node);
+
+    // Now handle the reportFilters field
     ReportFilterDTO filters = getFilters(p, node, type);
 
-    return ReportRequestDTO.builder().customerId(customerId).reportType(type).reportFormat(format)
-        .reportFilters(filters).build();
+    return ReportRequestDTO.builder()
+        .customerId(customerId)
+        .reportType(type)
+        .reportFormat(format)
+        .reportFilters(filters)
+        .build();
   }
 
   private long getCustomerId(JsonNode node) {
@@ -134,14 +139,16 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
     ReportFilterDTO filters = null;
     JsonNode filtersNode = node.get(fieldName);
 
+    // Check if reportFilters is present
     if (filtersNode != null) {
+      // Perform validation for nested fields based on the reportType
       filters = switch (reportType) {
         case ACCOUNT -> p.getCodec().treeToValue(filtersNode, AccountFilterDTO.class);
         case LOAN -> p.getCodec().treeToValue(filtersNode, LoanFilterDTO.class);
         case TRANSACTION -> p.getCodec().treeToValue(filtersNode, TransactionFilterDTO.class);
       };
 
-      // Check for unrecognized fields
+      // Check for unrecognized fields within filters
       checkForUnrecognizedFields(filtersNode, filters.getClass());
     }
 
@@ -159,9 +166,9 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       while (fieldNames.hasNext()) {
         String fieldName = fieldNames.next();
         JsonNode fieldValueNode = objectNode.get(fieldName);
+        log.info("Valid fields for {}: {}", fieldName, validFieldNames);
 
         if (!validFieldNames.contains(fieldName)) {
-          // Throw an exception if the field is not recognized
           throw new InvalidExceptionCustomize(Collections.singletonList(
               ErrorDetailDTO.builder()
                   .field(fieldName)
@@ -171,9 +178,9 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
                   .build()));
         }
 
-        // Recursively check for nested objects or arrays
+        // Recursively check for nested objects
         Class<?> fieldClass = getFieldClass(clazz, fieldName);
-        if (fieldClass != null && (fieldValueNode.isObject() || fieldValueNode.isArray())) {
+        if (fieldClass != null && fieldValueNode.isObject()) {
           checkForUnrecognizedFields(fieldValueNode, fieldClass);
         }
       }
@@ -212,6 +219,5 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
     }
     return validFields;
   }
-
 
 }

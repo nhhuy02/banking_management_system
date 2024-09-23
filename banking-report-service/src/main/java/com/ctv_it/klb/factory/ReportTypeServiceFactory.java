@@ -2,7 +2,7 @@ package com.ctv_it.klb.factory;
 
 import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.enumeration.ReportType;
-import com.ctv_it.klb.service.ReportTypeService;
+import com.ctv_it.klb.service.type.ReportTypeService;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -14,17 +14,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ReportTypeServiceFactory {
 
-  private final Map<ReportType, ReportTypeService<?>> reportServiceMap = new EnumMap<>(
+  private final Map<ReportType, ReportTypeService<?>> reportTypeServiceMap = new EnumMap<>(
       ReportType.class);
 
   @Autowired
   public ReportTypeServiceFactory(List<ReportTypeService<?>> reportTypeServices) {
-    reportTypeServices.forEach(service -> reportServiceMap.put(service.getType(), service));
-    log.info("ReportFormatServiceFactory {}", reportServiceMap);
+    reportTypeServices.forEach(service -> reportTypeServiceMap.put(service.getType(), service));
   }
 
   public ReportTypeService<?> getReportTypeService(ReportType reportType) {
-    log.info(Translator.toLocale("msg.called", "ReportTypeServiceFactory::getReportTypeService"));
-    return reportServiceMap.get(reportType);
+    log.info(Translator.toLocale("msg.called",
+        "ReportTypeServiceFactory::getReportTypeService " + reportTypeServiceMap));
+
+    return reportTypeServiceMap.get(reportType);
   }
 }

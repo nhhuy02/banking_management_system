@@ -1,6 +1,5 @@
 package com.ctv_it.klb.dto.request;
 
-import com.ctv_it.klb.config.validation.FieldName;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.LoanFilterDTO;
@@ -10,6 +9,7 @@ import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.util.ReportRequestDTODeserializerUtil;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,13 +22,14 @@ import lombok.ToString;
 @JsonDeserialize(using = ReportRequestDTODeserializerUtil.class)
 public class ReportRequestDTO {
 
-  @FieldName("customerId")
+  @NotNull
   private Long customerId;
 
+  @NotNull
   @Schema(implementation = ReportType.class)
-  @FieldName("reportType")
   private ReportType reportType;
 
+  @NotNull
   @Schema(implementation = ReportFormat.class)
   private ReportFormat reportFormat;
 
