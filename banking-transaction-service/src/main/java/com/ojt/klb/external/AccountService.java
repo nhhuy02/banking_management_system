@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@FeignClient(name = "banking-account-service", configuration = FeignClientConfiguration.class)
+@FeignClient(name = "banking-account-service", url = "${application.config.account-url}")
 public interface AccountService {
 
     @GetMapping("/accounts")

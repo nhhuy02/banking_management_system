@@ -8,34 +8,18 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class TransactionDto {
+@NoArgsConstructor @AllArgsConstructor
+@Data
+public class TransactionNotificationDto {
     private String referenceNumber;
-
-    private String fromAccountHolderName;
-
-    private String fromBank;
-
     private String fromAccountNumber;
-
+    private String fromAccountHolderName;
+    private String fromBank;
     private String toAccountNumber;
-
-    private String toBank;
-
     private String toAccountHolderName;
-
-    private String accountId;
-
-    private String transactionType;
-
+    private String toBank;
     private BigDecimal amount;
-
+    private String transactionType;
     private LocalDateTime transactionDate;
-
-    private String status;
-
-    private String description;
 }

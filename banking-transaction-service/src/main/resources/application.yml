@@ -13,3 +13,7 @@ spring:
     ddl-auto: create
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+application:
+  config:
+    account-url: http://localhost:8040/api/v1/accounts

@@ -19,6 +19,18 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String fromAccountHolderName;
+
+    private String fromBank;
+
+    private String fromAccountNumber;
+
+    private String toAccountNumber;
+
+    private String toBank;
+
+    private String toAccountHolderName;
+
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

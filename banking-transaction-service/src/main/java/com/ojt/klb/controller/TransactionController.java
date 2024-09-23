@@ -1,6 +1,6 @@
 package com.ojt.klb.controller;
 
-import com.ojt.klb.model.request.InternalTransferRequest;
+import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.response.Response;
 import com.ojt.klb.service.TransactionService;
@@ -30,7 +30,7 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/internal")
-    public ResponseEntity<?> internalFundTransfer(@RequestBody InternalTransferRequest request){
+    public ResponseEntity<?> internalFundTransfer(@RequestBody TransactionDto request){
         Response data = service.internalFundTransfer(request);
         return ResponseEntity.ok(new Response(200, "You have successfully transferred money", true, data));
     }

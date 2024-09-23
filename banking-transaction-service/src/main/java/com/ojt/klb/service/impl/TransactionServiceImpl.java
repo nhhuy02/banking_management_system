@@ -8,10 +8,10 @@ import com.ojt.klb.external.AccountService;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
+import com.ojt.klb.model.dto.TransactionNotificationDto;
 import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
-import com.ojt.klb.model.request.InternalTransferRequest;
 import com.ojt.klb.model.response.Response;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.service.TransactionService;
@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.ojt.klb.model.TransactionStatus.COMPLETED;
-import static com.ojt.klb.model.TransactionStatus.PENDING;
 import static com.ojt.klb.model.TransactionType.INTERNAL_TRANSFER;
 
 @Slf4j
@@ -46,10 +45,10 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionDto internalTransferDto = TransactionDto.builder()
                 .referenceNumber(referenceNumber)
                 .accountId(account.getAccountId())
-                .transactionType(String.valueOf(TransactionType.DEPOSIT))
+                .transactionType(TransactionType.DEPOSIT.name())
                 .amount(amount)
                 .transactionDate(LocalDateTime.now())
-                .status(String.valueOf(PENDING))
+                .status(COMPLETED.name())
                 .build();
 
         Transaction transaction = mapper.convertToEntity(internalTransferDto);
@@ -57,7 +56,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             account.setAvailableBalance(account.getAvailableBalance().add(amount));
-            transaction.setStatus(COMPLETED);
             repository.save(transaction);
             accountService.updateAccount(account.getAccountId(), account);
 
@@ -85,10 +83,10 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionDto internalTransferDto = TransactionDto.builder()
                 .referenceNumber(referenceNumber)
                 .accountId(account.getAccountId())
-                .transactionType(String.valueOf(TransactionType.WITHDRAWAL))
+                .transactionType(TransactionType.WITHDRAWAL.name())
                 .amount(amount)
                 .transactionDate(LocalDateTime.now())
-                .status(String.valueOf(PENDING))
+                .status(COMPLETED.name())
                 .build();
 
         Transaction transaction = mapper.convertToEntity(internalTransferDto);
@@ -96,7 +94,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             account.setAvailableBalance(account.getAvailableBalance().subtract(amount));
-            transaction.setStatus(COMPLETED);
             repository.save(transaction);
             accountService.updateAccount(account.getAccountId(), account);
 
@@ -114,7 +111,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void validateBalance(Account account, BigDecimal amount){
+    private void validateBalance(Account account, BigDecimal amount) {
         if (account.getAvailableBalance().compareTo(BigDecimal.ZERO) < 0 || account.getAvailableBalance().compareTo(amount) < 0) {
             throw new InsufficientBalance("Insufficient funds in the account");
         }
@@ -129,9 +126,19 @@ public class TransactionServiceImpl implements TransactionService {
         return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
     }
 
+//    private void sendKafkaNotification(TransactionNotificationDto notificationDto) {
+//        try {
+//            kafkaTemplate.send(NOTIFICATION_TOPIC, notificationDto.getReferenceNumber(), notificationDto);
+//            log.info("Kafka notification sent for transaction: {}", notificationDto.getReferenceNumber());
+//        } catch (Exception e) {
+//            log.error("Failed to send Kafka notification for transaction: {}", notificationDto.getReferenceNumber(), e);
+//            // Optionally, you might want to implement a retry mechanism or compensating action here
+//        }
+//    }
+
     @Transactional
     @Override
-    public Response internalFundTransfer(InternalTransferRequest request){
+    public Response internalFundTransfer(TransactionDto request) {
         String referenceNumber = generateUniqueReferenceNumber();
 
         Account accountSource = getAndValidateAccount(request.getFromAccountNumber());
@@ -139,39 +146,43 @@ public class TransactionServiceImpl implements TransactionService {
 
         validateBalance(accountSource, request.getAmount());
 
-        try{
-            TransactionDto sourceInternalTransferDto = TransactionDto.builder()
+        try {
+            TransactionDto transactionDto = TransactionDto.builder()
                     .referenceNumber(referenceNumber)
-                    .transactionType(String.valueOf(TransactionType.WITHDRAWAL))
-                    .status(String.valueOf(PENDING))
-                    .accountId(accountSource.getAccountId())
+                    .fromBank("Kien Long Bank")
+                    .fromAccountHolderName(request.getFromAccountHolderName())
+                    .fromAccountNumber(request.getFromAccountNumber())
+                    .toBank("Kien Long Bank")
+                    .toAccountHolderName(request.getToAccountHolderName())
+                    .toAccountNumber(request.getToAccountNumber())
+                    .transactionType(INTERNAL_TRANSFER.name())
+                    .status(COMPLETED.name())
                     .transactionDate(LocalDateTime.now())
                     .amount(request.getAmount().negate())
                     .build();
 
-            TransactionDto destinationTransactionDto = TransactionDto.builder()
-                    .referenceNumber(referenceNumber)
-                    .transactionType(String.valueOf(INTERNAL_TRANSFER))
-                    .status(String.valueOf(PENDING))
-                    .accountId(accountDestination.getAccountId())
-                    .transactionDate(LocalDateTime.now())
-                    .amount(request.getAmount())
-                    .build();
-
-            Transaction sourceTransaction = mapper.convertToEntity(sourceInternalTransferDto);
-            Transaction destinationTransaction = mapper.convertToEntity(destinationTransactionDto);
+            Transaction transaction = mapper.convertToEntity(transactionDto);
 
             accountSource.setAvailableBalance(accountSource.getAvailableBalance().subtract(request.getAmount()));
             accountDestination.setAvailableBalance(accountDestination.getAvailableBalance().add(request.getAmount()));
 
-            accountSource.setAccountStatus(String.valueOf(COMPLETED));
-            accountDestination.setAccountStatus(String.valueOf(COMPLETED));
-
-            repository.save(sourceTransaction);
-            repository.save(destinationTransaction);
-
+            repository.save(transaction);
             log.info("Internal fund transfer completed successfully");
-        }catch (Exception e) {
+
+            TransactionNotificationDto notificationDto = TransactionNotificationDto.builder()
+                    .referenceNumber(referenceNumber)
+                    .transactionType(TransactionType.INTERNAL_TRANSFER.name())
+                    .fromAccountHolderName(request.getFromAccountHolderName())
+                    .fromAccountNumber(request.getFromAccountNumber())
+                    .fromBank("Kien Long Bank")
+                    .toAccountHolderName(request.getToAccountHolderName())
+                    .toAccountNumber(request.getToAccountNumber())
+                    .toBank("Kien Long Bank")
+                    .amount(request.getAmount())
+                    .transactionDate(LocalDateTime.now())
+                    .build();
+//            kafkaTemplate.send("transaction-notifications", notificationDto);
+        } catch (Exception e) {
             log.error("Error during internal fund transfer: {}", e.getMessage(), e);
             throw new RuntimeException("Internal server error, please try again later");
         }

@@ -21,9 +21,14 @@ public interface AccountService {
 
     List<TransactionResponse> getTransactionsFromAccountId(String accountId);
 
-    Response closeAccount(String accountNumber);
+    void closeAccount(String accountNumber);
 
-    List<AccountDto> readAccountsByUserId(Long userId);
+//    List<AccountDto> readAccountsByUserId(Long userId);
 
     void updateBalance(String accountNumber, BigDecimal amount);
+
+    List<AccountDto> readAllAccounts();
+
+    void deleteAccount(String accountNumber);
+
 }
