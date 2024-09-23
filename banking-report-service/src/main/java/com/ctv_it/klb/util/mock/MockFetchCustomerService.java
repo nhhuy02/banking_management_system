@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 public class MockFetchCustomerService {
 
   public FetchCustomerDataDTO findById(Long customerId) {
-    return MockDataService.initInstance().getCustomerResponseDTO().stream()
-        .filter(cus -> Objects.equals(cus.getId(), customerId))
-        .findFirst().orElseThrow(() -> new NotFoundExceptionCustomize(List.of(
-            ErrorDetailDTO.builder().field("customerId").rejectedValue(customerId)
-                .message(Translator.toLocale("error.not-found")).build())));
+    return FetchCustomerDataDTO.builder().build();
   }
 }

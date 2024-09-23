@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "customers")
 public class Customer {

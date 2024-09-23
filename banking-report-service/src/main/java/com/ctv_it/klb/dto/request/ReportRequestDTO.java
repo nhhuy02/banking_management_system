@@ -16,8 +16,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Builder
-@Getter
 @Setter
+@Getter
 @ToString
 @JsonDeserialize(using = ReportRequestDTODeserializerUtil.class)
 public class ReportRequestDTO {

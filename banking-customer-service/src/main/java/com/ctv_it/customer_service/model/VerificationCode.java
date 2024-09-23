@@ -8,8 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "verification_codes")
 public class VerificationCode {

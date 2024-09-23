@@ -34,13 +34,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
     AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
 
-    List<AccountInfoDTO> accounts = mockFetchAccountService.filter(reportRequestDTO.getCustomerId(),
-        accountFilterDTO).getAccounts();
-
-    return AccountReportDTO.builder()
-        .customer(customer)
-        .accounts(accounts)
-        .build();
+    return null;
   }
 
   @Override

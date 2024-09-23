@@ -8,8 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Builder
-@Getter
 @Setter
+@Getter
 @ToString
 public class TransactionInfoDTO {
 

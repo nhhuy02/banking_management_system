@@ -7,8 +7,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
 @Setter
+@Getter
 @ToString(callSuper = true)
 public class ErrorResponseDTO extends BaseResponseDTO {
 

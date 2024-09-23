@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,6 +36,8 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
 
     JsonNode node = p.getCodec().readTree(p);
     log.info("Deserializing node: {}", node.toPrettyString());
+
+    checkForUnrecognizedFields(node, ReportRequestDTO.class);
 
     long customerId = getCustomerId(node);
     ReportType type = getType(node);
@@ -157,6 +160,10 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
   }
 
   private void checkForUnrecognizedFields(JsonNode node, Class<?> clazz) {
+    if (clazz == null || Modifier.isAbstract(clazz.getModifiers())) {
+      return;
+    }
+
     Set<String> validFieldNames = getValidFieldNames(clazz);
 
     if (node.isObject()) {

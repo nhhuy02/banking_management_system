@@ -7,8 +7,8 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class CustomerData {
     private Long customerId;
     private String customerName;

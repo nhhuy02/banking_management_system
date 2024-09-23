@@ -9,8 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class NotificationDTO {
     @Schema(description = "ID khách hàng")
     private Long customerId;

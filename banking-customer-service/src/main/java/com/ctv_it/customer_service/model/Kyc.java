@@ -9,8 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "kyc")
 public class Kyc {

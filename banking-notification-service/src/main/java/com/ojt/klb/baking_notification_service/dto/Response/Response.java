@@ -8,8 +8,8 @@ import com.ojt.klb.baking_notification_service.core.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 public class Response<D> extends BaseResponse<D> {
 
     public Response<D> withData(D data) {

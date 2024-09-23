@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class TransactionData {
     @Schema(description = "Email")
     private String email;
