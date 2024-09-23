@@ -24,7 +24,5 @@ public class NotificationTemplate extends BaseEntity {
     @Column(name = "subject_template")
     @ColumnComment("Tiêu đề thông báo")
     private String subjectTemplate;
-    @Column(name = "body_template")
-    @ColumnComment("Nội dung thông báo")
-    private String bodyTemplate;
+
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -13,10 +14,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TransactionData {
-    @Schema(description = "Số lệnh giao dịch")
-    private Long transactionId;
+    @Schema(description = "Email")
+    private String email;
     @Schema(description = "ID người gửi tiền")
     private Long customerId;
+    @Schema(description = "Số lệnh giao dịch")
+    private Long transactionId;
     @Schema(description = "Ngày giờ giao dịch")
     private LocalDateTime transactionDate;
     @Schema(description = "Tài khoản nguồn")
@@ -25,10 +28,8 @@ public class TransactionData {
     private String receiveBankAccount;
     @Schema(description = "Tên người nhận")
     private String recipientName;
-    @Schema(description = "Tên ngân hàng nhận")
-    private String bankName;
     @Schema(description = "Số tiền")
-    private Long amounts;
+    private BigDecimal amounts;
     @Schema(description = "Nội dung chuyển khoản")
-    private String content;
+    private String description;
 }

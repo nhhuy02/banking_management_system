@@ -8,4 +8,12 @@ public class KafkaTopicConfig {
     public NewTopic customerOtpTopic() {
         return new NewTopic("customer-otp-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
     }
+    @Bean
+    public NewTopic transTopic() {
+        return new NewTopic("transaction-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
+    }
+    @Bean
+    public NewTopic loanTopic() {
+        return new NewTopic("loan-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
+    }
 }
