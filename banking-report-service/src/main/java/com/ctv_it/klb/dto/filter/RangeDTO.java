@@ -1,15 +1,17 @@
 package com.ctv_it.klb.dto.filter;
 
 import java.io.Serializable;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class RangeDTO<T> implements Serializable {
 
   private T min;

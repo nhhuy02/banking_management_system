@@ -1,7 +1,7 @@
 package com.ctv_it.klb.dto;
 
-import com.ctv_it.klb.dto.base.AccountInfoDTO;
-import com.ctv_it.klb.dto.base.CustomerInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

@@ -18,10 +18,8 @@ public class LoggingService {
     Object requestId = httpServletRequest.getAttribute(REQUEST_ID);
     String sanitizedBody = GsonParser.parseObjectToString(body);
 
-    log.info("\nLOGGING REQUEST BODY-----------------------------------");
-    log.info("[REQUEST-ID]: {}", requestId);
-    log.info("[BODY REQUEST]: {}", sanitizedBody);
-    log.info("LOGGING REQUEST BODY-----------------------------------\n");
+    log.info("\nLOGGING REQUEST [{}]:",requestId);
+    log.info("\n\t[BODY REQUEST]: {}\n", sanitizedBody);
   }
 
   public void logResponse(HttpServletRequest httpServletRequest,
@@ -32,9 +30,7 @@ public class LoggingService {
     Object requestId = httpServletRequest.getAttribute(REQUEST_ID);
     String sanitizedBody = GsonParser.parseObjectToString(body);
 
-    log.info("\nLOGGING RESPONSE-----------------------------------");
-    log.info("[REQUEST-ID]: {}", requestId);
-    log.info("[BODY RESPONSE]: {}", sanitizedBody);
-    log.info("LOGGING RESPONSE-----------------------------------\n");
+    log.info("\nLOGGING RESPONSE [{}]:",requestId);
+    log.info("\n\t[BODY RESPONSE]: {}\n", sanitizedBody);
   }
 }

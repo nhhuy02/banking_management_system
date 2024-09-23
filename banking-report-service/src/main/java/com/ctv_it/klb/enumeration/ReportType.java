@@ -6,7 +6,7 @@ public enum ReportType {
   public static ReportType fromString(String value) {
     try {
       return ReportType.valueOf(value);
-    } catch (IllegalArgumentException ex) {
+    } catch (Exception ex) {
       return null;
     }
   }

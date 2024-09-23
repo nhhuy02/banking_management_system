@@ -14,7 +14,7 @@ public abstract class EnumConverter<T extends Enum<T>, E> implements AttributeCo
 
     @Override
     public E convertToDatabaseColumn(T attribute) {
-        Object value = ObjectUtils.callGetter(attribute, VALUE);
+        Object value = ObjectUtil.callGetter(attribute, VALUE);
         return (E) value;
     }
 
@@ -27,7 +27,7 @@ public abstract class EnumConverter<T extends Enum<T>, E> implements AttributeCo
         T[] enums = clazz.getEnumConstants();
 
         for (T e : enums) {
-            Object value = ObjectUtils.callGetter(e, VALUE);
+            Object value = ObjectUtil.callGetter(e, VALUE);
             if (value.equals(dbData)) {
                 return e;
             }
