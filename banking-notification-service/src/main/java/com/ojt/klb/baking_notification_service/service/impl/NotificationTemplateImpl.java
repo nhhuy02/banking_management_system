@@ -1,11 +1,11 @@
 package com.ojt.klb.baking_notification_service.service.impl;
 
-import com.ojt.klb.baking_notification_service.core.Mapper.NotificationTemplateMapper;
+
 import com.ojt.klb.baking_notification_service.dto.NotificationTemplateRequest;
 import com.ojt.klb.baking_notification_service.dto.Response.Response;
 import com.ojt.klb.baking_notification_service.dto.Response.ResponseMessage;
 import com.ojt.klb.baking_notification_service.entity.NotificationTemplate;
-import com.ojt.klb.baking_notification_service.exception.ValidateException;
+
 import com.ojt.klb.baking_notification_service.repository.NotificationTemplateRepository;
 import com.ojt.klb.baking_notification_service.service.NotificationTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class NotificationTemplateImpl implements NotificationTemplateService {
 
         if (id == null) {
 
-            notificationTemplate.setBodyTemplate(request.getBodyTemplate());
+
             notificationTemplate.setSubjectTemplate(request.getSubjectTemplate());
             notificationTemplate.setTemplateName(request.getTemplateName());
         } else {
@@ -33,7 +33,7 @@ public class NotificationTemplateImpl implements NotificationTemplateService {
             if (notificationTemplate == null) {
                 return response.withError(ResponseMessage.ERROR);
             } else {
-                notificationTemplate.setBodyTemplate(request.getBodyTemplate());
+
                 notificationTemplate.setSubjectTemplate(request.getSubjectTemplate());
                 notificationTemplate.setTemplateName(request.getTemplateName());
             }

@@ -5,6 +5,7 @@ import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -18,15 +19,15 @@ import java.util.Properties;
 @Service
 public class MailService {
 
+    @Value("${email.from}")
+    private String fromEmail;
 
+    @Value("${email.password}")
+    private String password;
     @Autowired
     private SpringTemplateEngine templateEngine; // Inject Thymeleaf template engine
     public String send(String email, String subject, String templateName, Map<String, Object> variables) {
         try {
-            final String fromEmail = "htkcymq1148@gmail.com";
-            final String password = "vpwlemjyapznytol";
-
-
 
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
@@ -48,7 +49,7 @@ public class MailService {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress(fromEmail, "KLB"));
+            msg.setFrom(new InternetAddress(fromEmail, "EIGHT BANK"));
             msg.setReplyTo(InternetAddress.parse(fromEmail, false));
             msg.setSubject(subject, "UTF-8");
 //            msg.setText(body, "UTF-8");
