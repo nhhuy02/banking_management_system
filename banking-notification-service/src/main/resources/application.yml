@@ -20,3 +20,4 @@ spring:
         value.deserializer.type: com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto
 
 
+
