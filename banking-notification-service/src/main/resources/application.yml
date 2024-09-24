@@ -13,6 +13,10 @@ spring:
     consumer:
       group-id: group_id
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: com.ojt.klb.banking_notification_service.config.GenericDeserializer
       properties:
         spring.json.trusted.packages: '*'
+        value.deserializer.type: com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto
+
+
