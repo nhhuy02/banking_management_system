@@ -4,7 +4,7 @@ import java.beans.PropertyDescriptor;
 
 public class ObjectUtil {
     public static Object callGetter(Object obj, String fieldName) {
-        if(obj != null && StringUtil.stringNotNullOrEmpty(fieldName)){
+        if(obj != null && StringUtils.stringNotNullOrEmpty(fieldName)){
             try {
                 return new PropertyDescriptor(fieldName, obj.getClass()).getReadMethod().invoke(obj);
             } catch (Exception e) {

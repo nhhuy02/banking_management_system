@@ -6,20 +6,20 @@ import java.time.LocalDateTime;
 
 public abstract class BaseResponse<T> {
 
-
+    @JsonProperty("success")
     private Boolean success = true;
 
-
+    @JsonProperty("code")
     private Integer statusCode = ResponseMessage.SUCCESSFUL.statusCode();
 
-
+    @JsonProperty("message")
     private String statusValue = ResponseMessage.SUCCESSFUL.statusCodeValue();
 
-
+    @JsonProperty("executeDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime executeDate = LocalDateTime.now();
 
-
+    @JsonProperty("data")
     protected T data = null;
 
     public void validated(T data, Integer statusCode, String statusValue) {
