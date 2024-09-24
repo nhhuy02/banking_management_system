@@ -3,6 +3,7 @@ package com.ctv_it.customer_service.controller;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.VerificationCodeService;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,19 +23,23 @@ public class VerificationCodeController {
     @Autowired
     private VerificationCodeService verificationCodeService;
 
-    @PostMapping("/generate")
-    public ResponseEntity<ApiResponse<String>> generateCode(@Valid @RequestBody VerificationCodeDto dto) {
-        logger.info("Request to generate verification code for customer ID: {} with email: {}", dto.getCustomerId(), dto.getEmail());
-        VerificationCodeDto codeDto = verificationCodeService.generateCode(dto.getCustomerId(), dto.getEmail());
-        String successMessage = "Created code successfully, please check your email!";
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.CREATED.value(), successMessage, true, null);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public VerificationCodeController(VerificationCodeService verificationCodeService) {
+        this.verificationCodeService = verificationCodeService;
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<ApiResponse<String>> verifyCode(@Valid @RequestBody VerificationCodeDto dto) {
-        logger.info("Request to verify code for customer ID: {} with code: {}", dto.getCustomerId(), dto.getCode());
-        boolean isVerified = verificationCodeService.verifyCode(dto.getCustomerId(), dto.getCode());
+    @PostMapping("/generate/{customerId}")
+    public ResponseEntity<ApiResponse<String>> generateCode(@PathVariable Long customerId, @Valid @RequestBody VerificationCodeDto dto) {
+        logger.info("Request to generate verification code for customer ID: {} with email: {}", customerId, dto.getEmail());
+        VerificationCodeDto codeDto = verificationCodeService.generateCode(customerId, dto.getEmail());
+        String successMessage = "Created code successfully, please check your email!";
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.CREATED.value(), successMessage, true, null);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify/{customerId}")
+    public ResponseEntity<ApiResponse<String>> verifyCode(@PathVariable Long customerId, @Valid @RequestBody VerificationCodeDto dto) {
+        logger.info("Request to verify code for customer ID: {} with code: {}", customerId, dto.getCode());
+        boolean isVerified = verificationCodeService.verifyCode(customerId, dto.getCode());
 
         if (isVerified) {
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Code verified successfully", true, null);
