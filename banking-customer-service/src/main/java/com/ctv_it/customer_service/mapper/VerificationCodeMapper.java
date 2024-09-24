@@ -13,12 +13,12 @@ public interface VerificationCodeMapper {
 
     VerificationCodeMapper INSTANCE = Mappers.getMapper(VerificationCodeMapper.class);
 
-    @Mapping(source = "customer.id", target = "customerId")
+//    @Mapping(source = "customer.id", target = "customerId")
     @Mapping(source = "code", target = "code")
     @Mapping(source = "customer.email", target = "email")
     VerificationCodeDto toDto(VerificationCode verificationCode);
 
-    @Mapping(source = "customerId", target = "customer.id")
+//    @Mapping(source = "customerId", target = "customer.id")
     @Mapping(source = "code", target = "code")
     @Mapping(source = "email", target = "customer.email")
     VerificationCode toEntity(VerificationCodeDto verificationCodeDto);

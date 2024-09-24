@@ -1,5 +1,6 @@
 package com.ctv_it.customer_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,9 +8,6 @@ import lombok.Data;
 
 @Data
 public class VerificationCodeDto {
-
-    @NotNull(message = "{customer.notNull}")
-    private Long customerId;
 
     @Size(max = 6, message = "{code.size}")
     @NotNull(message = "{code.notNull}")
