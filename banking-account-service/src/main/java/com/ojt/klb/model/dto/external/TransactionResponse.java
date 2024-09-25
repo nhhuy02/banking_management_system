@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 public class TransactionResponse {
 
-    private String referenceId;
+    private String referenceNumber;
 
-    private String accountId;
+    private String accountNumber;
 
     private String transactionType;
 

@@ -19,7 +19,7 @@ public interface AccountService {
 
     String getBalance(String accountNumber);
 
-    List<TransactionResponse> getTransactionsFromAccountId(String accountId);
+    List<TransactionResponse> getTransactionsFromAccountNumber(String accountNumber);
 
     void closeAccount(String accountNumber);
 

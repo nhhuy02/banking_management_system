@@ -4,7 +4,9 @@ import com.ojt.klb.model.dto.AccountDto;
 import com.ojt.klb.model.dto.AccountStatusUpdate;
 import com.ojt.klb.model.dto.external.TransactionResponse;
 import com.ojt.klb.model.dto.response.Response;
+import com.ojt.klb.model.entity.Account;
 import com.ojt.klb.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,27 +21,26 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<Response> createAccount(@RequestBody AccountDto accountDto) {
+    public ResponseEntity<Response> createAccount(@Valid @RequestBody AccountDto accountDto) {
 
         Long data = accountService.createAccount(accountDto);
         return ResponseEntity.ok(new Response(200, "Created account successfully", true, data));
     }
 
     @PatchMapping
-    public ResponseEntity<Response> updateAccountStatus(@RequestParam String accountNumber,
+    public ResponseEntity<Response> updateAccountStatus(@Valid @RequestParam String accountNumber,
             @RequestBody AccountStatusUpdate accountStatusUpdate) {
         this.accountService.updateStatus(accountNumber, accountStatusUpdate);
         return ResponseEntity.ok(new Response(200, "Updated account status successfully", true));
     }
 
     @GetMapping
-    public ResponseEntity<Response> readAccountByAccountNumber(@RequestParam String accountNumber) {
-        var data = accountService.readAccountByAccountNumber(accountNumber);
-        return ResponseEntity.ok(new Response(200, "Get account successfully", true, data));
+    public ResponseEntity<AccountDto> readAccountByAccountNumber(@RequestParam String accountNumber) {
+        return ResponseEntity.ok(accountService.readAccountByAccountNumber(accountNumber));
     }
 
     @PutMapping
-    public ResponseEntity<Response> updateAccount(@RequestParam String accountNumber, @RequestBody AccountDto accountDto) {
+    public ResponseEntity<Response> updateAccount(@Valid @RequestParam String accountNumber, @RequestBody AccountDto accountDto) {
         this.accountService.updateAccount(accountNumber, accountDto);
         return ResponseEntity.ok(new Response(200, "Update account successfully", true));
     }
@@ -50,10 +51,9 @@ public class AccountController {
         return ResponseEntity.ok(new Response(200, "Get balance successfully", true, data));
     }
 
-    @GetMapping("/{accountId}/transactions")
-    public ResponseEntity<Response> getTransactionsFromAccountId(@PathVariable String accountId) {
-        List<TransactionResponse> data = accountService.getTransactionsFromAccountId(accountId);
-        return ResponseEntity.ok(new Response(200, "Get transaction successfully", true, data));
+    @GetMapping("/{accountNumber}/transactions")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsFromAccountNumber(@PathVariable String accountNumber) {
+        return ResponseEntity.ok(accountService.getTransactionsFromAccountNumber(accountNumber));
     }
 
     @PutMapping("/closure")

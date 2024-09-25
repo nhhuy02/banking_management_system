@@ -1,129 +1,104 @@
 package com.ojt.klb.service.impl;
 
-import com.ojt.klb.exception.GlobalErrorCode;
-import com.ojt.klb.exception.InsufficientBalance;
-import com.ojt.klb.exception.ResourceNotFound;
-import com.ojt.klb.exception.TransactionFailedException;
-import com.ojt.klb.external.AccountService;
+import com.ojt.klb.exception.*;
+import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
-import com.ojt.klb.model.dto.TransactionNotificationDto;
 import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.external.Account;
+import com.ojt.klb.model.external.AccountStatus;
 import com.ojt.klb.model.mapper.TransactionMapper;
+import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.response.Response;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static com.ojt.klb.model.TransactionStatus.COMPLETED;
-import static com.ojt.klb.model.TransactionType.INTERNAL_TRANSFER;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository repository;
-    private final AccountService accountService;
+    private final AccountClient accountClient;
     private final TransactionMapper mapper = new TransactionMapper();
 
-    @Transactional
     @Override
-    public Response handleDeposit(String accountNumber, BigDecimal amount) {
-        Account account = getAndValidateAccount(accountNumber);
-        String referenceNumber = generateUniqueReferenceNumber();
-        validateBalance(account, amount);
+    public Response handleTransaction(TransactionDto transactionDto) {
+        ResponseEntity<Account> response = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
+        if (Objects.isNull(response.getBody())){
+            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
+        }
+        Account account = response.getBody();
+        Transaction transaction = mapper.convertToEntity(transactionDto);
+        if(transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
+            account.setAvailableBalance(account.getAvailableBalance().add(transactionDto.getAmount()));
+        } else if (transactionDto.getTransactionType().equals(TransactionType.WITHDRAWAL.toString())) {
+            if(!account.getAccountStatus().equals("ACTIVE")){
+                log.error("account is either inactive/closed, cannot process the transaction");
+                throw new AccountStatusException("account is inactive or closed");
+            }
+            if(account.getAvailableBalance().compareTo(transactionDto.getAmount()) < 0){
+                log.error("insufficient balance in the account");
+                throw new InsufficientBalance("Insufficient balance in the account");
+            }
+            transaction.setAmount(transactionDto.getAmount().negate());
+            account.setAvailableBalance(account.getAvailableBalance().subtract(transactionDto.getAmount()));
+        }
 
-        TransactionDto internalTransferDto = TransactionDto.builder()
-                .referenceNumber(referenceNumber)
-                .accountId(account.getAccountId())
-                .transactionType(TransactionType.DEPOSIT.name())
-                .amount(amount)
-                .transactionDate(LocalDateTime.now())
-                .status(COMPLETED.name())
-                .build();
+        transaction.setTransactionType(TransactionType.valueOf(transactionDto.getTransactionType()));
+        transaction.setDescription(transactionDto.getDescription());
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setReferenceNumber(generateUniqueReferenceNumber());
 
-        Transaction transaction = mapper.convertToEntity(internalTransferDto);
+        accountClient.updateAccount(transactionDto.getAccountNumber(), account);
         repository.save(transaction);
-
-        try {
-            account.setAvailableBalance(account.getAvailableBalance().add(amount));
-            repository.save(transaction);
-            accountService.updateAccount(account.getAccountId(), account);
-
-            return Response.builder()
-                    .message("Deposit completed successfully")
-                    .build();
-
-        } catch (Exception e) {
-            transaction.setStatus(TransactionStatus.FAILED);
-            repository.save(transaction);
-
-            log.error("Deposit failed for account {}: {}", accountNumber, e.getMessage(), e);
-
-            throw new TransactionFailedException("Deposit failed: " + e.getMessage());
-        }
-    }
-
-    @Transactional
-    @Override
-    public Response handleWithdraw(String accountNumber, BigDecimal amount) {
-        Account account = getAndValidateAccount(accountNumber);
-        String referenceNumber = generateUniqueReferenceNumber();
-        validateBalance(account, amount);
-
-        TransactionDto internalTransferDto = TransactionDto.builder()
-                .referenceNumber(referenceNumber)
-                .accountId(account.getAccountId())
-                .transactionType(TransactionType.WITHDRAWAL.name())
-                .amount(amount)
-                .transactionDate(LocalDateTime.now())
-                .status(COMPLETED.name())
+        return Response.builder()
+                .message("Transaction completed successfully")
+                .status(200)
+                .success(true)
                 .build();
-
-        Transaction transaction = mapper.convertToEntity(internalTransferDto);
-        repository.save(transaction);
-
-        try {
-            account.setAvailableBalance(account.getAvailableBalance().subtract(amount));
-            repository.save(transaction);
-            accountService.updateAccount(account.getAccountId(), account);
-
-            return Response.builder()
-                    .message("Withdraw completed successfully")
-                    .build();
-
-        } catch (Exception e) {
-            transaction.setStatus(TransactionStatus.FAILED);
-            repository.save(transaction);
-
-            log.error("Withdraw failed for account {}: {}", accountNumber, e.getMessage(), e);
-
-            throw new TransactionFailedException("Withdraw failed: " + e.getMessage());
-        }
     }
 
-    private void validateBalance(Account account, BigDecimal amount) {
-        if (account.getAvailableBalance().compareTo(BigDecimal.ZERO) < 0 || account.getAvailableBalance().compareTo(amount) < 0) {
-            throw new InsufficientBalance("Insufficient funds in the account");
-        }
-    }
-
-    private Account getAndValidateAccount(String accountNumber) {
-        return accountService.readByAccountNumber(accountNumber)
-                .orElseThrow(() -> new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND));
-    }
 
     private String generateUniqueReferenceNumber() {
         return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+    }
+
+    @Override
+    public List<TransactionRequest> getTransaction(String accountNumber) {
+        return repository.findByAccountNumber(accountNumber)
+                .stream().map(transaction -> {
+                    TransactionRequest transactionRequest = new TransactionRequest();
+                    BeanUtils.copyProperties(transaction, transactionRequest);
+                    transactionRequest.setTransactionStatus(transaction.getStatus().toString());
+                    transactionRequest.setLocalDateTime(transaction.getTransactionDate());
+                    transactionRequest.setTransactionType(transaction.getTransactionType().toString());
+                    return transactionRequest;
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionRequest> getTransactionByTransactionReference(String transactionReference) {
+        return repository.findByReferenceNumber(transactionReference)
+                .stream().map(transaction -> {
+                    TransactionRequest transactionRequest = new TransactionRequest();
+                    BeanUtils.copyProperties(transaction, transactionRequest);
+                    transactionRequest.setTransactionStatus(transaction.getStatus().toString());
+                    transactionRequest.setLocalDateTime(transaction.getTransactionDate());
+                    transactionRequest.setTransactionType(transaction.getTransactionType().toString());
+                    return transactionRequest;
+                }).collect(Collectors.toList());
     }
 
 //    private void sendKafkaNotification(TransactionNotificationDto notificationDto) {
@@ -136,58 +111,22 @@ public class TransactionServiceImpl implements TransactionService {
 //        }
 //    }
 
-    @Transactional
     @Override
-    public Response internalFundTransfer(TransactionDto request) {
-        String referenceNumber = generateUniqueReferenceNumber();
+    public Response internalTransaction(List<TransactionDto> transactionDtos, String referenceNumber) {
+        List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
-        Account accountSource = getAndValidateAccount(request.getFromAccountNumber());
-        Account accountDestination = getAndValidateAccount(request.getToAccountNumber());
+        transactions.forEach(transaction -> {
+            transaction.setTransactionType(TransactionType.INTERNAL_TRANSFER);
+            transaction.setStatus(TransactionStatus.COMPLETED);
+            transaction.setReferenceNumber(referenceNumber);
+        });
 
-        validateBalance(accountSource, request.getAmount());
-
-        try {
-            TransactionDto transactionDto = TransactionDto.builder()
-                    .referenceNumber(referenceNumber)
-                    .fromBank("Kien Long Bank")
-                    .fromAccountHolderName(request.getFromAccountHolderName())
-                    .fromAccountNumber(request.getFromAccountNumber())
-                    .toBank("Kien Long Bank")
-                    .toAccountHolderName(request.getToAccountHolderName())
-                    .toAccountNumber(request.getToAccountNumber())
-                    .transactionType(INTERNAL_TRANSFER.name())
-                    .status(COMPLETED.name())
-                    .transactionDate(LocalDateTime.now())
-                    .amount(request.getAmount().negate())
-                    .build();
-
-            Transaction transaction = mapper.convertToEntity(transactionDto);
-
-            accountSource.setAvailableBalance(accountSource.getAvailableBalance().subtract(request.getAmount()));
-            accountDestination.setAvailableBalance(accountDestination.getAvailableBalance().add(request.getAmount()));
-
-            repository.save(transaction);
-            log.info("Internal fund transfer completed successfully");
-
-            TransactionNotificationDto notificationDto = TransactionNotificationDto.builder()
-                    .referenceNumber(referenceNumber)
-                    .transactionType(TransactionType.INTERNAL_TRANSFER.name())
-                    .fromAccountHolderName(request.getFromAccountHolderName())
-                    .fromAccountNumber(request.getFromAccountNumber())
-                    .fromBank("Kien Long Bank")
-                    .toAccountHolderName(request.getToAccountHolderName())
-                    .toAccountNumber(request.getToAccountNumber())
-                    .toBank("Kien Long Bank")
-                    .amount(request.getAmount())
-                    .transactionDate(LocalDateTime.now())
-                    .build();
-//            kafkaTemplate.send("transaction-notifications", notificationDto);
-        } catch (Exception e) {
-            log.error("Error during internal fund transfer: {}", e.getMessage(), e);
-            throw new RuntimeException("Internal server error, please try again later");
-        }
+        repository.saveAll(transactions);
         return Response.builder()
-                .message("Transaction successfully completed")
-                .build();
+                .status(200)
+                .success(true)
+                .message("Transaction completed successfully").build();
     }
+
+
 }

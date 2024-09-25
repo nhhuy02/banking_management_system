@@ -98,7 +98,6 @@ public class AccountServiceImpl implements AccountService {
                             .accountType(String.valueOf(account.getAccountType()))
                             .accountStatus(String.valueOf(account.getAccountStatus()))
                             .availableBalance(account.getAvailableBalance())
-//                            .userId(account.getUserId())
                             .build();
                 })
                 .orElseThrow(ResourceNotFound::new);
@@ -125,18 +124,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<TransactionResponse> getTransactionsFromAccountId(String accountId) {
-        return transactionService.getTransactionsFromAccountId(accountId);
+    public List<TransactionResponse> getTransactionsFromAccountNumber(String accountNumber) {
+        return transactionService.getTransactionsFromAccountNumber(accountNumber);
     }
 
     @Override
     public void closeAccount(String accountNumber) {
         Account account = accountRepository.findAccountByAccountNumber(accountNumber)
                 .orElseThrow(() -> new ResourceNotFound("Account with accountNumber " + accountNumber + " not found."));
-
-        if (account.getAvailableBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new AccountClosingException("Balance should be zero");
-        }
 
         account.setAccountStatus(AccountStatus.CLOSED);
         accountRepository.save(account);
