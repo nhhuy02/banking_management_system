@@ -130,6 +130,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
                     accountData.setCustomerId(customerId);
                     accountData.setCustomerName(customer.getFullName());
                     accountData.setEmail(customer.getEmail());
+                    accountData.setPhoneNumber(customer.getPhoneNumber());
                     accountData.setAccountNumber(accountData.getAccountNumber());
                     accountData.setAccountName(accountData.getAccountName());
 
