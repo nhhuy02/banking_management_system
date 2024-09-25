@@ -30,7 +30,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     private static final Logger logger = LoggerFactory.getLogger(VerificationCodeServiceImpl.class);
     private static final String TOPIC = "otp-email-topic";
     private static final String TOPIC1= "data-account-topic";
-    private static final String CUSTOMER_SERVICE_URL = "http://localhost:8080/api/v1/account/";
+    private static final String CUSTOMER_SERVICE_URL = "http://localhost:8040/api/v1/account/";
 
     private final VerificationCodeRepository verificationCodeRepository;
     private final CustomerRepository customerRepository;
