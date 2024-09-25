@@ -1,5 +1,6 @@
 package com.ctv_it.customer_service.service.impl;
 
+import com.ctv_it.customer_service.client.AccountClient;
 import com.ctv_it.customer_service.dto.AccountData;
 import com.ctv_it.customer_service.dto.OtpEmailRequestDto;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
@@ -7,17 +8,14 @@ import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.VerificationCode;
 import com.ctv_it.customer_service.repository.CustomerRepository;
 import com.ctv_it.customer_service.repository.VerificationCodeRepository;
+import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.VerificationCodeService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -30,21 +28,20 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     private static final Logger logger = LoggerFactory.getLogger(VerificationCodeServiceImpl.class);
     private static final String TOPIC = "otp-email-topic";
     private static final String TOPIC1= "data-account-topic";
-    private static final String CUSTOMER_SERVICE_URL = "http://localhost:8080/api/v1/account/";
 
+    private final AccountClient accountClient;
     private final VerificationCodeRepository verificationCodeRepository;
     private final CustomerRepository customerRepository;
     private final KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate;
     private final KafkaTemplate<String, AccountData> kafkaTemplate1;
-    private final RestTemplate restTemplate;
 //    private final EmailService emailService;
 
-    public VerificationCodeServiceImpl(VerificationCodeRepository verificationCodeRepository, CustomerRepository customerRepository, KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate, KafkaTemplate<String, AccountData> kafkaTemplate1, RestTemplate restTemplate) {
+    public VerificationCodeServiceImpl(AccountClient accountClient, VerificationCodeRepository verificationCodeRepository, CustomerRepository customerRepository, KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate, KafkaTemplate<String, AccountData> kafkaTemplate1) {
+        this.accountClient = accountClient;
         this.verificationCodeRepository = verificationCodeRepository;
         this.customerRepository = customerRepository;
         this.kafkaTemplate = kafkaTemplate;
         this.kafkaTemplate1 = kafkaTemplate1;
-        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -120,48 +117,36 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         verificationCodeRepository.save(verificationCode);
         logger.info("Code verified successfully for customer ID: {}", customerId);
 
-        Optional<Customer> customer = customerRepository.findById(customerId);
-        if(customer.isPresent()) {
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
 
-            String url = CUSTOMER_SERVICE_URL + customer.get().getAccountId();
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+            ResponseEntity<ApiResponse<AccountData>> responseEntity = accountClient.getAccountData(customer.getAccountId());
+            if (responseEntity.getBody() != null && responseEntity.getBody().isSuccess()) {
+                AccountData accountData = responseEntity.getBody().getData();
 
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                String responseBody = responseEntity.getBody();
-                AccountData accountData = parseData(responseBody);
+                if (accountData != null) {
 
-                accountData.setCustomerId(customerId);
-                accountData.setCustomerName(customer.get().getFullName());
-                accountData.setEmail(customer.get().getEmail());
-                accountData.setAccountNumber(accountData.getAccountNumber());
-                accountData.setAccountType(accountData.getAccountType());
-                kafkaTemplate1.send(TOPIC1, accountData);
-                logger.info("Sent otp email to Kafka topic: {}", TOPIC1);
-                logger.info("Data {}", accountData);
+                    accountData.setCustomerId(customerId);
+                    accountData.setCustomerName(customer.getFullName());
+                    accountData.setEmail(customer.getEmail());
+                    accountData.setAccountNumber(accountData.getAccountNumber());
+                    accountData.setAccountName(accountData.getAccountName());
+
+                    kafkaTemplate1.send(TOPIC1, accountData);
+                    logger.info("Sent OTP email to Kafka topic: {}", TOPIC1);
+                    logger.info("Data sent: {}", accountData);
+                } else {
+                    logger.error("xFailed to fetch customer data from external service for accountId: {}", customer.getAccountId());
+                }
             } else {
-                logger.error("Failed to fetch customer data from external service for accountId: {}", customer.get().getAccountId());
+                logger.error("Failed to fetch customer data from external service for accountId: {}", customer.getAccountId());
             }
+
         } else {
             throw new IllegalArgumentException("Customer not found");
         }
         return true;
-    }
-
-    private AccountData parseData(String responseBody) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode rootNode = objectMapper.readTree(responseBody);
-            JsonNode dataNode = rootNode.path("data");
-
-            AccountData accountDto = new AccountData();
-            accountDto.setAccountNumber(Long.valueOf(dataNode.path("accountNumber").asText()));
-            accountDto.setAccountType(dataNode.path("accountName").asText());
-
-            return accountDto;
-        } catch (Exception e) {
-            logger.error("Error parsing customer data: ", e);
-            return new AccountData();
-        }
     }
 }
 
