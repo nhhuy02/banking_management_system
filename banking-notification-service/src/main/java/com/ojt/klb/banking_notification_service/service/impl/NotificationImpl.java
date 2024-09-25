@@ -4,6 +4,7 @@ import com.ojt.klb.banking_notification_service.core.StringUtils;
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
 import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
 import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
+import com.ojt.klb.banking_notification_service.dto.consumer.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
 import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
 import com.ojt.klb.banking_notification_service.dto.consumer.TransactionData;
@@ -12,6 +13,7 @@ import com.ojt.klb.banking_notification_service.repository.NotificationRepositor
 import com.ojt.klb.banking_notification_service.repository.NotificationTemplateRepository;
 import com.ojt.klb.banking_notification_service.service.MailService;
 import com.ojt.klb.banking_notification_service.service.NotificationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class NotificationImpl implements NotificationService {
 
     @Autowired
@@ -35,10 +38,10 @@ public class NotificationImpl implements NotificationService {
     NotificationRepository notificationRepository;
 
     @Override
-    @KafkaListener(topics = "otp-email-topic", groupId = "group_id")
+    @KafkaListener(topics = "otp-email-topic", groupId = "otp_group", containerFactory = "otpKafkaListenerContainerFactory")
     public String sendMailVerifyOTP(OtpEmailRequestDto customerData) {
         String email = customerData.getEmail();
-        System.out.println(email);
+        log.warn("email: {}", email);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
@@ -89,6 +92,22 @@ public class NotificationImpl implements NotificationService {
         variables.put("amounts", StringUtils.convertVND(loanData.getAmounts()));
         variables.put("deadline",StringUtils.convertDateTime(loanData.getDeadline()));
         return mailConfig.send(email, subject, "payment_reminder", variables);
+    }
+
+    @Override
+    @KafkaListener(topics = "data-account-topic", groupId = "account_group", containerFactory = "accountDataKafkaListenerContainerFactory")
+    public String sendMailRegister(AccountData accountData) {
+        String email = accountData.getEmail();
+        log.warn("email: {}", email);
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("customerName", accountData.getCustomerName());
+        variables.put("accountNumber", accountData.getAccountNumber());
+        variables.put("accountType", accountData.getAccountType());
+        variables.put("phoneNumber", accountData.getPhoneNumber());
+        return mailConfig.send(email, subject, "account_creation_success", variables);
     }
 
 }
