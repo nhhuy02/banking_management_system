@@ -112,13 +112,13 @@ public class TransactionServiceImpl implements TransactionService {
 //    }
 
     @Override
-    public Response internalTransaction(List<TransactionDto> transactionDtos, String referenceNumber) {
+    public Response internalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
         transactions.forEach(transaction -> {
             transaction.setTransactionType(TransactionType.INTERNAL_TRANSFER);
             transaction.setStatus(TransactionStatus.COMPLETED);
-            transaction.setReferenceNumber(referenceNumber);
+            transaction.setReferenceNumber(transactionReference);
         });
 
         repository.saveAll(transactions);

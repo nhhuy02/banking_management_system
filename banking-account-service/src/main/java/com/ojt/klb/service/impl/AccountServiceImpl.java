@@ -2,22 +2,20 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.Utils.AccountUtils;
 import com.ojt.klb.exception.*;
-import com.ojt.klb.external.TransactionService;
+import com.ojt.klb.external.TransactionClient;
 // import com.ojt.klb.external.UserService;
 import com.ojt.klb.model.AccountStatus;
 import com.ojt.klb.model.AccountType;
 import com.ojt.klb.model.dto.AccountDto;
 import com.ojt.klb.model.dto.AccountStatusUpdate;
-import com.ojt.klb.model.dto.external.TransactionResponse;
+import com.ojt.klb.model.external.TransactionResponse;
 // import com.ojt.klb.model.dto.external.UserDto;
-import com.ojt.klb.model.dto.response.Response;
 import com.ojt.klb.model.entity.Account;
 import com.ojt.klb.model.mapper.AccountMapper;
 import com.ojt.klb.repository.AccountRepository;
 import com.ojt.klb.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,7 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
     // private final UserService userService;
     private final AccountRepository accountRepository;
-    private final TransactionService transactionService;
+    private final TransactionClient transactionClient;
     private final AccountMapper accountMapper = new AccountMapper();
 
     @Override
@@ -125,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<TransactionResponse> getTransactionsFromAccountNumber(String accountNumber) {
-        return transactionService.getTransactionsFromAccountNumber(accountNumber);
+        return transactionClient.getTransactionsFromAccountNumber(accountNumber);
     }
 
     @Override

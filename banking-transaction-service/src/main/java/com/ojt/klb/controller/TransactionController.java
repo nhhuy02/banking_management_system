@@ -19,7 +19,7 @@ public class TransactionController {
     private final TransactionService service;
 
     @PostMapping
-    public ResponseEntity<Response> handleTransactions(@Valid @RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<Response> handleTransaction(@Valid @RequestBody TransactionDto transactionDto) {
         return new ResponseEntity<>(service.handleTransaction(transactionDto), HttpStatus.CREATED);
     }
 

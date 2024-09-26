@@ -1,4 +1,4 @@
-package com.ojt.klb.model.dto.external;
+package com.ojt.klb.model.external;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

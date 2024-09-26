@@ -1,4 +1,4 @@
-package com.ojt.klb.model.dto.response;
+package com.ojt.klb.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,8 +2,7 @@ package com.ojt.klb.service;
 
 import com.ojt.klb.model.dto.AccountDto;
 import com.ojt.klb.model.dto.AccountStatusUpdate;
-import com.ojt.klb.model.dto.external.TransactionResponse;
-import com.ojt.klb.model.dto.response.Response;
+import com.ojt.klb.model.external.TransactionResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

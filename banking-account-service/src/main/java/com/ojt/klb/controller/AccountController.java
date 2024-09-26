@@ -2,9 +2,8 @@ package com.ojt.klb.controller;
 
 import com.ojt.klb.model.dto.AccountDto;
 import com.ojt.klb.model.dto.AccountStatusUpdate;
-import com.ojt.klb.model.dto.external.TransactionResponse;
-import com.ojt.klb.model.dto.response.Response;
-import com.ojt.klb.model.entity.Account;
+import com.ojt.klb.model.external.TransactionResponse;
+import com.ojt.klb.model.response.Response;
 import com.ojt.klb.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
