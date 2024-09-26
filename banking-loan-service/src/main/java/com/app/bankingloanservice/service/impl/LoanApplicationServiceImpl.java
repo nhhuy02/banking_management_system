@@ -48,7 +48,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Retrieved LoanType: {}", loanType);
 
         // Check to see if there is any Collateral (if Loan Type requires it)
-        if (loanType.getRequiresCollateral() && loanApplication.getCollateral() != null) {
+        if (loanType.getRequiresCollateral() && loanApplicationRequestDto.getCollateralDto() == null) {
             log.error("Loan type requires collateral but none provided.");
             throw new InvalidLoanApplicationException("Loan type requires collateral but none provided.");
         }
@@ -131,6 +131,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Approving LoanApplication with ID: {}", applicationId);
         LoanApplication application = getEntityById(applicationId);
 
+        // Check and update the application status to see if it has expired or not
+        checkAndUpdateExpiredStatus(application);
+
         if (application.getApplicationStatus() != ApplicationStatus.REVIEWING) {
             log.error("Cannot approve application not in REVIEWING status.");
             throw new InvalidLoanApplicationException("Can only approve applications that are in REVIEWING status.");
@@ -149,6 +152,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     public LoanApplicationResponseDto rejectApplication(Long applicationId, String reason) {
         log.debug("Rejecting LoanApplication with ID: {} for reason: {}", applicationId, reason);
         LoanApplication application = getEntityById(applicationId);
+
+        // Check and update the application status to see if it has expired or not
+        checkAndUpdateExpiredStatus(application);
 
         if (application.getApplicationStatus() != ApplicationStatus.REVIEWING) {
             log.error("Cannot reject application not in REVIEWING status.");
@@ -170,7 +176,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Requesting additional documents for LoanApplication ID: {} with notes: {}", applicationId, additionalDocuments);
         LoanApplication application = getEntityById(applicationId);
 
-        if (!isExpired(application)) {
+        if (!checkAndUpdateExpiredStatus(application)) {
             log.error("Cannot request additional documents for non-expired applications.");
             throw new InvalidLoanApplicationException("Can only request documents for applications that are not expired.");
         }
@@ -189,6 +195,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Starting review for LoanApplication ID: {}", applicationId);
         LoanApplication application = getEntityById(applicationId);
 
+        // Check and update the application status to see if it has expired or not
+        checkAndUpdateExpiredStatus(application);
+
         if (application.getApplicationStatus() != ApplicationStatus.PENDING) {
             log.error("Cannot start review for application not in PENDING status.");
             throw new InvalidLoanApplicationException("Can only start review for applications in PENDING status.");
@@ -203,7 +212,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     }
 
     // Helper method to check and update expired status
-    private boolean isExpired(LoanApplication application) {
+    private boolean checkAndUpdateExpiredStatus(LoanApplication application) {
         if (application.getReviewDueDate().isBefore(LocalDate.now()) &&
                 (application.getApplicationStatus() == ApplicationStatus.PENDING ||
                         application.getApplicationStatus() == ApplicationStatus.REVIEWING)) {

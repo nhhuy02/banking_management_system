@@ -7,6 +7,7 @@ import com.app.bankingloanservice.service.LoanApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,11 +41,48 @@ public class LoanApplicationController {
     @Operation(
             summary = "Create a new loan application",
             description = "Registers a new loan application",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Loan application request body",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoanApplicationRequestDto.class),
+                            examples = @ExampleObject(
+                                    name = "Full Loan Application Example",
+                                    summary = "Loan Application with all required fields",
+                                    value = """
+                                            {
+                                              "customerId": 12345,
+                                              "accountId": 98765,
+                                              "monthlyIncome": 20000000,
+                                              "occupation": "Software Engineer",
+                                              "loanTypeId": 1,
+                                              "desiredLoanAmount": 50000000,
+                                              "desiredLoanTermMonths": 12,
+                                              "repaymentMethod": "EQUAL_INSTALLMENTS",
+                                              "desiredDisbursementDate": "2024-10-01",
+                                              "interestRateType": "FIXED",
+                                              "loanPurpose": "Home Renovation",
+                                              "collateralDto": {
+                                                "collateralType": "string",
+                                                "collateralValue": 0,
+                                                "description": "string",
+                                                "status": "ACTIVE",
+                                                "reclaimDate": "2024-09-26",
+                                                "reasonForReclamation": "string",
+                                                "releaseDate": "2024-09-26"
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
             responses = {
                     @ApiResponse(
                             responseCode = "201",
                             description = "Loan application created successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -52,6 +90,7 @@ public class LoanApplicationController {
                             responseCode = "400",
                             description = "Invalid input data",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -59,6 +98,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
@@ -97,6 +137,7 @@ public class LoanApplicationController {
                             responseCode = "200",
                             description = "Loan application retrieved successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -104,6 +145,7 @@ public class LoanApplicationController {
                             responseCode = "404",
                             description = "Loan application not found",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -111,6 +153,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
@@ -148,6 +191,7 @@ public class LoanApplicationController {
                             responseCode = "200",
                             description = "Loan application approved successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -155,6 +199,7 @@ public class LoanApplicationController {
                             responseCode = "404",
                             description = "Loan application not found",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -162,6 +207,7 @@ public class LoanApplicationController {
                             responseCode = "400",
                             description = "Invalid loan application status",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -169,6 +215,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
@@ -206,6 +253,7 @@ public class LoanApplicationController {
                             responseCode = "200",
                             description = "Loan application rejected successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -213,6 +261,7 @@ public class LoanApplicationController {
                             responseCode = "404",
                             description = "Loan application not found",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -220,6 +269,7 @@ public class LoanApplicationController {
                             responseCode = "400",
                             description = "Invalid loan application status",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -227,6 +277,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
@@ -266,6 +317,7 @@ public class LoanApplicationController {
                             responseCode = "200",
                             description = "Additional documents requested successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -273,6 +325,7 @@ public class LoanApplicationController {
                             responseCode = "404",
                             description = "Loan application not found",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -280,6 +333,7 @@ public class LoanApplicationController {
                             responseCode = "400",
                             description = "Invalid loan application status",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -287,6 +341,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
@@ -325,6 +380,7 @@ public class LoanApplicationController {
                             responseCode = "200",
                             description = "Review started successfully",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -332,6 +388,7 @@ public class LoanApplicationController {
                             responseCode = "404",
                             description = "Loan application not found",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -339,6 +396,7 @@ public class LoanApplicationController {
                             responseCode = "400",
                             description = "Invalid loan application status",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
@@ -346,6 +404,7 @@ public class LoanApplicationController {
                             responseCode = "500",
                             description = "Internal server error",
                             content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     )
