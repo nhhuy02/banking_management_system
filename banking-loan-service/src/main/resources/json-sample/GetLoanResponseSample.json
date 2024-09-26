@@ -1,0 +1,99 @@
+{
+  "status": 200,
+  "message": "Loan retrieved successfully",
+  "data": {
+    "loanId": 1,
+    "loanApplicationId": 2,
+    "customerId": 3,
+    "loanContractNo": "BNK-LN-2024-09-01234",
+    "customerConfirmationStatus": "CONFIRMED",
+    "customerConfirmationDate": "2023-01-10",
+    "loanType": {
+      "loanTypeId": 1,
+      "loanTypeName": "Vay tiêu dùng",
+      "annualInterestRate": 5.0,
+      "pastDueInterestRate": 7.0,
+      "latePaymentInterestRate": 8.0,
+      "prepaymentPenaltyRate": 1.0,
+      "maxLoanAmount": 500000000,
+      "maxLoanTermMonths": 60,
+      "requiresCollateral": true,
+      "reviewTimeDays": 5,
+      "description": "Vay tiêu dùng không tài sản đảm bảo",
+      "isActive": true
+    },
+    "loanAmount": 300000000,
+    "interestRateType": "FIXED",
+    "currentInterestRate": {
+      "interestRateId": 1,
+      "rate": 5.0,
+      "startDate": "2023-01-01",
+      "endDate": "2025-01-01"
+    },
+    "repaymentMethod": "EQUAL_INSTALLMENTS",
+    "loanTermMonths": 24,
+    "disbursementDate": "2023-01-15",
+    "maturityDate": "2025-01-15",
+    "settlementDate": "2024-01-15",
+    "renewalCount": 0,
+    "remainingBalance": 200000000,
+    "totalPaidAmount": 100000000,
+    "isBadDebt": false,
+    "badDebtDate": null,
+    "badDebtReason": null,
+    "debtClassification": "NORMAL",
+    "collateral": {
+      "collateralId": 1,
+      "collateralType": "Nhà đất",
+      "collateralValue": 400000000
+    },
+    "loanRepayments": [
+      {
+        "loanPaymentId": 1,
+        "principalAmount": 5000000,
+        "interestAmount": 80000,
+        "latePaymentInterestAmount": 0,
+        "totalAmount": 5080000,
+        "paymentDueDate": "2024-02-01",
+        "actualPaymentDate": "2024-02-01",
+        "accountId": 54321,
+        "paymentStatus": "PAID",
+        "isLate": false
+      },
+      {
+        "loanPaymentId": 2,
+        "principalAmount": 5000000,
+        "interestAmount": 80000,
+        "latePaymentInterestAmount": 0,
+        "totalAmount": 5080000,
+        "paymentDueDate": "2024-03-01",
+        "actualPaymentDate": null,
+        "accountId": 54321,
+        "paymentStatus": "OVERDUE",
+        "isLate": false
+      },
+      {
+        "loanPaymentId": 3,
+        "principalAmount": 5000000,
+        "interestAmount": 80000,
+        "latePaymentInterestAmount": 0,
+        "totalAmount": 5080000,
+        "paymentDueDate": "2024-04-01",
+        "actualPaymentDate": null,
+        "accountId": 54321,
+        "paymentStatus": "PENDING",
+        "isLate": false
+      }
+    ],
+    "loanSettlement": {
+      "loanSettlementId": 1,
+      "settlementDate": "2024-01-15",
+      "pastDueInterestAmount": 500000,
+      "latePaymentInterestAmount": 300000,
+      "prepaymentPenaltyAmount": 0,
+      "settlementAmount": 201300000,
+      "settlementStatus": "ON_TIME"
+    },
+    "status": "ACTIVE"
+  }
+}

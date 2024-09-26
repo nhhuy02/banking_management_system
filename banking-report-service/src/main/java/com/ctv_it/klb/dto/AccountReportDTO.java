@@ -1,8 +1,8 @@
 package com.ctv_it.klb.dto;
 
-import com.ctv_it.klb.dto.base.AccountInfoDTO;
-import java.util.Map;
-
+import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,6 @@ import lombok.ToString;
 @ToString
 public class AccountReportDTO {
 
-  private Long customerId;
-  private int total;
-  private Map<String, AccountInfoDTO> accounts; // keys = account types
+  private CustomerInfoDTO customer;
+  private List<AccountInfoDTO> accounts;
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác Thực Tài Khoản</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+<table style="width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px;">
+    <tr>
+        <td style="text-align: center;">
+            <!-- Thêm logo -->
+            <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2FEIGHT%20BANK.png?alt=media&token=34615cbe-189f-4d27-8a88-ba5819452403" alt="Logo Công Ty" style="width: 150px; height: auto; margin-bottom: 20px;" />
+
+            <h1 style="color: #333;" th:text="${customerName} + ' thân mến,'">Tên Khách Hàng thân mến,</h1>
+            <p>Đây là mã xác minh của bạn:</p>
+            <h2 style="color: #0066cc; font-size: 24px;"><span th:text="${verificationCode}">961954</span></h2>
+            <p>Mã xác minh chỉ có hiệu lực trong 5 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+            <p>Lưu ý: Nếu bạn không thực hiện yêu cầu này, vui lòng thay đổi mật khẩu của bạn ngay lập tức. Đi đến <a href="link-to-change-password" style="color: #0066cc; text-decoration: none;">Thay đổi mật khẩu</a>.</p>
+            <br/>
+            <p style="font-size: 16px;">Trân trọng,</p>
+            <p style="font-size: 16px;color: #0066cc;"><strong>EIGHT BANK</strong></p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

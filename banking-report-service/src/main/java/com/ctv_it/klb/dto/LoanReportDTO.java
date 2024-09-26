@@ -1,8 +1,8 @@
 package com.ctv_it.klb.dto;
 
-import com.ctv_it.klb.dto.base.LoanInfoDTO;
-import java.util.Map;
-
+import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
+import com.ctv_it.klb.dto.baseInfo.LoanInfoDTO;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,6 @@ import lombok.ToString;
 @ToString
 public class LoanReportDTO {
 
-  private Long customerId;
-  Map<String, LoanInfoDTO> loans; // keys = loan status
+  private CustomerInfoDTO customer;
+  private List<LoanInfoDTO> loans;
 }

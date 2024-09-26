@@ -12,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class ErrorResponseDTO extends BaseResponseDTO {
 
+  private String message;
   private List<ErrorDetailDTO> errors;
 }

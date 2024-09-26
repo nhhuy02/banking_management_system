@@ -1,15 +1,19 @@
 package com.ctv_it.customer_service.service.impl;
 
+import com.ctv_it.customer_service.client.AccountClient;
+import com.ctv_it.customer_service.dto.AccountData;
+import com.ctv_it.customer_service.dto.OtpEmailRequestDto;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.VerificationCode;
 import com.ctv_it.customer_service.repository.CustomerRepository;
 import com.ctv_it.customer_service.repository.VerificationCodeRepository;
+import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.VerificationCodeService;
-import com.ctv_it.customer_service.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +26,23 @@ import java.util.Random;
 public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     private static final Logger logger = LoggerFactory.getLogger(VerificationCodeServiceImpl.class);
+    private static final String TOPIC = "otp-email-topic";
+    private static final String TOPIC1= "data-account-topic";
 
-    @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
+    private final AccountClient accountClient;
+    private final VerificationCodeRepository verificationCodeRepository;
+    private final CustomerRepository customerRepository;
+    private final KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate;
+    private final KafkaTemplate<String, AccountData> kafkaTemplate1;
+//    private final EmailService emailService;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private EmailService emailService;
+    public VerificationCodeServiceImpl(AccountClient accountClient, VerificationCodeRepository verificationCodeRepository, CustomerRepository customerRepository, KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate, KafkaTemplate<String, AccountData> kafkaTemplate1) {
+        this.accountClient = accountClient;
+        this.verificationCodeRepository = verificationCodeRepository;
+        this.customerRepository = customerRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaTemplate1 = kafkaTemplate1;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -64,16 +76,22 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         verificationCodeRepository.save(verificationCode);
         logger.info("Verification code saved for customer ID: {}", customerId);
 
-        //send code
-        emailService.sendCode(email, "Banking", "Your verification code is: " + code);
+        // Send code via Kafka
+        OtpEmailRequestDto otpEmailRequestDto = new OtpEmailRequestDto();
+        otpEmailRequestDto.setCustomerId(customerId);
+        otpEmailRequestDto.setCustomerName(customer.get().getFullName());
+        otpEmailRequestDto.setEmail(email);
+        otpEmailRequestDto.setOtpCode(code);
+        logger.info("OTP is: {}", otpEmailRequestDto.getOtpCode());
+        otpEmailRequestDto.setTimeToLiveCode("5 minutes");
+        kafkaTemplate.send(TOPIC, otpEmailRequestDto);
+        logger.info("Sent otp email to Kafka topic {}", TOPIC);
 
         VerificationCodeDto dto = new VerificationCodeDto();
-        dto.setCustomerId(customerId);
         dto.setCode(code);
         dto.setEmail(email);
         return dto;
     }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -89,9 +107,6 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
         VerificationCode verificationCode = verificationCodeOptional.get();
 
-        logger.info("Code expiration time: {}", verificationCode.getExpiresAt());
-        logger.info("Current time: {}", Instant.now());
-
         if (verificationCode.getExpiresAt().isBefore(Instant.now())) {
             logger.warn("Verification failed: Code expired for customer ID: {}", customerId);
             return false;
@@ -102,6 +117,37 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         verificationCodeRepository.save(verificationCode);
         logger.info("Code verified successfully for customer ID: {}", customerId);
 
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+
+            ResponseEntity<ApiResponse<AccountData>> responseEntity = accountClient.getAccountData(customer.getAccountId());
+            if (responseEntity.getBody() != null && responseEntity.getBody().isSuccess()) {
+                AccountData accountData = responseEntity.getBody().getData();
+
+                if (accountData != null) {
+
+                    accountData.setCustomerId(customerId);
+                    accountData.setCustomerName(customer.getFullName());
+                    accountData.setEmail(customer.getEmail());
+                    accountData.setPhoneNumber(customer.getPhoneNumber());
+                    accountData.setAccountNumber(accountData.getAccountNumber());
+                    accountData.setAccountName(accountData.getAccountName());
+
+                    kafkaTemplate1.send(TOPIC1, accountData);
+                    logger.info("Sent OTP email to Kafka topic: {}", TOPIC1);
+                    logger.info("Data sent: {}", accountData);
+                } else {
+                    logger.error("xFailed to fetch customer data from external service for accountId: {}", customer.getAccountId());
+                }
+            } else {
+                logger.error("Failed to fetch customer data from external service for accountId: {}", customer.getAccountId());
+            }
+
+        } else {
+            throw new IllegalArgumentException("Customer not found");
+        }
         return true;
     }
 }
+

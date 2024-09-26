@@ -1,12 +1,10 @@
 package com.ctv_it.klb.dto.filter;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Setter
-@Getter
+@NoArgsConstructor
 public abstract class ReportFilterDTO {
 
 }

@@ -1,25 +1,33 @@
 <configuration>
+
+  <!-- Define common patterns as properties -->
+  <property name="maskPattern" value="&quot;phoneNumber&quot;\s*:\s*&quot;(.*?)&quot;"/>
+  <property name="maskPattern" value="&quot;email&quot;\s*:\s*&quot;(.*?)&quot;"/>
+  <property name="maskPattern" value="&quot;nationalId&quot;\s*:\s*&quot;(.*?)&quot;"/>
+  <property name="pattern" value="%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable"/>
+
+  <!-- Console Appender -->
   <appender class="ch.qos.logback.core.ConsoleAppender" name="Console">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-      <layout class="com.ctv_it.klb.util.MaskingPatternLayoutUtils">
-        <Pattern>
-          %white(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %green(%C): %msg%n%throwable
-        </Pattern>
-        <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
+      <layout class="com.ctv_it.klb.config.logging.MaskingPatternLayout">
+        <Pattern>${pattern}</Pattern>
+        <maskPattern>${maskPattern}</maskPattern>
       </layout>
     </encoder>
   </appender>
 
+  <!-- Rolling File Appender -->
   <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RollingFile">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-      <layout class="com.ctv_it.klb.util.MaskingPatternLayoutUtils">
-        <Pattern>%d{ISO8601} %-5level [%t] %C{1}: %msg%n%throwable</Pattern>
-        <maskPattern>\"phoneNumber\"\s*:\s*\"(.*?)\"</maskPattern>
+      <layout class="com.ctv_it.klb.config.logging.MaskingPatternLayout">
+        <Pattern>${pattern}</Pattern>
+        <maskPattern>${maskPattern}</maskPattern>
       </layout>
     </encoder>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./banking-report-service/logs/report-service--%d{yyyy-MM-dd}--v%i.log</fileNamePattern>
+      <fileNamePattern>./banking-report-service/logs/report-service--%d{yyyy-MM-dd}--v%i.log
+      </fileNamePattern>
       <maxHistory>100</maxHistory>
       <timeBasedFileNamingAndTriggeringPolicy
         class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -28,13 +36,16 @@
     </rollingPolicy>
   </appender>
 
+  <!-- Logger Configuration -->
   <logger additivity="false" level="trace" name="com.example.logback">
     <appender-ref ref="RollingFile"/>
     <appender-ref ref="Console"/>
   </logger>
 
+  <!-- Root Logger -->
   <root level="info">
     <appender-ref ref="RollingFile"/>
     <appender-ref ref="Console"/>
   </root>
+
 </configuration>

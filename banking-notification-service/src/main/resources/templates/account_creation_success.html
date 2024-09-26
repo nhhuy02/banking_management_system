@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tài Khoản Đã Được Mở Thành Công</title>
+    <style>
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif;">
+<table style="width: 100%; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px;">
+    <tr>
+        <td style="text-align: center;">
+            <!-- Thêm logo -->
+            <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2FEIGHT%20BANK.png?alt=media&token=34615cbe-189f-4d27-8a88-ba5819452403" alt="Logo Công Ty" style="width: 150px; height: auto; margin-bottom: 20px;" />
+
+            <h1 style="color: #333;" th:text="${customerName} + ' thân mến,'">Tên Khách Hàng thân mến,</h1>
+            <p>Chúc mừng! Tài khoản của bạn đã được mở thành công tại <strong>EIGHT BANK</strong>.</p>
+
+            <p>Thông tin tài khoản của bạn:</p>
+            <ul style="list-style-type: none; padding: 0;">
+                <li><strong>Số điện thoại (Tên đăng nhập):</strong> <span th:text="${phoneNumber}">038XXXX278</span></li>
+                <li><strong>Số tài khoản:</strong> <span th:text="${accountNumber}">123456789</span></li>
+                <li><strong>Loại tài khoản:</strong> <span th:text="${accountType}">Tài khoản thanh toán</span></li>
+            </ul>
+
+            <p>Bạn có thể đăng nhập vào tài khoản của mình và bắt đầu sử dụng các dịch vụ của chúng tôi ngay bây giờ.</p>
+
+            <p>Nếu bạn gặp bất kỳ vấn đề nào hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua <a href="mailto:support@eightbank.com" style="color: #0066cc; text-decoration: none;">support@eightbank.com</a>.</p>
+
+            <br/>
+            <p style="font-size: 16px;">Trân trọng,</p>
+            <p style="font-size: 16px;color: #0066cc;"><strong>EIGHT BANK</strong></p>
+            <div class="footer">
+                <p>Tham khảo hướng dẫn sử dụng <a href="http://localhost:5173/login"><strong>EIGHT BANK</strong></a></p>
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
