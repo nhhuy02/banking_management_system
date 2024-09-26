@@ -41,8 +41,8 @@ public class NotificationImpl implements NotificationService {
     @KafkaListener(topics = "otp-email-topic", groupId = "otp_group", containerFactory = "otpKafkaListenerContainerFactory")
     public String sendMailVerifyOTP(OtpEmailRequestDto customerData) {
         String email = customerData.getEmail();
-        log.warn("email: {}", email);
-        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
+        log.warn("email otp: {}", email);
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.OTP.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
         Map<String, Object> variables = new HashMap<>();
@@ -61,9 +61,10 @@ public class NotificationImpl implements NotificationService {
     }
 
     @Override
-    @KafkaListener(topics = "transaction-topic", groupId = "group_id")
+    @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
     public String sendMailPaymentReceipt(TransactionData transactionData) {
         String email = transactionData.getEmail();
+        log.warn("email trans: {}", email);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
@@ -98,15 +99,16 @@ public class NotificationImpl implements NotificationService {
     @KafkaListener(topics = "data-account-topic", groupId = "account_group", containerFactory = "accountDataKafkaListenerContainerFactory")
     public String sendMailRegister(AccountData accountData) {
         String email = accountData.getEmail();
-        log.warn("email: {}", email);
+        log.warn("email register: {}", email);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", accountData.getCustomerName());
         variables.put("accountNumber", accountData.getAccountNumber());
-        variables.put("accountType", accountData.getAccountType());
+        variables.put("accountType", accountData.getAccountName());
         variables.put("phoneNumber", accountData.getPhoneNumber());
+
         return mailConfig.send(email, subject, "account_creation_success", variables);
     }
 

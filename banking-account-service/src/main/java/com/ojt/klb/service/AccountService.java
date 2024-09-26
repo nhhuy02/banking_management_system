@@ -2,8 +2,7 @@ package com.ojt.klb.service;
 
 import com.ojt.klb.model.dto.AccountDto;
 import com.ojt.klb.model.dto.AccountStatusUpdate;
-import com.ojt.klb.model.dto.external.TransactionResponse;
-import com.ojt.klb.model.dto.response.Response;
+import com.ojt.klb.model.external.TransactionResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,11 +18,16 @@ public interface AccountService {
 
     String getBalance(String accountNumber);
 
-    List<TransactionResponse> getTransactionsFromAccountId(String accountId);
+    List<TransactionResponse> getTransactionsFromAccountNumber(String accountNumber);
 
-    Response closeAccount(String accountNumber);
+    void closeAccount(String accountNumber);
 
-    List<AccountDto> readAccountsByUserId(Long userId);
+//    List<AccountDto> readAccountsByUserId(Long userId);
 
     void updateBalance(String accountNumber, BigDecimal amount);
+
+    List<AccountDto> readAllAccounts();
+
+    void deleteAccount(String accountNumber);
+
 }

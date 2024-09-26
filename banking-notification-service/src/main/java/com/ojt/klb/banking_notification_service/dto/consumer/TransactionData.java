@@ -32,4 +32,8 @@ public class TransactionData {
     private BigDecimal amounts;
     @Schema(description = "Nội dung chuyển khoản")
     private String description;
+    @Schema(description = "Số dư tk chuyển")
+    private BigDecimal balanceAccountSend;
+    @Schema(description = "Số dư tài khoản nhận")
+    private BigDecimal balanceAccountReceive;
 }

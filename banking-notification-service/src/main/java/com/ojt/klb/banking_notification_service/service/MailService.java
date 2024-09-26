@@ -4,6 +4,7 @@ package com.ojt.klb.banking_notification_service.service;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-
+@Slf4j
 @Service
 public class MailService {
 
@@ -63,10 +64,11 @@ public class MailService {
             msg.setContent(body, "text/html; charset=UTF-8");
             // Send the message
             Transport.send(msg);
-
+            log.info("Email sent successfully!");
             return "Email sent successfully!";
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
+            log.error("Failed to send email!");
             return "Failed to send email!";
         }
     }

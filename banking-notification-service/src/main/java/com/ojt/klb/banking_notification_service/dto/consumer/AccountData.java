@@ -14,6 +14,6 @@ public class AccountData {
     private String customerName;
     private String email;
     private Long accountNumber;
-    private String accountType;
+    private String accountName;
     private String phoneNumber;
 }

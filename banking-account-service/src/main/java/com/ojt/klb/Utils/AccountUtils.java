@@ -1,22 +1,21 @@
-package com.ojt.klb.Util;
+package com.ojt.klb.Utils;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 @RequiredArgsConstructor
-public class AccountUtil {
-    private static final Random RANDOM = new Random();
+public class AccountUtils {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
-    public static String generateAccountNumber(){
+    public static String generateAccountNumber() {
         return "3420" + generateRandomNumber(8);
     }
 
-
     private static String generateRandomNumber(int len) {
         StringBuilder number = new StringBuilder();
-        for(int i = 0; i < len; i++){
-            int digit = RANDOM.nextInt(10);
+        for (int i = 0; i < len; i++) {
+            int digit = SECURE_RANDOM.nextInt(10);
             number.append(digit);
         }
         return number.toString();
