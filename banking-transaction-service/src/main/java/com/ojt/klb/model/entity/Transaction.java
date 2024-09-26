@@ -19,12 +19,14 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal amount;
+    private String referenceNumber;
+
+    private String accountNumber;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private String referenceNumber;
+    private BigDecimal amount;
 
     @CreationTimestamp
     private LocalDateTime transactionDate;
@@ -33,6 +35,4 @@ public class Transaction {
     private TransactionStatus status;
 
     private String description;
-
-    private String accountId;
 }

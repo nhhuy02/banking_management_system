@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -30,9 +30,9 @@ public class Account {
     private AccountStatus accountStatus;
 
     @CreationTimestamp
-    private LocalDate openingDate;
+    private LocalDateTime openingDate;
 
     private BigDecimal availableBalance;
 
-    private Long userId;
+//    private Long userId;
 }

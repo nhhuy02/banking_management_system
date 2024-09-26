@@ -1,15 +1,16 @@
 package com.ojt.klb.controller;
 
-import com.ojt.klb.model.request.InternalTransferRequest;
+import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.response.Response;
 import com.ojt.klb.service.TransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/transactions")
@@ -17,21 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionController {
     private final TransactionService service;
 
-    @PostMapping(value = "/deposit")
-    public ResponseEntity<?> handleDeposit(@RequestBody TransactionRequest request){
-        Response data = service.handleDeposit(request.getAccountNumber(), request.getAmount());
-        return ResponseEntity.ok(new Response(200, "You have successfully sent money", true, data));
+    @PostMapping
+    public ResponseEntity<Response> handleTransaction(@Valid @RequestBody TransactionDto transactionDto) {
+        return new ResponseEntity<>(service.handleTransaction(transactionDto), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/withdraw")
-    public ResponseEntity<?> handleWithdraw(@RequestBody TransactionRequest request){
-        Response data = service.handleWithdraw(request.getAccountNumber(), request.getAmount());
-        return ResponseEntity.ok(new Response(200, "You have successfully withdrawn money", true, data));
+    @PostMapping("/internal")
+    public ResponseEntity<Response> makeInternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
+        return new ResponseEntity<>(service.internalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/internal")
-    public ResponseEntity<?> internalFundTransfer(@RequestBody InternalTransferRequest request){
-        Response data = service.internalFundTransfer(request);
-        return ResponseEntity.ok(new Response(200, "You have successfully transferred money", true, data));
+    @GetMapping
+    public ResponseEntity<List<TransactionRequest>> getTransactions(@RequestParam String accountNumber) {
+        return new ResponseEntity<>(service.getTransaction(accountNumber), HttpStatus.OK);
+    }
+
+    @GetMapping("/{referenceNumber}")
+    public ResponseEntity<List<TransactionRequest>> getTransactionByTransactionReference(@PathVariable String referenceNumber) {
+        return new ResponseEntity<>(service.getTransactionByTransactionReference(referenceNumber), HttpStatus.OK);
     }
 }
