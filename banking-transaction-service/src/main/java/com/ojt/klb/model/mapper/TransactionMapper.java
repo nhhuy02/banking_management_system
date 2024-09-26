@@ -2,7 +2,7 @@ package com.ojt.klb.model.mapper;
 
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.entity.Transaction;
-import org.springframework.beans.BeanUtil;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ public class TransactionMapper extends BaseMapper<Transaction, TransactionDto> {
 
         Transaction transaction = new Transaction();
         if(!Objects.isNull(dto)){
-            BeanUtil.copyProperties(dto, transaction);
+            BeanUtils.copyProperties(dto, transaction);
         }
         return transaction;
     }
@@ -23,7 +23,7 @@ public class TransactionMapper extends BaseMapper<Transaction, TransactionDto> {
 
         TransactionDto internalTransferDto = new TransactionDto();
         if(!Objects.isNull(entity)) {
-            BeanUtil.copyProperties(entity, internalTransferDto);
+            BeanUtils.copyProperties(entity, internalTransferDto);
         }
         return internalTransferDto;    }
 }
