@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: banking-loan-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/loan_service
+    username: chienma
+    password: chienma_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 40MB
+
+# OpenAPI config
+springdoc:
+  swagger-ui:
+    path: /api-docs/swagger-ui
+  api-docs:
+    path: /api-docs
+
+app:
+  file:
+    storage:
+      directory: banking-loan-docs/
+
+logging:
+  file:
+    name: logs/access_log.log
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

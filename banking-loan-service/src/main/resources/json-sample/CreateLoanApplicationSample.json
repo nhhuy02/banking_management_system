@@ -1,0 +1,30 @@
+{
+  "customerId": 1,
+  "accountId": 1,
+  "monthlyIncome": 3000000,
+  "occupation": "Engineer",
+  "loanTypeId": 1,
+  "desiredLoanAmount": 50000000,
+  "desiredLoanTermMonths": 12,
+  "repaymentMethod": "EQUAL_INSTALLMENTS",
+  "desiredDisbursementDate": "2024-10-01",
+  "interestRateType": "FIXED",
+  "loanPurpose": "Home renovation",
+  "creditScore": 700,
+  "submissionDate": "2024-09-25",
+  "applicationStatus": "PENDING",
+  "reviewDueDate": "2024-10-10",
+  "reviewDate": null,
+  "reviewNotes": null,
+  "collateralDto": {
+    "loanId": null,
+    "loanApplicationId": null,
+    "collateralType": "House",
+    "collateralValue": 100000000,
+    "description": "Family house",
+    "status": "ACTIVE",
+    "reclaimDate": null,
+    "reasonForReclamation": null,
+    "releaseDate": null
+  }
+}
