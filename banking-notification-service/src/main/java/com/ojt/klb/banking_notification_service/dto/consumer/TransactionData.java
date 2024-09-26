@@ -14,10 +14,14 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class TransactionData {
-    @Schema(description = "Email")
-    private String email;
+    @Schema(description = "Email người chuyển")
+    private String emailCustomerSend;
+    @Schema(description = "Email người nhận")
+    private String emailCustomerReceive;
     @Schema(description = "ID người gửi tiền")
-    private Long customerId;
+    private Long customerSendId;
+    @Schema(description = "ID người gửi tiền")
+    private Long customerReceiveId;
     @Schema(description = "Số lệnh giao dịch")
     private Long transactionId;
     @Schema(description = "Ngày giờ giao dịch")
