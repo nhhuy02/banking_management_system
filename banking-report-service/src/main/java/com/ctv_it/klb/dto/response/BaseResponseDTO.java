@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
 
 @SuperBuilder
-@Getter
 @Setter
+@Getter
 @ToString
 public abstract class BaseResponseDTO {
 

@@ -2,15 +2,14 @@ package com.ctv_it.klb.dto.baseInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Builder
-@Getter
 @Setter
+@Getter
 @ToString
 public class TransactionInfoDTO {
 

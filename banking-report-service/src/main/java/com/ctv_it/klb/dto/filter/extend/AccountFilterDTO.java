@@ -12,8 +12,8 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
 @Setter
+@Getter
 @ToString(callSuper = true)
 @Schema(description = "Filter for account reports")
 public class AccountFilterDTO extends ReportFilterDTO {

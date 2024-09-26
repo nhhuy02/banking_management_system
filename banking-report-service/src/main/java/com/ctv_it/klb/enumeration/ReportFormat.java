@@ -8,7 +8,7 @@ public enum ReportFormat {
 
   public static ReportFormat fromString(String value) {
     try {
-      return ReportFormat.valueOf(value);
+      return ReportFormat.valueOf(value.toUpperCase());
     } catch (Exception ex) {
       return null;
     }

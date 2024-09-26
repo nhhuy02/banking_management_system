@@ -8,8 +8,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
 @Setter
+@Getter
 @ToString
 public class AccountInfoDTO {
 

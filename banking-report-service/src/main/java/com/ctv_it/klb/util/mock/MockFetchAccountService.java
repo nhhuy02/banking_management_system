@@ -7,6 +7,7 @@ import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.util.FilterRangeUtil;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -18,17 +19,7 @@ import org.springframework.stereotype.Component;
 public class MockFetchAccountService {
 
   public FetchAccountDataDTO filter(Long customerId, AccountFilterDTO accountFilterDTO) {
-    List<AccountInfoDTO> filteredAccounts = MockDataService.initInstance().getAccountResponseDTO()
-        .stream()
-        .filter(customer -> Objects.equals(customer.getCustomerId(), customerId))
-        .flatMap(fa -> fa.getAccounts().stream())
-        .filter(acc -> applyFilters(acc, accountFilterDTO))
-        .collect(Collectors.toList());
-
-    return FetchAccountDataDTO.builder()
-        .customerId(customerId)
-        .accounts(filteredAccounts)
-        .build();
+    return FetchAccountDataDTO.builder().build();
   }
 
   public boolean applyFilters(AccountInfoDTO account, AccountFilterDTO filters) {

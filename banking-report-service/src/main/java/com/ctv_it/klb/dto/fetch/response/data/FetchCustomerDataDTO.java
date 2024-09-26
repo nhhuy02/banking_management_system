@@ -1,15 +1,37 @@
 package com.ctv_it.klb.dto.fetch.response.data;
 
-import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
+import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
-@Getter
+@Builder
 @Setter
-@ToString(callSuper = true)
-public class FetchCustomerDataDTO extends CustomerInfoDTO {
+@Getter
+@ToString
+public class FetchCustomerDataDTO {
 
+  private Long id;
+  private Long accountId;
+  private String fullName;
+  private LocalDate dateOfBirth;
+  private String gender;
+  private String email;
+  private String phoneNumber;
+  private String currentAddress;
+  private Kyc kyc;
+  private String kycStatus;
+
+
+  @Builder
+  @Setter
+  @Getter
+  @ToString
+  public static class Kyc {
+
+    private String documentType;
+    private String documentNumber;
+  }
 }
+

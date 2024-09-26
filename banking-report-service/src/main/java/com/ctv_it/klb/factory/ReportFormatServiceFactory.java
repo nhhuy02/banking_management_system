@@ -21,16 +21,17 @@ public class ReportFormatServiceFactory {
 
   @Autowired
   public ReportFormatServiceFactory(List<ReportFormatService<?>> reportFormatServices) {
-    this.reportServiceMap = reportFormatServices.stream().collect(Collectors.toMap(
-        // Create a composite key for the map using AbstractMap.SimpleEntry
-        service -> new AbstractMap.SimpleEntry<>(service.getType(), service.getFormat()),
-        // Use the service itself as the value
-        service -> service,
-        // Merge function to handle any duplicate keys
-        (existing, replacement) -> existing, // Keep the existing entry in case of duplicates
-        // Initialize the map with a HashMap
-        HashMap::new // You could use EnumMap or another map type if preferred
-    ));
+    this.reportServiceMap = reportFormatServices.stream()
+        .collect(
+            Collectors.toMap(
+                // Create a composite key for the map using AbstractMap.SimpleEntry
+                service -> new AbstractMap.SimpleEntry<>(service.getType(), service.getFormat()),
+                // Use the service itself as the value
+                service -> service,
+                // Merge function to handle any duplicate keys
+                (existing, replacement) -> existing,
+                HashMap::new
+            ));
   }
 
   // Get the service by ReportType and ReportFormat using the composite key

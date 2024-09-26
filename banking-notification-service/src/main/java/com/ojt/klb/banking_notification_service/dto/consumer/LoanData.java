@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class LoanData {
     private Long customerId;
     private String customerName;
