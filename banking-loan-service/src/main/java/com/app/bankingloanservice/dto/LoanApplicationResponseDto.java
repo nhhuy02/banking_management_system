@@ -58,5 +58,5 @@ public class LoanApplicationResponseDto {
 
     private CollateralDto collateralDto;
 
-    private DocumentUploadDto documentUploadDto;
+    private DocumentResponseDto documentResponseDto;
 }

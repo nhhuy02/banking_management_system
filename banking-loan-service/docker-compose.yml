@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: mysql:9.0.1
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: loan_service
+      MYSQL_USER: chienma
+      MYSQL_PASSWORD: chienma_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my_custom_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  my_custom_network:
+    driver: bridge
+    external: true
