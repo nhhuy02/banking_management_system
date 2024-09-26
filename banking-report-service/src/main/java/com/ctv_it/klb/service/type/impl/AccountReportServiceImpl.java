@@ -2,7 +2,6 @@ package com.ctv_it.klb.service.type.impl;
 
 import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.AccountReportDTO;
-import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
@@ -11,7 +10,6 @@ import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
 import com.ctv_it.klb.service.type.ReportTypeService;
 import com.ctv_it.klb.util.mock.MockFetchAccountService;
 import com.ctv_it.klb.util.mock.MockFetchCustomerService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

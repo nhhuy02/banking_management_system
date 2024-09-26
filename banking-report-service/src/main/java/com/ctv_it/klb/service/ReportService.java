@@ -3,6 +3,7 @@
 package com.ctv_it.klb.service;
 
 import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
+import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.factory.ReportFormatServiceFactory;
 import com.ctv_it.klb.factory.ReportTypeServiceFactory;
@@ -67,7 +68,7 @@ public class ReportService {
     return reportFormatService.export((T) reportData);
   }
 
-  private Object search(com.ctv_it.klb.dto.request.ReportRequestDTO requestDTO, ReportTypeService<?> reportTypeService) {
+  private Object search(ReportRequestDTO requestDTO, ReportTypeService<?> reportTypeService) {
     return reportTypeService.search(requestDTO);
   }
 }

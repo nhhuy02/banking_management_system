@@ -1,6 +1,5 @@
 package com.ctv_it.klb.dto.fetch.response.data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,16 +13,9 @@ import lombok.ToString;
 public class FetchAccountDataDTO {
 
   private Long id;
-
-  private String fullName;
-
   private String accountName;
-
-  private Long accountNumber;
-
-  private BigDecimal balance;
-
+  private long accountNumber;
+  private long balance;
   private String status;
-
   private LocalDateTime openingDate;
 }

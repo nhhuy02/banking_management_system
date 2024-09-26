@@ -22,8 +22,8 @@ public class CustomerInfoDTO {
   private KYC kyc;
   private String kycStatus;
 
-  @Getter
   @Setter
+  @Getter
   @ToString
   private static class KYC {
 
