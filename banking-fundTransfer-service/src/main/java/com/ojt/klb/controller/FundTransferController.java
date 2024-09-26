@@ -24,11 +24,11 @@ public class FundTransferController {
     }
 
     @GetMapping("/{referenceNumber}")
-    public ResponseEntity<FundTransferDto> getTransferDetailsFromReferenceId(@PathVariable String referenceNumber) {
+    public ResponseEntity<FundTransferDto> getTransferDetailsFromReferenceNumber(@PathVariable String referenceNumber) {
         return new ResponseEntity<>(fundTransferService.getTransferDetailsFromReferenceNumber(referenceNumber), HttpStatus.OK);
     }
     @GetMapping
-    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountId(@RequestParam String accountNumber) {
+    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountNumber(@RequestParam String accountNumber) {
         return new ResponseEntity<>(fundTransferService.getAllTransferByAccountNumber(accountNumber), HttpStatus.OK);
     }
 
