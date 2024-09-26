@@ -7,6 +7,7 @@ public class AccountData {
     private Long customerId;
     private String customerName;
     private String email;
+    private String phoneNumber;
     private Long accountNumber;
-    private String accountType;
+    private String accountName;
 }
