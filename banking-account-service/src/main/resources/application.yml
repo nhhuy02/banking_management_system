@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: banking-account-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+
+  datasource:
+    url: jdbc:mysql://sql12.freesqldatabase.com:3306/sql12731981
+    username: sql12731981
+    password: SlXUJG2wlZ
+#
+#    url: jdbc:mysql://localhost:3369/account_service
+#    username: root
+#    password: minhtam2002
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: account-group
+      auto-offset-reset: earliest
+    properties:
+      spring:
+        json:
+          trusted:
+            packages: "*"
+          value:
+            default:
+              type: com.ojt.klb.dto.CustomerDto
+
+##Eureka Configuration
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+#
+## Logging Configuration
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        cloud:
+#          netflix:
+#            eureka: DEBUG
+#        web: DEBUG
