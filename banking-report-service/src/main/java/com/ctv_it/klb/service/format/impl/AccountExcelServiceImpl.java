@@ -26,7 +26,7 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
 
     fileName += getFormat().getExtension(); // example: "fileAccount" + ".pdf" = "fileAccount.pdf"
 
-    Map<String, Object> data = Map.of("name", "NVS");
+    Map<String, Object> data = Map.of("customer", reportData.getCustomer());
 
     byte[] byteData = fileUtil.writeFile(fileName, getTemplate(), data);
 

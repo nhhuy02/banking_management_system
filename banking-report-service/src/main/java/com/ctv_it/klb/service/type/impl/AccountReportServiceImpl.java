@@ -2,6 +2,7 @@ package com.ctv_it.klb.service.type.impl;
 
 import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.AccountReportDTO;
+import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
@@ -10,6 +11,8 @@ import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
 import com.ctv_it.klb.service.type.ReportTypeService;
 import com.ctv_it.klb.util.mock.MockFetchAccountService;
 import com.ctv_it.klb.util.mock.MockFetchCustomerService;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,21 +31,29 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
   public AccountReportDTO search(ReportRequestDTO reportRequestDTO) {
     log.info(Translator.toLocale("msg.called", "AccountReportServiceImpl::search"));
 
-    FetchCustomerDataDTO customer = getCustomerById(reportRequestDTO.getCustomerId());
+    FetchCustomerDataDTO fetchCustomerDataDTO = fetchCustomerServiceFC.findByAccountId(
+        reportRequestDTO.getCustomerId());
 
     AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
 
-    return null;
+    return AccountReportDTO.builder()
+        .customer(
+            CustomerInfoDTO.builder()
+                .fullName(fetchCustomerDataDTO.getFullName())
+                .email(fetchCustomerDataDTO.getEmail())
+                .phoneNumber(fetchCustomerDataDTO.getPhoneNumber())
+                .address(fetchCustomerDataDTO.getCurrentAddress())
+                .dateOfBirth(LocalDate.parse(
+                    fetchCustomerDataDTO.getDateOfBirth()
+                        .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
+                .kycDocumentType(fetchCustomerDataDTO.getKyc().getDocumentType())
+                .kycDocumentNumber(fetchCustomerDataDTO.getKyc().getDocumentNumber())
+                .build())
+        .build();
   }
 
   @Override
   public ReportType getType() {
     return ReportType.ACCOUNT;
-  }
-
-  private FetchCustomerDataDTO getCustomerById(long accountId) {
-    return mockFetchCustomerService.findById(accountId);
-
-//    return fetchCustomerServiceFC.findById(accountId);
   }
 }
