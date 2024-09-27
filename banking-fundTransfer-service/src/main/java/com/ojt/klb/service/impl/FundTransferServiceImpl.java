@@ -1,11 +1,10 @@
 package com.ojt.klb.service.impl;
 
-import com.ojt.klb.exception.AccountUpdateException;
-import com.ojt.klb.exception.GlobalErrorCode;
-import com.ojt.klb.exception.InsufficientBalance;
-import com.ojt.klb.exception.ResourceNotFound;
+import com.ojt.klb.exception.*;
 import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.external.TransactionClient;
+import com.ojt.klb.kafka.InternalTransferNotification;
+import com.ojt.klb.kafka.InternalTransferProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransferType;
 import com.ojt.klb.model.dto.Account;
@@ -23,9 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,6 +37,7 @@ public class FundTransferServiceImpl implements FundTransferService {
     private final AccountClient accountClient;
     private final TransactionClient transactionClient;
     private final FundTransferRepository fundTransferRepository;
+    private final InternalTransferProducer internalTransferProducer;
 
     private final FundTransferMapper fundTransferMapper = new FundTransferMapper();
 
@@ -41,30 +45,45 @@ public class FundTransferServiceImpl implements FundTransferService {
     public FundTransferResponse fundTransfer(FundTransferRequest fundTransferRequest) {
         Account fromAccount;
         ResponseEntity<Account> response = accountClient.readByAccountNumber(fundTransferRequest.getFromAccount());
-        if(Objects.isNull(response.getBody())){
-            log.error("requested account "+fundTransferRequest.getFromAccount()+" is not found on the server");
-            throw new ResourceNotFound("requested account not found on the server", GlobalErrorCode.NOT_FOUND);
+        if (Objects.isNull(response.getBody())) {
+            log.error("requested account " + fundTransferRequest.getFromAccount() + " is not found on the server");
+            throw new AccountNotFoundException("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
         fromAccount = response.getBody();
-        if(!fromAccount.getAccountStatus().equals("ACTIVE")){
+        if (!fromAccount.getAccountStatus().equals("ACTIVE")) {
             log.error("Account status is pending or inactive, please update the account status");
             throw new AccountUpdateException("Account status is pending", GlobalErrorCode.NOT_ACCEPTABLE);
         }
-        if(fromAccount.getAvailableBalance().compareTo(fundTransferRequest.getAmount()) < 0){
+        BigDecimal minimumAmount = new BigDecimal("2000");
+        if (fundTransferRequest.getAmount().compareTo(minimumAmount) < 0) {
+            log.error("Transfer amount is below the minimum requirement of 2000");
+            throw new InvalidTransferAmountException("Transfer amount must be at least 2000", GlobalErrorCode.INVALID_AMOUNT);
+        }
+
+        if (fromAccount.getAvailableBalance().compareTo(fundTransferRequest.getAmount()) < 0) {
             log.error("Required amount to transfer is not available");
             throw new InsufficientBalance("requested amount is not available", GlobalErrorCode.NOT_ACCEPTABLE);
         }
 
+        BigDecimal dailyLimit = new BigDecimal("500000000");
+        BigDecimal dailyTotal = getDailyTransferTotal(fromAccount.getAccountNumber());
+        BigDecimal newTotal = dailyTotal.add(fundTransferRequest.getAmount());
+
+        if (newTotal.compareTo(dailyLimit) > 0) {
+            log.error("Daily transfer limit exceeded");
+            throw new DailyLimitExceededException("Daily transfer limit of 500000000 exceeded", GlobalErrorCode.NOT_ACCEPTABLE);
+        }
+
         Account toAccount;
         response = accountClient.readByAccountNumber(fundTransferRequest.getToAccount());
-        if(Objects.isNull(response.getBody())) {
-            log.error("requested account "+fundTransferRequest.getToAccount()+" is not found on the server");
-            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
+        if (Objects.isNull(response.getBody())) {
+            log.error("requested account " + fundTransferRequest.getToAccount() + " is not found on the server");
+            throw new AccountNotFoundException("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
         toAccount = response.getBody();
 
-        String transactionReference = internalTransfer(fromAccount, toAccount, fundTransferRequest.getAmount());
-
+        String transactionReference = internalTransfer(fromAccount, toAccount, fundTransferRequest.getAmount(), fundTransferRequest.getDescription());
+        LocalDateTime transferredOn = LocalDateTime.now();
         FundTransfer fundTransfer = FundTransfer.builder()
                 .transferType(TransferType.INTERNAL)
                 .amount(fundTransferRequest.getAmount())
@@ -72,17 +91,44 @@ public class FundTransferServiceImpl implements FundTransferService {
                 .transactionReference(transactionReference)
                 .status(TransactionStatus.SUCCESS)
                 .toAccount(toAccount.getAccountNumber())
+                .transferredOn(transferredOn)
+                .description(fundTransferRequest.getDescription())
                 .build();
 
         fundTransferRepository.save(fundTransfer);
+
+//        internalTransferProducer.sendInternalTransferNotification(
+//                new InternalTransferNotification(
+//                        transactionReference,
+//                        transferredOn,
+//                        fundTransferRequest.getFromAccount(),
+//                        fundTransferRequest.getToAccount(),
+//                        fundTransferRequest.getAmount(),
+//                        fundTransferRequest.getDescription(),
+//                        fundTransferRequest.getAmount(),
+//                        fundTransferRequest.getAmount()
+//                )
+//        );
         return FundTransferResponse.builder()
                 .transactionReference(transactionReference)
                 .message("Fund transfer was successful").build();
     }
 
-    private String internalTransfer(Account fromAccount, Account toAccount, BigDecimal amount){
+    private BigDecimal getDailyTransferTotal(String accountNumber) {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        List<FundTransfer> dailyTransfers = fundTransferRepository.findByFromAccountAndTransferredOnBetween(
+                accountNumber, startOfDay, endOfDay);
+
+        return dailyTransfers.stream()
+                .map(FundTransfer::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private String internalTransfer(Account fromAccount, Account toAccount, BigDecimal amount, String description) {
         fromAccount.setAvailableBalance(fromAccount.getAvailableBalance().subtract(amount));
-        accountClient.updateAccount(fromAccount.getAccountNumber(),fromAccount);
+        accountClient.updateAccount(fromAccount.getAccountNumber(), fromAccount);
 
         toAccount.setAvailableBalance(toAccount.getAvailableBalance().add(amount));
         accountClient.updateAccount(toAccount.getAccountNumber(), toAccount);
@@ -92,13 +138,13 @@ public class FundTransferServiceImpl implements FundTransferService {
                         .accountNumber(fromAccount.getAccountNumber())
                         .transactionType("INTERNAL_TRANSFER")
                         .amount(amount)
-                        .description("Internal fund transfer from "+fromAccount.getAccountNumber()+" to "+toAccount.getAccountNumber())
+                        .description(description)
                         .build(),
                 Transaction.builder()
                         .accountNumber(toAccount.getAccountNumber())
                         .transactionType("INTERNAL_TRANSFER")
                         .amount(amount)
-                        .description("Internal fund transfer received from: "+fromAccount.getAccountNumber())
+                        .description(description)
                         .build());
 
         String transactionReference = generateUniqueTransactionReference();
@@ -120,6 +166,17 @@ public class FundTransferServiceImpl implements FundTransferService {
 
     @Override
     public List<FundTransferDto> getAllTransferByAccountNumber(String accountNumber) {
-        return fundTransferMapper.convertToDtoList(fundTransferRepository.findByFromAccount(accountNumber));
+        List<FundTransfer> transfers = fundTransferRepository.findByFromAccountOrToAccount(accountNumber);
+        return transfers.stream()
+                .map(transfer -> {
+                    FundTransferDto dto = fundTransferMapper.convertToDto(transfer);
+                    if (transfer.getFromAccount().equals(accountNumber)) {
+                        dto.setTransferType(TransferType.valueOf("OUTGOING"));
+                    } else {
+                        dto.setTransferType(TransferType.valueOf("INCOMING"));
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

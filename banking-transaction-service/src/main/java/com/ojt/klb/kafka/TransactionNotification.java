@@ -1,7 +1,6 @@
-package com.ojt.klb.model.external;
+package com.ojt.klb.kafka;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,11 +8,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TransactionResponse {
-
+@AllArgsConstructor
+public class TransactionNotification {
     private String referenceNumber;
 
     private String accountNumber;
@@ -23,8 +20,6 @@ public class TransactionResponse {
     private BigDecimal amount;
 
     private LocalDateTime localDateTime;
-
-    private String transactionStatus;
 
     private String description;
 }
