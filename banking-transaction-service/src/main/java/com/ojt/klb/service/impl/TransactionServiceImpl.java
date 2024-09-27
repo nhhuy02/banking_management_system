@@ -2,12 +2,13 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.exception.*;
 import com.ojt.klb.external.AccountClient;
+import com.ojt.klb.kafka.TransactionNotification;
+import com.ojt.klb.kafka.TransactionProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.external.Account;
-import com.ojt.klb.model.external.AccountStatus;
 import com.ojt.klb.model.mapper.TransactionMapper;
 import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.response.Response;
@@ -19,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -32,6 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository repository;
     private final AccountClient accountClient;
     private final TransactionMapper mapper = new TransactionMapper();
+    private final TransactionProducer transactionProducer;
 
     @Override
     public Response handleTransaction(TransactionDto transactionDto) {
@@ -56,13 +59,25 @@ public class TransactionServiceImpl implements TransactionService {
             account.setAvailableBalance(account.getAvailableBalance().subtract(transactionDto.getAmount()));
         }
 
+        String referenceNumber = generateUniqueReferenceNumber();
         transaction.setTransactionType(TransactionType.valueOf(transactionDto.getTransactionType()));
         transaction.setDescription(transactionDto.getDescription());
         transaction.setStatus(TransactionStatus.COMPLETED);
-        transaction.setReferenceNumber(generateUniqueReferenceNumber());
+        transaction.setReferenceNumber(referenceNumber);
 
         accountClient.updateAccount(transactionDto.getAccountNumber(), account);
         repository.save(transaction);
+
+        transactionProducer.sendTransactionNotification(
+                new TransactionNotification(
+                        referenceNumber,
+                        transactionDto.getAccountNumber(),
+                        transactionDto.getTransactionType(),
+                        transactionDto.getAmount(),
+                        LocalDateTime.now(),
+                        transactionDto.getDescription()
+                )
+        );
         return Response.builder()
                 .message("Transaction completed successfully")
                 .status(200)

@@ -38,4 +38,6 @@ public class FundTransfer {
 
     @CreationTimestamp
     private LocalDateTime transferredOn;
+
+    String description;
 }

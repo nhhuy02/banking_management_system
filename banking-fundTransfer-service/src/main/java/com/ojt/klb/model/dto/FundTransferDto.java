@@ -29,4 +29,6 @@ public class FundTransferDto {
     private TransferType transferType;
 
     private LocalDateTime transferredOn;
+
+    private String description;
 }
