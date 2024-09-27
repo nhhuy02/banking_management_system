@@ -1,10 +1,16 @@
 package com.ctv_it.klb.enumeration;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public enum ReportFormat {
-  NONE, PDF, EXCEL;
+  NONE(""), PDF(".pdf"), EXCEL(".xlsx");
+
+  private String extension;
 
   public static ReportFormat fromString(String value) {
     try {
