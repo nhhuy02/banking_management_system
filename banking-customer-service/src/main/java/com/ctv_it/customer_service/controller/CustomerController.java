@@ -2,6 +2,7 @@ package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
+import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomerService;
 import jakarta.persistence.EntityNotFoundException;
@@ -85,6 +86,31 @@ public class CustomerController {
             logger.warn("Error updating customer with accountId {}", accountId);
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, false, null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/{accountId}/customer-info-for-account-service")
+    public ResponseEntity<ApiResponse<GetAccountIdAndCustomerId>> getAccountAndCustomerId(
+            @PathVariable Long accountId) {
+
+        Optional<GetAccountIdAndCustomerId> data = customerService.getAccountIdAndCustomerId(accountId);
+
+        if (data.isPresent()) {
+            ApiResponse<GetAccountIdAndCustomerId> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Customer found for account ID: " + accountId,
+                    true,
+                    data.get()
+            );
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<GetAccountIdAndCustomerId> response = new ApiResponse<>(
+                    HttpStatus.NOT_FOUND.value(),
+                    "Not found for account ID: " + accountId,
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

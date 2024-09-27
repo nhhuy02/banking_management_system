@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface KycService {
     Optional<Kyc.VerificationStatus> getKycStatusById(Long id);
 
-    KycDto updateKyc(Long id, KycDto updatedKycDto);
+    KycDto updateKycbyAccountId(Long id, KycDto updatedKycDto);
 
-    Optional<KycResponseDto> getKycById(Long id);
+    Optional<KycResponseDto> getKycByCustomerId(Long customerId);
 
     Kyc saveKyc(Kyc kyc);
 }
