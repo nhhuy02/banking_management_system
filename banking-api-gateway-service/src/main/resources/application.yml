@@ -4,4 +4,7 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 
+  jwt:
+    secret-key: jwtHGUIUIUJghasjHGLKWPJOIDKIGjjUhkMGfkIPgf548594651gf51we5fs56f1w65f1we5f4651FGTbiIBHGUYGVHbiHEhehehe
+    expiration: 3600000
 

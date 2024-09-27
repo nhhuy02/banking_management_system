@@ -11,7 +11,7 @@ import java.time.Instant;
 public class KycDto {
 
     @JsonIgnore
-    private Long id;
+    private Long customerId;
 
     @JsonIgnore
     private String verificationStatus;

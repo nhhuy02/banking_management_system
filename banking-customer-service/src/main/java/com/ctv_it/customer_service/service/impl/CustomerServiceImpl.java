@@ -3,6 +3,7 @@ package com.ctv_it.customer_service.service.impl;
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
 import com.ctv_it.customer_service.dto.CustomersStatusHistoryDto;
+import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
 import com.ctv_it.customer_service.mapper.CustomerMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.CustomersStatusHistory;
@@ -11,7 +12,6 @@ import com.ctv_it.customer_service.repository.CustomerRepository;
 import com.ctv_it.customer_service.service.CustomerService;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import com.ctv_it.customer_service.service.KycService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,17 +27,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    @Autowired
-    private CustomerRepository customerRepository;
 
-    @Autowired
-    private CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
+    private final KycService kycService;
+    private final CustomersStatusHistoryService customersStatusHistoryService;
 
-    @Autowired
-    private KycService kycService;
-
-    @Autowired
-    private CustomersStatusHistoryService customersStatusHistoryService;
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, KycService kycService, CustomersStatusHistoryService customersStatusHistoryService) {
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
+        this.kycService = kycService;
+        this.customersStatusHistoryService = customersStatusHistoryService;
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -46,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> customerOptional = customerRepository.findByAccountId(accountId);
 
         if (customerOptional.isEmpty()) {
-            logger.warn("Customer with accountId: {} not found", accountId);
+            logger.warn("xCustomer with accountId: {} not found", accountId);
             return Optional.empty();
         }
 
@@ -138,6 +139,19 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public Optional<GetAccountIdAndCustomerId> getAccountIdAndCustomerId(Long accountId) {
+        Optional<Customer> customerOptional = customerRepository.findByAccountId(accountId);
+        if (customerOptional.isPresent()) {
+            GetAccountIdAndCustomerId data = new GetAccountIdAndCustomerId();
+            data.setCustomerId(customerOptional.get().getId());
+            data.setAccountId(accountId);
+            return Optional.of(data);
+        } else {
+            logger.warn("Not found: {}", accountId);
+            return Optional.empty();
+        }
+    }
 
     private void populateAdditionalCustomerInfo(CustomerDto dto, Customer customer) {
         // Get status KYC
