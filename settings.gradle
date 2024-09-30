@@ -1,1 +1,3 @@
 rootProject.name = 'Microservices-Core-Banking'
+include 'banking-account-service'
+
