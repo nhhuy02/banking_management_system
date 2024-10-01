@@ -2,7 +2,6 @@ package com.ojt.klb.controller;
 
 import com.ojt.klb.dto.AccountDto;
 import com.ojt.klb.dto.ChangeStatusDto;
-import com.ojt.klb.dto.FindNameByAccountDto;
 import com.ojt.klb.dto.GetAllId;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.AccountService;
@@ -56,27 +55,28 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/name/{accountNumber}")
-    public ResponseEntity<ApiResponse<FindNameByAccountDto>> getNameByAccountNumber(@PathVariable String accountNumber) {
+    @GetMapping("/account/{accountNumber}")
+    public ResponseEntity<ApiResponse<AccountDto>> getDataAccountNumber(@PathVariable String accountNumber) {
         Optional<Long> accountIdOptional = accountService.getAccountIdByAccountNumber(accountNumber);
 
         if (accountIdOptional.isPresent()) {
-            String fullName = accountService.getFullNameByAccountId(accountIdOptional.get());
+            Long accountId = accountIdOptional.get();
+            Optional<AccountDto> accountDataOptional = accountService.getDataByAccountNumber(accountId);
 
-            if (fullName != null) {
-                FindNameByAccountDto dto = new FindNameByAccountDto();
-                dto.setFullName(fullName);
-                ApiResponse<FindNameByAccountDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Found name by account number", true, dto);
+            if (accountDataOptional.isPresent()) {
+                AccountDto accountData = accountDataOptional.get();
+                ApiResponse<AccountDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Account found", true, accountData);
                 return ResponseEntity.ok(response);
             } else {
-                ApiResponse<FindNameByAccountDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Cant find name by account number", false, null);
+                ApiResponse<AccountDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Account data not found", false, null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         } else {
-            ApiResponse<FindNameByAccountDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Account not found", false, null);
+            ApiResponse<AccountDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "Account not found", false, null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
 
     @GetMapping("/{userId}/all-id-for-gateway")
     public ResponseEntity<ApiResponse<GetAllId>> getAllIdForApiGateWay(@PathVariable Long userId) {

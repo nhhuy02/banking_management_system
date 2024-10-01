@@ -33,7 +33,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/account/card-registration/pending-requests","/api/v1/notification/getAllNotification").hasAnyAuthority("ROLE_employee", "ROLE_admin")
+                        .requestMatchers("/api/v1/account/card-registration/pending-requests","/api/v1/notification/getAllNotification",
+                                "/api/v1/account/card-types/**").hasAnyAuthority("ROLE_employee", "ROLE_admin")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
