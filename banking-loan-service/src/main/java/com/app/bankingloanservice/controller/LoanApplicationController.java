@@ -56,7 +56,7 @@ public class LoanApplicationController {
                                     summary = "Loan Application with all required fields",
                                     value = """
                                             {
-                                              "customerId": 12345,
+                                              "accountId": 12345,
                                               "accountId": 98765,
                                               "monthlyIncome": 20000000,
                                               "occupation": "Software Engineer",
@@ -182,17 +182,17 @@ public class LoanApplicationController {
 
 
     /**
-     * Endpoint to retrieve loan applications by customerId.
+     * Endpoint to retrieve loan applications by accountId.
      *
-     * @param customerId The ID of the customer.
-     * @param pageable   Pagination information.
+     * @param accountId The ID of the account.
+     * @param pageable  Pagination information.
      * @return ResponseEntity containing ApiResponseWrapper with a page of LoanApplicationResponse and HTTP status.
      */
     @Operation(
-            summary = "Get Loan Applications by Customer ID",
-            description = "Retrieves loan applications for a specific customer based on customerId with pagination support.",
+            summary = "Get Loan Applications by Account ID",
+            description = "Retrieves loan applications for a specific account based on accountId with pagination support.",
             parameters = {
-                    @Parameter(name = "customerId", description = "The ID of the customer", required = true, example = "12345"),
+                    @Parameter(name = "accountId", description = "The ID of the account", required = true, example = "12345"),
                     @Parameter(name = "page", description = "Current page (0-based)", example = "0"),
                     @Parameter(name = "size", description = "Page size", example = "10"),
                     @Parameter(name = "sort", description = "Sort the result by a specific field, e.g.: loanDate,desc", example = "submissionDate,desc")
@@ -208,12 +208,12 @@ public class LoanApplicationController {
                     ),
                     @ApiResponse(
                             responseCode = "204",
-                            description = "No loan applications found for the given customerId",
+                            description = "No loan applications found for the given accountId",
                             content = @Content
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Invalid customerId provided",
+                            description = "Invalid accountId provided",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
@@ -230,23 +230,23 @@ public class LoanApplicationController {
             }
     )
     @GetMapping
-    public ResponseEntity<ApiResponseWrapper<Page<LoanApplicationResponse>>> getLoanApplicationsByCustomerId(
-            @Parameter(description = "The ID of the customer to fetch loan applications", required = true)
-            @RequestParam @Min(value = 1, message = "customerId must be a positive number") Long customerId,
+    public ResponseEntity<ApiResponseWrapper<Page<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
+            @Parameter(description = "The ID of the account to fetch loan applications", required = true)
+            @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId,
 
             @ParameterObject Pageable pageable) {
 
-        log.info("Received request to fetch loan applications for customerId: {}", customerId);
+        log.info("Received request to fetch loan applications for accountId: {}", accountId);
 
-        Page<LoanApplicationResponse> loanApplications = loanApplicationService.getLoanApplicationsByCustomerId(customerId, pageable);
+        Page<LoanApplicationResponse> loanApplications = loanApplicationService.getLoanApplicationsByAccountId(accountId, pageable);
 
         String message;
 
         if (loanApplications.isEmpty()) {
-            log.warn("No loan applications found for customerId: {}", customerId);
-            message = "No loan applications found for the given customerId.";
+            log.warn("No loan applications found for accountId: {}", accountId);
+            message = "No loan applications found for the given accountId.";
         } else {
-            log.info("Successfully retrieved loan applications for customerId: {}", customerId);
+            log.info("Successfully retrieved loan applications for accountId: {}", accountId);
             message = "Loan applications retrieved successfully.";
         }
 

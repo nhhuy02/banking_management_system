@@ -19,18 +19,16 @@ public class LoanResponse {
     // Loan application details
     private Long loanApplicationId;
 
-    // Customer ID
-    private Long customerId;
+    // Account ID
+    private Long accountId;
 
     private String customerName;
 
-    private Long accountId; // Account ID for receiving disbursement and making repayments
+    private String accountNumber; // Account number for receiving disbursement and making repayments
 
     private String contactPhone; // Customer's phone number
 
     private String contactEmail; // Customer's email
-
-    private String idCard; // Customer's ID Card number
 
     // Loan contract number
     private String loanContractNo;

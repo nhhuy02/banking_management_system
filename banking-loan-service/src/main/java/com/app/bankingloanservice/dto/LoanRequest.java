@@ -16,15 +16,15 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoanRequest {
+public class LoanRequest { // tính năng
 
     @Schema(description = "ID of the loan application associated with this loan", example = "2")
     @NotNull(message = "Loan application ID is required")
     private Long loanApplicationId;
 
-    @Schema(description = "ID of the customer who is taking the loan", example = "456")
-    @NotNull(message = "Customer ID is required")
-    private Long customerId;
+    @Schema(description = "ID of the account who is taking the loan", example = "456")
+    @NotNull(message = "Account ID is required")
+    private Long accountId;
 
     @Schema(description = "Loan type ID", example = "3")
     @NotNull(message = "Loan type ID is required")

@@ -1,5 +1,0 @@
-insert into loan_service.document (document_id, loan_application_id, document_type, file_name, file_type, file_size, file_path, description, created_by, created_date, last_modified_by, last_modified_date)
-values  (1, 1, 'COLLATERAL_PROOF', 'house_deed.pdf', 'application/pdf', 102400, '/documents/house_deed.pdf', 'Proof of ownership for the house.', 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (2, 2, 'COLLATERAL_PROOF', 'car_registration.pdf', 'application/pdf', 51200, '/documents/car_registration.pdf', 'Proof of ownership for the car.', 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (3, 3, 'COLLATERAL_PROOF', 'house_deed.pdf', 'application/pdf', 102400, '/documents/house_deed.pdf', 'Proof of ownership for the house.', 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (4, 4, 'COLLATERAL_PROOF', 'car_registration.pdf', 'application/pdf', 51200, '/documents/car_registration.pdf', 'Proof of ownership for the car.', 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55');

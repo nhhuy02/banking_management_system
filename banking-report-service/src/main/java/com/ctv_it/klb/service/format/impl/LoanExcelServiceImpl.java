@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 public class LoanExcelServiceImpl implements ReportFormatService<LoanReportDTO> {
 
   @Override
-  public Byte[] export(LoanReportDTO reportData) {
+  public byte[] export(String fileName, LoanReportDTO reportData) {
     log.info(Translator.toLocale("msg.called", "LoanExcelServiceImpl::export"));
     log.info("ReportData: {}", reportData);
 
-    return new Byte[0];
+    fileName += getFormat().getExtension(); // example: "fileLoan" + ".xlsx" = "fileLoan.xlsx"
+
+    return new byte[0];
   }
 
   @Override

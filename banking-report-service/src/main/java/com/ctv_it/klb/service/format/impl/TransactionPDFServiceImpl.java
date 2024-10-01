@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 public class TransactionPDFServiceImpl implements ReportFormatService<TransactionReportDTO> {
 
   @Override
-  public Byte[] export(TransactionReportDTO reportData) {
+  public byte[] export(String fileName, TransactionReportDTO reportData) {
     log.info(Translator.toLocale("msg.called", "TransactionPDFServiceImpl::export"));
     log.info("ReportData: {}", reportData);
 
-    return new Byte[0];
+    fileName += getFormat().getExtension(); // example: "fileTransaction" + ".pdf" = "fileTransaction.pdf"
+
+    return new byte[0];
   }
 
   @Override

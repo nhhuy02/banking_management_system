@@ -154,27 +154,27 @@ public class LoanServiceImpl implements LoanService {
     }
 
     /**
-     * Retrieves loans based on customerId with pagination support.
+     * Retrieves loans based on accountId with pagination support.
      *
-     * @param customerId The ID of the customer.
+     * @param accountId The ID of the account.
      * @param pageable   Pagination information.
      * @return A page of LoanResponse.
      */
     @Override
-    public Page<LoanResponse> getLoansByCustomerId(Long customerId, Pageable pageable) {
+    public Page<LoanResponse> getLoansByAccountId(Long accountId, Pageable pageable) {
 
-        log.info("Fetching loans for customer ID: {} with pagination: {}", customerId, pageable);
+        log.info("Fetching loans for account ID: {} with pagination: {}", accountId, pageable);
 
-        Page<Loan> loanPage = loanRepository.findByCustomerId(customerId, pageable);
+        Page<Loan> loanPage = loanRepository.findByAccountId(accountId, pageable);
 
         if (loanPage.isEmpty()) {
-            log.warn("No loans found for customer ID: {}", customerId);
+            log.warn("No loans found for account ID: {}", accountId);
             // Return an empty page
             return Page.empty(pageable);
         }
 
         Page<LoanResponse> responseDtos = loanPage.map(loanMapper::toResponse);
-        log.info("Fetched {} loans for customer ID: {}", responseDtos.getContent().size(), customerId);
+        log.info("Fetched {} loans for account ID: {}", responseDtos.getContent().size(), accountId);
 
         return responseDtos;
     }
