@@ -44,6 +44,9 @@ public class Card {
         closed
     }
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "opened_at", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
     private Timestamp openedAt;

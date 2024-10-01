@@ -44,6 +44,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<AccountDto> getAccountById(Long id) {
+        return getAccountDto(id);
+    }
+
+    private Optional<AccountDto> getAccountDto(Long id) {
         Optional<Account> accountOptional = accountRepository.findById(id);
 
         if (accountOptional.isPresent()) {
@@ -59,15 +63,7 @@ public class AccountServiceImpl implements AccountService {
                 AccountDto customerData = responseEntity.getBody().getData();
 
                 if (customerData != null) {
-                    customerData.setFullName(customerData.getFullName());
-                    customerData.setAccountName(account.getAccountName());
-                    customerData.setAccountNumber(account.getAccountNumber());
-                    customerData.setDateOfBirth(customerData.getDateOfBirth());
-                    customerData.setGender(customerData.getGender());
-                    customerData.setEmail(customerData.getEmail());
-                    customerData.setPhoneNumber(customerData.getPhoneNumber());
-                    customerData.setPermanentAddress(customerData.getPermanentAddress());
-                    customerData.setCurrentAddress(customerData.getCurrentAddress());
+                    getData(customerData, account.getAccountName(), account.getAccountNumber());
                     customerData.setBalance(account.getBalance());
                     customerData.setStatus(account.getStatus());
                     customerData.setOpeningDate(account.getCreatedAt());
@@ -108,16 +104,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String getFullNameByAccountId(Long accountId) {
+    public Optional<AccountDto> getDataByAccountNumber(Long accountId) {
+        return getAccountDto(accountId);
+    }
 
-        ResponseEntity<ApiResponse<AccountDto>> responseEntity = accountClient.getData(accountId);
-        if (responseEntity.getBody() != null && responseEntity.getBody().isSuccess()) {
-            AccountDto customerData = responseEntity.getBody().getData();
-            return customerData.getFullName();
-        } else {
-            logger.error("Failed fetch customer data from external service for account id: {}", accountId);
-            return null;
-        }
+
+    private void getData(AccountDto customerData, String accountName, String accountNumber) {
+        customerData.setFullName(customerData.getFullName());
+        customerData.setAccountName(accountName);
+        customerData.setAccountNumber(accountNumber);
+        customerData.setDateOfBirth(customerData.getDateOfBirth());
+        customerData.setGender(customerData.getGender());
+        customerData.setEmail(customerData.getEmail());
+        customerData.setPhoneNumber(customerData.getPhoneNumber());
+        customerData.setPermanentAddress(customerData.getPermanentAddress());
+        customerData.setCurrentAddress(customerData.getCurrentAddress());
     }
 
     @Override
