@@ -4,11 +4,15 @@ server:
 spring:
   application:
     name: banking-loan-service
+  config:
+    import: optional:configserver:http://localhost:8888
 
   datasource:
-    url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
-  #    username: chienma
+#    url: jdbc:mysql://localhost:3306/loan_service
+#    username: chienma
 #    password: chienma_password
+
+    url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
     username: root
     password: root
   jpa:
@@ -21,6 +25,12 @@ spring:
       enabled: true
       max-file-size: 20MB
       max-request-size: 40MB
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 # OpenAPI config
 springdoc:

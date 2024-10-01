@@ -46,6 +46,11 @@ public class StringUtils {
         return content;
     }
 
+    public static String convertContentLoanApplication(Long contractNumber) {
+
+        return "";
+    }
+
 
 
 
