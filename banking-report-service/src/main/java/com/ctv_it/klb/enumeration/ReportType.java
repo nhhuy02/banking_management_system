@@ -1,7 +1,16 @@
 package com.ctv_it.klb.enumeration;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public enum ReportType {
-  ACCOUNT, TRANSACTION, LOAN;
+  ACCOUNT("account"), TRANSACTION("transaction"), LOAN("loan");
+
+  private String value;
 
   public static ReportType fromString(String value) {
     try {

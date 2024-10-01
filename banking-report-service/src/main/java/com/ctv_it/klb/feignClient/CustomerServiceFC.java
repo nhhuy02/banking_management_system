@@ -6,9 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "banking-customer-service", url = "http://localhost:8081/api/v1/customer")
+@FeignClient(name = "banking-customer-service", url = "http://localhost:8082/api/v1/customer")
 public interface CustomerServiceFC {
 
-  @GetMapping("/byId/{Id}")
-  FetchResponseDTO<FetchCustomerDataDTO> findById(@PathVariable Long accountId);
+  @GetMapping("/{accountId}")
+  FetchResponseDTO<FetchCustomerDataDTO> findByAccountId(@PathVariable Long accountId);
 }

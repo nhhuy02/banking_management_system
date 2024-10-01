@@ -19,10 +19,11 @@ public class FetchCustomerServiceFC {
 
   private final CustomerServiceFC customerServiceFC;
 
-  public FetchCustomerDataDTO findById(long accountId) {
+  public FetchCustomerDataDTO findByAccountId(long accountId) {
     try {
-      FetchResponseDTO<FetchCustomerDataDTO> fetchResponseDTO = customerServiceFC.findById(
+      FetchResponseDTO<FetchCustomerDataDTO> fetchResponseDTO = customerServiceFC.findByAccountId(
           accountId);
+      log.info("findByAccountId({}): {}", accountId, fetchResponseDTO);
 
       if (fetchResponseDTO.isSuccess() && fetchResponseDTO.getData() != null) {
         return fetchResponseDTO.getData();
@@ -33,7 +34,6 @@ public class FetchCustomerServiceFC {
                   ErrorDetailDTO.builder()
                       .message(fetchResponseDTO.getMessage())
                       .build()));
-
         } else {
           throw new InternalError(fetchResponseDTO.getMessage());
         }

@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 public class AccountPDFServiceImpl implements ReportFormatService<AccountReportDTO> {
 
   @Override
-  public Byte[] export(AccountReportDTO reportData) {
+  public byte[] export(String fileName, AccountReportDTO reportData) {
     log.info(Translator.toLocale("msg.called", "AccountPDFServiceImpl::export"));
     log.info("ReportData: {}", reportData);
 
-    return new Byte[0];
+    fileName += getFormat().getExtension(); // example: "fileAccount" + ".xlsx" = "fileAccount.pdf"
+
+    return new byte[0];
   }
 
   @Override

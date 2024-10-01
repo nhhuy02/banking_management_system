@@ -1,13 +1,13 @@
 package com.ctv_it.klb.common;
 
-import java.time.format.DateTimeFormatter;
-
 public class Default {
 
-  public static class LocalDateTimeFormat {
+  public static class File {
 
-    public static DateTimeFormatter LOCAL_DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-    public static DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    public static final String TEMPLATE_PATH = "/template";
 
+    public static final String TARGET_PATH = "./files";
+
+    public static final String PATTERN = "P@TTERN";
   }
 }
