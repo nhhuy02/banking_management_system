@@ -5,6 +5,7 @@ package com.ctv_it.klb.service;
 import com.ctv_it.klb.common.Default.File;
 import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
+import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.factory.ReportFormatServiceFactory;
 import com.ctv_it.klb.factory.ReportTypeServiceFactory;
@@ -32,7 +33,7 @@ public class ReportService {
 
     if (reportTypeService == null) {
       throw new InvalidExceptionCustomize(Collections.singletonList(
-          com.ctv_it.klb.dto.response.ErrorDetailDTO.builder().field("reportType")
+          ErrorDetailDTO.builder().field("reportType")
               .rejectedValue(requestDTO.getReportType())
               .message("Report for type '" + requestDTO.getReportType() + "' is not supported")
               .build()));
@@ -40,20 +41,20 @@ public class ReportService {
 
     // Return Object if request format NONE
     if (ReportFormat.NONE.equals(requestDTO.getReportFormat())) {
-      return search(requestDTO, reportTypeService);
+      return this.search(requestDTO, reportTypeService);
     } else { // Else, check support format for type
       ReportFormatService<?> reportFormatService = reportFormatServiceFactory.getReportFormatService(
           requestDTO.getReportType(), requestDTO.getReportFormat());
 
       if (reportFormatService == null) {
-        throw new InvalidExceptionCustomize(Collections.singletonList(
-            com.ctv_it.klb.dto.response.ErrorDetailDTO.builder().field("reportFormat")
+        throw new InvalidExceptionCustomize(
+            Collections.singletonList(ErrorDetailDTO.builder().field("reportFormat")
                 .rejectedValue(requestDTO.getReportFormat()).message(
                     "Report format '" + requestDTO.getReportFormat() + "' for type '"
                         + requestDTO.getReportType() + "' is not supported").build()));
       } else {
         String fileName = File.TARGET_PATH + "/" + generateFileName(requestDTO);
-        return exportReport(fileName, search(requestDTO, reportTypeService), reportFormatService);
+        return exportReport(fileName, this.search(requestDTO, reportTypeService), reportFormatService);
       }
     }
   }

@@ -15,6 +15,7 @@ public class AccountInfoDTO {
 
   private Long id;
   private String type;
+  private String name;
   private String number;
   private String currency;
   private BigDecimal accountingBalance;

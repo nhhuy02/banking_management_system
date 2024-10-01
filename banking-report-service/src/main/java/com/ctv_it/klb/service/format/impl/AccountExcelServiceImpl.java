@@ -20,15 +20,19 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   private final FileUtil fileUtil;
 
   @Override
-  public byte[] export(String fileName, AccountReportDTO reportData) {
+  public byte[] export(String fileName, AccountReportDTO accountReportData) {
     log.info(Translator.toLocale("msg.called", "AccountExcelServiceImpl::export"));
-    log.info("ReportData: {}", reportData);
+    log.info("ReportData: {}", accountReportData);
 
+    // custom file name
     fileName += getFormat().getExtension(); // example: "fileAccount" + ".pdf" = "fileAccount.pdf"
 
-    Map<String, Object> data = Map.of("customer", reportData.getCustomer());
+    Map<String, Object> data = Map.of(
+        "customer", accountReportData.getCustomer(),
+        "accounts", accountReportData.getAccounts());
+    log.info("DataMap: {}", data);
 
-    byte[] byteData = fileUtil.writeFile(fileName, getTemplate(), data);
+    byte[] byteData = fileUtil.export(fileName, getTemplate(), data);
 
     log.info("byteData: {}", byteData);
     log.info("fileName: {}", fileName);

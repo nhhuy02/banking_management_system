@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUtil {
 
-  public byte[] writeFile(String fileName, String templateName, Map<String, Object> data) {
+  public byte[] export(String fileName, String templateName, Map<String, Object> data) {
     try {
       File file = new File(fileName);
       File parentDir = file.getParentFile();
@@ -37,12 +37,11 @@ public class FileUtil {
       }
 
       // Create and export the document using FileExportUtil
-      try (OutputStream outStream = new FileOutputStream(file)) {
-        this.writeFile(outStream, templateName, data);
-        log.info("File is exported successfully");
+      OutputStream outStream = new FileOutputStream(file);
+      this.writeFile(outStream, templateName, data);
+      log.info("File is exported successfully");
 
-        return this.readFile(fileName);  // Return the file as a byte array
-      }
+      return this.readFile(fileName);
     } catch (IOException e) {
       log.error("Error occurred while exporting the report", e);
       throw new InternalError("Error while exporting report");
@@ -64,7 +63,8 @@ public class FileUtil {
       data.forEach(context::putVar);
 
       // Process the template and write to the output stream
-      JxlsHelper.getInstance().processTemplate(input, outStream, context);
+      JxlsHelper.getInstance()
+          .processTemplate(input, outStream, context);
       log.info("Template processed successfully");
 
     } catch (FileNotFoundException e) {
@@ -114,7 +114,7 @@ public class FileUtil {
     int patternIndex = indexOf(combined, patternBytes);
     if (patternIndex == -1) {
       log.error("PATTERN {} is not found", Default.File.PATTERN);
-      return null; // or throw an exception
+      throw new InternalError();
     }
 
     // Extract data and filename based on the pattern index
@@ -139,10 +139,10 @@ public class FileUtil {
         }
       }
       if (found) {
-        return i; // Return the index where the pattern is found
+        return i;
       }
     }
-    return -1; // Pattern not found
+    return -1;
   }
 
   public String generateReportingFileName(ReportRequestDTO requestDTO) {
