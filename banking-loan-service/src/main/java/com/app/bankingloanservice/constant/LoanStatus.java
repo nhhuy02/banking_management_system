@@ -7,7 +7,7 @@ public enum LoanStatus {
     /**
      * The loan has been approved by the system and is pending customer approval.
      */
-    PENDING_CUSTOMER_APPROVAL,
+    PENDING,
 
     /**
      * The loan was cancelled before becoming active due to customer rejection or other reasons.

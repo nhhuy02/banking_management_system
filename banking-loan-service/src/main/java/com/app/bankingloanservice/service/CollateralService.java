@@ -1,14 +1,13 @@
 package com.app.bankingloanservice.service;
 
-import com.app.bankingloanservice.dto.CollateralDto;
-import com.app.bankingloanservice.dto.DocumentResponseDto;
-import com.app.bankingloanservice.dto.DocumentUploadDto;
+import com.app.bankingloanservice.dto.CollateralRequest;
+import com.app.bankingloanservice.dto.DocumentResponse;
+import com.app.bankingloanservice.dto.DocumentUploadRequest;
 import com.app.bankingloanservice.entity.Collateral;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface CollateralService {
 
-    Collateral createCollateral(CollateralDto collateralDto);
+    Collateral createCollateral(CollateralRequest collateralRequest);
 
-    DocumentResponseDto uploadCollateralDocument (Long collateralId, DocumentUploadDto documentUploadDto);
+    DocumentResponse uploadCollateralDocument (Long collateralId, DocumentUploadRequest documentUploadRequest);
 }

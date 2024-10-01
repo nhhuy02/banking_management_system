@@ -17,6 +17,8 @@ import com.app.bankingloanservice.service.LoanApplicationService;
 import com.app.bankingloanservice.service.LoanTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,19 +38,19 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final DocumentMapper documentMapper;
 
     @Override
-    public LoanApplicationResponseDto createLoanApplication(LoanApplicationRequestDto loanApplicationRequestDto) {
-        log.info("LoanApplicationRequestDto: {}", loanApplicationRequestDto);
+    public LoanApplicationResponse createLoanApplication(LoanApplicationRequest loanApplicationRequest) {
+        log.info("LoanApplicationRequest: {}", loanApplicationRequest);
 
         // Convert DTO to Entity
-        LoanApplication loanApplication = loanApplicationMapper.toEntity(loanApplicationRequestDto);
+        LoanApplication loanApplication = loanApplicationMapper.toEntity(loanApplicationRequest);
 
         // Get LoanType
-        LoanType loanType = loanTypeService.getLoanTypeById(loanApplicationRequestDto.getLoanTypeId());
+        LoanType loanType = loanTypeService.getLoanTypeById(loanApplicationRequest.getLoanTypeId());
         loanApplication.setLoanType(loanType);
         log.debug("Retrieved LoanType: {}", loanType);
 
         // Check to see if there is any Collateral (if Loan Type requires it)
-        if (loanType.getRequiresCollateral() && loanApplicationRequestDto.getCollateralDto() == null) {
+        if (loanType.getRequiresCollateral() && loanApplicationRequest.getCollateralRequest() == null) {
             log.error("Loan type requires collateral but none provided.");
             throw new InvalidLoanApplicationException("Loan type requires collateral but none provided.");
         }
@@ -59,11 +61,11 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.info("LoanApplication entity has been saved: {}", loanApplication);
 
         // Save LoanApplication's Collateral
-        CollateralDto collateralDto = loanApplicationRequestDto.getCollateralDto();
-        collateralDto.setLoanApplicationId(loanApplication.getLoanApplicationId());
-        Collateral savedCollateral = collateralService.createCollateral(collateralDto);
+        CollateralRequest collateralRequest = loanApplicationRequest.getCollateralRequest();
+        collateralRequest.setLoanApplicationId(loanApplication.getLoanApplicationId());
+        Collateral savedCollateral = collateralService.createCollateral(collateralRequest);
         loanApplication.setCollateral(savedCollateral);
-        log.info("Collateral created successfully: {}", savedCollateral);
+        log.info("Collateral created successfully: {}", savedCollateral); // Fixed errors related to Loan Application, completed API Docs, added README.md
 
         // Set application status to PENDING and submission date to the current date
         loanApplication.setApplicationStatus(ApplicationStatus.PENDING);
@@ -83,10 +85,10 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Saved LoanApplication entity: {}", loanApplication);
 
         // Create a DTO to return the saved Loan Application
-        LoanApplicationResponseDto loanApplicationResponseDto = loanApplicationMapper.toResponseDto(loanApplication);
-        log.debug("Converted LoanApplicationResponseDto: {}", loanApplicationResponseDto);
+        LoanApplicationResponse loanApplicationResponse = loanApplicationMapper.toResponse(loanApplication);
+        log.debug("Converted LoanApplicationResponse: {}", loanApplicationResponse);
 
-        return loanApplicationResponseDto;
+        return loanApplicationResponse;
     }
 
     @Override
@@ -100,116 +102,118 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     }
 
     @Override
-    public LoanApplicationResponseDto getResponseDtoById(Long loanApplicationId) {
+    public LoanApplicationResponse getResponseDtoById(Long loanApplicationId) {
         LoanApplication loanApplication = getEntityById(loanApplicationId);
 
-        // Convert LoanApplication to LoanApplicationResponseDto and return
-        LoanApplicationResponseDto responseDto = loanApplicationMapper.toResponseDto(loanApplication);
-        log.debug("Converted LoanApplicationResponseDto: {}", responseDto);
+        // Convert LoanApplication to LoanApplicationResponse and return
+        LoanApplicationResponse responseDto = loanApplicationMapper.toResponse(loanApplication);
+        log.debug("Converted LoanApplicationResponse: {}", responseDto);
 
         return responseDto;
     }
 
     @Override
-    public DocumentResponseDto uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadDto documentUploadDto) {
+    public Page<LoanApplicationResponse> getLoanApplicationsByCustomerId(Long customerId, Pageable pageable) {
+        log.debug("Fetching loan applications for customerId: {} with pagination: {}", customerId, pageable);
+
+        Page<LoanApplication> loanApplications = loanApplicationRepository.findByCustomerId(customerId, pageable);
+
+        if (loanApplications.isEmpty()) {
+            log.warn("No loan applications found for customerId: {}", customerId);
+            // Returns a blank page but retains pagination information
+            return Page.empty(pageable);
+        }
+
+        // Map loanApplication to LoanApplicationResponse
+        Page<LoanApplicationResponse> responseDtos = loanApplications.map(loanApplicationMapper::toResponse);
+        log.debug("Fetched {} loan applications for customerId: {}", responseDtos.getContent().size(), customerId);
+
+        return responseDtos;
+    }
+
+
+    @Override
+    public DocumentResponse uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadRequest documentUploadRequest) {
         log.debug("Uploading document for LoanApplication ID: {}", loanApplicationId);
 
         // Get LoanApplication from Id
         LoanApplication loanApplication = getEntityById(loanApplicationId);
 
         // Save Loan Application Document
-        Document savedDocument = documentService.createDocument(documentUploadDto);
+        Document savedDocument = documentService.createDocument(documentUploadRequest);
         loanApplication.getDocuments().add(savedDocument);
         log.info("Successfully created application document: {}", savedDocument);
         loanApplicationRepository.save(loanApplication);
 
-        return documentMapper.toResponseDto(savedDocument);
+        return documentMapper.toResponse(savedDocument);
     }
+
 
     @Override
-    public LoanApplicationResponseDto approveApplication(Long applicationId) {
-        log.debug("Approving LoanApplication with ID: {}", applicationId);
-        LoanApplication application = getEntityById(applicationId);
+    public LoanApplicationResponse updateStatus(Long applicationId, LoanApplicationStatusDto loanApplicationStatusDto) {
+        log.debug("Updating status for LoanApplication ID: {}", applicationId);
 
-        // Check and update the application status to see if it has expired or not
-        checkAndUpdateExpiredStatus(application);
+        // Fetch LoanApplication entity by ID
+        LoanApplication loanApplication = getEntityById(applicationId);
 
-        if (application.getApplicationStatus() != ApplicationStatus.REVIEWING) {
-            log.error("Cannot approve application not in REVIEWING status.");
-            throw new InvalidLoanApplicationException("Can only approve applications that are in REVIEWING status.");
+        // Check and update expired status if necessary
+        checkAndUpdateExpiredStatus(loanApplication);
+
+        // Validate the status update based on current status
+        ApplicationStatus newStatus = loanApplicationStatusDto.getApplicationStatus();
+        if (newStatus == null) {
+            log.error("Invalid loan application status: null");
+            throw new InvalidLoanApplicationException("Loan application status cannot be null.");
         }
 
-        application.setApplicationStatus(ApplicationStatus.APPROVED);
-        application.setReviewDate(LocalDate.now());
+        // Validate the status transition
+        validateStatusTransition(loanApplication, newStatus);
 
-        LoanApplication savedApplication = loanApplicationRepository.save(application);
-        log.info("Loan application with ID {} has been approved", applicationId);
-
-        return loanApplicationMapper.toResponseDto(savedApplication);
-    }
-
-    @Override
-    public LoanApplicationResponseDto rejectApplication(Long applicationId, String reason) {
-        log.debug("Rejecting LoanApplication with ID: {} for reason: {}", applicationId, reason);
-        LoanApplication application = getEntityById(applicationId);
-
-        // Check and update the application status to see if it has expired or not
-        checkAndUpdateExpiredStatus(application);
-
-        if (application.getApplicationStatus() != ApplicationStatus.REVIEWING) {
-            log.error("Cannot reject application not in REVIEWING status.");
-            throw new InvalidLoanApplicationException("Can only reject applications that are in REVIEWING status.");
+        // Check if this is a status transition from REVIEWING to APPROVED or REJECTED
+        ApplicationStatus currentStatus = loanApplication.getApplicationStatus();
+        if (currentStatus == ApplicationStatus.REVIEWING &&
+                (newStatus == ApplicationStatus.APPROVED || newStatus == ApplicationStatus.REJECTED)) {
+            // Set the reviewDate to the current date if the status is being approved or rejected
+            loanApplication.setReviewDate(LocalDate.now());
+            log.debug("Review date set to {} for LoanApplication ID: {}", LocalDate.now(), applicationId);
         }
 
-        application.setApplicationStatus(ApplicationStatus.REJECTED);
-        application.setReviewNotes(reason);
-        application.setReviewDate(LocalDate.now());
+        // Update the loan application status and review notes if provided
+        loanApplication.setApplicationStatus(newStatus);
+        loanApplication.setReviewNotes(loanApplicationStatusDto.getReviewNotes());
 
-        LoanApplication savedApplication = loanApplicationRepository.save(application);
-        log.info("Loan application with ID {} has been rejected for reason: {}", applicationId, reason);
+        // Save updated loan application
+        LoanApplication savedApplication = loanApplicationRepository.save(loanApplication);
+        log.info("Loan application with ID {} updated to status {}", applicationId, newStatus);
 
-        return loanApplicationMapper.toResponseDto(savedApplication);
+        // Return the updated response DTO
+        return loanApplicationMapper.toResponse(savedApplication);
     }
 
-    @Override
-    public LoanApplicationResponseDto requestAdditionalDocuments(Long applicationId, String additionalDocuments) {
-        log.debug("Requesting additional documents for LoanApplication ID: {} with notes: {}", applicationId, additionalDocuments);
-        LoanApplication application = getEntityById(applicationId);
 
-        if (!checkAndUpdateExpiredStatus(application)) {
-            log.error("Cannot request additional documents for non-expired applications.");
-            throw new InvalidLoanApplicationException("Can only request documents for applications that are not expired.");
+    private void validateStatusTransition(LoanApplication loanApplication, ApplicationStatus newStatus) {
+        ApplicationStatus currentStatus = loanApplication.getApplicationStatus();
+
+        // Check the validity of the transition
+        if (currentStatus == ApplicationStatus.PENDING) {
+            if (newStatus != ApplicationStatus.REVIEWING && newStatus != ApplicationStatus.DOCUMENT_REQUIRED) {
+                throw new InvalidLoanApplicationException("Can only move from PENDING to REVIEWING or DOCUMENT_REQUIRED.");
+            }
+        } else if (currentStatus == ApplicationStatus.REVIEWING) {
+            // After reviewing, it can only be APPROVED or REJECTED
+            if (newStatus != ApplicationStatus.APPROVED && newStatus != ApplicationStatus.REJECTED) {
+                throw new InvalidLoanApplicationException("Can only move from REVIEWING to APPROVED or REJECTED.");
+            }
+        } else if (currentStatus == ApplicationStatus.DOCUMENT_REQUIRED) {
+            // From DOCUMENT_REQUIRED, we can only go to REVIEWING
+            if (newStatus != ApplicationStatus.REVIEWING) {
+                throw new InvalidLoanApplicationException("Can only move from DOCUMENT_REQUIRED back to REVIEWING.");
+            }
+        } else if (currentStatus == ApplicationStatus.EXPIRED) {
+            throw new InvalidLoanApplicationException("Cannot change status from EXPIRED.");
         }
-
-        application.setApplicationStatus(ApplicationStatus.DOCUMENT_REQUIRED);
-        application.setReviewNotes(additionalDocuments);
-
-        LoanApplication savedApplication = loanApplicationRepository.save(application);
-        log.info("Requested additional documents for Loan application with ID: {}", applicationId);
-
-        return loanApplicationMapper.toResponseDto(savedApplication);
     }
 
-    @Override
-    public LoanApplicationResponseDto startReview(Long applicationId) {
-        log.debug("Starting review for LoanApplication ID: {}", applicationId);
-        LoanApplication application = getEntityById(applicationId);
-
-        // Check and update the application status to see if it has expired or not
-        checkAndUpdateExpiredStatus(application);
-
-        if (application.getApplicationStatus() != ApplicationStatus.PENDING) {
-            log.error("Cannot start review for application not in PENDING status.");
-            throw new InvalidLoanApplicationException("Can only start review for applications in PENDING status.");
-        }
-
-        application.setApplicationStatus(ApplicationStatus.REVIEWING);
-
-        LoanApplication savedApplication = loanApplicationRepository.save(application);
-        log.info("Started review for Loan application with ID {}", applicationId);
-
-        return loanApplicationMapper.toResponseDto(savedApplication);
-    }
 
     // Helper method to check and update expired status
     private boolean checkAndUpdateExpiredStatus(LoanApplication application) {

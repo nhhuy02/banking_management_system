@@ -3,8 +3,8 @@ package com.app.bankingloanservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Represents the history of loan interest rate changes.
@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LoanInterestRate extends AuditModel {
 
     /**
@@ -33,12 +32,6 @@ public class LoanInterestRate extends AuditModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
-
-    /**
-     * Indicates if this is the current interest rate for the loan.
-     */
-    @Column(name = "is_current", nullable = false)
-    private Boolean isCurrent;
 
     /**
      * Annual interest rate as a percentage.

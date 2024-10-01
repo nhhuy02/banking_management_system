@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LoanSettlement extends AuditModel {
 
     /**
