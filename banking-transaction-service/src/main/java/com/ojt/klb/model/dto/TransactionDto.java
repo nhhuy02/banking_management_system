@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class TransactionDto {
 
     @NotNull
-    private Long accountNumber;
+    private String accountNumber;
 
     @NotBlank(message = "Transaction type cannot be blank")
     private String transactionType;

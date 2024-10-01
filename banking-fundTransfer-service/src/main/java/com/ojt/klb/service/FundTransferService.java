@@ -9,5 +9,5 @@ import java.util.List;
 public interface FundTransferService {
     FundTransferResponse fundTransfer(FundTransferRequest fundTransferRequest);
     FundTransferDto getTransferDetailsFromReferenceNumber(String referenceNumber);
-    List<FundTransferDto> getAllTransferByAccountNumber(Long accountNumber);
+    List<FundTransferDto> getAllTransferByAccountNumber(String accountNumber);
 }

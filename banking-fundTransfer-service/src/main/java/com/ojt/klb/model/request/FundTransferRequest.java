@@ -18,10 +18,10 @@ import java.math.BigDecimal;
 public class FundTransferRequest {
 
     @NotNull(message = "From account cannot be null")
-    private Long fromAccount;
+    private String fromAccount;
 
     @NotNull(message = "To account cannot be null")
-    private Long toAccount;
+    private String toAccount;
 
     @NotNull(message = "Amount cannot be null")
     @Positive(message = "Amount must be a positive value")

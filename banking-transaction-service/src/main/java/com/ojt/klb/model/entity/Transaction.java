@@ -21,7 +21,7 @@ public class Transaction {
 
     private String referenceNumber;
 
-    private Long accountNumber;
+    private String accountNumber;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "banking-account-service", url = "http://localhost:8080/api/v1/account")
 public interface AccountClient {
-    @GetMapping
-    ResponseEntity<Account> readByAccountNumber(@RequestParam Long accountNumber);
+    @GetMapping("/data/{accountNumber}")
+    ResponseEntity<ApiResponse<Account>> getDataAccountNumber(@PathVariable String accountNumber);
 
     @PutMapping
-    ResponseEntity<ApiResponse> updateAccount(@RequestParam Long accountNumber, @RequestBody Account account);
+    ResponseEntity<ApiResponse> updateAccount(@RequestParam String accountNumber, @RequestBody Account account);
 }

@@ -24,9 +24,9 @@ public class FundTransfer {
 
     private String transactionReference;
 
-    private Long fromAccount;
+    private String fromAccount;
 
-    private Long toAccount;
+    private String toAccount;
 
     private BigDecimal amount;
 

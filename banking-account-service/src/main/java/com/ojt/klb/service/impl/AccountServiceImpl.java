@@ -146,18 +146,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto readAccountByAccountNumber(Long accountNumber) {
-
-        return accountRepository.findAccountByAccountNumber(accountNumber)
-                .map(account -> {
-                    AccountDto accountDto = accountMapper.toDto(account);
-                    return accountDto;
-                })
-                .orElseThrow(() -> new AccountNotFoundException("Account not found for account number: " + accountNumber));
-    }
-
-    @Override
-    public ApiResponse updateAccount(Long accountNumber, AccountDto accountDto) {
+    public ApiResponse updateAccount(String accountNumber, AccountDto accountDto) {
         return accountRepository.findAccountByAccountNumber(accountDto.getAccountNumber())
                 .map(account -> {
                     BeanUtils.copyProperties(accountDto, account);
@@ -167,6 +156,13 @@ public class AccountServiceImpl implements AccountService {
                             .success(true)
                             .message("Account updated successfully").build();
                 }).orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
+    }
+
+    @Override
+    public String getBalance(String accountNumber) {
+        return accountRepository.findAccountByAccountNumber(accountNumber)
+                .map(account -> account.getBalance().toString())
+                .orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
     }
 
 

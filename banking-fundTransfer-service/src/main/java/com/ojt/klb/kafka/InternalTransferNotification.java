@@ -1,8 +1,10 @@
 package com.ojt.klb.kafka;
 
+import com.ojt.klb.model.TransferType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,8 +15,6 @@ import java.time.LocalDateTime;
 public class InternalTransferNotification {
     private String emailCustomerSend;
     private String emailCustomerReceive;
-    private Long customerSendId;
-    private Long customerReceiveId;
     private String transactionId;
     private String transactionType;
     private LocalDateTime transactionDate;
@@ -25,4 +25,7 @@ public class InternalTransferNotification {
     private String description;
     private BigDecimal balanceAccountSend;
     private BigDecimal balanceAccountReceive;
+
+    public InternalTransferNotification(String email, String email1, String transactionReference, TransferType transferType, LocalDateTime transferredOn, String accountNumber, String accountNumber1, String accountName, BigDecimal amount, String description, ResponseEntity<String> stringResponseEntity, ResponseEntity<String> stringResponseEntity1) {
+    }
 }

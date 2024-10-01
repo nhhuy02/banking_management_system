@@ -12,14 +12,14 @@ import java.util.Optional;
 public interface FundTransferRepository extends JpaRepository<FundTransfer, Long> {
     Optional<FundTransfer> findByTransactionReference(String referenceNumber);
 
-    List<FundTransfer> findByFromAccount(Long accountNumber);
+    List<FundTransfer> findByFromAccount(String accountNumber);
 
     List<FundTransfer> findByFromAccountAndTransferredOnBetween(
-            Long fromAccount,
+            String fromAccount,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     );
 
     @Query("SELECT ft FROM FundTransfer ft WHERE ft.fromAccount = :accountNumber OR ft.toAccount = :accountNumber")
-    List<FundTransfer> findByFromAccountOrToAccount(@Param("accountNumber") Long accountNumber);
+    List<FundTransfer> findByFromAccountOrToAccount(@Param("accountNumber") String accountNumber);
 }

@@ -20,7 +20,7 @@ public class Account {
 
     private String accountName;
 
-    private Long accountNumber;
+    private String accountNumber;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;

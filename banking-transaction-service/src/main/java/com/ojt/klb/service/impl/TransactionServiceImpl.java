@@ -39,12 +39,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public ApiResponse handleTransaction(TransactionDto transactionDto) {
-        var rs = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
-        ResponseEntity<Account> response = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
-        if (Objects.isNull(response.getBody())){
+        Account account;
+        ResponseEntity<ApiResponse<Account>> response = accountClient.getDataAccountNumber(transactionDto.getAccountNumber());
+        ApiResponse<Account> apiResponse = response.getBody();
+        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
+            log.error("requested account " + transactionDto.getAccountNumber() + " is not found on the server");
             throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
-        Account account = response.getBody();
+        account = apiResponse.getData();
         System.out.println(account);
         Transaction transaction = mapper.convertToEntity(transactionDto);
         if(transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
@@ -103,7 +105,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionRequest> getTransaction(String accountNumber) {
-        return repository.findByAccountNumber(Long.valueOf(accountNumber))
+        return repository.findByAccountNumber(accountNumber)
                 .stream().map(transaction -> {
                     TransactionRequest transactionRequest = new TransactionRequest();
                     BeanUtils.copyProperties(transaction, transactionRequest);
