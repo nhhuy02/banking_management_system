@@ -27,6 +27,16 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @GetMapping
+    public ResponseEntity<AccountDto> readByAccountNumber(@RequestParam Long accountNumber) {
+        return ResponseEntity.ok(accountService.readAccountByAccountNumber(accountNumber));
+    }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse> updateAccount(@RequestParam Long accountNumber, @RequestBody AccountDto accountDto) {
+        return ResponseEntity.ok(accountService.updateAccount(accountNumber, accountDto));
+    }
+
     @GetMapping("/{accountId}")
     public ResponseEntity<ApiResponse<AccountDto>> getAccountById(@PathVariable Long accountId) {
         Optional<AccountDto> accountDtoOptional = accountService.getAccountById(accountId);
