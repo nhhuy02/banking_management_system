@@ -48,18 +48,10 @@ public class DataLoader implements CommandLineRunner {
             notificationTemplate4.setSubjectTemplate("Mở tài khoản");
             notificationTemplate4.setTemplateName("REGISTER");
 
-            NotificationTemplate notificationTemplate5 = new NotificationTemplate();
-            notificationTemplate4.setStatus(Status.ACTIVE);
-            notificationTemplate4.setCreatedAt(LocalDateTime.now());
-            notificationTemplate4.setCreatedBy("ADMIN");
-            notificationTemplate4.setSubjectTemplate("Biến động số dư");
-            notificationTemplate4.setTemplateName("BALANCE_CHANGE");
-
             repository.save(notificationTemplate1);
             repository.save(notificationTemplate2);
             repository.save(notificationTemplate3);
             repository.save(notificationTemplate4);
-            repository.save(notificationTemplate5);
             log.warn("import data example");
 
         }
