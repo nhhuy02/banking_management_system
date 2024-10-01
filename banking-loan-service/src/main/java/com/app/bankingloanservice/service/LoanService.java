@@ -18,5 +18,5 @@ public interface LoanService {
 
     LoanResponse createLoan(LoanRequest loanRequest);
 
-    Page<LoanResponse> getLoansByCustomerId(Long customerId, Pageable pageable);
+    Page<LoanResponse> getLoansByAccountId(Long customerId, Pageable pageable);
 }

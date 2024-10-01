@@ -17,14 +17,9 @@ import java.time.LocalDate;
 @Schema(description = "Data Transfer Object for loan application")
 public class LoanApplicationRequest {
 
-    // Customer ID (reference from Customer Service)
-    @NotNull(message = "Customer ID cannot be null")
-    @Schema(description = "Customer ID (reference from Customer Service)", example = "12345")
-    private Long customerId;
-
     // Account ID for receiving disbursement and making repayments
-    @NotNull(message = "Account ID cannot be null")
-    @Schema(description = "Account ID for receiving disbursement and making repayments", example = "98765")
+    @Schema(description = "Account Number for receiving disbursement and making repayments", example = "98765")
+    @NotNull(message = "Account Number cannot be null")
     private Long accountId;
 
     // Customer's monthly income

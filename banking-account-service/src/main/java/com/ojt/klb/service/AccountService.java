@@ -12,7 +12,7 @@ public interface AccountService {
     Optional<AccountDto> getAccountById(Long id);
     void changeStatusAccount(Long id , ChangeStatusDto changeStatusDto);
     Optional<Long> getAccountIdByAccountNumber(String accountNumber);
-    String getFullNameByAccountId(Long accountId);
+    Optional<AccountDto> getDataByAccountNumber(Long accountId);
     Optional<GetAllId> getAccountIdCustomerIdUserId(Long userId);
     AccountDto readAccountByAccountNumber(Long accountNumber);
     ApiResponse updateAccount(Long accountNumber, AccountDto accountDto);

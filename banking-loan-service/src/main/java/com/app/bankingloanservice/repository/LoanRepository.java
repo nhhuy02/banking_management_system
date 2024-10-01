@@ -22,13 +22,13 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     Optional<Loan> findByLoanContractNo(String loanContractNo);
 
     /**
-     * Find loans based on customerId with pagination support.
+     * Find loans based on accountId with pagination support.
      *
-     * @param customerId The customer's ID.
-     * @param pageable   Paging information.
+     * @param accountId The account's ID.
+     * @param pageable  Paging information.
      * @return Loans page found.
      */
-    Page<Loan> findByCustomerId(Long customerId, Pageable pageable);
+    Page<Loan> findByAccountId(Long accountId, Pageable pageable);
 
     boolean existsByLoanContractNo(String loanContractNo);
 

@@ -1,6 +1,0 @@
-insert into loan_service.collateral (collateral_id, loan_id, loan_application_id, document_id, collateral_type, collateral_value, description, status, reclaim_date, reason_for_reclamation, release_date, created_by, created_date, last_modified_by, last_modified_date)
-values  (1, null, 1, 1, 'House', 300000000, '3-bedroom house in downtown area.', 'ACTIVE', null, null, null, 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (2, null, 2, 2, 'Car', 150000000, 'Toyota Camry 2020.', 'ACTIVE', null, null, null, 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (3, null, 3, 3, 'House', 200000000, '4-bedroom house in suburban area.', 'ACTIVE', null, null, null, 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (4, null, 4, 4, 'Car', 120000000, 'Honda Civic 2018.', 'ACTIVE', null, null, null, 'SYSTEM', '2024-10-01 03:25:55', 'SYSTEM', '2024-10-01 03:25:55'),
-        (5, 6, 5, null, 'string', 0, 'string', 'ACTIVE', '2024-09-26', 'string', '2024-09-26', 'SYSTEM', '2024-10-01 11:54:26', 'SYSTEM', '2024-10-01 11:57:19');
