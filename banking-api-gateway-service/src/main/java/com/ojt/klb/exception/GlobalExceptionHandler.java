@@ -1,9 +1,11 @@
 package com.ojt.klb.exception;
 
+import com.ojt.klb.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,5 +61,18 @@ public class GlobalExceptionHandler {
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(AccessDeniedException ex) {
+        logger.error("Access denied: {}", ex.getMessage());
+
+        ApiResponse<Void> response = new ApiResponse<>(
+                HttpStatus.FORBIDDEN.value(),
+                "Access Denied: " + ex.getMessage(),
+                false,
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 }

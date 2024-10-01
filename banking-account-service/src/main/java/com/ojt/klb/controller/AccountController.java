@@ -67,7 +67,7 @@ public class AccountController {
     }
 
     @GetMapping("/name/{accountNumber}")
-    public ResponseEntity<ApiResponse<FindNameByAccountDto>> getNameByAccountNumber(@PathVariable Long accountNumber) {
+    public ResponseEntity<ApiResponse<FindNameByAccountDto>> getNameByAccountNumber(@PathVariable String accountNumber) {
         Optional<Long> accountIdOptional = accountService.getAccountIdByAccountNumber(accountNumber);
 
         if (accountIdOptional.isPresent()) {

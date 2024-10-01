@@ -8,3 +8,29 @@ spring:
     secret-key: jwtHGUIUIUJghasjHGLKWPJOIDKIGjjUhkMGfkIPgf548594651gf51we5fs56f1w65f1we5f4651FGTbiIBHGUYGVHbiHEhehehe
     expiration: 3600000
 
+  cloud:
+    gateway:
+      routes:
+        - id: customer_service_banking
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/customer/**
+        - id: account_service_banking
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/v1/account/**
+        - id: notification_service_banking
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/notification/**
+        - id: reports_service_banking
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/v1/reports/**
+
+resilience4j.ratelimiter:
+  instances:
+    ipRateLimiter:
+      limitForPeriod: 2          # max request form 1 ip
+      limitRefreshPeriod: 1s     # refresh
+      timeoutDuration: 0         # time waiting

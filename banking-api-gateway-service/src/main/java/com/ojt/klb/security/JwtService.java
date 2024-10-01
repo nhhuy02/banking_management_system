@@ -1,4 +1,4 @@
-package com.ojt.klb.sercurity;
+package com.ojt.klb.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,7 +24,7 @@ public class JwtService {
         claims.put("userId", userId);
         claims.put("accountId", accountId);
         claims.put("customerId", customerId);
-        claims.put("role", role);
+        claims.put("role", "ROLE_" + role);
         claims.put("savingAccountId", savingAccountId);
 
         return Jwts.builder()
@@ -35,4 +35,5 @@ public class JwtService {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
+
 }
