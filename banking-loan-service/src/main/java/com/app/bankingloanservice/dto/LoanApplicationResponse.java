@@ -12,11 +12,13 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanApplicationResponseDto {
+public class LoanApplicationResponse {
 
     private Long loanApplicationId; // Loan application ID
 
     private Long customerId; // Customer ID
+
+    private String customerName;
 
     private Long accountId; // Account ID for receiving disbursement and making repayments
 
@@ -56,7 +58,7 @@ public class LoanApplicationResponseDto {
 
     private String reviewNotes; // Review notes
 
-    private CollateralDto collateralDto;
+    private CollateralResponse collateralResponse;
 
-    private DocumentResponseDto documentResponseDto;
+    private DocumentResponse documentResponse;
 }

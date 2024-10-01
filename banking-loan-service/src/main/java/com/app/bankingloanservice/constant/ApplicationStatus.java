@@ -9,6 +9,10 @@ public enum ApplicationStatus {
      */
     PENDING,
     /**
+     * Additional documents are required for the application.
+     */
+    DOCUMENT_REQUIRED,
+    /**
      * The application is being reviewed.
      */
     REVIEWING,
@@ -20,10 +24,6 @@ public enum ApplicationStatus {
      * The application has been rejected.
      */
     REJECTED,
-    /**
-     * Additional documents are required for the application.
-     */
-    DOCUMENT_REQUIRED,
     /**
      * The application has passed the approval deadline without being approved.
      */

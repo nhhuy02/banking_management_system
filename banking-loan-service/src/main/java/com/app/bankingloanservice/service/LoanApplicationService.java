@@ -1,28 +1,21 @@
 package com.app.bankingloanservice.service;
 
-import com.app.bankingloanservice.dto.DocumentResponseDto;
-import com.app.bankingloanservice.dto.DocumentUploadDto;
-import com.app.bankingloanservice.dto.LoanApplicationRequestDto;
-import com.app.bankingloanservice.dto.LoanApplicationResponseDto;
+import com.app.bankingloanservice.dto.*;
 import com.app.bankingloanservice.entity.LoanApplication;
-
-import java.io.IOException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface LoanApplicationService {
 
-    public LoanApplicationResponseDto createLoanApplication(LoanApplicationRequestDto loanApplicationRequestDto) throws IOException;
+    LoanApplicationResponse createLoanApplication(LoanApplicationRequest loanApplicationRequest);
 
     LoanApplication getEntityById(Long applicationId);
 
-    LoanApplicationResponseDto getResponseDtoById(Long loanApplicationId);
+    LoanApplicationResponse getResponseDtoById(Long loanApplicationId);
 
-    DocumentResponseDto uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadDto documentUploadDto);
+    Page<LoanApplicationResponse> getLoanApplicationsByCustomerId(Long customerId, Pageable pageable);
 
-    LoanApplicationResponseDto approveApplication(Long applicationId);
+    DocumentResponse uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadRequest documentUploadRequest);
 
-    LoanApplicationResponseDto rejectApplication(Long applicationId, String reason);
-
-    LoanApplicationResponseDto requestAdditionalDocuments(Long applicationId, String additionalDocuments);
-
-    LoanApplicationResponseDto startReview(Long applicationId);
+    LoanApplicationResponse updateStatus(Long applicationId, LoanApplicationStatusDto loanApplicationStatusDto);
 }
