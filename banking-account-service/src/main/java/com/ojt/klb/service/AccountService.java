@@ -14,6 +14,6 @@ public interface AccountService {
     Optional<Long> getAccountIdByAccountNumber(String accountNumber);
     Optional<AccountDto> getDataByAccountNumber(Long accountId);
     Optional<GetAllId> getAccountIdCustomerIdUserId(Long userId);
-    AccountDto readAccountByAccountNumber(Long accountNumber);
-    ApiResponse updateAccount(Long accountNumber, AccountDto accountDto);
+    ApiResponse updateAccount(String accountNumber, AccountDto accountDto);
+    String getBalance(String accountNumber);
 }

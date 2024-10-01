@@ -1,5 +1,6 @@
 package com.ojt.klb.kafka;
 
+import com.ojt.klb.model.external.Account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,17 +12,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionNotification {
-    private String emailCustomerSend;
-    private String emailCustomerReceive;
-    private Long customerSendId;
-    private Long customerReceiveId;
-    private Long transactionId;
-    private LocalDateTime transactionDate;
-    private String senderBankAccount;
-    private String receiveBankAccount;
-    private String recipientName;
-    private BigDecimal amounts;
+    private String referenceNumber;
+
+    private String accountNumber;
+
+    private String transactionType;
+
+    private BigDecimal amount;
+
+    private LocalDateTime localDateTime;
+
     private String description;
-    private BigDecimal balanceAccountSend;
-    private BigDecimal balanceAccountReceive;
+
+    public TransactionNotification(String referenceNumber, Account account, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
+    }
 }

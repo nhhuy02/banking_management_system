@@ -4,7 +4,7 @@ import com.ojt.klb.exception.*;
 import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.external.TransactionClient;
 import com.ojt.klb.kafka.InternalTransferNotification;
-//import com.ojt.klb.kafka.InternalTransferProducer;
+import com.ojt.klb.kafka.InternalTransferProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransferType;
 import com.ojt.klb.model.dto.Account;
@@ -13,6 +13,7 @@ import com.ojt.klb.model.dto.Transaction;
 import com.ojt.klb.model.entity.FundTransfer;
 import com.ojt.klb.model.mapper.FundTransferMapper;
 import com.ojt.klb.model.request.FundTransferRequest;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.model.response.FundTransferResponse;
 import com.ojt.klb.repository.FundTransferRepository;
 import com.ojt.klb.service.FundTransferService;
@@ -37,20 +38,22 @@ public class FundTransferServiceImpl implements FundTransferService {
     private final AccountClient accountClient;
     private final TransactionClient transactionClient;
     private final FundTransferRepository fundTransferRepository;
-//    private final InternalTransferProducer internalTransferProducer;
+    private final InternalTransferProducer internalTransferProducer;
 
     private final FundTransferMapper fundTransferMapper = new FundTransferMapper();
 
     @Override
     public FundTransferResponse fundTransfer(FundTransferRequest fundTransferRequest) {
         Account fromAccount;
-        ResponseEntity<Account> response = accountClient.readByAccountNumber(fundTransferRequest.getFromAccount());
-        if (Objects.isNull(response.getBody())) {
+        ResponseEntity<ApiResponse<Account>> response = accountClient.getDataAccountNumber(fundTransferRequest.getFromAccount());
+        ApiResponse<Account> apiResponse = response.getBody();
+        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
             log.error("requested account " + fundTransferRequest.getFromAccount() + " is not found on the server");
             throw new AccountNotFoundException("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
-        fromAccount = response.getBody();
-        if (!fromAccount.getAccountStatus().equals("ACTIVE")) {
+        fromAccount = apiResponse.getData();
+
+        if (!fromAccount.getStatus().equals(Account.Status.active)) {
             log.error("Account status is pending or inactive, please update the account status");
             throw new AccountUpdateException("Account status is pending", GlobalErrorCode.NOT_ACCEPTABLE);
         }
@@ -60,7 +63,7 @@ public class FundTransferServiceImpl implements FundTransferService {
             throw new InvalidTransferAmountException("Transfer amount must be at least 2000", GlobalErrorCode.INVALID_AMOUNT);
         }
 
-        if (fromAccount.getAvailableBalance().compareTo(fundTransferRequest.getAmount()) < 0) {
+        if (fromAccount.getBalance().compareTo(fundTransferRequest.getAmount()) < 0) {
             log.error("Required amount to transfer is not available");
             throw new InsufficientBalance("requested amount is not available", GlobalErrorCode.NOT_ACCEPTABLE);
         }
@@ -75,12 +78,15 @@ public class FundTransferServiceImpl implements FundTransferService {
         }
 
         Account toAccount;
-        response = accountClient.readByAccountNumber(fundTransferRequest.getToAccount());
-        if (Objects.isNull(response.getBody())) {
-            log.error("requested account " + fundTransferRequest.getToAccount() + " is not found on the server");
+        response = accountClient.getDataAccountNumber(fundTransferRequest.getToAccount());
+        ApiResponse<Account> toAccountResponse = response.getBody();
+
+        if (Objects.isNull(toAccountResponse) || !toAccountResponse.isSuccess() || Objects.isNull(toAccountResponse.getData())) {
+            log.error("Requested account " + fundTransferRequest.getToAccount() + " is not found on the server");
             throw new AccountNotFoundException("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
-        toAccount = response.getBody();
+
+        toAccount = toAccountResponse.getData();
 
         String transactionReference = internalTransfer(fromAccount, toAccount, fundTransferRequest.getAmount(), fundTransferRequest.getDescription());
         LocalDateTime transferredOn = LocalDateTime.now();
@@ -97,16 +103,24 @@ public class FundTransferServiceImpl implements FundTransferService {
 
         fundTransferRepository.save(fundTransfer);
 
+
+        var fromAccountBalance = accountClient.accountBalance(fromAccount.getAccountNumber());
+        var toAccountBalance = accountClient.accountBalance(toAccount.getAccountNumber());
+
 //        internalTransferProducer.sendInternalTransferNotification(
 //                new InternalTransferNotification(
+//                        fromAccount.getEmail(),
+//                        toAccount.getEmail(),
 //                        transactionReference,
+//                        TransferType.INTERNAL,
 //                        transferredOn,
-//                        fundTransferRequest.getFromAccount(),
-//                        fundTransferRequest.getToAccount(),
+//                        fromAccount.getAccountNumber(),
+//                        toAccount.getAccountNumber(),
+//                        toAccount.getAccountName(),
 //                        fundTransferRequest.getAmount(),
-//                        fundTransferRequest.getDescription(),
-//                        fundTransferRequest.getAmount(),
-//                        fundTransferRequest.getAmount()
+//                        fundTransfer.getDescription(),
+//                        fromAccountBalance,
+//                        toAccountBalance
 //                )
 //        );
         return FundTransferResponse.builder()
@@ -127,10 +141,10 @@ public class FundTransferServiceImpl implements FundTransferService {
     }
 
     private String internalTransfer(Account fromAccount, Account toAccount, BigDecimal amount, String description) {
-        fromAccount.setAvailableBalance(fromAccount.getAvailableBalance().subtract(amount));
+        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
         accountClient.updateAccount(fromAccount.getAccountNumber(), fromAccount);
 
-        toAccount.setAvailableBalance(toAccount.getAvailableBalance().add(amount));
+        toAccount.setBalance(toAccount.getBalance().add(amount));
         accountClient.updateAccount(toAccount.getAccountNumber(), toAccount);
 
         List<Transaction> transactions = List.of(

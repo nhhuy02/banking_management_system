@@ -30,3 +30,8 @@ spring:
 application:
   config:
     account-url: http://localhost:8040/api/v1/accounts
+
+logging:
+  level:
+    org.apache.kafka.clients.producer: DEBUG
+    org.springframework.kafka: DEBUG
