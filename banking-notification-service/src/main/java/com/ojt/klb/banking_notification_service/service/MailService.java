@@ -27,7 +27,7 @@ public class MailService {
     private String password;
     @Autowired
     private SpringTemplateEngine templateEngine; // Inject Thymeleaf template engine
-    public String send(String email, String subject, String templateName, Map<String, Object> variables) {
+    public void send(String email, String subject, String templateName, Map<String, Object> variables) {
         try {
 
             Properties props = new Properties();
@@ -65,11 +65,11 @@ public class MailService {
             // Send the message
             Transport.send(msg);
             log.info("Email sent successfully!");
-            return "Email sent successfully!";
+//            return "Email sent successfully!";
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
             log.error("Failed to send email!");
-            return "Failed to send email!";
+//            return "Failed to send email!";
         }
     }
 }
