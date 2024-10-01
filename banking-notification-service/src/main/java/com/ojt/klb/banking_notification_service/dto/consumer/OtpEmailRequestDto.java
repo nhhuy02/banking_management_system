@@ -11,8 +11,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OtpEmailRequestDto implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class OtpEmailRequestDto  {
+
     private Long customerId;
     private String customerName;
     private String email;
