@@ -25,7 +25,7 @@ public class GenerateUniqueNumber {
         String accountNumber;
         do {
             accountNumber = new BigInteger(40, random).toString().substring(0, 10);
-        } while (accountRepository.existsByAccountNumber(Long.parseLong(accountNumber)));
+        } while (accountRepository.existsByAccountNumber(accountNumber));
         return accountNumber;
     }
 

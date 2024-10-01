@@ -90,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Long> getAccountIdByAccountNumber(Long accountNumber) {
+    public Optional<Long> getAccountIdByAccountNumber(String accountNumber) {
         Optional<Account> accountOptional = accountRepository.findAccountByAccountNumber(accountNumber);
         if (accountOptional.isPresent()) {
             return Optional.of(accountOptional.get().getId());

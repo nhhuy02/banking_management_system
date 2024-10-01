@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/card-registration")
+@RequestMapping("/api/v1/account/card-registration")
 public class CardRegistrationRequestController {
 
     private static final Logger logger = LoggerFactory.getLogger(CardRegistrationRequestController.class);
@@ -70,7 +70,7 @@ public class CardRegistrationRequestController {
     public ResponseEntity<ApiResponse<List<CardRegistrationRequestResponseDto>>> getAllPendingCardRequests() {
         Optional<List<CardRegistrationRequestResponseDto>> optionalCardRequests = cardRegistrationRequestService.getAllCardRegistrationRequestsStatusPending();
 
-        if (optionalCardRequests.isPresent()) {
+        if (optionalCardRequests.isPresent() && !optionalCardRequests.get().isEmpty()) {
             ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
                     HttpStatus.OK.value(),
                     "Pending card registration requests retrieved successfully",
@@ -81,7 +81,7 @@ public class CardRegistrationRequestController {
         } else {
             ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
                     HttpStatus.NOT_FOUND.value(),
-                    "No pending card registration requests found",
+                    "No pending card registration requests found, please check the provided details.",
                     false,
                     null
             );
@@ -118,7 +118,7 @@ public class CardRegistrationRequestController {
         }
     }
 
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/{accountId}")
     public ResponseEntity<ApiResponse<List<CardRegistrationRequestResponseDto>>> getAllCardRegistrationRequestsByAccountId(
             @PathVariable Long accountId) {
         try {

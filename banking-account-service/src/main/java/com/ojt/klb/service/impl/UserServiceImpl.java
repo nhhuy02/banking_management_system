@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         newAccount.setAccountName("TKTT KHACH HANG ");
 
         String accountNumber = generateUniqueAccountNumber.generate();
-        newAccount.setAccountNumber(Long.parseLong(accountNumber));
+        newAccount.setAccountNumber(accountNumber);
         newAccount.setBalance(BigDecimal.ZERO);
         newAccount.setStatus(Account.Status.active);
         newAccount.setCreatedAt(Timestamp.from(Instant.now()));

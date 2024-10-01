@@ -57,7 +57,6 @@ public class KycController {
     @GetMapping("/{customerId}")
     public ResponseEntity<ApiResponse<KycResponseDto>> getKycByCustomerId(@PathVariable Long customerId) {
         logger.info("Fetching KYC details for id: {}", customerId);
-
         Optional<KycResponseDto> kycResponseDtoOptional = kycService.getKycByCustomerId(customerId);
 
         if (kycResponseDtoOptional.isPresent()) {
