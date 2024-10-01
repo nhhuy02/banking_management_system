@@ -113,20 +113,20 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     }
 
     @Override
-    public Page<LoanApplicationResponse> getLoanApplicationsByCustomerId(Long customerId, Pageable pageable) {
-        log.debug("Fetching loan applications for customerId: {} with pagination: {}", customerId, pageable);
+    public Page<LoanApplicationResponse> getLoanApplicationsByAccountId(Long accountId, Pageable pageable) {
+        log.debug("Fetching loan applications for accountId: {} with pagination: {}", accountId, pageable);
 
-        Page<LoanApplication> loanApplications = loanApplicationRepository.findByCustomerId(customerId, pageable);
+        Page<LoanApplication> loanApplications = loanApplicationRepository.findByAccountId(accountId, pageable);
 
         if (loanApplications.isEmpty()) {
-            log.warn("No loan applications found for customerId: {}", customerId);
+            log.warn("No loan applications found for accountId: {}", accountId);
             // Returns a blank page but retains pagination information
             return Page.empty(pageable);
         }
 
         // Map loanApplication to LoanApplicationResponse
         Page<LoanApplicationResponse> responseDtos = loanApplications.map(loanApplicationMapper::toResponse);
-        log.debug("Fetched {} loan applications for customerId: {}", responseDtos.getContent().size(), customerId);
+        log.debug("Fetched {} loan applications for accountId: {}", responseDtos.getContent().size(), accountId);
 
         return responseDtos;
     }

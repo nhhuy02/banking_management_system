@@ -31,8 +31,8 @@ public class Loan extends AuditModel {
     private LoanApplication loanApplication;
 
     // The ID of the customer who took the loan.
-    @Column(name = "customer_id", nullable = false)
-    private Long customerId;
+    @Column(name = "account_id", nullable = false)
+    private Long accountId;
 
     // Unique contract number for the loan.
     @Column(name = "loan_contract_no", nullable = false, unique = true, length = 20)

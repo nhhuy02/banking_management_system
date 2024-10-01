@@ -20,13 +20,13 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     Optional<LoanApplication> findByLoanApplicationId(Long id);
 
     /**
-     * Find loan applications based on customerId with pagination support.
+     * Find loan applications based on accountId with pagination support.
      *
-     * @param customerId The customer's ID.
-     * @param pageable Paging information.
+     * @param accountId The account's ID.
+     * @param pageable  Paging information.
      * @return Loan applications page.
      */
-    Page<LoanApplication> findByCustomerId(Long customerId, Pageable pageable);
+    Page<LoanApplication> findByAccountId(Long accountId, Pageable pageable);
 
     /**
      * Find all loan applications by their application status.

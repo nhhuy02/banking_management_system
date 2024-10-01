@@ -13,7 +13,7 @@ public interface LoanApplicationService {
 
     LoanApplicationResponse getResponseDtoById(Long loanApplicationId);
 
-    Page<LoanApplicationResponse> getLoanApplicationsByCustomerId(Long customerId, Pageable pageable);
+    Page<LoanApplicationResponse> getLoanApplicationsByAccountId(Long customerId, Pageable pageable);
 
     DocumentResponse uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadRequest documentUploadRequest);
 
