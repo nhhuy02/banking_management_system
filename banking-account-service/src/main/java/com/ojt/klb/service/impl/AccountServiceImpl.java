@@ -2,6 +2,9 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.client.AccountClient;
 import com.ojt.klb.dto.*;
+import com.ojt.klb.exception.AccountNotFoundException;
+import com.ojt.klb.exception.ResourceNotFound;
+import com.ojt.klb.mapper.AccountMapper;
 import com.ojt.klb.model.Account;
 import com.ojt.klb.model.SavingsAccount;
 import com.ojt.klb.repository.AccountRepository;
@@ -10,6 +13,7 @@ import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -26,13 +30,16 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final SavingsAccountRepository savingsAccountRepository;
     private final KafkaTemplate<String, ChangeStatusDto> kafkaTemplate;
+    private final AccountMapper accountMapper;
 
 
-    public AccountServiceImpl(AccountClient accountClient, AccountRepository accountRepository, SavingsAccountRepository savingsAccountRepository, KafkaTemplate<String, ChangeStatusDto> kafkaTemplate) {
+    public AccountServiceImpl(AccountClient accountClient, AccountRepository accountRepository, SavingsAccountRepository savingsAccountRepository,
+                              KafkaTemplate<String, ChangeStatusDto> kafkaTemplate, AccountMapper accountMapper) {
         this.accountClient = accountClient;
         this.accountRepository = accountRepository;
         this.savingsAccountRepository = savingsAccountRepository;
         this.kafkaTemplate = kafkaTemplate;
+        this.accountMapper = accountMapper;
     }
 
     @Override
@@ -90,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Long> getAccountIdByAccountNumber(Long accountNumber) {
+    public Optional<Long> getAccountIdByAccountNumber(String accountNumber) {
         Optional<Account> accountOptional = accountRepository.findAccountByAccountNumber(accountNumber);
         if (accountOptional.isPresent()) {
             return Optional.of(accountOptional.get().getId());
@@ -136,4 +143,30 @@ public class AccountServiceImpl implements AccountService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public AccountDto readAccountByAccountNumber(Long accountNumber) {
+
+        return accountRepository.findAccountByAccountNumber(Long.valueOf(accountNumber))
+                .map(account -> {
+                    AccountDto accountDto = accountMapper.toDto(account);
+                    return accountDto;
+                })
+                .orElseThrow(() -> new AccountNotFoundException("Account not found for account number: " + accountNumber));
+    }
+
+    @Override
+    public ApiResponse updateAccount(Long accountNumber, AccountDto accountDto) {
+        return accountRepository.findAccountByAccountNumber(accountDto.getAccountNumber())
+                .map(account -> {
+                    BeanUtils.copyProperties(accountDto, account);
+                    accountRepository.save(account);
+                    return ApiResponse.builder()
+                            .status(200)
+                            .success(true)
+                            .message("Account updated successfully").build();
+                }).orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
+    }
+
+
 }

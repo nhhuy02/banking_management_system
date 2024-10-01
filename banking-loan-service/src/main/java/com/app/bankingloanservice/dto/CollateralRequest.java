@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CollateralDto {
+public class CollateralRequest {
 
     @Schema(description = "Unique identifier for the collateral")
     private Long collateralId;
@@ -26,7 +26,7 @@ public class CollateralDto {
     private Long loanApplicationId;
 
     @Schema(description = "Document details related to the collateral")
-    private DocumentUploadDto documentUploadDto;
+    private DocumentUploadRequest documentUploadRequest;
 
     @Schema(description = "Type of collateral (e.g., Property, Vehicle, etc.)")
     private String collateralType;

@@ -26,8 +26,8 @@ public class Account {
     @Column(name = "account_name", length = 100)
     private String accountName;
 
-    @Column(name = "account_number")
-    private Long accountNumber;
+    @Column(name = "account_number", length = 20)
+    private String accountNumber;
 
     @Column(name = "balance", precision = 15, scale = 2)
     private BigDecimal balance;

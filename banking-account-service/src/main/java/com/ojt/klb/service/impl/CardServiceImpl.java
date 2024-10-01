@@ -22,13 +22,9 @@ public class CardServiceImpl implements CardService {
 
     private static final Logger logger = LoggerFactory.getLogger(CardServiceImpl.class);
 
-
     private final CardRepository cardRepository;
-
     private final AccountRepository accountRepository;
-
     private final CardTypeRepository cardTypeRepository;
-
     private final GenerateUniqueNumber generateUniqueNumber;
 
     public CardServiceImpl(CardRepository cardRepository, AccountRepository accountRepository, CardTypeRepository cardTypeRepository, GenerateUniqueNumber generateUniqueNumber) {

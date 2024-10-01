@@ -2,6 +2,8 @@ package com.app.bankingloanservice.repository;
 
 import com.app.bankingloanservice.entity.LoanApplication;
 import com.app.bankingloanservice.constant.ApplicationStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,8 +19,14 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     // Find a loan application by its ID
     Optional<LoanApplication> findByLoanApplicationId(Long id);
 
-    // Find loan applications by customer ID
-    List<LoanApplication> findByCustomerId(Long customerId);
+    /**
+     * Find loan applications based on customerId with pagination support.
+     *
+     * @param customerId The customer's ID.
+     * @param pageable Paging information.
+     * @return Loan applications page.
+     */
+    Page<LoanApplication> findByCustomerId(Long customerId, Pageable pageable);
 
     /**
      * Find all loan applications by their application status.

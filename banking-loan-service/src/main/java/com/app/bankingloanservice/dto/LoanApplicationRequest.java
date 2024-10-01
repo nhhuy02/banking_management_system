@@ -14,9 +14,8 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Schema(description = "Data Transfer Object for loan application")
-public class LoanApplicationRequestDto {
+public class LoanApplicationRequest {
 
     // Customer ID (reference from Customer Service)
     @NotNull(message = "Customer ID cannot be null")
@@ -74,5 +73,5 @@ public class LoanApplicationRequestDto {
 
     // Collateral details associated with the loan application
     @Schema(description = "Collateral details associated with the loan application")
-    private CollateralDto collateralDto;
+    private CollateralRequest collateralRequest;
 }

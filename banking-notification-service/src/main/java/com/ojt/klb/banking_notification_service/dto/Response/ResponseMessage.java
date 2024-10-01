@@ -10,6 +10,11 @@ public enum ResponseMessage {
     VALIDATED_ERROR(2002, "VALIDATED_ERROR"),
     VND(204, " VND"),
     NO_REPLY(205, "[NoReply-JD]"),
+    BALANCE_CHANGE(206, "BALANCE_CHANGE"),
+    INCREASE(207, "+"),
+    DECREASE(208, "-"),
+    CONTENT_BALANCE(209, "Biến động số dư: TK "),
+    BALANCE(210, "Số dư "),
     ;
     private final int statusCode;
     private final String statusCodeValue;

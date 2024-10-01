@@ -1,11 +1,14 @@
 package com.ojt.klb.model.external;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Data
@@ -14,17 +17,39 @@ import java.time.LocalDate;
 @Builder
 public class Account {
 
-    private String accountId;
+//    @JsonIgnore
+//    private Long id;
 
-    private String accountNumber;
+    private String fullName;
 
-    private String accountType;
+    private String accountName;
 
-    private String accountStatus;
+    private Long accountNumber;
 
-    private LocalDate openingDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
-    private BigDecimal availableBalance;
+    private String gender;
 
-    private Long userId;
+    private String email;
+
+    private String phoneNumber;
+
+    private String permanentAddress;
+
+    private String currentAddress;
+
+    private BigDecimal balance;
+
+    private Account.Status status ;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp openingDate;
+
+    public enum Status {
+        active,
+        suspended,
+        closed
+    }
+
 }

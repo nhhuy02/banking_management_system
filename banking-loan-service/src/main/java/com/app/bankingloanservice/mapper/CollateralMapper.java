@@ -1,28 +1,19 @@
 package com.app.bankingloanservice.mapper;
 
-import com.app.bankingloanservice.dto.CollateralDto;
+import com.app.bankingloanservice.dto.CollateralRequest;
+import com.app.bankingloanservice.dto.CollateralResponse;
 import com.app.bankingloanservice.entity.Collateral;
-import com.app.bankingloanservice.entity.LoanApplication;
-import com.app.bankingloanservice.service.LoanApplicationService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DocumentMapper.class)
 public abstract class CollateralMapper {
 
-//    @Autowired
-//    private LoanApplicationService loanApplicationService;
+    public abstract Collateral toEntity(CollateralRequest dto);
 
-    //@Mapping(target = "loanApplication", source = "loanApplicationId", qualifiedByName = "getLoanApplicationById")
-    public abstract Collateral toEntity(CollateralDto dto);
-
-    public abstract CollateralDto toDto(Collateral entity);
-
-//    @Named("getLoanApplicationById")
-//    public LoanApplication getLoanApplicationById(Long loanApplicationId) {
-//        return loanApplicationService.getEntityById(loanApplicationId);
-//    }
+    @Mapping(target = "loanId", source = "loan.loanId")
+    @Mapping(target = "loanApplicationId", source = "loanApplication.loanApplicationId")
+    @Mapping(target = "documentResponse", source = "document")
+    public abstract CollateralResponse toResponse(Collateral entity);
 
 }

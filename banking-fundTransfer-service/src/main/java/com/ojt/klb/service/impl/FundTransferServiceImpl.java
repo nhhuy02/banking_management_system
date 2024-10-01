@@ -4,7 +4,7 @@ import com.ojt.klb.exception.*;
 import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.external.TransactionClient;
 import com.ojt.klb.kafka.InternalTransferNotification;
-import com.ojt.klb.kafka.InternalTransferProducer;
+//import com.ojt.klb.kafka.InternalTransferProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransferType;
 import com.ojt.klb.model.dto.Account;
@@ -37,7 +37,7 @@ public class FundTransferServiceImpl implements FundTransferService {
     private final AccountClient accountClient;
     private final TransactionClient transactionClient;
     private final FundTransferRepository fundTransferRepository;
-    private final InternalTransferProducer internalTransferProducer;
+//    private final InternalTransferProducer internalTransferProducer;
 
     private final FundTransferMapper fundTransferMapper = new FundTransferMapper();
 

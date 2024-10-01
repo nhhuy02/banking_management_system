@@ -29,18 +29,4 @@ public abstract class AuditModel {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-//    /**
-//     * The user who created this collateral record.
-//     */
-//    @CreatedBy
-//    @Column(name = "created_by")
-//    private String createdBy;
-//
-//    /**
-//     * The user who last modified this collateral record.
-//     */
-//    @Column(name = "last_modified_by")
-//    @LastModifiedBy
-//    private String lastModifiedBy;
-
 }
