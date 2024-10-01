@@ -36,8 +36,8 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.2'
-    implementation group: 'org.jxls', name: 'jxls', version: '2.10.0'
-    implementation group: 'org.jxls', name: 'jxls-poi', version: '2.10.0'
+    implementation 'org.jxls:jxls:2.14.0'
+    implementation 'org.jxls:jxls-poi:2.14.0'
 }
 
 dependencyManagement {

@@ -6,9 +6,11 @@ spring:
     name: banking-loan-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/loan_service
-    username: chienma
-    password: chienma_password
+    url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
+  #    username: chienma
+#    password: chienma_password
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
