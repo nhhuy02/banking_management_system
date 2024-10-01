@@ -20,7 +20,6 @@ public class CardTypeImpl implements CardTypeService {
     private static final Logger logger = LoggerFactory.getLogger(CardTypeImpl.class);
 
     private final CardTypeRepository cardTypeRepository;
-
     private final CardTypeMapper cardTypeMapper;
 
     public CardTypeImpl(CardTypeRepository cardTypeRepository, CardTypeMapper cardTypeMapper) {

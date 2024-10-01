@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/savings-accounts")
+@RequestMapping("/api/v1/account/savings-accounts")
 public class SavingsAccountController {
 
     private static final Logger logger = LoggerFactory.getLogger(SavingsAccountController.class);

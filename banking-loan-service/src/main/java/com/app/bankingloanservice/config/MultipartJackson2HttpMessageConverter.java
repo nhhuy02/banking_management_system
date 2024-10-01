@@ -11,28 +11,26 @@ import java.util.Collections;
 @Component
 public class MultipartJackson2HttpMessageConverter extends MappingJackson2HttpMessageConverter {
 
-    /**
-     * Converter for handling JSON in multipart/form-data requests.
-     */
     public MultipartJackson2HttpMessageConverter(ObjectMapper objectMapper) {
         super(objectMapper);
-        // Supports both multipart/form-data and application/json
+        // Hỗ trợ cả multipart/form-data và application/json
         setSupportedMediaTypes(Collections.singletonList(MediaType.MULTIPART_FORM_DATA));
     }
 
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
-        return false;
+        // Chỉ vô hiệu hóa ghi đối với multipart/form-data, cho phép ghi đối với các media type khác
+        return mediaType != null && !mediaType.equals(MediaType.MULTIPART_FORM_DATA);
     }
 
     @Override
     public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
-        return false;
+        return canWrite(clazz, mediaType);
     }
 
     @Override
     protected boolean canWrite(MediaType mediaType) {
-        return false;
+        return mediaType != null && !mediaType.equals(MediaType.MULTIPART_FORM_DATA);
     }
 
 }

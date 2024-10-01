@@ -4,7 +4,7 @@ import com.ojt.klb.client.Client;
 import com.ojt.klb.dto.DataForJwt;
 import com.ojt.klb.dto.IdDto;
 import com.ojt.klb.response.ApiResponse;
-import com.ojt.klb.sercurity.JwtService;
+import com.ojt.klb.security.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,12 @@ public class AuthServiceHelper {
     }
 
     public String generateTokenAndFetchIds(DataForJwt dataForJwt) {
-        return getString(dataForJwt, client, logger, jwtService);
+        return getString(dataForJwt, client, jwtService);
     }
 
-    static String getString(DataForJwt dataForJwt, Client client, Logger logger, JwtService jwtService) {
+    static String getString(DataForJwt dataForJwt, Client client, JwtService jwtService) {
         ResponseEntity<ApiResponse<IdDto>> dataResponse = client.getAllId(dataForJwt.getId());
-        logger.info("Received response for user ID: {} from account service: {}", dataForJwt.getId(), dataResponse);
+        AuthServiceHelper.logger.info("Received response for user ID: {} from account service: {}", dataForJwt.getId(), dataResponse);
 
         if (dataResponse.getBody() != null && dataResponse.getBody().isSuccess()) {
             IdDto idDto = dataResponse.getBody().getData();
@@ -40,10 +40,10 @@ public class AuthServiceHelper {
                     idDto.getCustomerId(),
                     idDto.getSavingAccountId()
             );
-            logger.info("JWT token created successfully for username: {}", dataForJwt.getUsername());
+            AuthServiceHelper.logger.info("JWT token created successfully for username: {}", dataForJwt.getUsername());
             return token;
         } else {
-            logger.warn("Failed to get all IDs for user ID: {}", dataForJwt.getId());
+            AuthServiceHelper.logger.warn("Failed to get all IDs for user ID: {}", dataForJwt.getId());
             return null;
         }
     }

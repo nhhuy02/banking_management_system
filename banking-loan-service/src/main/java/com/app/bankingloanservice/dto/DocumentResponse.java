@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class DocumentResponseDto {
+public class DocumentResponse {
 
     private Long documentId;
     private Long loanApplicationId;

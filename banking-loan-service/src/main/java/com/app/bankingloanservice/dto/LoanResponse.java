@@ -1,23 +1,18 @@
 package com.app.bankingloanservice.dto;
 
 import com.app.bankingloanservice.constant.*;
-import com.app.bankingloanservice.entity.LoanInterestRate;
-import com.app.bankingloanservice.entity.LoanRepayment;
-import com.app.bankingloanservice.entity.LoanSettlement;
-import com.app.bankingloanservice.entity.LoanType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanDto {
+public class LoanResponse {
 
     private Long loanId;
 
@@ -26,6 +21,16 @@ public class LoanDto {
 
     // Customer ID
     private Long customerId;
+
+    private String customerName;
+
+    private Long accountId; // Account ID for receiving disbursement and making repayments
+
+    private String contactPhone; // Customer's phone number
+
+    private String contactEmail; // Customer's email
+
+    private String idCard; // Customer's ID Card number
 
     // Loan contract number
     private String loanContractNo;
@@ -37,7 +42,7 @@ public class LoanDto {
     private LocalDate customerConfirmationDate;
 
     // Loan type
-    private LoanType loanType;
+    private LoanTypeDto loanTypeDto;
 
     // Loan amount in VND
     private Long loanAmount;
@@ -46,7 +51,7 @@ public class LoanDto {
     private InterestRateType interestRateType;
 
     // Current interest rate details
-    private LoanInterestRate currentInterestRate;
+    private LoanInterestRateResponse currentInterestRate;
 
     // Repayment method
     private RepaymentMethod repaymentMethod;
@@ -84,14 +89,8 @@ public class LoanDto {
     // Debt classification
     private DebtClassification debtClassification;
 
-    // Collateral details
-    private CollateralDto collateral;
-
-    // List of repayments
-    private List<LoanRepayment> loanRepayments;
-
     // Loan settlement details
-    private LoanSettlement loanSettlement;
+    private LoanSettlementResponse loanSettlementResponse;
 
     // Loan status
     private LoanStatus status;

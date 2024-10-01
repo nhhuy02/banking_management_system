@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class DocumentUploadDto {
+public class DocumentUploadRequest {
 
     @Schema(description = "Loan application ID")
     @NotNull(message = "Loan application ID is required")
