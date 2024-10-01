@@ -1,9 +1,8 @@
 package com.app.bankingloanservice.controller;
 
-import com.app.bankingloanservice.dto.ApiResponseWrapper;
-import com.app.bankingloanservice.dto.LoanApplicationRequestDto;
-import com.app.bankingloanservice.dto.LoanApplicationResponseDto;
+import com.app.bankingloanservice.dto.*;
 import com.app.bankingloanservice.service.LoanApplicationService;
+import com.app.bankingloanservice.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,19 +11,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /**
  * Controller for managing loan applications.
  */
 @RestController
-@RequestMapping("/loan-applications")
+@RequestMapping("/api/v1/loan-applications")
 @AllArgsConstructor
 @Tag(name = "Loan Application Controller", description = "APIs related to Loan Application operations")
 @Slf4j
@@ -32,11 +34,13 @@ public class LoanApplicationController {
 
     private final LoanApplicationService loanApplicationService;
 
+    private final LoanService loanService;
+
     /**
      * Endpoint to register a new loan application.
      *
-     * @param loanApplicationRequestDto DTO object representing the loan application details.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
+     * @param loanApplicationRequest DTO object representing the loan application details.
+     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponse and HTTP status.
      */
     @Operation(
             summary = "Create a new loan application",
@@ -46,13 +50,13 @@ public class LoanApplicationController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoanApplicationRequestDto.class),
+                            schema = @Schema(implementation = LoanApplicationRequest.class),
                             examples = @ExampleObject(
                                     name = "Full Loan Application Example",
                                     summary = "Loan Application with all required fields",
                                     value = """
                                             {
-                                              "customerId": 12345,
+                                              "accountId": 12345,
                                               "accountId": 98765,
                                               "monthlyIncome": 20000000,
                                               "occupation": "Software Engineer",
@@ -63,7 +67,7 @@ public class LoanApplicationController {
                                               "desiredDisbursementDate": "2024-10-01",
                                               "interestRateType": "FIXED",
                                               "loanPurpose": "Home Renovation",
-                                              "collateralDto": {
+                                              "collateralRequest": {
                                                 "collateralType": "string",
                                                 "collateralValue": 0,
                                                 "description": "string",
@@ -105,14 +109,14 @@ public class LoanApplicationController {
             }
     )
     @PostMapping
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> createLoanApplication(
+    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> createLoanApplication(
             @Parameter(description = "Loan application request data", required = true)
-            @Valid @RequestBody LoanApplicationRequestDto loanApplicationRequestDto) throws IOException {
+            @Valid @RequestBody LoanApplicationRequest loanApplicationRequest) {
 
         // Create loan application and return the response
-        LoanApplicationResponseDto createdLoanApplication = loanApplicationService.createLoanApplication(loanApplicationRequestDto);
+        LoanApplicationResponse createdLoanApplication = loanApplicationService.createLoanApplication(loanApplicationRequest);
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<LoanApplicationResponse> response = new ApiResponseWrapper<>(
                 HttpStatus.CREATED.value(),
                 true,
                 "Created Loan Application!",
@@ -127,7 +131,7 @@ public class LoanApplicationController {
      * Endpoint to retrieve a loan application by ID.
      *
      * @param loanApplicationId ID of the loan application to retrieve.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
+     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponse and HTTP status.
      */
     @Operation(
             summary = "Get a loan application by ID",
@@ -160,17 +164,17 @@ public class LoanApplicationController {
             }
     )
     @GetMapping("/{loanApplicationId}")
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> getLoanApplicationById(
+    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> getLoanApplicationById(
             @Parameter(description = "ID of the loan application", required = true)
             @PathVariable Long loanApplicationId) {
 
-        LoanApplicationResponseDto loanApplicationResponseDto = loanApplicationService.getResponseDtoById(loanApplicationId);
+        LoanApplicationResponse loanApplicationResponse = loanApplicationService.getResponseDtoById(loanApplicationId);
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<LoanApplicationResponse> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 "Retrieved Loan Application!",
-                loanApplicationResponseDto
+                loanApplicationResponse
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -178,34 +182,38 @@ public class LoanApplicationController {
 
 
     /**
-     * Endpoint to approve a loan application.
+     * Endpoint to retrieve loan applications by accountId.
      *
-     * @param applicationId ID of the loan application to approve.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
+     * @param accountId The ID of the account.
+     * @param pageable  Pagination information.
+     * @return ResponseEntity containing ApiResponseWrapper with a page of LoanApplicationResponse and HTTP status.
      */
     @Operation(
-            summary = "Approve a loan application",
-            description = "Approves a loan application based on the provided ID",
+            summary = "Get Loan Applications by Account ID",
+            description = "Retrieves loan applications for a specific account based on accountId with pagination support.",
+            parameters = {
+                    @Parameter(name = "accountId", description = "The ID of the account", required = true, example = "12345"),
+                    @Parameter(name = "page", description = "Current page (0-based)", example = "0"),
+                    @Parameter(name = "size", description = "Page size", example = "10"),
+                    @Parameter(name = "sort", description = "Sort the result by a specific field, e.g.: loanDate,desc", example = "submissionDate,desc")
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Loan application approved successfully",
+                            description = "Loan applications retrieved successfully",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
                             )
                     ),
                     @ApiResponse(
-                            responseCode = "404",
-                            description = "Loan application not found",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiResponseWrapper.class)
-                            )
+                            responseCode = "204",
+                            description = "No loan applications found for the given accountId",
+                            content = @Content
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Invalid loan application status",
+                            description = "Invalid accountId provided",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
@@ -221,37 +229,45 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PostMapping("/{applicationId}/approve")
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> approveApplication(
-            @Parameter(description = "ID of the loan application to approve", required = true)
-            @PathVariable Long applicationId) {
+    @GetMapping
+    public ResponseEntity<ApiResponseWrapper<Page<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
+            @Parameter(description = "The ID of the account to fetch loan applications", required = true)
+            @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId,
 
-        LoanApplicationResponseDto approvedApplication = loanApplicationService.approveApplication(applicationId);
+            @ParameterObject Pageable pageable) {
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
+        log.info("Received request to fetch loan applications for accountId: {}", accountId);
+
+        Page<LoanApplicationResponse> loanApplications = loanApplicationService.getLoanApplicationsByAccountId(accountId, pageable);
+
+        String message;
+
+        if (loanApplications.isEmpty()) {
+            log.warn("No loan applications found for accountId: {}", accountId);
+            message = "No loan applications found for the given accountId.";
+        } else {
+            log.info("Successfully retrieved loan applications for accountId: {}", accountId);
+            message = "Loan applications retrieved successfully.";
+        }
+
+        ApiResponseWrapper<Page<LoanApplicationResponse>> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
-                "Loan application approved successfully!",
-                approvedApplication
+                message,
+                loanApplications
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**
-     * Endpoint to reject a loan application.
-     *
-     * @param applicationId ID of the loan application to reject.
-     * @param reason        Reason for rejecting the loan application.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
-     */
+
     @Operation(
-            summary = "Reject a loan application",
-            description = "Rejects a loan application based on the provided ID and reason",
+            summary = "Update status of a loan application",
+            description = "Updates the status of a loan application based on the provided ID and status",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Loan application rejected successfully",
+                            description = "Loan application status updated successfully",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
@@ -283,39 +299,32 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PostMapping("/{applicationId}/reject")
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> rejectApplication(
-            @Parameter(description = "ID of the loan application to reject", required = true)
+    @PatchMapping("/{applicationId}/status")
+    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> updateStatus(
+            @Parameter(description = "ID of the loan application to update status", required = true)
             @PathVariable Long applicationId,
-            @Parameter(description = "Reason for rejecting the loan application", required = true)
-            @RequestParam String reason) {
+            @RequestBody @Valid LoanApplicationStatusDto loanApplicationStatusDto) {
 
-        LoanApplicationResponseDto rejectedApplication = loanApplicationService.rejectApplication(applicationId, reason);
+        LoanApplicationResponse updatedApplication = loanApplicationService.updateStatus(applicationId, loanApplicationStatusDto);
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<LoanApplicationResponse> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
-                "Loan application rejected successfully!",
-                rejectedApplication
+                "Loan application status updated successfully!",
+                updatedApplication
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**
-     * Endpoint to request additional documents for a loan application.
-     *
-     * @param applicationId       ID of the loan application to request additional documents for.
-     * @param additionalDocuments List of additional documents required.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
-     */
+
     @Operation(
-            summary = "Request additional documents for a loan application",
-            description = "Requests additional documents for a loan application based on the provided ID and document list",
+            summary = "Add additional documents to your loan application",
+            description = "Add additional documents required for a loan application based on the provided ID",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Additional documents requested successfully",
+                            description = "Additional documents updated successfully",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
@@ -331,7 +340,7 @@ public class LoanApplicationController {
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Invalid loan application status",
+                            description = "Invalid request data",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiResponseWrapper.class)
@@ -347,84 +356,49 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PostMapping("/{applicationId}/request-documents")
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> requestAdditionalDocuments(
-            @Parameter(description = "ID of the loan application to request additional documents for", required = true)
-            @PathVariable Long applicationId,
-            @Parameter(description = "List of additional documents required", required = true)
-            @RequestParam String additionalDocuments) {
+    @PostMapping(value = "/{applicationId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseWrapper<DocumentResponse>> uploadDocument(
+            @PathVariable("applicationId") Long loanApplicationId,
+            @ModelAttribute DocumentUploadRequest documentUploadRequest) {
 
-        LoanApplicationResponseDto applicationWithDocumentsRequested = loanApplicationService.requestAdditionalDocuments(applicationId, additionalDocuments);
+        log.info("Uploading document for loan application with ID: {}", loanApplicationId);
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
-                HttpStatus.OK.value(),
+        // Call the loan application service to create and link the document to the loan application
+        DocumentResponse documentResponse = loanApplicationService.uploadLoanApplicationDocument(loanApplicationId, documentUploadRequest);
+
+        // Create the API response wrapper
+        ApiResponseWrapper<DocumentResponse> response = new ApiResponseWrapper<>(
+                HttpStatus.CREATED.value(),
                 true,
-                "Additional documents requested successfully!",
-                applicationWithDocumentsRequested
+                "Document uploaded successfully!",
+                documentResponse
         );
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        // Return the response with HTTP status 201 CREATED
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
-     * Endpoint to start the review process for a loan application.
+     * Create a loan from a loan application ID.
      *
-     * @param applicationId ID of the loan application to start the review for.
-     * @return ResponseEntity containing ApiResponseWrapper with LoanApplicationResponseDto and HTTP status.
+     * @param loanApplicationId the ID of the loan application to create the loan from
+     * @return the created loan entity wrapped in ApiResponseWrapper
      */
-    @Operation(
-            summary = "Start review for a loan application",
-            description = "Starts the review process for a loan application based on the provided ID",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Review started successfully",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiResponseWrapper.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Loan application not found",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiResponseWrapper.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Invalid loan application status",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiResponseWrapper.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal server error",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiResponseWrapper.class)
-                            )
-                    )
-            }
-    )
-    @PostMapping("/{applicationId}/start-review")
-    public ResponseEntity<ApiResponseWrapper<LoanApplicationResponseDto>> startReview(
-            @Parameter(description = "ID of the loan application to start the review for", required = true)
-            @PathVariable Long applicationId) {
+    @PostMapping("/{loanApplicationId}/loans")
+    @Operation(summary = "Create Loan from Loan Application", description = "Create a new loan based on a loan application ID.")
+    public ResponseEntity<ApiResponseWrapper<LoanResponse>> createLoanFromApplication(
+            @PathVariable Long loanApplicationId) {
 
-        LoanApplicationResponseDto applicationUnderReview = loanApplicationService.startReview(applicationId);
+        LoanResponse loanResponse = loanService.createLoanFromApplicationId(loanApplicationId);
 
-        ApiResponseWrapper<LoanApplicationResponseDto> response = new ApiResponseWrapper<>(
-                HttpStatus.OK.value(),
+        ApiResponseWrapper<LoanResponse> response = new ApiResponseWrapper<>(
+                HttpStatus.CREATED.value(),
                 true,
-                "Review started successfully!",
-                applicationUnderReview
+                "Loan created successfully from loan application.",
+                loanResponse
         );
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }
+

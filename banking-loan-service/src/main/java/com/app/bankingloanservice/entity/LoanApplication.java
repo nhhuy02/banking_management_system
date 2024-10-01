@@ -22,7 +22,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LoanApplication extends AuditModel {
 
     /**
@@ -32,12 +31,6 @@ public class LoanApplication extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_application_id")
     private Long loanApplicationId;
-
-    /**
-     * Customer ID (reference from Customer Service).
-     */
-    @Column(name = "customer_id", nullable = false)
-    private Long customerId;
 
     /**
      * Account ID for receiving disbursement and making repayments.

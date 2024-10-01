@@ -35,23 +35,14 @@ public class CardRegistrationRequestServiceImpl implements CardRegistrationReque
 
     private static final Logger logger = LoggerFactory.getLogger(CardRegistrationRequestServiceImpl.class);
 
-
     private final CardRegistrationRequestRepository cardRegistrationRequestRepository;
-
     private final AccountRepository accountRepository;
-
     private final CardTypeRepository cardTypeRepository;
-
     private final CardRepository cardRepository;
-
     private final GenerateUniqueNumber generateUniqueNumber;
-
     private final RestTemplate restTemplate;
-
     private static final String CUSTOMER_SERVICE_URL = "http://localhost:8082/api/v1/customer/";
-
     private final KafkaTemplate<String, CardRegistrationRequestUpdateDto> kafkaTemplate;
-
     private static final String TOPIC = "send-result-register-card-topic";
 
     public CardRegistrationRequestServiceImpl(CardRegistrationRequestRepository cardRegistrationRequestRepository, AccountRepository accountRepository, CardTypeRepository cardTypeRepository, CardRepository cardRepository, GenerateUniqueNumber generateUniqueNumber, RestTemplate restTemplate, KafkaTemplate<String, CardRegistrationRequestUpdateDto> kafkaTemplate) {
@@ -94,6 +85,7 @@ public class CardRegistrationRequestServiceImpl implements CardRegistrationReque
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Optional<List<CardRegistrationRequestResponseDto>> getAllCardRegistrationRequestsStatusPending() {
         List<CardRegistrationRequest> cardRegistrationRequestList = cardRegistrationRequestRepository.findByRequestStatus(CardRegistrationRequest.Status.pending);

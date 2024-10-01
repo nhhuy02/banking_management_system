@@ -1,6 +1,6 @@
 package com.app.bankingloanservice.service.impl;
 
-import com.app.bankingloanservice.dto.DocumentUploadDto;
+import com.app.bankingloanservice.dto.DocumentUploadRequest;
 import com.app.bankingloanservice.entity.Document;
 import com.app.bankingloanservice.entity.LoanApplication;
 import com.app.bankingloanservice.exception.InvalidDocumentException;
@@ -35,10 +35,10 @@ public class DocumentServiceImpl implements DocumentService {
     private String fileStorageDirectory;
 
     @Override
-    public Document createDocument(DocumentUploadDto documentUploadDto) {
+    public Document createDocument(DocumentUploadRequest documentUploadRequest) {
 
         // Get the file from the DTO
-        MultipartFile file = documentUploadDto.getDocumentFile();
+        MultipartFile file = documentUploadRequest.getDocumentFile();
 
         // Validate input: check if file is present and not empty
         if (file == null || file.isEmpty()) {
@@ -47,10 +47,10 @@ public class DocumentServiceImpl implements DocumentService {
         }
 
         // Fetch the associated LoanApplication using the ID from DocumentDto
-        LoanApplication loanApplication = loanApplicationRepository.findById(documentUploadDto.getLoanApplicationId())
+        LoanApplication loanApplication = loanApplicationRepository.findById(documentUploadRequest.getLoanApplicationId())
                 .orElseThrow(() -> {
-                    log.error("Loan application not found for ID: {}", documentUploadDto.getLoanApplicationId());
-                    return new InvalidLoanApplicationException("Invalid loan application ID: " + documentUploadDto.getLoanApplicationId());
+                    log.error("Loan application not found for ID: {}", documentUploadRequest.getLoanApplicationId());
+                    return new InvalidLoanApplicationException("Invalid loan application ID: " + documentUploadRequest.getLoanApplicationId());
                 });
 
         // Create the storage directory if it does not exist
@@ -83,12 +83,12 @@ public class DocumentServiceImpl implements DocumentService {
         // Create the Document entity and populate its fields
         Document document = Document.builder()
                 .loanApplication(loanApplication)
-                .documentType(documentUploadDto.getDocumentType())
+                .documentType(documentUploadRequest.getDocumentType())
                 .fileName(fileName)
                 .fileType(file.getContentType())
                 .fileSize(file.getSize())
                 .filePath(filePath)
-                .description(documentUploadDto.getDescription())
+                .description(documentUploadRequest.getDescription())
                 .build();
 
         // Log before saving the document

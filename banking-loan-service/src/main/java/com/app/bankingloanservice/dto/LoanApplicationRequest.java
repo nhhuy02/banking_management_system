@@ -14,18 +14,12 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Schema(description = "Data Transfer Object for loan application")
-public class LoanApplicationRequestDto {
-
-    // Customer ID (reference from Customer Service)
-    @NotNull(message = "Customer ID cannot be null")
-    @Schema(description = "Customer ID (reference from Customer Service)", example = "12345")
-    private Long customerId;
+public class LoanApplicationRequest {
 
     // Account ID for receiving disbursement and making repayments
-    @NotNull(message = "Account ID cannot be null")
-    @Schema(description = "Account ID for receiving disbursement and making repayments", example = "98765")
+    @Schema(description = "Account Number for receiving disbursement and making repayments", example = "98765")
+    @NotNull(message = "Account Number cannot be null")
     private Long accountId;
 
     // Customer's monthly income
@@ -74,5 +68,5 @@ public class LoanApplicationRequestDto {
 
     // Collateral details associated with the loan application
     @Schema(description = "Collateral details associated with the loan application")
-    private CollateralDto collateralDto;
+    private CollateralRequest collateralRequest;
 }

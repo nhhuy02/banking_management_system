@@ -24,7 +24,6 @@ CREATE TABLE loan_type
 CREATE TABLE loan_application
 (
     loan_application_id       BIGINT AUTO_INCREMENT PRIMARY KEY,
-    customer_id               BIGINT                                                                     NOT NULL,                                      -- Customer ID (reference from Customer Service)
     account_id                BIGINT,                                                                                                                   -- Account ID for receiving disbursement and making repayments
     monthly_income            BIGINT                                                                     NOT NULL CHECK (monthly_income >= 0),          -- Monthly income
     occupation                VARCHAR(255)                                                               NOT NULL,                                      -- Customer's occupation
@@ -92,7 +91,7 @@ CREATE TABLE loan
 (
     loan_id                      BIGINT AUTO_INCREMENT PRIMARY KEY,
     loan_application_id          BIGINT                                          NOT NULL UNIQUE,                                   -- Reference to loan_application
-    customer_id                  BIGINT                                          NOT NULL,                                          -- Customer ID (reference from Customer Service)
+    account_id                   BIGINT                                          NOT NULL,                                          -- Account ID (reference from Account Service)
     loan_contract_no             CHAR(20)                                        NOT NULL UNIQUE
         CHECK (REGEXP_LIKE(loan_contract_no, '^BNK-LN-[0-9]{4}-[0-9]{2}-[0-9]{5}$')),                                               -- Loan contract number, e.g., BNK-LN-2024-09-01234
     customer_confirmation_status ENUM ('PENDING', 'CONFIRMED', 'REJECTED')       NOT NULL DEFAULT 'PENDING',                        -- Borrower's confirmation status
@@ -100,7 +99,7 @@ CREATE TABLE loan
     loan_type_id                 BIGINT                                          NOT NULL,                                          -- Loan type ID (reference to loan_type)
     loan_amount                  BIGINT                                          NOT NULL CHECK (loan_amount >= 0),                 -- Loan amount (VND)
     interest_rate_type           ENUM ('FIXED', 'FLOATING')                      NOT NULL,                                          -- Interest rate type: fixed or floating
-    current_interest_rate_id     BIGINT                                          NOT NULL,                                          -- Reference to interest_rate
+    current_interest_rate_id     BIGINT,                                                                                            -- Reference to interest_rate
     repayment_method             ENUM ('EQUAL_INSTALLMENTS', 'REDUCING_BALANCE') NOT NULL DEFAULT 'EQUAL_INSTALLMENTS',             -- Repayment method: equal installments or reducing balance
     loan_term_months             INT                                             NOT NULL CHECK (loan_term_months > 0),             -- Loan term in months
     disbursement_date            DATE                                            NOT NULL,                                          -- Loan disbursement date
@@ -120,7 +119,7 @@ CREATE TABLE loan
         'LOSS'                                                                                                                      -- Group 5 (LOSS - Loss debt)
         )                                                                        NOT NULL DEFAULT 'NORMAL',
     status                       ENUM (
-        'PENDING_CUSTOMER_APPROVAL',                                                                                                -- The loan has been approved by the system and is pending customer approval
+        'PENDING',                                                                                                                  -- The loan has been approved by the system and is pending customer approval
         'CANCELLED',                                                                                                                -- The loan was cancelled before becoming active due to customer rejection or other reasons
         'ACTIVE',                                                                                                                   -- Loan is active and being repaid
         'SETTLED_ON_TIME',                                                                                                          -- Loan settled on time
@@ -148,7 +147,6 @@ CREATE TABLE loan_interest_rate
     prepayment_penalty_rate    DECIMAL(5, 2) NOT NULL CHECK (prepayment_penalty_rate >= 0),    -- Prepayment penalty rate (e.g. 3% of the remaining balance paid before the due date)
     effective_from             DATE          NOT NULL,                                         -- Date when the interest rate becomes effective
     effective_to               DATE,                                                           -- Date when the interest rate expires
-    is_current                 BOOLEAN       NOT NULL DEFAULT FALSE,                           -- Indicates if this is the current interest rate
     -- -- --
     created_by                 VARCHAR(255)  NOT NULL DEFAULT 'SYSTEM',
     created_date               TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -1,8 +1,8 @@
 package com.app.bankingloanservice.service.impl;
 
-import com.app.bankingloanservice.dto.CollateralDto;
-import com.app.bankingloanservice.dto.DocumentResponseDto;
-import com.app.bankingloanservice.dto.DocumentUploadDto;
+import com.app.bankingloanservice.dto.CollateralRequest;
+import com.app.bankingloanservice.dto.DocumentResponse;
+import com.app.bankingloanservice.dto.DocumentUploadRequest;
 import com.app.bankingloanservice.entity.Collateral;
 import com.app.bankingloanservice.entity.Document;
 import com.app.bankingloanservice.entity.LoanApplication;
@@ -31,16 +31,16 @@ public class CollateralServiceImpl implements CollateralService {
     private final DocumentMapper documentMapper;
 
     @Override
-    public Collateral createCollateral(CollateralDto collateralDto) {
+    public Collateral createCollateral(CollateralRequest collateralRequest) {
         // Fetch LoanApplication
-        LoanApplication loanApplication = loanApplicationRepository.findById(collateralDto.getLoanApplicationId())
+        LoanApplication loanApplication = loanApplicationRepository.findById(collateralRequest.getLoanApplicationId())
                 .orElseThrow(() -> {
-                    log.error("Invalid loan application ID: {}", collateralDto.getLoanApplicationId());
+                    log.error("Invalid loan application ID: {}", collateralRequest.getLoanApplicationId());
                     return new InvalidLoanApplicationException("Invalid loan application ID");
                 });
 
         // Map to Collateral entity and save
-        Collateral collateral = collateralMapper.toEntity(collateralDto);
+        Collateral collateral = collateralMapper.toEntity(collateralRequest);
         collateral.setLoanApplication(loanApplication);
 
         log.info("Saving collateral for Loan Application ID: {}", loanApplication.getLoanApplicationId());
@@ -48,7 +48,7 @@ public class CollateralServiceImpl implements CollateralService {
     }
 
     @Override
-    public DocumentResponseDto uploadCollateralDocument(Long collateralId, DocumentUploadDto documentUploadDto) {
+    public DocumentResponse uploadCollateralDocument(Long collateralId, DocumentUploadRequest documentUploadRequest) {
         // Fetch Collateral
         Collateral collateral = collateralRepository.findById(collateralId)
                 .orElseThrow(() -> {
@@ -59,23 +59,23 @@ public class CollateralServiceImpl implements CollateralService {
         // Log thông tin về collateral
         log.info("Found collateral with ID: {}", collateralId);
 
-        // Check whether Loan Application Id matches Collateral and documentUploadDto
-        if (!documentUploadDto.getLoanApplicationId().equals(collateral.getLoanApplication().getLoanApplicationId())) {
+        // Check whether Loan Application Id matches Collateral and documentUploadRequest
+        if (!documentUploadRequest.getLoanApplicationId().equals(collateral.getLoanApplication().getLoanApplicationId())) {
             log.error("Loan Application ID does not match: collateralId={}, loanApplicationId={}",
-                    collateralId, documentUploadDto.getLoanApplicationId());
+                    collateralId, documentUploadRequest.getLoanApplicationId());
             throw new InvalidDocumentException("Loan Application ID does not match");
         }
 
         // Save Document and associate with the collateral
         try {
-            Document document = documentService.createDocument(documentUploadDto);
+            Document document = documentService.createDocument(documentUploadRequest);
             collateral.setDocument(document); // Assuming you want to associate the document with collateral
             collateralRepository.save(collateral); // Save the collateral with the document reference
 
             log.info("Document uploaded and associated with collateral ID: {}", collateralId);
             log.info("Uploaded Document Details: {}", document);
 
-            return documentMapper.toResponseDto(document);
+            return documentMapper.toResponse(document);
 
         } catch (Exception e) {
             log.error("Failed to upload collateral document: {}", e.getMessage());

@@ -40,13 +40,13 @@ spring:
             default:
               type: com.ojt.klb.dto.CustomerDto
 
-##Eureka Configuration
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#    register-with-eureka: true
-#    fetch-registry: true
+#Eureka Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      register-with-eureka: true
+      fetch-registry: true
 #
 ## Logging Configuration
 #logging:
