@@ -55,7 +55,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/{accountNumber}")
+    @GetMapping("/data/{accountNumber}")
     public ResponseEntity<ApiResponse<AccountDto>> getDataAccountNumber(@PathVariable String accountNumber) {
         Optional<Long> accountIdOptional = accountService.getAccountIdByAccountNumber(accountNumber);
 
