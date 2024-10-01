@@ -1,7 +1,6 @@
 package com.ojt.klb.interceptor;
 
 import com.ojt.klb.exception.ErrorResponseHandler;
-import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.security.JwtUtil;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
@@ -15,6 +14,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
@@ -56,20 +57,17 @@ public class JwtInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            String username = jwtUtil.extractUserName(token);
-            logger.info("Username found: {}", username);
             String userId = jwtUtil.extractUserId(token);
-            logger.info("UserId : {}", userId);
             String accountId = jwtUtil.extractAccountId(token);
-            logger.info("AccountId : {}", accountId);
             String customerId = jwtUtil.extractCustomerId(token);
-            logger.info("CustomerId : {}", customerId);
-            String role = jwtUtil.extractRole(token);
-            logger.info("Role : {}", role);
             String savingAccountId = jwtUtil.extractSavingAccountId(token);
-            logger.info("SavingAccountId : {}", savingAccountId);
 
             String url = request.getRequestURI();
+            url = url.replace("%7B", "").replace("%7D", "");
+
+            String regex = "(?<!v)\\d+";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(url);
 
             Map<String, String> urlMappings = Map.of(
                     "account", "http://localhost:8080",
@@ -78,30 +76,46 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "reports", "http://localhost:8086"
             );
 
+            String targetUrl = null;
+
             for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
+                logger.info("Checking URL mapping for: {}", entry.getKey());
                 if (url.contains(entry.getKey())) {
+                    targetUrl = entry.getValue();
+
                     url = url.replace("userId", userId)
                             .replace("accountId", accountId)
                             .replace("customerId", customerId)
                             .replace("savingAccountId", savingAccountId);
-                    url = entry.getValue() + url;
-                    if ("customer".equals(entry.getKey())) {
-                        logger.info(url);
+
+
+                    while (matcher.find()) {
+                        String foundId = matcher.group();
+                        logger.info("Found ID in URL: {}", foundId);
+
+                        if (!foundId.equals(userId) && !foundId.equals(accountId)
+                                && !foundId.equals(customerId) && !foundId.equals(savingAccountId)) {
+                            logger.error("The ID found in the URL does not match any of the IDs from the token.");
+                            ErrorResponseHandler.setErrorResponse(response, HttpStatus.FORBIDDEN.value(), "Unauthorized: You not have access to the resource!");
+                            return false;
+                        }
                     }
+
                     break;
                 }
             }
 
-            url = url.replace("%7B", "").replace("%7D", "");
+            if (targetUrl != null) {
+                url = targetUrl + url;
+                logger.info("Processed URL: {}", url);
 
-            logger.info("Processed URL: {}", url);
-
-            if (!request.getRequestURI().equals(url)) {
-                logger.info("Redirecting to: {}", url);
-                response.sendRedirect(url);
-                return false;
+                if (!request.getRequestURI().equals(url)) {
+                    logger.info("Redirecting to: {}", url);
+                    response.sendRedirect(url);
+                    return false;
+                }
             } else {
-                logger.error("No replacement was made in the URL. Current URL: {}", request.getRequestURI());
+                logger.error("No matching URL found in urlMappings.");
             }
         } else {
             logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
@@ -109,4 +123,5 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
 }
