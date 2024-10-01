@@ -5,19 +5,19 @@ VALUES
     ('Car Loan', 9.00, 160.00, 12.00, 4.00, 300000000, 60, TRUE, 7, 'Loan for purchasing a vehicle.');
 
 -- Insert Loan Applications
-INSERT INTO loan_application (customer_id, account_id, monthly_income, occupation, loan_type_id, desired_loan_amount, desired_loan_term_months, repayment_method, desired_disbursement_date, interest_rate_type, loan_purpose, credit_score, application_status, submission_date, review_due_date)
+INSERT INTO loan_application (account_id, monthly_income, occupation, loan_type_id, desired_loan_amount, desired_loan_term_months, repayment_method, desired_disbursement_date, interest_rate_type, loan_purpose, credit_score, application_status, submission_date, review_due_date)
 VALUES
-    -- Customer 1: Home Loan Application
-    (1001, 2001, 20000000, 'Software Engineer', 1, 300000000, 120, 'EQUAL_INSTALLMENTS', '2024-10-01', 'FIXED', 'Home Renovation', 700, 'PENDING', '2024-09-01', '2024-09-15'),
+    -- Account 2001: Home Loan Application
+    (2001, 20000000, 'Software Engineer', 1, 300000000, 120, 'EQUAL_INSTALLMENTS', '2024-10-01', 'FIXED', 'Home Renovation', 700, 'PENDING', '2024-09-01', '2024-09-15'),
 
-    -- Customer 1: Car Loan Application
-    (1001, 2001, 20000000, 'Software Engineer', 2, 150000000, 48, 'REDUCING_BALANCE', '2024-11-01', 'FIXED', 'Purchase New Car', 720, 'PENDING', '2024-09-05', '2024-09-12'),
+    -- Account 2001: Car Loan Application
+    (2001, 20000000, 'Software Engineer', 2, 150000000, 48, 'REDUCING_BALANCE', '2024-11-01', 'FIXED', 'Purchase New Car', 720, 'PENDING', '2024-09-05', '2024-09-12'),
 
-    -- Customer 2: Home Loan Application
-    (1002, 2002, 15000000, 'Teacher', 1, 200000000, 180, 'EQUAL_INSTALLMENTS', '2024-10-15', 'FLOATING', 'Buy a Bigger House', 680, 'PENDING', '2024-09-10', '2024-09-24'),
+    -- Account 2002: Home Loan Application
+    (2002, 15000000, 'Teacher', 1, 200000000, 180, 'EQUAL_INSTALLMENTS', '2024-10-15', 'FLOATING', 'Buy a Bigger House', 680, 'PENDING', '2024-09-10', '2024-09-24'),
 
-    -- Customer 2: Car Loan Application
-    (1002, 2002, 15000000, 'Teacher', 2, 120000000, 36, 'EQUAL_INSTALLMENTS', '2024-11-20', 'FIXED', 'Purchase Used Car', 690, 'PENDING', '2024-09-12', '2024-09-19');
+    -- Account 2002: Car Loan Application
+    (2002, 15000000, 'Teacher', 2, 120000000, 36, 'EQUAL_INSTALLMENTS', '2024-11-20', 'FIXED', 'Purchase Used Car', 690, 'PENDING', '2024-09-12', '2024-09-19');
 
 -- Insert Documents for Loan Applications
 INSERT INTO document (loan_application_id, document_type, file_name, file_type, file_size, file_path, description)
@@ -51,19 +51,19 @@ VALUES
 
 
 -- Insert Loans (current_interest_rate_id set to NULL initially)
-INSERT INTO loan (loan_application_id, customer_id, loan_contract_no, customer_confirmation_status, customer_confirmation_date, loan_type_id, loan_amount, interest_rate_type, repayment_method, loan_term_months, disbursement_date, maturity_date, settlement_date, renewal_count, remaining_balance, total_paid_amount, is_bad_debt, bad_debt_date, bad_debt_reason, debt_classification, status)
+INSERT INTO loan (loan_application_id, account_id, loan_contract_no, customer_confirmation_status, customer_confirmation_date, loan_type_id, loan_amount, interest_rate_type, repayment_method, loan_term_months, disbursement_date, maturity_date, settlement_date, renewal_count, remaining_balance, total_paid_amount, is_bad_debt, bad_debt_date, bad_debt_reason, debt_classification, status)
 VALUES
     -- Loan for Loan Application 1 (Home Loan)
-    (1, 1001, 'BNK-LN-2024-09-00001', 'PENDING', NULL, 1, 300000000, 'FIXED', 'EQUAL_INSTALLMENTS', 120, '2024-10-01', '2034-10-01', NULL, 0, 300000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
+    (1, 2001, 'BNK-LN-2024-09-00001', 'PENDING', NULL, 1, 300000000, 'FIXED', 'EQUAL_INSTALLMENTS', 120, '2024-10-01', '2034-10-01', NULL, 0, 300000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
 
     -- Loan for Loan Application 2 (Car Loan)
-    (2, 1001, 'BNK-LN-2024-09-00002', 'PENDING', NULL, 2, 150000000, 'FIXED', 'REDUCING_BALANCE', 48, '2024-11-01', '2028-11-01', NULL, 0, 150000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
+    (2, 2001, 'BNK-LN-2024-09-00002', 'PENDING', NULL, 2, 150000000, 'FIXED', 'REDUCING_BALANCE', 48, '2024-11-01', '2028-11-01', NULL, 0, 150000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
 
     -- Loan for Loan Application 3 (Home Loan)
-    (3, 1002, 'BNK-LN-2024-09-00003', 'PENDING', NULL, 1, 200000000, 'FLOATING', 'EQUAL_INSTALLMENTS', 180, '2024-10-15', '2034-10-15', NULL, 0, 200000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
+    (3, 2002, 'BNK-LN-2024-09-00003', 'PENDING', NULL, 1, 200000000, 'FLOATING', 'EQUAL_INSTALLMENTS', 180, '2024-10-15', '2034-10-15', NULL, 0, 200000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE'),
 
     -- Loan for Loan Application 4 (Car Loan)
-    (4, 1002, 'BNK-LN-2024-09-00004', 'PENDING', NULL, 2, 120000000, 'FIXED', 'EQUAL_INSTALLMENTS', 36, '2024-11-20', '2027-11-20', NULL, 0, 120000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE');
+    (4, 2002, 'BNK-LN-2024-09-00004', 'PENDING', NULL, 2, 120000000, 'FIXED', 'EQUAL_INSTALLMENTS', 36, '2024-11-20', '2027-11-20', NULL, 0, 120000000, 0, FALSE, NULL, NULL, 'NORMAL', 'ACTIVE');
 
 
 -- Insert Loan Interest Rates

@@ -24,7 +24,6 @@ CREATE TABLE loan_type
 CREATE TABLE loan_application
 (
     loan_application_id       BIGINT AUTO_INCREMENT PRIMARY KEY,
-    customer_id               BIGINT                                                                     NOT NULL,                                      -- Customer ID (reference from Customer Service)
     account_id                BIGINT,                                                                                                                   -- Account ID for receiving disbursement and making repayments
     monthly_income            BIGINT                                                                     NOT NULL CHECK (monthly_income >= 0),          -- Monthly income
     occupation                VARCHAR(255)                                                               NOT NULL,                                      -- Customer's occupation
@@ -92,7 +91,7 @@ CREATE TABLE loan
 (
     loan_id                      BIGINT AUTO_INCREMENT PRIMARY KEY,
     loan_application_id          BIGINT                                          NOT NULL UNIQUE,                                   -- Reference to loan_application
-    customer_id                  BIGINT                                          NOT NULL,                                          -- Customer ID (reference from Customer Service)
+    account_id                   BIGINT                                          NOT NULL,                                          -- Account ID (reference from Account Service)
     loan_contract_no             CHAR(20)                                        NOT NULL UNIQUE
         CHECK (REGEXP_LIKE(loan_contract_no, '^BNK-LN-[0-9]{4}-[0-9]{2}-[0-9]{5}$')),                                               -- Loan contract number, e.g., BNK-LN-2024-09-01234
     customer_confirmation_status ENUM ('PENDING', 'CONFIRMED', 'REJECTED')       NOT NULL DEFAULT 'PENDING',                        -- Borrower's confirmation status

@@ -52,43 +52,43 @@ public class LoanController {
     }
 
     /**
-     * Get all loans by Customer ID with pagination.
+     * Get all loans by Account ID with pagination.
      *
-     * @param customerId the ID of the customer whose loans to retrieve
-     * @param pageable   the pagination information
+     * @param accountId the ID of the account whose loans to retrieve
+     * @param pageable  the pagination information
      * @return paginated list of loans wrapped in ApiResponseWrapper
      */
     @GetMapping
-    @Operation(summary = "Get Loans by Customer ID", description = "Retrieve all loans for a specific customer with pagination support.")
+    @Operation(summary = "Get Loans by Account ID", description = "Retrieve all loans for a specific account with pagination support.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loans retrieved successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiResponseWrapper.class))),
-            @ApiResponse(responseCode = "204", description = "No loans found for the given customer",
+            @ApiResponse(responseCode = "204", description = "No loans found for the given account",
                     content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid customer ID",
+            @ApiResponse(responseCode = "400", description = "Invalid account ID",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    public ResponseEntity<ApiResponseWrapper<Page<LoanResponse>>> getLoansByCustomerId(
-            @Parameter(description = "ID of the customer to retrieve loans for", required = true)
-            @RequestParam Long customerId,
+    public ResponseEntity<ApiResponseWrapper<Page<LoanResponse>>> getLoansByAccountId(
+            @Parameter(description = "ID of the account to retrieve loans for", required = true)
+            @RequestParam Long accountId,
 
             @Parameter(description = "Pagination information")
             @ParameterObject Pageable pageable) {
 
-        log.info("Received request to fetch loans for customerId: {} with pageable: {}", customerId, pageable);
+        log.info("Received request to fetch loans for accountId: {} with pageable: {}", accountId, pageable);
 
-        Page<LoanResponse> loans = loanService.getLoansByCustomerId(customerId, pageable);
+        Page<LoanResponse> loans = loanService.getLoansByAccountId(accountId, pageable);
 
         String message;
 
         if (loans.isEmpty()) {
-            log.warn("No loans found for customerId: {}", customerId);
-            message = "No loans found for the given customerId.";
+            log.warn("No loans found for accountId: {}", accountId);
+            message = "No loans found for the given accountId.";
         } else {
-            log.info("Successfully retrieved loans for customerId: {}", customerId);
+            log.info("Successfully retrieved loans for accountId: {}", accountId);
             message = "Loans retrieved successfully.";
         }
 

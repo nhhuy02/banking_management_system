@@ -33,12 +33,6 @@ public class LoanApplication extends AuditModel {
     private Long loanApplicationId;
 
     /**
-     * Customer ID (reference from Customer Service).
-     */
-    @Column(name = "customer_id", nullable = false)
-    private Long customerId;
-
-    /**
      * Account ID for receiving disbursement and making repayments.
      */
     @Column(name = "account_id", nullable = false)
