@@ -3,7 +3,7 @@ package com.ojt.klb.service.impl;
 import com.ojt.klb.exception.*;
 import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.kafka.TransactionNotification;
-//import com.ojt.klb.kafka.TransactionProducer;
+import com.ojt.klb.kafka.TransactionProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
@@ -11,7 +11,7 @@ import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
 import com.ojt.klb.model.request.TransactionRequest;
-import com.ojt.klb.model.response.Response;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +35,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository repository;
     private final AccountClient accountClient;
     private final TransactionMapper mapper = new TransactionMapper();
-//    private final TransactionProducer transactionProducer;
+    private final TransactionProducer transactionProducer;
 
     @Override
-    public Response handleTransaction(TransactionDto transactionDto) {
+    public ApiResponse handleTransaction(TransactionDto transactionDto) {
         var rs = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
         ResponseEntity<Account> response = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
         if (Objects.isNull(response.getBody())){
@@ -78,18 +78,18 @@ public class TransactionServiceImpl implements TransactionService {
 
         repository.save(transaction);
 
-//        transactionProducer.sendTransactionNotification(
-//                new TransactionNotification(
-//                        referenceNumber,
-//                        transactionDto.getAccountNumber(),
-//                        transactionDto.getTransactionType(),
-//                        transactionDto.getAmount(),
-//                        LocalDateTime.now(),
-//                        transactionDto.getDescription()
-//                )
-//        );
+        transactionProducer.sendTransactionNotification(
+                new TransactionNotification(
+                        referenceNumber,
+                        account,
+                        transactionDto.getTransactionType(),
+                        transactionDto.getAmount(),
+                        LocalDateTime.now(),
+                        transactionDto.getDescription()
+                )
+        );
 
-        return Response.builder()
+        return ApiResponse.builder()
                 .message("Transaction completed successfully")
                 .status(200)
                 .success(true)
@@ -128,7 +128,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Response internalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
+    public ApiResponse internalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
         transactions.forEach(transaction -> {
@@ -138,7 +138,7 @@ public class TransactionServiceImpl implements TransactionService {
         });
 
         repository.saveAll(transactions);
-        return Response.builder()
+        return ApiResponse.builder()
                 .status(200)
                 .success(true)
                 .message("Transaction completed successfully").build();

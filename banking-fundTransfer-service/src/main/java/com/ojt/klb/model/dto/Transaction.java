@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class Transaction {
 
-    private String accountNumber;
+    private Long accountNumber;
 
     private String transactionType;
 

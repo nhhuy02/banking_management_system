@@ -11,15 +11,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InternalTransferNotification {
-//    private String emailCustomerSend;
-//    private String emailCustomerReceive;
-//    private Long customerSendId;
-//    private Long customerReceiveId;
+    private String emailCustomerSend;
+    private String emailCustomerReceive;
+    private Long customerSendId;
+    private Long customerReceiveId;
     private String transactionId;
+    private String transactionType;
     private LocalDateTime transactionDate;
     private String senderBankAccount;
     private String receiveBankAccount;
-//    private String recipientName;
+    private String recipientName;
     private BigDecimal amounts;
     private String description;
     private BigDecimal balanceAccountSend;

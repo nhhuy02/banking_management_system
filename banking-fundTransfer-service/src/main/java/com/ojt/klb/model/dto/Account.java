@@ -1,11 +1,14 @@
 package com.ojt.klb.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -13,15 +16,36 @@ import java.math.BigDecimal;
 @Builder
 public class Account {
 
-    private Long accountId;
+    private String fullName;
 
-    private String accountNumber;
+    private String accountName;
 
-    private String accountType;
+    private Long accountNumber;
 
-    private String accountStatus;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
-    private BigDecimal availableBalance;
+    private String gender;
 
-//    private Long userId;
+    private String email;
+
+    private String phoneNumber;
+
+    private String permanentAddress;
+
+    private String currentAddress;
+
+    private BigDecimal balance;
+
+    private Account.Status status ;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp openingDate;
+
+    public enum Status {
+        active,
+        suspended,
+        closed
+    }
+
 }

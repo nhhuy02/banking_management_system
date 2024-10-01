@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Response {
+public class ApiResponse<T> {
 
     private int status;
     private String message;
     private boolean success;
-    private Object data;
+    private T data;
 
-    public Response(int status, String message, boolean success) {
+    public ApiResponse(int status, String message, boolean success) {
         this.status = status;
         this.message = message;
         this.success = success;
     }
 }
+
 

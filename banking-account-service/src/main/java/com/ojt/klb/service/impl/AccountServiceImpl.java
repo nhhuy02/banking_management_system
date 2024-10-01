@@ -147,7 +147,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto readAccountByAccountNumber(Long accountNumber) {
 
-        return accountRepository.findAccountByAccountNumber(Long.valueOf(accountNumber))
+        return accountRepository.findAccountByAccountNumber(accountNumber)
                 .map(account -> {
                     AccountDto accountDto = accountMapper.toDto(account);
                     return accountDto;

@@ -1,7 +1,7 @@
 package com.ojt.klb.external;
 
 import com.ojt.klb.model.dto.Transaction;
-import com.ojt.klb.model.response.Response;
+import com.ojt.klb.model.response.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +14,8 @@ import java.util.List;
 public interface TransactionClient {
 
     @PostMapping
-    ResponseEntity<Response> handleTransaction(@RequestBody Transaction transaction);
+    ResponseEntity<ApiResponse> handleTransaction(@RequestBody Transaction transaction);
 
     @PostMapping("/internal")
-    ResponseEntity<Response> makeInternalTransactions(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
+    ResponseEntity<ApiResponse> makeInternalTransactions(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
 }

@@ -2,7 +2,7 @@ package com.ojt.klb.controller;
 
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.request.TransactionRequest;
-import com.ojt.klb.model.response.Response;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ public class TransactionController {
     private final TransactionService service;
 
     @PostMapping
-    public ResponseEntity<Response> handleTransaction(@Valid @RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<ApiResponse> handleTransaction(@Valid @RequestBody TransactionDto transactionDto) {
         return new ResponseEntity<>(service.handleTransaction(transactionDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/internal")
-    public ResponseEntity<Response> makeInternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
+    public ResponseEntity<ApiResponse> makeInternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
         return new ResponseEntity<>(service.internalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
     }
 

@@ -28,7 +28,7 @@ public class FundTransferController {
         return new ResponseEntity<>(fundTransferService.getTransferDetailsFromReferenceNumber(referenceNumber), HttpStatus.OK);
     }
     @GetMapping
-    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountNumber(@RequestParam String accountNumber) {
+    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountNumber(@RequestParam Long accountNumber) {
         return new ResponseEntity<>(fundTransferService.getAllTransferByAccountNumber(accountNumber), HttpStatus.OK);
     }
 
