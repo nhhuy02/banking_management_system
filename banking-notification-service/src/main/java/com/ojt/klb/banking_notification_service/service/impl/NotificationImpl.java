@@ -8,7 +8,6 @@ import com.ojt.klb.banking_notification_service.dto.consumer.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
 import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
 import com.ojt.klb.banking_notification_service.dto.consumer.TransactionData;
-import com.ojt.klb.banking_notification_service.entity.Notification;
 import com.ojt.klb.banking_notification_service.entity.NotificationTemplate;
 import com.ojt.klb.banking_notification_service.repository.NotificationRepository;
 import com.ojt.klb.banking_notification_service.repository.NotificationTemplateRepository;
@@ -22,7 +21,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +39,7 @@ public class NotificationImpl implements NotificationService {
 
     @Override
     @KafkaListener(topics = "otp-email-topic", groupId = "otp_group", containerFactory = "otpKafkaListenerContainerFactory")
-    public void sendMailVerifyOTP(OtpEmailRequestDto customerData) {
+    public String sendMailVerifyOTP(OtpEmailRequestDto customerData) {
         String email = customerData.getEmail();
         log.warn("email otp: {}", email);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.OTP.statusCodeValue());
@@ -52,7 +50,7 @@ public class NotificationImpl implements NotificationService {
         variables.put("verificationCode", customerData.getOtpCode());
 
         // Gửi email với template
-         mailConfig.send(email, subject, "otp_template", variables);
+        return mailConfig.send(email, subject, "otp_template", variables);
 
     }
 
@@ -64,58 +62,28 @@ public class NotificationImpl implements NotificationService {
 
     @Override
     @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
-    public void sendMailPaymentReceipt(TransactionData transactionData) {
-        String emailCustomerSend = transactionData.getEmailCustomerSend();
-        log.warn("email trans: {}", emailCustomerSend);
-        NotificationTemplate notificationTemplate1 = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
-        String subject1 =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate1.getSubjectTemplate();
+    public String sendMailPaymentReceipt(TransactionData transactionData) {
+        String email = transactionData.getEmail();
+        log.warn("email trans: {}", email);
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
-        Notification notification1 = new Notification();
-        notification1.setCreatedAt(LocalDateTime.now());
-        notification1.setSendDate(LocalDateTime.now());
-        notification1.setNotificationTemplateId(notificationTemplate1.getId());
-        notification1.setCustomerId(transactionData.getCustomerReceiveId());
-        notification1.setContent(StringUtils.convertContentDecreaseBalance(transactionData.getSenderBankAccount(),transactionData.getAmounts(), transactionData.getBalanceAccountReceive()));
+        Map<String, Object> variables = new HashMap<>();
 
-        Map<String, Object> variables1  = new HashMap<>();
-        variables1.put("transactionDate", StringUtils.convertDateTime(transactionData.getTransactionDate()));
-        variables1.put("transId", transactionData.getTransactionId());
-        variables1.put("sendAccount", transactionData.getSenderBankAccount());
-        variables1.put("receiveAccount", transactionData.getReceiveBankAccount());
-        variables1.put("recipientName", transactionData.getRecipientName());
-        variables1.put("amount", StringUtils.convertVND(transactionData.getAmounts()));
-        variables1.put("content", transactionData.getDescription());
-
-        mailConfig.send(emailCustomerSend, subject1, "payment_receipt", variables1);
-        notificationRepository.save(notification1);
-
-        String emailCustomerReceive = transactionData.getEmailCustomerReceive();
-        NotificationTemplate notificationTemplate2 = notificationTemplateRepository.getByTemplateName(ResponseMessage.BALANCE_CHANGE.statusCodeValue());
-        String subject2 =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate2.getSubjectTemplate();
-
-        Notification notification2 = new Notification();
-        notification2.setCreatedAt(LocalDateTime.now());
-        notification2.setSendDate(LocalDateTime.now());
-        notification2.setNotificationTemplateId(notificationTemplate2.getId());
-        notification2.setCustomerId(transactionData.getCustomerReceiveId());
-        notification2.setContent(StringUtils.convertContentIncreaseBalance(transactionData.getReceiveBankAccount(),transactionData.getAmounts(), transactionData.getBalanceAccountReceive()));
-
-        Map<String, Object> variables2  = new HashMap<>();
-        variables2.put("customerName", transactionData.getRecipientName());
-        variables2.put("accountNumber", transactionData.getReceiveBankAccount());
-        variables2.put("balance", StringUtils.convertVND(transactionData.getBalanceAccountReceive()));
-        variables2.put("transactionAmount", ResponseMessage.INCREASE.statusCodeValue() + StringUtils.convertVND(transactionData.getAmounts()));
-        variables2.put("transactionDate", StringUtils.convertDateTime(transactionData.getTransactionDate()));
-        variables2.put("content", transactionData.getDescription());
-
-        mailConfig.send(emailCustomerReceive,subject2,"balance_change_notification",variables2);
-        notificationRepository.save(notification2);
-
+        variables.put("transactionDate", StringUtils.convertDateTime(transactionData.getTransactionDate()));
+        variables.put("transId", transactionData.getTransactionId());
+        variables.put("sendAccount", transactionData.getSenderBankAccount());
+        variables.put("receiveAccount", transactionData.getReceiveBankAccount());
+        variables.put("recipientName", transactionData.getRecipientName());
+        variables.put("amount", StringUtils.convertVND(transactionData.getAmounts()));
+        variables.put("content", transactionData.getDescription());
+        // Gửi email với template
+        return mailConfig.send(email, subject, "payment_receipt", variables);
     }
 
     @Override
     @KafkaListener(topics = "loan-topic", groupId = "group_id")
-    public void sendMailPaymentReminder(LoanData loanData) {
+    public String sendMailPaymentReminder(LoanData loanData) {
         String email = loanData.getEmail();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_REMINDER.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
@@ -124,12 +92,12 @@ public class NotificationImpl implements NotificationService {
         variables.put("contractNumber", loanData.getContractNumber());
         variables.put("amounts", StringUtils.convertVND(loanData.getAmounts()));
         variables.put("deadline",StringUtils.convertDateTime(loanData.getDeadline()));
-         mailConfig.send(email, subject, "payment_reminder", variables);
+        return mailConfig.send(email, subject, "payment_reminder", variables);
     }
 
     @Override
     @KafkaListener(topics = "data-account-topic", groupId = "account_group", containerFactory = "accountDataKafkaListenerContainerFactory")
-    public void sendMailRegister(AccountData accountData) {
+    public String sendMailRegister(AccountData accountData) {
         String email = accountData.getEmail();
         log.warn("email register: {}", email);
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.REGISTER.statusCodeValue());
@@ -141,7 +109,7 @@ public class NotificationImpl implements NotificationService {
         variables.put("accountType", accountData.getAccountName());
         variables.put("phoneNumber", accountData.getPhoneNumber());
 
-         mailConfig.send(email, subject, "account_creation_success", variables);
+        return mailConfig.send(email, subject, "account_creation_success", variables);
     }
 
 }
