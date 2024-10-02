@@ -10,7 +10,7 @@ spring:
 #    username: sql12731981
 #    password: SlXUJG2wlZ
 #
-    url: jdbc:mysql://localhost:3306/AccountService
+    url: jdbc:mysql://localhost:3306/account_service
     username: root
     password: root
   jpa:
