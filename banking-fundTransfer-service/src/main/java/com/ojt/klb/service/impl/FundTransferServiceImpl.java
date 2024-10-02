@@ -104,19 +104,23 @@ public class FundTransferServiceImpl implements FundTransferService {
         fundTransferRepository.save(fundTransfer);
 
 
-        var fromAccountBalance = accountClient.accountBalance(fromAccount.getAccountNumber());
-        var toAccountBalance = accountClient.accountBalance(toAccount.getAccountNumber());
+        var fromAccountBalance  = accountClient.accountBalance(fromAccount.getAccountNumber()).getBody();
+
+        var toAccountBalance = accountClient.accountBalance(toAccount.getAccountNumber()).getBody();
+
 
         internalTransferProducer.sendInternalTransferNotification(
                 new InternalTransferNotification(
                         fromAccount.getEmail(),
                         toAccount.getEmail(),
+                        fromAccount.getCustomerId(),
+                        toAccount.getCustomerId(),
                         transactionReference,
-                        TransferType.valueOf(TransferType.INTERNAL.toString()),
+                        TransferType.INTERNAL.toString(),
                         transferredOn,
                         fromAccount.getAccountNumber(),
                         toAccount.getAccountNumber(),
-                        toAccount.getAccountName(),
+                        toAccountResponse.getData().getFullName(),
                         fundTransferRequest.getAmount(),
                         fundTransfer.getDescription(),
                         fromAccountBalance,

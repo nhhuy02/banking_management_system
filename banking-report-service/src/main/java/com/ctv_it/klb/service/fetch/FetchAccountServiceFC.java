@@ -48,23 +48,11 @@ public class FetchAccountServiceFC {
       FetchResponseDTO<FetchAccountDataDTO> fetchResponseDTO = accountServiceFC.getAccountById(id);
       log.info("getSavingsAccountById({}): {}", id, fetchResponseDTO);
 
-      if (fetchResponseDTO.isSuccess() && fetchResponseDTO.getData() != null) {
-        return fetchResponseDTO.getData();
-      } else {
-        if (Objects.equals(HttpStatus.SC_BAD_REQUEST, fetchResponseDTO.getStatus())) {
-          throw new InvalidExceptionCustomize(
-              Collections.singletonList(
-                  ErrorDetailDTO.builder()
-                      .message(fetchResponseDTO.getMessage())
-                      .build()));
-        } else {
-          throw new InternalError(fetchResponseDTO.getMessage());
-        }
-      }
+      return fetchResponseDTO.getData();
     } catch (Exception ex) {
-      log.error("Error fetch saving-account from account service: {}", ex.getMessage());
+      log.error("Error fetch saving-account with id={} from account service: {}", id,
+          ex.getMessage());
       throw ex;
     }
   }
-
 }

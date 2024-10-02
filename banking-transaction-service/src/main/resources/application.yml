@@ -21,10 +21,6 @@ spring:
       properties:
         spring.json.type.mapping: transactionNotification:com.ojt.klb.kafka.TransactionNotification
 
-application:
-  config:
-    account-url: http://localhost:8040/api/v1/accounts
-
 logging:
   level:
     org.apache.kafka.clients.producer: DEBUG

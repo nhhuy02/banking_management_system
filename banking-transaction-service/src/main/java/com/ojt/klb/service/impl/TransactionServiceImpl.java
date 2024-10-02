@@ -80,10 +80,16 @@ public class TransactionServiceImpl implements TransactionService {
 
         repository.save(transaction);
 
+        BigDecimal balance = accountClient.accountBalance(account.getAccountNumber()).getBody();
+
         transactionProducer.sendTransactionNotification(
                 new TransactionNotification(
+                        apiResponse.getData().getEmail(),
                         referenceNumber,
-                        account,
+                        account.getCustomerId(),
+                        apiResponse.getData().getAccountNumber(),
+                        apiResponse.getData().getFullName(),
+                        balance,
                         transactionDto.getTransactionType(),
                         transactionDto.getAmount(),
                         LocalDateTime.now(),

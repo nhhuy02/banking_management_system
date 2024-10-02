@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -110,6 +111,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     private void getData(AccountDto customerData, String accountName, String accountNumber) {
+        customerData.setCustomerId(customerData.getCustomerId());
         customerData.setFullName(customerData.getFullName());
         customerData.setAccountName(accountName);
         customerData.setAccountNumber(accountNumber);
@@ -159,9 +161,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String getBalance(String accountNumber) {
+    public BigDecimal getBalance(String accountNumber) {
         return accountRepository.findAccountByAccountNumber(accountNumber)
-                .map(account -> account.getBalance().toString())
+                .map(account -> account.getBalance())
                 .orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
     }
 

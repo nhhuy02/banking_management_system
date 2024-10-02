@@ -19,7 +19,6 @@ public class JacksonConfiguration {
   public ObjectMapper objectMapper() {
 
     ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(createJavaTimeModule());
 
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
@@ -29,6 +28,8 @@ public class JacksonConfiguration {
 
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+    mapper.registerModule(createJavaTimeModule());
+
     return mapper;
   }
 
@@ -36,6 +37,7 @@ public class JacksonConfiguration {
     JavaTimeModule javaTimeModule = new JavaTimeModule();
 
     javaTimeModule.addDeserializer(Object.class, new GenericCustomDeserializer());
+    javaTimeModule.addDeserializer(LocalDateTime.class, new MultiFormatLocalDateTimeDeserializer());
 
     javaTimeModule.addSerializer(LocalDate.class,
         new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));

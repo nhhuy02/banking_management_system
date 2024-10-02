@@ -4,10 +4,7 @@ import com.ojt.klb.banking_notification_service.core.StringUtils;
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
 import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
 import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
-import com.ojt.klb.banking_notification_service.dto.consumer.AccountData;
-import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
-import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
-import com.ojt.klb.banking_notification_service.dto.consumer.TransactionData;
+import com.ojt.klb.banking_notification_service.dto.consumer.*;
 import com.ojt.klb.banking_notification_service.entity.Notification;
 import com.ojt.klb.banking_notification_service.entity.NotificationTemplate;
 import com.ojt.klb.banking_notification_service.repository.NotificationRepository;
@@ -16,9 +13,11 @@ import com.ojt.klb.banking_notification_service.service.MailService;
 import com.ojt.klb.banking_notification_service.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -30,6 +29,7 @@ import java.util.Map;
 @Slf4j
 public class NotificationImpl implements NotificationService {
 
+
     @Autowired
     private SpringTemplateEngine templateEngine;
     @Autowired
@@ -38,6 +38,9 @@ public class NotificationImpl implements NotificationService {
     NotificationTemplateRepository notificationTemplateRepository;
     @Autowired
     NotificationRepository notificationRepository;
+    @Qualifier("loanAppKafkaListenerContainerFactory")
+    @Autowired
+    private ConcurrentKafkaListenerContainerFactory loanAppKafkaListenerContainerFactory;
 
     @Override
     @KafkaListener(topics = "otp-email-topic", groupId = "otp_group", containerFactory = "otpKafkaListenerContainerFactory")
@@ -63,8 +66,8 @@ public class NotificationImpl implements NotificationService {
     }
 
     @Override
-    @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
-    public void sendMailPaymentReceipt(TransactionData transactionData) {
+    @KafkaListener(topics = "internalTransfer-topic", groupId = "trans_group",containerFactory = "transactionInternalDataConcurrentKafkaListenerContainerFactory")
+    public void sendMailPaymentReceipt(TransactionInternalData transactionData) {
         String emailCustomerSend = transactionData.getEmailCustomerSend();
         log.warn("email trans: {}", emailCustomerSend);
         NotificationTemplate notificationTemplate1 = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
@@ -112,6 +115,51 @@ public class NotificationImpl implements NotificationService {
         notificationRepository.save(notification2);
 
     }
+    @Override
+    @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
+    public void sendMailTrans(TransData transData) {
+        String email = transData.getEmail();
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.BALANCE_CHANGE.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
+
+        Map<String, Object> variables2  = new HashMap<>();
+        String content,transactionAmount = "";
+
+        if(transData.getTransactionType().equalsIgnoreCase("DEPOSIT")){
+            content = "NẠP TIỀN";
+            transactionAmount = ResponseMessage.INCREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+        } else {
+            content = "RÚT TIỀN";
+            transactionAmount = ResponseMessage.DECREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+        }
+
+        variables2.put("customerName", transData.getCustomerName());
+        variables2.put("accountNumber", transData.getAccountNumber());
+        variables2.put("balance", StringUtils.convertVND(transData.getBalance()));
+        variables2.put("transactionAmount", transactionAmount);
+        variables2.put("transactionDate", StringUtils.convertDateTime(transData.getLocalDateTime()));
+        variables2.put("content", content);
+
+        mailConfig.send(email,subject,"balance_change_notification",variables2);
+    }
+
+    @Override
+    @KafkaListener(topics = "loan_application", groupId = "loan_group",containerFactory = "loanAppKafkaListenerContainerFactory")
+    public void sendMailLoanApplication(LoanDto loanDto) {
+        String email = loanDto.getEmail();
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.LOAN.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("customerName", loanDto.getCustomerName());
+        variables.put("applicationNumber", loanDto.getLoanApplicationId());
+        variables.put("loanAmount", StringUtils.convertVND(loanDto.getAmounts()));
+        String status = "";
+        if (loanDto.getStatus().equalsIgnoreCase("PENDING")) { status = "Chờ Duyệt";}
+        variables.put("status", status);
+        mailConfig.send(email, subject, "loan_application", variables);
+    }
+
+
 
     @Override
     @KafkaListener(topics = "loan-topic", groupId = "group_id")

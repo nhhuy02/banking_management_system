@@ -1,5 +1,8 @@
 package com.app.bankingloanservice.service.impl;
 
+import com.app.bankingloanservice.client.account.AccountClient;
+import com.app.bankingloanservice.client.account.dto.AccountDto;
+import com.app.bankingloanservice.client.account.dto.ApiResponse;
 import com.app.bankingloanservice.constant.ApplicationStatus;
 import com.app.bankingloanservice.dto.*;
 import com.app.bankingloanservice.entity.Collateral;
@@ -17,11 +20,14 @@ import com.app.bankingloanservice.service.LoanApplicationService;
 import com.app.bankingloanservice.service.LoanTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -36,6 +42,12 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final LoanTypeService loanTypeService;
     private final LoanApplicationMapper loanApplicationMapper;
     private final DocumentMapper documentMapper;
+
+    private  final AccountClient accountClient;
+    private static final String TOPIC = "loan_application";
+
+    @Autowired
+    private KafkaTemplate<String, LoanApplicationProducer> kafkaTemplate;
 
     @Override
     public LoanApplicationResponse createLoanApplication(LoanApplicationRequest loanApplicationRequest) {
@@ -87,6 +99,20 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         // Create a DTO to return the saved Loan Application
         LoanApplicationResponse loanApplicationResponse = loanApplicationMapper.toResponse(loanApplication);
         log.debug("Converted LoanApplicationResponse: {}", loanApplicationResponse);
+
+        //kafka producer
+        LoanApplicationProducer loanApplicationProducer = new LoanApplicationProducer();
+        loanApplicationProducer.setLoanApplicationId(loanApplicationResponse.getLoanApplicationId());
+        loanApplicationProducer.setAmounts(BigDecimal.valueOf(loanApplicationResponse.getDesiredLoanAmount()));
+        loanApplicationProducer.setLoanTermMonths(loanApplicationResponse.getDesiredLoanTermMonths());
+        loanApplicationProducer.setStatus(String.valueOf(loanApplicationResponse.getApplicationStatus()));
+        loanApplicationProducer.setReviewTimeDays(loanApplicationResponse.getLoanTypeDto().getReviewTimeDays());
+        ApiResponse<AccountDto> response = accountClient.getAccountById(loanApplicationResponse.getAccountId());
+        loanApplicationProducer.setCustomerId(response.getData().getCustomerId());
+        loanApplicationProducer.setEmail(response.getData().getEmail());
+        loanApplicationProducer.setCustomerName(response.getData().getFullName());
+        loanApplicationProducer.setSubmissionDate(loanApplicationResponse.getSubmissionDate());
+        kafkaTemplate.send(TOPIC,loanApplicationProducer);
 
         return loanApplicationResponse;
     }

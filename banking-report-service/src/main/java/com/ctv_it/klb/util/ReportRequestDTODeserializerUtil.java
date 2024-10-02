@@ -39,7 +39,7 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
 
     checkForUnrecognizedFields(node, ReportRequestDTO.class);
 
-    long customerId = getCustomerId(node);
+//    long customerId = getCustomerId(node);
     ReportType type = getType(node);
     ReportFormat format = getFormat(node);
 
@@ -47,44 +47,43 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
     ReportFilterDTO filters = getFilters(p, node, type);
 
     return ReportRequestDTO.builder()
-        .customerId(customerId)
         .reportType(type)
         .reportFormat(format)
         .reportFilters(filters)
         .build();
   }
 
-  private long getCustomerId(JsonNode node) {
-    JsonNode customerIdNode = node.get("customerId");
-    if (customerIdNode == null) {
-      throw new InvalidExceptionCustomize(Collections.singletonList(
-          ErrorDetailDTO.builder()
-              .field("customerId")
-              .rejectedValue(null)
-              .message(Translator.toLocale("error.invalid.null")).build()));
-    }
-
-    // Ensure that the value is an integral number (not floating-point)
-    if (!customerIdNode.isIntegralNumber()) {
-      throw new InvalidExceptionCustomize(Collections.singletonList(
-          ErrorDetailDTO.builder()
-              .field("customerId")
-              .rejectedValue(customerIdNode)
-              .message(
-                  Translator.toLocale(
-                      "error.invalid.json-parse-3",
-                      "'" + customerIdNode + "'",
-                      "'Long'",
-                      "'customerId'"
-                  ))
-              .build()));
-    }
-
-    long customerId = customerIdNode.asLong();
-    log.info("customerId: {}", customerId);
-
-    return customerId;
-  }
+//  private long getCustomerId(JsonNode node) {
+//    JsonNode customerIdNode = node.get("customerId");
+//    if (customerIdNode == null) {
+//      throw new InvalidExceptionCustomize(Collections.singletonList(
+//          ErrorDetailDTO.builder()
+//              .field("customerId")
+//              .rejectedValue(null)
+//              .message(Translator.toLocale("error.invalid.null")).build()));
+//    }
+//
+//    // Ensure that the value is an integral number (not floating-point)
+//    if (!customerIdNode.isIntegralNumber()) {
+//      throw new InvalidExceptionCustomize(Collections.singletonList(
+//          ErrorDetailDTO.builder()
+//              .field("customerId")
+//              .rejectedValue(customerIdNode)
+//              .message(
+//                  Translator.toLocale(
+//                      "error.invalid.json-parse-3",
+//                      "'" + customerIdNode + "'",
+//                      "'Long'",
+//                      "'customerId'"
+//                  ))
+//              .build()));
+//    }
+//
+//    long customerId = customerIdNode.asLong();
+//    log.info("customerId: {}", customerId);
+//
+//    return customerId;
+//  }
 
   private ReportType getType(JsonNode node) {
     String fieldName = "reportType";

@@ -1,6 +1,7 @@
 package com.ctv_it.klb.config.exception;
 
 import com.ctv_it.klb.config.i18n.Translator;
+import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import com.fasterxml.jackson.core.JsonParser;
@@ -196,5 +197,16 @@ public class GlobalExceptionHandler {
         "Malformed JSON request. " + (mie.getMessage() != null ? mie.getMessage() : "");
     log.error("MismatchedInputException: Field: {}, Message: {}", field, message);
     return createErrorDetail(field, message);
+  }
+
+  @ExceptionHandler(FetchErrorResponseExceptionCustomize.class)
+  public ResponseEntity<ErrorResponseDTO> handleFetchErrorResponseExceptionCustomize(
+      FetchErrorResponseExceptionCustomize ex,
+      HttpServletRequest request) {
+
+    FetchResponseDTO<?> fetchResponseDTO = ex.getFetchResponseDTO();
+
+    return buildErrorResponse(HttpStatus.valueOf(fetchResponseDTO.getStatus()),
+        fetchResponseDTO.getMessage(), null, request);
   }
 }
