@@ -13,6 +13,7 @@ public class AccountDto {
 
 //    @JsonIgnore
 //    private Long id;
+    private Long customerId;
 
     private String fullName;
 
