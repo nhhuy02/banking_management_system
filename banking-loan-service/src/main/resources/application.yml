@@ -44,6 +44,16 @@ app:
     storage:
       directory: banking-loan-docs/
 
+  loan:
+    disbursement:
+      source-account-number: 12345678901234567890
+
+  fund-transfer-client:
+    url: http://localhost:8090/api/v1/fund_transfer
+
+  account-client:
+    url: http://localhost:8080/api/v1/account
+
 logging:
   file:
     name: logs/access_log.log

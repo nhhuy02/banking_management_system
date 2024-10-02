@@ -4,6 +4,7 @@ import com.app.bankingloanservice.constant.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class Loan extends AuditModel {
 
     // The amount of the loan in VND.
     @Column(name = "loan_amount", nullable = false)
-    private Long loanAmount;
+    private BigDecimal loanAmount;
 
     // The type of interest rate (fixed or floating).
     @Enumerated(EnumType.STRING)
@@ -98,11 +99,11 @@ public class Loan extends AuditModel {
 
     // The remaining balance of the loan in VND.
     @Column(name = "remaining_balance", nullable = false)
-    private Long remainingBalance;
+    private BigDecimal remainingBalance;
 
     // The total amount that has been paid towards the loan in VND.
     @Column(name = "total_paid_amount", nullable = false)
-    private Long totalPaidAmount;
+    private BigDecimal totalPaidAmount;
 
     // Indicates whether the loan is classified as a bad debt.
     @Column(name = "is_bad_debt", nullable = false)

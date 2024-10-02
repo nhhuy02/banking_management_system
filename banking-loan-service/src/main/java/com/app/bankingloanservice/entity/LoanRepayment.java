@@ -4,6 +4,7 @@ import com.app.bankingloanservice.constant.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -35,25 +36,25 @@ public class LoanRepayment extends AuditModel {
      * The principal amount to be repaid in this schedule.
      */
     @Column(name = "principal_amount", nullable = false)
-    private Long principalAmount;
+    private BigDecimal principalAmount;
 
     /**
      * The interest amount to be repaid in this schedule.
      */
     @Column(name = "interest_amount", nullable = false)
-    private Long interestAmount;
+    private BigDecimal interestAmount;
 
     /**
      * The late payment interest amount, if applicable.
      */
     @Column(name = "late_payment_interest_amount", nullable = false)
-    private Long latePaymentInterestAmount;
+    private BigDecimal latePaymentInterestAmount;
 
     /**
      * The total amount to be repaid in this schedule.
      */
     @Column(name = "total_amount", nullable = false)
-    private Long totalAmount;
+    private BigDecimal totalAmount;
 
     /**
      * The due date for this repayment schedule.
