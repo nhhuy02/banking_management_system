@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class TransactionData {
+    private String transactionType;
     @Schema(description = "Email người chuyển")
     private String emailCustomerSend;
     @Schema(description = "Email người nhận")
