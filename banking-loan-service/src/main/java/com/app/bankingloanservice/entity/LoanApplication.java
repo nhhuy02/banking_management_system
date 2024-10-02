@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class LoanApplication extends AuditModel {
      * Customer's monthly income.
      */
     @Column(name = "monthly_income", nullable = false)
-    private Long monthlyIncome;
+    private BigDecimal monthlyIncome;
 
     /**
      * Customer's occupation.
@@ -61,7 +62,7 @@ public class LoanApplication extends AuditModel {
      * Desired loan amount.
      */
     @Column(name = "desired_loan_amount", nullable = false)
-    private Long desiredLoanAmount;
+    private BigDecimal desiredLoanAmount;
 
     /**
      * Desired loan term in months.

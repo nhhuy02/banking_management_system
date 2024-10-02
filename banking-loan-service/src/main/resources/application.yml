@@ -1,11 +1,20 @@
+server:
+  port: 8060
+
 spring:
   application:
     name: banking-loan-service
+  config:
+    import: optional:configserver:http://localhost:8888
 
   datasource:
-    url: jdbc:mysql://localhost:3306/loan_service
-    username: chienma
-    password: chienma_password
+#    url: jdbc:mysql://localhost:3306/loan_service
+#    username: chienma
+#    password: chienma_password
+
+    url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,6 +25,12 @@ spring:
       enabled: true
       max-file-size: 20MB
       max-request-size: 40MB
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 # OpenAPI config
 springdoc:
@@ -28,6 +43,16 @@ app:
   file:
     storage:
       directory: banking-loan-docs/
+
+  loan:
+    disbursement:
+      source-account-number: 12345678901234567890
+
+  fund-transfer-client:
+    url: http://localhost:8090/api/v1/fund_transfer
+
+  account-client:
+    url: http://localhost:8080/api/v1/account
 
 logging:
   file:

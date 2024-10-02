@@ -4,6 +4,7 @@ import com.app.bankingloanservice.constant.CollateralStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -58,7 +59,7 @@ public class Collateral extends AuditModel {
      * The value of the collateral in VND.
      */
     @Column(name = "collateral_value")
-    private Long collateralValue;
+    private BigDecimal collateralValue;
 
     /**
      * Detailed description of the collateral.

@@ -15,6 +15,7 @@ public enum ResponseMessage {
     DECREASE(208, "-"),
     CONTENT_BALANCE(209, "Biến động số dư: TK "),
     BALANCE(210, "Số dư "),
+    LOAN(211, "LOAN APPLICATION "),
     ;
     private final int statusCode;
     private final String statusCodeValue;

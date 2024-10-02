@@ -1,6 +1,5 @@
 package com.ctv_it.klb.config.mapper;
 
-import com.ctv_it.klb.common.Default.LocalDateTimeFormat;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -9,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,9 +38,9 @@ public class JacksonConfiguration {
     javaTimeModule.addDeserializer(Object.class, new GenericCustomDeserializer());
 
     javaTimeModule.addSerializer(LocalDate.class,
-        new LocalDateSerializer(LocalDateTimeFormat.LOCAL_DATE_FORMAT));
+        new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));
     javaTimeModule.addSerializer(LocalDateTime.class,
-        new LocalDateTimeSerializer(LocalDateTimeFormat.LOCAL_DATE_TIME_FORMAT));
+        new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
     return javaTimeModule;
   }
