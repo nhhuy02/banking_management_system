@@ -118,14 +118,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void forgetPassword(Long userId, String newPassword) {
-        Optional<User> user = userRepository.findById(userId);
+    public void forgetPassword(String email) {
+        Optional<User> user = userRepository.findByPhoneNumber(email);
         if (user.isPresent()) {
-            user.get().setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user.get());
             logger.info("Updated password for user: {}", user.get().getUsername());
         } else {
-            throw new UserNotFoundException("User with ID " + userId + " not found.");
+            throw new UserNotFoundException("User with phoneNumber " + email + " not found.");
         }
     }
 }
