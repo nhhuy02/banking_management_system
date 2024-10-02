@@ -111,6 +111,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         loanApplicationProducer.setCustomerId(response.getData().getCustomerId());
         loanApplicationProducer.setEmail(response.getData().getEmail());
         loanApplicationProducer.setCustomerName(response.getData().getFullName());
+        loanApplicationProducer.setSubmissionDate(loanApplicationResponse.getSubmissionDate());
         kafkaTemplate.send(TOPIC,loanApplicationProducer);
 
         return loanApplicationResponse;
