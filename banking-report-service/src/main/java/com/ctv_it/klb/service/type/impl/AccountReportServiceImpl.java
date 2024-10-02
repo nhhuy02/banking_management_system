@@ -30,8 +30,11 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
   public AccountReportDTO search(ReportRequestDTO reportRequestDTO) {
     log.info(Translator.toLocale("msg.called", "AccountReportServiceImpl::search"));
 
+    AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
+
     FetchCustomerDataDTO fetchCustomerDataDTO = fetchCustomerServiceFC.findByAccountId(
-        reportRequestDTO.getCustomerId());
+        accountFilterDTO.getAccountId());
+
     CustomerInfoDTO customerInfo = CustomerInfoDTO.builder()
         .fullName(fetchCustomerDataDTO.getFullName())
         .email(fetchCustomerDataDTO.getEmail())
@@ -45,8 +48,6 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
     List<AccountInfoDTO> accountInfoDTOS = new ArrayList<>();
 
-    AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
-    // get account info
     FetchAccountDataDTO fetchAccountDataDTO = fetchAccountServiceFC.getAccountById(
         accountFilterDTO.getAccountId());
     AccountInfoDTO accountInfo = AccountInfoDTO.builder()

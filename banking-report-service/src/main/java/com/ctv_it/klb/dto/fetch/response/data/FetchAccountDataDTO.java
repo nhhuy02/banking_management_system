@@ -18,6 +18,7 @@ import lombok.ToString;
 public class FetchAccountDataDTO {
 
   private Long id;
+  private Long customerId;
   private String accountName;
   private String accountNumber;
   private BigDecimal balance;
