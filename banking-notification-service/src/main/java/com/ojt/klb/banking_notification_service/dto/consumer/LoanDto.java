@@ -16,12 +16,9 @@ public class LoanDto {
     private Long customerId;
     private String customerName;
     private String email;
-    @Schema(description = "Trạng thái đang được reviews/yêu cầu bổ sung tài liệu/ từ choi/ chap nhận")
     private String status;
-    @Schema(description = "khoan vay")
+    private Long loanApplicationId;
     private BigDecimal amounts;
     private Integer loanTermMonths;
     private Integer reviewTimeDays;
-    private Long loanApplicationId;
-    // data cần thiet .....
 }
