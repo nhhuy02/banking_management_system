@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller for managing loan applications.
  */
 @RestController
-@RequestMapping("/api/v1/loan-applications")
+@RequestMapping("/api/v1/loan-service/loan-applications")
 @AllArgsConstructor
 @Tag(name = "Loan Application Controller", description = "APIs related to Loan Application operations")
 @Slf4j

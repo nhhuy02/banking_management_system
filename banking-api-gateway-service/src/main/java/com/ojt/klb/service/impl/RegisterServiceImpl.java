@@ -5,6 +5,7 @@ import com.ojt.klb.dto.DataForJwt;
 import com.ojt.klb.dto.RegisterRequest;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.AuthRegisterService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class RegisterServiceImpl implements AuthRegisterService {
         this.authServiceHelper = authServiceHelper;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public String VerifyRegisterAndGenJWT(RegisterRequest registerRequest) {
         logger.info("Received register data: {}", registerRequest);
@@ -32,7 +34,7 @@ public class RegisterServiceImpl implements AuthRegisterService {
         logger.info("Response body: {}", response.getBody());
 
         try {
-            Thread.sleep(300);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             logger.error("Sleep interrupted", e);
             return null;

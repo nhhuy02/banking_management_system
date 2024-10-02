@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -29,7 +30,7 @@ public class CustomersStatusHistory {
     private Status status = Status.active;
 
     @Column(name = "changed_at", nullable = false, updatable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private Instant changedAt = Instant.now();
 
     public enum Status {

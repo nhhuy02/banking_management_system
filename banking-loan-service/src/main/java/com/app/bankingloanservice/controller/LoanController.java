@@ -3,6 +3,7 @@ package com.app.bankingloanservice.controller;
 import com.app.bankingloanservice.dto.ApiResponseWrapper;
 import com.app.bankingloanservice.dto.LoanRequest;
 import com.app.bankingloanservice.dto.LoanResponse;
+import com.app.bankingloanservice.service.LoanDisbursementService;
 import com.app.bankingloanservice.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,13 +22,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/loans")
+@RequestMapping("/api/v1/loan-service/loans")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Loan Controller", description = "APIs related to loan operations")
 public class LoanController {
 
     private final LoanService loanService;
+    private final LoanDisbursementService loanDisbursementService;
 
     /**
      * Get loan by ID.
@@ -137,4 +139,39 @@ public class LoanController {
         );
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
+    /**
+     * Endpoint for loan disbursement.
+     *
+     * @param loanId ID of the loan to be disbursed
+     * @return ApiResponseWrapper with success message
+     */
+    @PostMapping("/{loanId}/disburse")
+    @Operation(summary = "Disburse Loan", description = "Disburse the loan with the given ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Loan disbursed successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponseWrapper.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid loan ID or loan status",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Loan not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    public ResponseEntity<ApiResponseWrapper<Void>> disburseLoan(
+            @Parameter(description = "ID of the loan to be disbursed", required = true)
+            @PathVariable Long loanId) {
+        log.info("Received request to disburse loan with ID: {}", loanId);
+        loanDisbursementService.disburseLoan(loanId);
+        ApiResponseWrapper<Void> response = new ApiResponseWrapper<>(
+                HttpStatus.OK.value(),
+                true,
+                "Loan disbursed successfully.",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

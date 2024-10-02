@@ -3,7 +3,7 @@ package com.app.bankingloanservice.constant;
 /**
  * Enum representing the status of a loan.
  */
-public enum LoanStatus {
+public enum     LoanStatus {
     /**
      * The loan has been approved by the system and is pending customer approval.
      */

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import com.ojt.klb.security.JwtService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -18,10 +19,12 @@ public class AuthController {
 
     private final AuthLoginService authLoginService;
     private final AuthRegisterService authRegisterService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthLoginService authLoginService, AuthRegisterService authRegisterService) {
+    public AuthController(AuthLoginService authLoginService, AuthRegisterService authRegisterService, JwtService jwtService) {
         this.authLoginService = authLoginService;
         this.authRegisterService = authRegisterService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -57,5 +60,32 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String tokenHeader) {
+        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
+            String token = tokenHeader.substring(7);
+
+            String invalidToken = jwtService.invalidateToken(token);
+
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Logout success, see you again!",
+                    true,
+                    invalidToken
+            );
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Invalid token or not provided",
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+
 }
 

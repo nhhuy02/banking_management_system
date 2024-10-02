@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/loan-types")
+@RequestMapping("/api/v1/loan-service/loan-types")
 @RequiredArgsConstructor
 public class LoanTypeController {
 
