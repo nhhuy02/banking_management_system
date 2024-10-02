@@ -83,6 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactionProducer.sendTransactionNotification(
                 new TransactionNotification(
                         referenceNumber,
+                        account.getCustomerId(),
                         account,
                         transactionDto.getTransactionType(),
                         transactionDto.getAmount(),

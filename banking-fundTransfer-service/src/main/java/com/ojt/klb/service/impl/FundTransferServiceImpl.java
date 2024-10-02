@@ -111,6 +111,7 @@ public class FundTransferServiceImpl implements FundTransferService {
                 new InternalTransferNotification(
                         fromAccount.getEmail(),
                         toAccount.getEmail(),
+                        fromAccount.getCustomerId(),
                         transactionReference,
                         TransferType.valueOf(TransferType.INTERNAL.toString()),
                         transferredOn,
