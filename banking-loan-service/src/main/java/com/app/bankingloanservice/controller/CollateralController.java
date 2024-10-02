@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/collaterals")
+@RequestMapping("/api/v1/loan-service/collaterals")
 @RequiredArgsConstructor
 @Tag(name = "Collateral", description = "APIs for managing collaterals")
 @Slf4j
