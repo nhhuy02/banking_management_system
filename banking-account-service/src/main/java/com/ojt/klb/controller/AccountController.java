@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -106,7 +107,7 @@ public class AccountController {
     }
 
     @GetMapping("/balance")
-    public ResponseEntity<String> accountBalance(@RequestParam String accountNumber) {
+    public ResponseEntity<BigDecimal> accountBalance(@RequestParam String accountNumber) {
         return ResponseEntity.ok(accountService.getBalance(accountNumber));
     }
 }

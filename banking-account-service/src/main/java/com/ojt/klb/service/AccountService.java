@@ -6,6 +6,7 @@ import com.ojt.klb.dto.GetAllId;
 import com.ojt.klb.response.ApiResponse;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 @Service
 public interface AccountService {
@@ -15,5 +16,5 @@ public interface AccountService {
     Optional<AccountDto> getDataByAccountNumber(Long accountId);
     Optional<GetAllId> getAccountIdCustomerIdUserId(Long userId);
     ApiResponse updateAccount(String accountNumber, AccountDto accountDto);
-    String getBalance(String accountNumber);
+    BigDecimal getBalance(String accountNumber);
 }

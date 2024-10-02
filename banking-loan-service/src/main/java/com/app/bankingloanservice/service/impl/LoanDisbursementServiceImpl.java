@@ -6,7 +6,7 @@ import com.app.bankingloanservice.client.account.dto.ApiResponse;
 import com.app.bankingloanservice.client.fundtransfer.FundTransferClient;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
-import com.app.bankingloanservice.client.notification.NotificationClient;
+//import com.app.bankingloanservice.client.notification.NotificationClient;
 import com.app.bankingloanservice.client.notification.dto.NotificationRequest;
 import com.app.bankingloanservice.entity.Loan;
 import com.app.bankingloanservice.exception.ExternalServiceException;
@@ -34,7 +34,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
     private final LoanRepository loanRepository;
     private final AccountClient accountClient;
     private final FundTransferClient fundTransferClient;
-    private final NotificationClient notificationClient;
+//    private final NotificationClient notificationClient;
 
     @Value("${app.loan.disbursement.source-account-number}")
     private String sourceAccountNumber;
@@ -60,7 +60,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         updateLoanAfterDisbursement(loan);
 
         // 6. Send notification to the borrower through Notification Service
-        sendNotification(loan);
+//        sendNotification(loan);
 
         log.info("Loan with ID {} has been successfully disbursed.", loanId);
     }
@@ -110,18 +110,18 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         loanRepository.save(loan); // Save the updated Loan information
     }
 
-    private void sendNotification(Loan loan) {
-        NotificationRequest notificationRequest = NotificationRequest.builder()
-                .accountId(loan.getAccountId())
-                .message("Your loan of " + loan.getLoanAmount() + " VND has been disbursed.")
-                .build();
-
-        try {
-            notificationClient.sendNotification(notificationRequest);
-            log.info("Notification sent to Account ID {}", loan.getAccountId());
-        } catch (Exception e) {
-            // Log the error but do not throw an exception to avoid impacting the completed disbursement process
-            log.error("Error sending notification to Account ID {}: {}", loan.getAccountId(), e.getMessage());
-        }
-    }
+//    private void sendNotification(Loan loan) {
+//        NotificationRequest notificationRequest = NotificationRequest.builder()
+//                .accountId(loan.getAccountId())
+//                .message("Your loan of " + loan.getLoanAmount() + " VND has been disbursed.")
+//                .build();
+//
+//        try {
+//            notificationClient.sendNotification(notificationRequest);
+//            log.info("Notification sent to Account ID {}", loan.getAccountId());
+//        } catch (Exception e) {
+//            // Log the error but do not throw an exception to avoid impacting the completed disbursement process
+//            log.error("Error sending notification to Account ID {}: {}", loan.getAccountId(), e.getMessage());
+//        }
+//    }
 }

@@ -63,7 +63,7 @@ public class NotificationImpl implements NotificationService {
     }
 
     @Override
-    @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
+    @KafkaListener(topics = "internalTransfer-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
     public void sendMailPaymentReceipt(TransactionData transactionData) {
         String emailCustomerSend = transactionData.getEmailCustomerSend();
         log.warn("email trans: {}", emailCustomerSend);
