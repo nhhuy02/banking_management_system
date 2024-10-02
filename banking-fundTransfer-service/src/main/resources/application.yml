@@ -5,19 +5,9 @@ spring:
     name: banking-fundTransfer-service
   config:
     import: optional:configserver:http://localhost:8888
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/fund_transfer
-#    username: root
-#    password: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    database: postgresql
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   datasource:
-    url: jdbc:mysql://localhost:3306/fund_transfer?createDatabaseIfNotExist=true
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/fund_transfer
     username: root
     password: root
   jpa:
@@ -25,6 +15,8 @@ spring:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
   kafka:
     producer:
       bootstrap-servers: localhost:9092

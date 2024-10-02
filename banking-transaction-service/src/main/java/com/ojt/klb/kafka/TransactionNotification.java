@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 public class TransactionNotification {
     private String referenceNumber;
 
+    private Long customerId;
+
     private String accountNumber;
 
     private String transactionType;
@@ -24,6 +26,6 @@ public class TransactionNotification {
 
     private String description;
 
-    public TransactionNotification(String referenceNumber, Account account, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
+    public TransactionNotification(String referenceNumber, Long customerId, Account account, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
     }
 }

@@ -53,7 +53,7 @@ public class JwtUtil {
             Claims claims = extractAllClaims(token);
             return claims.getExpiration().after(new Date());
         } catch (Exception e) {
-            logger.error("JwtUtil isTokenValid: {}",e.getMessage());
+            logger.error("JwtUtil isTokenValid: {}", e.getMessage());
             return false;
         }
     }
