@@ -50,7 +50,8 @@ public class FetchAccountServiceFC {
 
       return fetchResponseDTO.getData();
     } catch (Exception ex) {
-      log.error("Error fetch saving-account from account service: {}", ex.getMessage());
+      log.error("Error fetch saving-account with id={} from account service: {}", id,
+          ex.getMessage());
       throw ex;
     }
   }
