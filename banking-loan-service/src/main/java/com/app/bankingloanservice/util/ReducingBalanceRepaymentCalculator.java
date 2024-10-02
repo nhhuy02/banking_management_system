@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +28,16 @@ public class ReducingBalanceRepaymentCalculator implements RepaymentCalculator {
         LocalDate disbursementDate = loan.getDisbursementDate();
 
         BigDecimal annualInterestRate = loan.getCurrentInterestRate().getAnnualInterestRate();
-        BigDecimal monthlyInterestRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, BigDecimal.ROUND_HALF_UP)
-                .divide(BigDecimal.valueOf(100), 10, BigDecimal.ROUND_HALF_UP); // Chuyển từ % sang thập phân
+        BigDecimal monthlyInterestRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP); // Convert from % to decimal
 
-        BigDecimal principalPerMonth = principal.divide(BigDecimal.valueOf(term), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal principalPerMonth = principal.divide(BigDecimal.valueOf(term), 2, RoundingMode.HALF_UP);
         BigDecimal remainingBalance = principal;
 
         for (int i = 1; i <= term; i++) {
             LocalDate dueDate = disbursementDate.plusMonths(i);
-            BigDecimal interest = remainingBalance.multiply(monthlyInterestRate).setScale(2, BigDecimal.ROUND_HALF_UP);
-            BigDecimal totalAmount = principalPerMonth.add(interest).setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal interest = remainingBalance.multiply(monthlyInterestRate).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal totalAmount = principalPerMonth.add(interest).setScale(2, RoundingMode.HALF_UP);
 
             LoanRepayment repayment = LoanRepayment.builder()
                     .loan(loan)

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Service
@@ -43,61 +44,66 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
 
     @Override
     public void makeRepayment(Long loanId, Long repaymentId, RepaymentRequest repaymentRequest) {
-        // 1. Kiểm tra xem Loan có tồn tại không
+        // 1. Check if the loan exists
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + loanId + " not found"));
 
-        // 2. Kiểm tra trạng thái khoản vay
+        // 2. Check the status of the loan
         if (loan.getStatus() != LoanStatus.ACTIVE) {
             throw new InvalidLoanException("Loan is not active for repayment.");
         }
 
-        // 3. Kiểm tra lịch trả nợ có tồn tại không
+        // 3. Check if the repayment schedule exists
         LoanRepayment repayment = loanRepaymentRepository.findById(repaymentId)
                 .orElseThrow(() -> new RepaymentNotFoundException("Repayment with ID " + repaymentId + " not found"));
 
-        // 4. Kiểm tra xem repayment thuộc về loan này không
+        // 4. Check if the repayment belongs to this loan
         if (!repayment.getLoan().getLoanId().equals(loanId)) {
             throw new InvalidRepaymentException("Repayment does not belong to the specified loan.");
         }
 
-        // 5. Kiểm tra trạng thái của repayment
+        // 5. Check the status of the repayment
         if (repayment.getPaymentStatus() == PaymentStatus.PAID) {
             throw new InvalidRepaymentException("This repayment has already been paid.");
         }
 
-        // 6. Xác định xem có phải thanh toán trễ không
+        // 6. Determine if it is a late payment
         boolean isLate = repayment.getPaymentDueDate().isBefore(LocalDate.now());
-        BigDecimal penalty = BigDecimal.ZERO;
+        BigDecimal latePaymentInterest = BigDecimal.ZERO;
         if (isLate) {
-            // Tính lãi phạt
-            BigDecimal penaltyRate = loan.getCurrentInterestRate().getPrepaymentPenaltyRate();
-            penalty = loan.getRemainingBalance().multiply(penaltyRate)
-                    .divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP);
+            // Calculate late payment interest
+            BigDecimal latePaymentInterestRate = loan.getCurrentInterestRate().getLatePaymentInterestRate();
+            latePaymentInterest = repayment.getInterestAmount().multiply(latePaymentInterestRate)
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-            repayment.setLatePaymentInterestAmount(penalty);
+            repayment.setLatePaymentInterestAmount(latePaymentInterest);
             repayment.setIsLate(true);
         }
 
-        // 7. Cập nhật repayment
+        // 7. Update repayment details
         repayment.setActualPaymentDate(LocalDate.now());
         repayment.setPaymentStatus(PaymentStatus.PAID);
         repayment.setIsLate(isLate);
         loanRepaymentRepository.save(repayment);
 
-        // 8. Cập nhật thông tin khoản vay
+        // 8. Update loan information
         BigDecimal paymentAmount = repaymentRequest.getAmount();
-        if (isLate) {
-            paymentAmount = paymentAmount.subtract(penalty);
-        }
+        // Add the amount of the current payment to the total loan amount paid:
         loan.setTotalPaidAmount(loan.getTotalPaidAmount().add(paymentAmount));
-        loan.setRemainingBalance(loan.getLoanAmount().subtract(loan.getTotalPaidAmount()));
+        // Update the remaining balance by subtracting the principal balance paid in this payment:
+        loan.setRemainingBalance(loan.getRemainingBalance().subtract(repayment.getPrincipalAmount()));
         loanRepository.save(loan);
 
-        // 9. Kiểm tra xem khoản vay đã được thanh toán đầy đủ chưa
+        // 9. Check if the loan has been fully repaid
         if (loan.getRemainingBalance().compareTo(BigDecimal.ZERO) <= 0) {
-            loan.setStatus(LoanStatus.SETTLED);
             loan.setSettlementDate(LocalDate.now());
+            if (isLate) {
+                loan.setStatus(LoanStatus.SETTLED_LATE);
+            } else if (repayment.getPaymentDueDate().isAfter(LocalDate.now())) {
+                loan.setStatus(LoanStatus.SETTLED_EARLY);  // If paid before due date
+            } else {
+                loan.setStatus(LoanStatus.SETTLED_ON_TIME);
+            }
             loanRepository.save(loan);
         }
     }

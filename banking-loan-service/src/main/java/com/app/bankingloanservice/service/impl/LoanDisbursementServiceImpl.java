@@ -6,8 +6,6 @@ import com.app.bankingloanservice.client.account.dto.ApiResponse;
 import com.app.bankingloanservice.client.fundtransfer.FundTransferClient;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
-//import com.app.bankingloanservice.client.notification.NotificationClient;
-import com.app.bankingloanservice.client.notification.dto.NotificationRequest;
 import com.app.bankingloanservice.entity.Loan;
 import com.app.bankingloanservice.exception.ExternalServiceException;
 import com.app.bankingloanservice.exception.InvalidLoanException;
@@ -17,6 +15,7 @@ import com.app.bankingloanservice.repository.LoanRepository;
 import com.app.bankingloanservice.constant.LoanStatus;
 
 import com.app.bankingloanservice.service.LoanDisbursementService;
+import com.app.bankingloanservice.service.LoanRepaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +33,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
     private final LoanRepository loanRepository;
     private final AccountClient accountClient;
     private final FundTransferClient fundTransferClient;
-//    private final NotificationClient notificationClient;
+    private final LoanRepaymentService loanRepaymentService;
 
     @Value("${app.loan.disbursement.source-account-number}")
     private String sourceAccountNumber;
@@ -47,7 +46,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
 
         // 2. Check the Loan status
         if (loan.getStatus() != LoanStatus.PENDING) {
-            throw new InvalidLoanException("Loan is not in PENDING status");
+            throw new InvalidLoanException("Loan with ID " + loan.getLoanId() + " is not in PENDING status. Current status: " + loan.getStatus());
         }
 
         // 3. Fetch the borrower's account information from Account Service
@@ -60,9 +59,13 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         updateLoanAfterDisbursement(loan);
 
         // 6. Send notification to the borrower through Notification Service
-//        sendNotification(loan);
+        sendNotification(loan);
 
         log.info("Loan with ID {} has been successfully disbursed.", loanId);
+
+        // 7. Create Repayment Schedule
+        loanRepaymentService.createRepaymentSchedule(loan);
+
     }
 
     private Loan getLoanEntityById(Long loanId) {
@@ -78,7 +81,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
             }
             return apiResponse.getData();
         } catch (Exception e) {
-            throw new ExternalServiceException("Error calling Account Service", e);
+            throw new ExternalServiceException("Error calling Account Service for Account ID: " + accountId, e);
         }
     }
 
@@ -93,12 +96,12 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         try {
             FundTransferResponse response = fundTransferClient.transferFunds(fundTransferRequest);
             if (response == null || response.getTransactionReference() == null) {
-                throw new TransactionFailedException("Disbursement transfer failed: No valid response from Transaction Service");
+                throw new TransactionFailedException("Disbursement transfer failed for Loan ID " + loan.getLoanId() + ". No valid response from Fund Transaction Service");
             }
-            // You can add additional checks if necessary, such as checking status in the response
+            // Checks if necessary, such as checking status in the response
             return response;
         } catch (Exception e) {
-            throw new ExternalServiceException("Error calling Transaction Service", e);
+            throw new ExternalServiceException("Error performing fund transfer for Loan ID: " + loan.getLoanId(), e);
         }
     }
 
@@ -110,18 +113,17 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         loanRepository.save(loan); // Save the updated Loan information
     }
 
-//    private void sendNotification(Loan loan) {
-//        NotificationRequest notificationRequest = NotificationRequest.builder()
-//                .accountId(loan.getAccountId())
-//                .message("Your loan of " + loan.getLoanAmount() + " VND has been disbursed.")
-//                .build();
-//
-//        try {
-//            notificationClient.sendNotification(notificationRequest);
-//            log.info("Notification sent to Account ID {}", loan.getAccountId());
-//        } catch (Exception e) {
-//            // Log the error but do not throw an exception to avoid impacting the completed disbursement process
-//            log.error("Error sending notification to Account ID {}: {}", loan.getAccountId(), e.getMessage());
-//        }
-//    }
+    private void sendNotification(Loan loan) {
+
+        // Create a DTO to send disbursement notifications to customers
+
+        try {
+            // Send notification to customer
+
+            log.info("Notification sent to Account ID {}", loan.getAccountId());
+        } catch (Exception e) {
+            // Log the error but do not throw an exception to avoid impacting the completed disbursement process
+            log.error("Error sending notification to Account ID {}: {}", loan.getAccountId(), e.getMessage());
+        }
+    }
 }

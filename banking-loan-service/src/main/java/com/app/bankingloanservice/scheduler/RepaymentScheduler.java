@@ -30,10 +30,11 @@ public class RepaymentScheduler {
                 .toList();
 
         for (LoanRepayment repayment : lateRepayments) {
-            repayment.setIsLate(true);
+            // Update the status of Loan Payment as overdue:
+            repayment.setPaymentStatus(PaymentStatus.OVERDUE);
 
-            // Calculate interest and penalties if necessary
-            // repayment.setLatePaymentInterestAmount(...);
+            // Calculate late payment interest and add it to Loan Repayment
+
 
             loanRepaymentRepository.save(repayment);
             log.info("Repayment ID {} is now marked as late.", repayment.getLoanPaymentId());
