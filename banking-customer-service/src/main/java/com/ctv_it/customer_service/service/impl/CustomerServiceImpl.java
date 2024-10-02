@@ -56,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerDto customerDto = customerMapper.toDto(customer);
 
         populateAdditionalCustomerInfo(customerDto, customer);
-
+        customerDto.setCustomerId(customer.getId());so
         return Optional.of(customerDto);
     }
 
