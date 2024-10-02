@@ -107,22 +107,22 @@ public class FundTransferServiceImpl implements FundTransferService {
         var fromAccountBalance = accountClient.accountBalance(fromAccount.getAccountNumber());
         var toAccountBalance = accountClient.accountBalance(toAccount.getAccountNumber());
 
-//        internalTransferProducer.sendInternalTransferNotification(
-//                new InternalTransferNotification(
-//                        fromAccount.getEmail(),
-//                        toAccount.getEmail(),
-//                        transactionReference,
-//                        TransferType.INTERNAL,
-//                        transferredOn,
-//                        fromAccount.getAccountNumber(),
-//                        toAccount.getAccountNumber(),
-//                        toAccount.getAccountName(),
-//                        fundTransferRequest.getAmount(),
-//                        fundTransfer.getDescription(),
-//                        fromAccountBalance,
-//                        toAccountBalance
-//                )
-//        );
+        internalTransferProducer.sendInternalTransferNotification(
+                new InternalTransferNotification(
+                        fromAccount.getEmail(),
+                        toAccount.getEmail(),
+                        transactionReference,
+                        TransferType.valueOf(TransferType.INTERNAL.toString()),
+                        transferredOn,
+                        fromAccount.getAccountNumber(),
+                        toAccount.getAccountNumber(),
+                        toAccount.getAccountName(),
+                        fundTransferRequest.getAmount(),
+                        fundTransfer.getDescription(),
+                        fromAccountBalance,
+                        toAccountBalance
+                )
+        );
         return FundTransferResponse.builder()
                 .transactionReference(transactionReference)
                 .message("Fund transfer was successful").build();
