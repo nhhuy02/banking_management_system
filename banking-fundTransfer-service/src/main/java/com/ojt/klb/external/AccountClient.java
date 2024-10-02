@@ -6,6 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @FeignClient(name = "banking-account-service", url = "http://localhost:8080/api/v1/account")
 public interface AccountClient {
 
@@ -16,5 +18,5 @@ public interface AccountClient {
     ResponseEntity<ApiResponse<Account>> getDataAccountNumber(@PathVariable String accountNumber);
 
     @GetMapping("/balance")
-    ResponseEntity<String> accountBalance(@RequestParam String accountNumber);
+    ResponseEntity<BigDecimal> accountBalance(@RequestParam String accountNumber);
 }
