@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class InternalTransferNotification {
     private String emailCustomerSend;
     private String emailCustomerReceive;
+    private Long customerId;
     private String transactionId;
     private String transactionType;
     private LocalDateTime transactionDate;
@@ -28,6 +29,6 @@ public class InternalTransferNotification {
     private String balanceAccountSend;
     private String balanceAccountReceive;
 
-    public InternalTransferNotification(String email, String email1, String transactionReference, TransferType transferType, LocalDateTime transferredOn, String accountNumber, String accountNumber1, String accountName, BigDecimal amount, String description, ResponseEntity<String> fromAccountBalance, ResponseEntity<String> toAccountBalance) {
+    public InternalTransferNotification(String email, String email1, Long customerId, String transactionReference, TransferType transferType, LocalDateTime transferredOn, String accountNumber, String accountNumber1, String accountName, BigDecimal amount, String description, ResponseEntity<String> fromAccountBalance, ResponseEntity<String> toAccountBalance) {
     }
 }

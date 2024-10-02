@@ -18,6 +18,8 @@ public class Account {
 
     private String fullName;
 
+    private Long customerId;
+
     private String accountName;
 
     private String accountNumber;
