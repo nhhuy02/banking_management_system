@@ -17,6 +17,7 @@ import com.app.bankingloanservice.repository.LoanRepository;
 import com.app.bankingloanservice.constant.LoanStatus;
 
 import com.app.bankingloanservice.service.LoanDisbursementService;
+import com.app.bankingloanservice.service.LoanRepaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
     private final AccountClient accountClient;
     private final FundTransferClient fundTransferClient;
     private final NotificationClient notificationClient;
+    private final LoanRepaymentService loanRepaymentService;
 
     @Value("${app.loan.disbursement.source-account-number}")
     private String sourceAccountNumber;
@@ -59,10 +61,14 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         // 5. Update the Loan information after successful disbursement
         updateLoanAfterDisbursement(loan);
 
-        // 6. Send notification to the borrower through Notification Service
+        // 6. Create Repayment Schedule
+        loanRepaymentService.createRepaymentSchedule(loan);
+
+        // 7. Send notification to the borrower through Notification Service
         sendNotification(loan);
 
         log.info("Loan with ID {} has been successfully disbursed.", loanId);
+
     }
 
     private Loan getLoanEntityById(Long loanId) {
