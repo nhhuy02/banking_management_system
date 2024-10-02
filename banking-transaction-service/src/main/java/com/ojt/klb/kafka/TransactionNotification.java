@@ -18,6 +18,10 @@ public class TransactionNotification {
 
     private String accountNumber;
 
+    private String customerName;
+
+    private String balance;
+
     private String transactionType;
 
     private BigDecimal amount;
@@ -27,5 +31,8 @@ public class TransactionNotification {
     private String description;
 
     public TransactionNotification(String referenceNumber, Long customerId, Account account, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
+    }
+
+    public TransactionNotification(String referenceNumber, Long customerId, Account account, String accountName, BigDecimal balance, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
     }
 }
