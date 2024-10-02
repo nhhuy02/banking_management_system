@@ -9,8 +9,9 @@ import org.springframework.data.domain.Pageable;
 public interface NotificationService {
     void sendMailVerifyOTP(OtpEmailRequestDto otpEmailRequestDto);
     ListResponse<NotificationDTO> findByCustomerId(Long id, Pageable pageable);
-    void sendMailPaymentReceipt(TransactionData transactionData);
+    void sendMailPaymentReceipt(TransactionInternalData transactionData);
     void sendMailPaymentReminder(LoanData loanData);
     void sendMailRegister(AccountData accountData);
     void sendMailLoanApplication(LoanDto loanDto);
+    void sendMailTrans(TransData transData);
 }

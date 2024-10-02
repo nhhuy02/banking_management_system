@@ -66,8 +66,8 @@ public class NotificationImpl implements NotificationService {
     }
 
     @Override
-    @KafkaListener(topics = "internalTransfer-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
-    public void sendMailPaymentReceipt(TransactionData transactionData) {
+    @KafkaListener(topics = "internalTransfer-topic", groupId = "trans_group",containerFactory = "transactionInternalDataConcurrentKafkaListenerContainerFactory")
+    public void sendMailPaymentReceipt(TransactionInternalData transactionData) {
         String emailCustomerSend = transactionData.getEmailCustomerSend();
         log.warn("email trans: {}", emailCustomerSend);
         NotificationTemplate notificationTemplate1 = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
@@ -115,6 +115,33 @@ public class NotificationImpl implements NotificationService {
         notificationRepository.save(notification2);
 
     }
+    @Override
+    @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
+    public void sendMailTrans(TransData transData) {
+        String email = transData.getEmail();
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.BALANCE_CHANGE.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
+
+        Map<String, Object> variables2  = new HashMap<>();
+        String content,transactionAmount = "";
+
+        if(transData.getTransactionType().equalsIgnoreCase("DEPOSIT")){
+            content = "NẠP TIỀN";
+            transactionAmount = ResponseMessage.INCREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+        } else {
+            content = "RÚT TIỀN";
+            transactionAmount = ResponseMessage.DECREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+        }
+
+        variables2.put("customerName", transData.getCustomerName());
+        variables2.put("accountNumber", transData.getAccountNumber());
+        variables2.put("balance", StringUtils.convertVND(transData.getBalance()));
+        variables2.put("transactionAmount", transactionAmount);
+        variables2.put("transactionDate", StringUtils.convertDateTime(transData.getLocalDateTime()));
+        variables2.put("content", content);
+
+        mailConfig.send(email,subject,"balance_change_notification",variables2);
+    }
 
     @Override
     @KafkaListener(topics = "loan_application", groupId = "loan_group",containerFactory = "loanAppKafkaListenerContainerFactory")
@@ -131,6 +158,8 @@ public class NotificationImpl implements NotificationService {
         variables.put("status", status);
         mailConfig.send(email, subject, "loan_application", variables);
     }
+
+
 
     @Override
     @KafkaListener(topics = "loan-topic", groupId = "group_id")

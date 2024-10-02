@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class LoanApplicationProducer {
     private BigDecimal amounts;
     private Integer loanTermMonths;
     private Integer reviewTimeDays;
+    private LocalDate submissionDate;
 }
