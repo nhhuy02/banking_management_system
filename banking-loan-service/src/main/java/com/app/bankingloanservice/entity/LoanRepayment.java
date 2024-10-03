@@ -87,4 +87,9 @@ public class LoanRepayment extends AuditModel {
     @Column(name = "is_late", nullable = false)
     private Boolean isLate;
 
+    @Transient
+    public BigDecimal getTotalAmount() {
+        return principalAmount.add(interestAmount).add(latePaymentInterestAmount);
+    }
+
 }

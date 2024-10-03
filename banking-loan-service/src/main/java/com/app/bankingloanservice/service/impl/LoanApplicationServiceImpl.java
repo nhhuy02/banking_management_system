@@ -42,8 +42,8 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final LoanTypeService loanTypeService;
     private final LoanApplicationMapper loanApplicationMapper;
     private final DocumentMapper documentMapper;
+    private final AccountClient accountClient;
 
-    private  final AccountClient accountClient;
     private static final String TOPIC = "loan_application";
 
     @Autowired
@@ -112,7 +112,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         loanApplicationProducer.setEmail(response.getData().getEmail());
         loanApplicationProducer.setCustomerName(response.getData().getFullName());
         loanApplicationProducer.setSubmissionDate(loanApplicationResponse.getSubmissionDate());
-        kafkaTemplate.send(TOPIC,loanApplicationProducer);
+        kafkaTemplate.send(TOPIC, loanApplicationProducer);
 
         return loanApplicationResponse;
     }

@@ -56,8 +56,7 @@ public class LoanApplicationController {
                                     summary = "Loan Application with all required fields",
                                     value = """
                                             {
-                                              "accountId": 12345,
-                                              "accountId": 98765,
+                                              "accountId": 1,
                                               "monthlyIncome": 20000000,
                                               "occupation": "Software Engineer",
                                               "loanTypeId": 1,
@@ -68,13 +67,9 @@ public class LoanApplicationController {
                                               "interestRateType": "FIXED",
                                               "loanPurpose": "Home Renovation",
                                               "collateralRequest": {
-                                                "collateralType": "string",
-                                                "collateralValue": 0,
-                                                "description": "string",
-                                                "status": "ACTIVE",
-                                                "reclaimDate": "2024-09-26",
-                                                "reasonForReclamation": "string",
-                                                "releaseDate": "2024-09-26"
+                                                "collateralType": "Home",
+                                                "collateralValue": 5000000000,
+                                                "description": "House in the city center"
                                               }
                                             }
                                             """

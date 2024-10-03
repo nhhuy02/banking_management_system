@@ -7,10 +7,7 @@ import com.app.bankingloanservice.client.fundtransfer.FundTransferClient;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
 import com.app.bankingloanservice.entity.Loan;
-import com.app.bankingloanservice.exception.ExternalServiceException;
-import com.app.bankingloanservice.exception.InvalidLoanException;
-import com.app.bankingloanservice.exception.LoanNotFoundException;
-import com.app.bankingloanservice.exception.TransactionFailedException;
+import com.app.bankingloanservice.exception.*;
 import com.app.bankingloanservice.repository.LoanRepository;
 import com.app.bankingloanservice.constant.LoanStatus;
 
@@ -96,12 +93,12 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
         try {
             FundTransferResponse response = fundTransferClient.transferFunds(fundTransferRequest);
             if (response == null || response.getTransactionReference() == null) {
-                throw new TransactionFailedException("Disbursement transfer failed for Loan ID " + loan.getLoanId() + ". No valid response from Fund Transaction Service");
+                throw new FundTransferException("Disbursement transfer failed for Loan ID " + loan.getLoanId() + ". No valid response from Fund Transaction Service");
             }
             // Checks if necessary, such as checking status in the response
             return response;
         } catch (Exception e) {
-            throw new ExternalServiceException("Error performing fund transfer for Loan ID: " + loan.getLoanId(), e);
+            throw new FundTransferException("Error performing fund transfer for Loan ID: " + loan.getLoanId(), e);
         }
     }
 
