@@ -135,7 +135,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public ApiResponse internalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
+    public ApiResponse saveTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
         transactions.forEach(transaction -> {

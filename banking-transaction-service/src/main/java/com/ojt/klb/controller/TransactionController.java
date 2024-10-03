@@ -24,8 +24,8 @@ public class TransactionController {
     }
 
     @PostMapping("/internal")
-    public ResponseEntity<ApiResponse> makeInternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.internalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
+        return new ResponseEntity<>(service.saveTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
     }
 
     @GetMapping
