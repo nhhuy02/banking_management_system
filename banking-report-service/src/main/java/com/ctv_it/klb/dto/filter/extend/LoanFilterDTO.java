@@ -1,7 +1,7 @@
 package com.ctv_it.klb.dto.filter.extend;
 
-import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.RangeDTO;
+import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import lombok.Getter;

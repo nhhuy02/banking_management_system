@@ -1,6 +1,6 @@
 package com.app.bankingloanservice.mapper;
 
-import com.app.bankingloanservice.dto.DocumentResponseDto;
+import com.app.bankingloanservice.dto.DocumentResponse;
 import com.app.bankingloanservice.entity.Document;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface DocumentMapper {
 
     @Mapping(source = "loanApplication.loanApplicationId", target = "loanApplicationId")
-    DocumentResponseDto toResponseDto(Document document);
+    DocumentResponse toResponse(Document document);
 
 }

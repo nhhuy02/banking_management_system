@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 public class LoanExcelServiceImpl implements ReportFormatService<LoanReportDTO> {
 
   @Override
-  public Byte[] export(LoanReportDTO reportData) {
-    log.info(Translator.toLocale("msg.called", "LoanExcelServiceImpl::export"));
-    log.info("ReportData: {}", reportData);
+  public byte[] export(LoanReportDTO reportData) {
+    log.info("LoanExcelServiceImpl::export is processing with data: {}", reportData);
 
-    return new Byte[0];
+    return new byte[0];
   }
 
   @Override

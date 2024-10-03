@@ -1,9 +1,6 @@
 package com.ojt.klb.banking_notification_service.config;
 
-import com.ojt.klb.banking_notification_service.dto.consumer.AccountData;
-import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
-import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
-import com.ojt.klb.banking_notification_service.dto.consumer.TransactionData;
+import com.ojt.klb.banking_notification_service.dto.consumer.*;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -35,8 +32,17 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, TransactionData> transactionDataConsumerFactory() {
-        return createConsumerFactory(TransactionData.class, "trans_group");
+    public ConsumerFactory<String, LoanDto> loanAppConsumerFactory() {
+        return createConsumerFactory(LoanDto.class, "loan_group");
+    }
+
+    @Bean
+    public ConsumerFactory<String, TransactionInternalData> transactionInternalDataConsumerFactory() {
+        return createConsumerFactory(TransactionInternalData.class, "trans_group");
+    }
+    @Bean
+    public ConsumerFactory<String, TransData> transDataConsumerFactory() {
+        return createConsumerFactory(TransData.class, "trans_group");
     }
     // Phương thức chung để tạo ConsumerFactory cho các lớp khác nhau
     private <T> ConsumerFactory<String, T> createConsumerFactory(Class<T> targetType, String groupId) {
@@ -72,16 +78,26 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, TransactionData> transactionDataKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, TransactionData> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(transactionDataConsumerFactory());
+    public ConcurrentKafkaListenerContainerFactory<String, LoanDto> loanAppKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, LoanDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(loanAppConsumerFactory());
         return factory;
     }
 
     @Bean
-    public NewTopic transTopic() {
-        return new NewTopic("transaction-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
+    public ConcurrentKafkaListenerContainerFactory<String, TransactionInternalData> transactionInternalDataConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TransactionInternalData> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(transactionInternalDataConsumerFactory());
+        return factory;
     }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, TransData> transactionDataKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TransData> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(transDataConsumerFactory());
+        return factory;
+    }
+
     @Bean
     public NewTopic loanTopic() {
         return new NewTopic("loan-topic", 1, (short) 1);  // 1 partition, 1 replication-factor

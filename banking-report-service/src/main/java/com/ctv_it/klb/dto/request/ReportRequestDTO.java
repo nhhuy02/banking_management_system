@@ -1,9 +1,9 @@
 package com.ctv_it.klb.dto.request;
 
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
+import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.LoanFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO;
-import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.util.ReportRequestDTODeserializerUtil;
@@ -21,9 +21,6 @@ import lombok.ToString;
 @ToString
 @JsonDeserialize(using = ReportRequestDTODeserializerUtil.class)
 public class ReportRequestDTO {
-
-  @NotNull
-  private Long customerId;
 
   @NotNull
   @Schema(implementation = ReportType.class)

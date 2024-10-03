@@ -31,6 +31,14 @@ spring:
           uri: http://locallhost:8060
           predicates:
             - Path:/api/v1/loan-service/**
+        - id: transaction_service_banking
+          uri: http://locallhost:8070
+          predicates:
+            - Path:/api/v1/transactions/**
+        - id: fundTransfer_service_banking
+          uri: http://locallhost:8090
+          predicates:
+            - Path:/api/v1/fund_transfer/**
 
 resilience4j.ratelimiter:
   instances:

@@ -11,16 +11,20 @@ import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
 import com.ojt.klb.model.request.TransactionRequest;
-import com.ojt.klb.model.response.Response;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -37,26 +41,36 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionProducer transactionProducer;
 
     @Override
-    public Response handleTransaction(TransactionDto transactionDto) {
-        ResponseEntity<Account> response = accountClient.readByAccountNumber(transactionDto.getAccountNumber());
-        if (Objects.isNull(response.getBody())){
+    public ApiResponse handleTransaction(TransactionDto transactionDto) {
+        Account account;
+        ResponseEntity<ApiResponse<Account>> response = accountClient.getDataAccountNumber(transactionDto.getAccountNumber());
+        ApiResponse<Account> apiResponse = response.getBody();
+        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
+            log.error("requested account " + transactionDto.getAccountNumber() + " is not found on the server");
             throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
-        Account account = response.getBody();
+        account = apiResponse.getData();
+        System.out.println(account);
         Transaction transaction = mapper.convertToEntity(transactionDto);
         if(transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
-            account.setAvailableBalance(account.getAvailableBalance().add(transactionDto.getAmount()));
+            if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
+                throw new TransactionException("The minimum deposit amount is 50,000 VND.");
+            }
+            account.setBalance(account.getBalance().add(transactionDto.getAmount()));
         } else if (transactionDto.getTransactionType().equals(TransactionType.WITHDRAWAL.toString())) {
-            if(!account.getAccountStatus().equals("ACTIVE")){
+            if(!account.getStatus().equals(Account.Status.active)){
                 log.error("account is either inactive/closed, cannot process the transaction");
                 throw new AccountStatusException("account is inactive or closed");
             }
-            if(account.getAvailableBalance().compareTo(transactionDto.getAmount()) < 0){
+            if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
+                throw new TransactionException("The minimum withdraw amount is 50,000 VND.");
+            }
+            if(account.getBalance().compareTo(transactionDto.getAmount()) < 0){
                 log.error("insufficient balance in the account");
                 throw new InsufficientBalance("Insufficient balance in the account");
             }
             transaction.setAmount(transactionDto.getAmount().negate());
-            account.setAvailableBalance(account.getAvailableBalance().subtract(transactionDto.getAmount()));
+            account.setBalance(account.getBalance().subtract(transactionDto.getAmount()));
         }
 
         String referenceNumber = generateUniqueReferenceNumber();
@@ -66,19 +80,27 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setReferenceNumber(referenceNumber);
 
         accountClient.updateAccount(transactionDto.getAccountNumber(), account);
+
         repository.save(transaction);
+
+        BigDecimal balance = accountClient.accountBalance(account.getAccountNumber()).getBody();
 
         transactionProducer.sendTransactionNotification(
                 new TransactionNotification(
+                        apiResponse.getData().getEmail(),
                         referenceNumber,
-                        transactionDto.getAccountNumber(),
+                        account.getCustomerId(),
+                        apiResponse.getData().getAccountNumber(),
+                        apiResponse.getData().getFullName(),
+                        balance,
                         transactionDto.getTransactionType(),
                         transactionDto.getAmount(),
                         LocalDateTime.now(),
                         transactionDto.getDescription()
                 )
         );
-        return Response.builder()
+
+        return ApiResponse.builder()
                 .message("Transaction completed successfully")
                 .status(200)
                 .success(true)
@@ -116,18 +138,46 @@ public class TransactionServiceImpl implements TransactionService {
                 }).collect(Collectors.toList());
     }
 
-//    private void sendKafkaNotification(TransactionNotificationDto notificationDto) {
-//        try {
-//            kafkaTemplate.send(NOTIFICATION_TOPIC, notificationDto.getReferenceNumber(), notificationDto);
-//            log.info("Kafka notification sent for transaction: {}", notificationDto.getReferenceNumber());
-//        } catch (Exception e) {
-//            log.error("Failed to send Kafka notification for transaction: {}", notificationDto.getReferenceNumber(), e);
-//            // Optionally, you might want to implement a retry mechanism or compensating action here
-//        }
-//    }
 
     @Override
-    public Response internalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
+    public List<TransactionDto> findTransactions(
+            TransactionType transactionType,
+            LocalDate fromDate,
+            LocalDate toDate,
+            TransactionStatus status) {
+
+        Specification<Transaction> spec = (root, query, cb) -> {
+            query.distinct(true);
+            return null;
+        };
+
+        if (transactionType != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("transactionType"), transactionType));
+        }
+
+        if (fromDate != null) {
+            LocalDateTime fromDateTime = fromDate.atStartOfDay();
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("transactionDate"), fromDateTime));
+        }
+
+        if (toDate != null) {
+            LocalDateTime toDateTime = toDate.plusDays(1).atStartOfDay().minusNanos(1);
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("transactionDate"), toDateTime));
+        }
+
+        if (status != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+
+        List<Transaction> transactions = repository.findAll(spec);
+
+        return transactions.stream()
+                .map(mapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ApiResponse saveTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
         transactions.forEach(transaction -> {
@@ -137,11 +187,9 @@ public class TransactionServiceImpl implements TransactionService {
         });
 
         repository.saveAll(transactions);
-        return Response.builder()
+        return ApiResponse.builder()
                 .status(200)
                 .success(true)
                 .message("Transaction completed successfully").build();
     }
-
-
 }

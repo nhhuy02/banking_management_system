@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn đăng ký khoản vay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+        .header img {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            color: #4caf50;
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333333;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0044cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #003399;
+        }
+    </style>
+</head>
+<body>
+<table style="width: 100%; max-width: 800px; margin: 20px auto;  border: 1px solid #ddd;">
+    <tr>
+        <td style="text-align: center;">
+            <div class="container">
+                <div class="header">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2FEIGHT%20BANK.png?alt=media&token=34615cbe-189f-4d27-8a88-ba5819452403" alt="Logo Bank">
+                    <h1>Đơn đăng ký khoản vay</h1>
+                </div>
+                <div class="content">
+                    <p>Kính gửi <strong th:text="${customerName}">[Customer Name]</strong>,</p>
+                    <p>Chúng tôi xin thông báo rằng đơn đăng ký khoản vay của bạn tại <strong style="color: #0066cc;">EIGHT BANK</strong> đã được tiếp nhận và đang trong quá trình xử lý.</p>
+                    <p>Số Hợp Đồng đăng ký: <strong th:text="${applicationNumber}">[Số đơn]</strong></p>
+                    <p>Thời gian đăng ký: <strong th:text="${time}">[...]</strong></p>
+                    <p>Số tiền khoản vay: <strong th:text="${loanAmount}">[...]</strong> tháng</p>
+                    <p>Kỳ hạn: <strong th:text="${loanTermMonths}">[...]</strong></p>
+                    <p>Quá trình xử lý: <strong th:text="${status}">[Trạng thái]</strong>.</p>
+                    <p>Hồ sơ của bạn sẽ được xem xét và phản hồi trong thời gian <span th:text="${reviewTimeDays}">...</span> ngày làm việc tiếp theo.</p>
+                    <p>Nếu bạn cần thêm thông tin hoặc hỗ trợ, vui lòng liên hệ với chúng tôi qua <a href="mailto:support@eightbank.com" style="color: #0066cc; text-decoration: none;">support@eightbank.com</a>.</p>
+                    <p>Trân trọng,<br>
+                        <strong style="color: #0066cc;">EIGHT BANK</strong></p>
+                </div>
+                <div class="footer">
+                    <p>Để biết thêm thông tin, vui lòng truy cập <a href="http://localhost:5173/login"><strong>EIGHT BANK</strong></a></p>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -4,6 +4,7 @@ import com.app.bankingloanservice.constant.SettlementStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -17,7 +18,6 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class LoanSettlement extends AuditModel {
 
     /**
@@ -45,25 +45,25 @@ public class LoanSettlement extends AuditModel {
      * The amount of past-due interest at the time of settlement.
      */
     @Column(name = "past_due_interest_amount", nullable = false)
-    private Long pastDueInterestAmount;
+    private BigDecimal pastDueInterestAmount;
 
     /**
      * The amount of late payment interest at the time of settlement.
      */
     @Column(name = "late_payment_interest_amount", nullable = false)
-    private Long latePaymentInterestAmount;
+    private BigDecimal latePaymentInterestAmount;
 
     /**
      * The amount of prepayment penalty at the time of settlement, if applicable.
      */
     @Column(name = "prepayment_penalty_amount", nullable = false)
-    private Long prepaymentPenaltyAmount;
+    private BigDecimal prepaymentPenaltyAmount;
 
     /**
      * The total settlement amount, including all fees and penalties.
      */
     @Column(name = "settlement_amount", nullable = false)
-    private Long settlementAmount;
+    private BigDecimal settlementAmount;
 
     /**
      * The status of the settlement (EARLY, ON_TIME, or LATE).
