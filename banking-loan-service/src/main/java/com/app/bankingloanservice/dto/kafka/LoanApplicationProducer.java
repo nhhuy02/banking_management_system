@@ -1,4 +1,4 @@
-package com.app.bankingloanservice.dto;
+package com.app.bankingloanservice.dto.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
