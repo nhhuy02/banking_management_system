@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = DocumentMapper.class)
 public abstract class CollateralMapper {
 
+    @Mapping(target = "status", constant = "ACTIVE")
     public abstract Collateral toEntity(CollateralRequest dto);
 
     @Mapping(target = "loanId", source = "loan.loanId")
