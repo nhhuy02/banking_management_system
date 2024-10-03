@@ -1,6 +1,5 @@
 package com.ctv_it.klb.service.type.impl;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.AccountReportDTO;
 import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
@@ -12,6 +11,7 @@ import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.fetch.FetchAccountServiceFC;
 import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
 import com.ctv_it.klb.service.type.ReportTypeService;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,61 +28,93 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
   @Override
   public AccountReportDTO search(ReportRequestDTO reportRequestDTO) {
-    log.info(Translator.toLocale("msg.called", "AccountReportServiceImpl::search"));
+    log.info("AccountReportServiceImpl::search started");
 
     AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
+    log.info("Received valid accountFilterDTO: {}", accountFilterDTO);
 
-    FetchCustomerDataDTO fetchCustomerDataDTO = fetchCustomerServiceFC.findByAccountId(
-        accountFilterDTO.getAccountId());
-
-    CustomerInfoDTO customerInfo = CustomerInfoDTO.builder()
-        .fullName(fetchCustomerDataDTO.getFullName())
-        .email(fetchCustomerDataDTO.getEmail())
-        .phoneNumber(fetchCustomerDataDTO.getPhoneNumber())
-        .address(fetchCustomerDataDTO.getCurrentAddress())
-        .dateOfBirth(fetchCustomerDataDTO.getDateOfBirth())
-        .kycDocumentType(fetchCustomerDataDTO.getKyc().getDocumentType())
-        .kycDocumentNumber(fetchCustomerDataDTO.getKyc().getDocumentNumber())
+    AccountReportDTO reportDTO = AccountReportDTO.builder()
+        .customer(this.fetchCustomerByAccountId(accountFilterDTO.getAccountId()))
+        .accounts(this.fetchAccounts(
+            accountFilterDTO.getAccountId(),
+            accountFilterDTO.getSavingAccountId()))
         .build();
-    log.info("Customer: {}", customerInfo);
 
-    List<AccountInfoDTO> accountInfoDTOS = new ArrayList<>();
-
-    FetchAccountDataDTO fetchAccountDataDTO = fetchAccountServiceFC.getAccountById(
-        accountFilterDTO.getAccountId());
-    AccountInfoDTO accountInfo = AccountInfoDTO.builder()
-        .id(1L)
-        .number(fetchAccountDataDTO.getAccountNumber())
-        .availableBalance(fetchAccountDataDTO.getBalance())
-        .name(fetchAccountDataDTO.getAccountName())
-        .type("Tài khoản thanh toán")
-        .status(fetchAccountDataDTO.getStatus())
-        .build();
-    accountInfoDTOS.add(accountInfo);
-
-    Long savingAccountId = accountFilterDTO.getSavingAccountId();
-    if (savingAccountId != null) {
-      FetchAccountDataDTO fetchSavingAccountDataDTO = fetchAccountServiceFC.getSavingsAccountById(
-          savingAccountId);
-      AccountInfoDTO savingAccountInfo = AccountInfoDTO.builder()
-          .id(2L)
-          .availableBalance(fetchSavingAccountDataDTO.getBalance())
-          .name(fetchSavingAccountDataDTO.getAccountName())
-          .type("Tài khoản tiết kiệm")
-          .status(fetchSavingAccountDataDTO.getStatus())
-          .build();
-      accountInfoDTOS.add(savingAccountInfo);
-    }
-    log.info("AccountsInfo: {}", accountInfoDTOS);
-
-    return AccountReportDTO.builder()
-        .customer(customerInfo)
-        .accounts(accountInfoDTOS)
-        .build();
+    log.info("AccountReportDTO successfully built: {}", reportDTO);
+    return reportDTO;
   }
 
   @Override
   public ReportType getType() {
     return ReportType.ACCOUNT;
+  }
+
+  private CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
+    log.info("Fetching customer data for accountId: {}", accountId);
+    FetchCustomerDataDTO data = fetchCustomerServiceFC.findByAccountId(accountId);
+    CustomerInfoDTO customer = this.map(data);
+    log.info("Mapped customer data: {}", customer);
+    return customer;
+  }
+
+  private List<AccountInfoDTO> fetchAccounts(Long accountId, Long savingAccountId) {
+    log.info("Fetching accounts for accountId: {}, savingAccountId: {}", accountId,
+        savingAccountId);
+
+    List<AccountInfoDTO> accounts = new ArrayList<>();
+    accounts.add(this.fetchAccountById(accountId));
+
+    if (savingAccountId != null) {
+      log.info("Fetching saving account for savingAccountId: {}", savingAccountId);
+      accounts.add(this.fetchSavingAccountById(savingAccountId));
+    }
+
+    log.info("Mapped accounts: {}", accounts);
+    return accounts;
+  }
+
+  private AccountInfoDTO fetchAccountById(long accountId) {
+    log.info("Fetching account by accountId: {}", accountId);
+    FetchAccountDataDTO data = fetchAccountServiceFC.getAccountById(accountId);
+    AccountInfoDTO account = map(data);
+    account.setType("Tài khoản thanh toán");
+    log.info("Mapped account data: {}", account);
+    return account;
+  }
+
+  private AccountInfoDTO fetchSavingAccountById(long savingAccountId) {
+    log.info("Fetching saving account by savingAccountId: {}", savingAccountId);
+
+    FetchAccountDataDTO data = fetchAccountServiceFC.getSavingsAccountById(savingAccountId);
+    AccountInfoDTO savingAccount = map(data);
+
+    savingAccount.setType("Tài khoản tiết kiệm");
+    log.info("Mapped saving account data: {}", savingAccount);
+    return savingAccount;
+  }
+
+  private AccountInfoDTO map(FetchAccountDataDTO fetchAccountDataDTO) {
+    log.debug("Mapping FetchAccountDataDTO to AccountInfoDTO: {}", fetchAccountDataDTO);
+    return AccountInfoDTO.builder()
+        .id(fetchAccountDataDTO.getId())
+        .number(fetchAccountDataDTO.getAccountNumber())
+        .availableBalance(fetchAccountDataDTO.getBalance())
+        .name(fetchAccountDataDTO.getAccountName())
+        .status(fetchAccountDataDTO.getStatus())
+        .build();
+  }
+
+  private CustomerInfoDTO map(FetchCustomerDataDTO fetchCustomerDataDTO) {
+    log.debug("Mapping FetchCustomerDataDTO to CustomerInfoDTO: {}", fetchCustomerDataDTO);
+    return CustomerInfoDTO.builder()
+        .fullName(fetchCustomerDataDTO.getFullName())
+        .email(fetchCustomerDataDTO.getEmail())
+        .phoneNumber(fetchCustomerDataDTO.getPhoneNumber())
+        .address(fetchCustomerDataDTO.getCurrentAddress())
+        .dateOfBirth(fetchCustomerDataDTO.getDateOfBirth().format(
+            DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+        .kycDocumentType(fetchCustomerDataDTO.getKyc().getDocumentType())
+        .kycDocumentNumber(fetchCustomerDataDTO.getKyc().getDocumentNumber())
+        .build();
   }
 }

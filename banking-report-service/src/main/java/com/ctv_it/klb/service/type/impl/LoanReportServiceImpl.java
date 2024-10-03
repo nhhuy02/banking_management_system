@@ -14,7 +14,7 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
   @Override
   public LoanReportDTO search(ReportRequestDTO reportRequestDTO) {
-    log.info(Translator.toLocale("msg.called", "LoanReportServiceImpl::search"));
+    log.info("LoanReportServiceImpl::search is processing with request: {}", reportRequestDTO);
 
     return null;
   }

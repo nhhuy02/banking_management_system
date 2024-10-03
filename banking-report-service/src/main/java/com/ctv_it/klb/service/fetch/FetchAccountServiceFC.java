@@ -45,8 +45,9 @@ public class FetchAccountServiceFC {
 
   public FetchAccountDataDTO getSavingsAccountById(long id) {
     try {
+      log.info("getSavingsAccountById(id={}) is processing", id);
       FetchResponseDTO<FetchAccountDataDTO> fetchResponseDTO = accountServiceFC.getAccountById(id);
-      log.info("getSavingsAccountById({}): {}", id, fetchResponseDTO);
+      log.info("getSavingsAccountById(id={}) passed: {}", id, fetchResponseDTO);
 
       return fetchResponseDTO.getData();
     } catch (Exception ex) {

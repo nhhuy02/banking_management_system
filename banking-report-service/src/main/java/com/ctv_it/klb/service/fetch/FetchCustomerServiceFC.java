@@ -17,9 +17,10 @@ public class FetchCustomerServiceFC {
 
   public FetchCustomerDataDTO findByAccountId(long accountId) {
     try {
+      log.info("findByAccountId(accountId = {}) is processing", accountId);
       FetchResponseDTO<FetchCustomerDataDTO> fetchResponseDTO = customerServiceFC.findByAccountId(
           accountId);
-      log.info("findByAccountId({}): {}", accountId, fetchResponseDTO);
+      log.info("findByAccountId(accountId = {}) passed: {}", accountId, fetchResponseDTO);
 
       if (fetchResponseDTO.isSuccess()) {
         return fetchResponseDTO.getData();
@@ -27,7 +28,7 @@ public class FetchCustomerServiceFC {
         throw new FetchErrorResponseExceptionCustomize(fetchResponseDTO);
       }
     } catch (Exception ex) {
-      log.error("Error fetch customer service: {}", ex.getMessage());
+      log.error("findByAccountId(accountId = {}) by {}", accountId, ex.getMessage());
       throw ex;
     }
   }
