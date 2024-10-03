@@ -101,7 +101,6 @@ public class AccountServiceImpl implements AccountService {
         return getAccountDto(accountId);
     }
 
-
     private void getData(AccountDto customerData, String accountName, String accountNumber) {
         customerData.setFullName(customerData.getFullName());
         customerData.setAccountName(accountName);

@@ -3,7 +3,7 @@ package com.ctv_it.customer_service.config;
 import com.ctv_it.customer_service.dto.AccountData;
 import com.ctv_it.customer_service.dto.ChangeStatusDto;
 import com.ctv_it.customer_service.dto.CustomerDto;
-import com.ctv_it.customer_service.dto.OtpEmailRequestDto;
+import com.ctv_it.customer_service.dto.OtpRequestDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -76,7 +76,6 @@ public class KafkaConfig {
     @Bean
     public ProducerFactory<String, CustomerDto> producerFactoryCustomerDto() {
         Map<String, Object> configProps = new HashMap<>();
-//        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class.getName());
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
@@ -100,13 +99,13 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, OtpEmailRequestDto> producerFactoryOtpEmail() {
+    public ProducerFactory<String, OtpRequestDto> producerFactoryOtp() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplateOtpEmail() {
-        return new KafkaTemplate<>(producerFactoryOtpEmail());
+    public KafkaTemplate<String, OtpRequestDto> kafkaTemplateOtpEmail() {
+        return new KafkaTemplate<>(producerFactoryOtp());
     }
 
     @Bean
