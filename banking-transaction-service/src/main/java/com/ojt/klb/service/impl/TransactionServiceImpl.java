@@ -135,6 +135,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionDto> findTransactions(TransactionType transactionType, LocalDateTime fromDate, LocalDateTime toDate, TransactionStatus status) {
+        List<Transaction> transactions = repository.findByTransactionTypeAndTransactionDateBetweenAndStatus(
+                transactionType, fromDate, toDate, status
+        );
+
+        return transactions.stream()
+                .map(mapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ApiResponse saveTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
