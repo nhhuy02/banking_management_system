@@ -25,7 +25,7 @@ public class ReportService {
   private final ReportFormatServiceFactory reportFormatServiceFactory;
   private final FileUtil fileUtil;
 
-  public Object report(ReportRequestDTO requestDTO) {
+  public Object report(Long accountId, ReportRequestDTO requestDTO) {
     // check support type
     ReportTypeService<?> reportTypeService = reportTypeServiceFactory.getReportTypeService(
         requestDTO.getReportType());
@@ -40,7 +40,7 @@ public class ReportService {
 
     // Return Object if request format NONE
     if (ReportFormat.NONE.equals(requestDTO.getReportFormat())) {
-      return this.search(requestDTO, reportTypeService);
+      return this.search(accountId, requestDTO, reportTypeService);
     } else { // Else, check support format for type
       ReportFormatService<?> reportFormatService = reportFormatServiceFactory.getReportFormatService(
           requestDTO.getReportType(), requestDTO.getReportFormat());
@@ -52,7 +52,8 @@ public class ReportService {
                     "Report format '" + requestDTO.getReportFormat() + "' for type '"
                         + requestDTO.getReportType() + "' is not supported").build()));
       } else {
-        return exportReport(this.search(requestDTO, reportTypeService), reportFormatService);
+        return exportReport(this.search(accountId, requestDTO, reportTypeService),
+            reportFormatService);
       }
     }
   }
@@ -63,7 +64,8 @@ public class ReportService {
     return reportFormatService.export((T) reportData);
   }
 
-  private Object search(ReportRequestDTO requestDTO, ReportTypeService<?> reportTypeService) {
-    return reportTypeService.search(requestDTO);
+  private Object search(Long accountId, ReportRequestDTO requestDTO,
+      ReportTypeService<?> reportTypeService) {
+    return reportTypeService.search(accountId, requestDTO);
   }
 }
