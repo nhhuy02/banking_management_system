@@ -1,7 +1,7 @@
-package com.ojt.klb.dto;
+package com.ctv_it.customer_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ojt.klb.model.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 public class AccountDto {
 
+    @JsonIgnore
     private Long accountId;
 
     private String fullName;
@@ -33,8 +34,6 @@ public class AccountDto {
     private String currentAddress;
 
     private BigDecimal balance;
-
-    private Account.Status status ;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp openingDate;

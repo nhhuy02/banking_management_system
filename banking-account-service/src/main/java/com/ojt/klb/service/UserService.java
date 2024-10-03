@@ -1,5 +1,6 @@
 package com.ojt.klb.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ojt.klb.dto.LoginDto;
 import com.ojt.klb.dto.RegisterDto;
 import com.ojt.klb.dto.RegisterResponseDto;
@@ -12,5 +13,6 @@ public interface UserService {
     Optional<LoginDto> login(String username, String password);
 
     RegisterResponseDto createUser(RegisterDto registerDto);
-    void forgetPassword (String phoneNumber);
+    void forgetPasswordGetCode (String phoneNumber) throws JsonProcessingException;
+    void changePassword(String phoneNumber, String password);
 }
