@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,10 +64,15 @@ public class ReportController {
       // Split byte[] to get fileName and actual data
       Map<String, Object> reportDataBytesSplit = fileUtil.splitDataAndFileName(reportDataBytes);
       String fileName = (String) reportDataBytesSplit.get("fileName");
-      reportData = (byte[]) reportDataBytesSplit.get("data");
+      reportData = reportDataBytesSplit.get("data");
 
-      // Set filename in response header
-      responseBuilder.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+      // Set response header
+      responseBuilder
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+          .header(HttpHeaders.CONTENT_TYPE,
+              reportRequestDTO.getReportFormat().getHeaderContentType());
+
+      return responseBuilder.body(reportData);
     }
 
 // Handle non-byte[] report data

@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class AccountInfoDTO {
 
+  private int no;
   private Long id;
   private String type;
   private String name;
@@ -22,5 +23,5 @@ public class AccountInfoDTO {
   private BigDecimal availableBalance;
   private String branch;
   private String status;
-  private LocalDate openingDate;
+  private String openingDate;
 }

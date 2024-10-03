@@ -14,7 +14,7 @@ public class TransactionReportServiceImpl implements ReportTypeService<Transacti
 
   @Override
   public TransactionReportDTO search(ReportRequestDTO reportRequestDTO) {
-    log.info(Translator.toLocale("msg.called", "TransactionReportServiceImpl::search"));
+    log.info("TransactionReportServiceImpl::search is processing with request: {}", reportRequestDTO);
 
     return null;
   }
