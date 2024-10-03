@@ -9237,3 +9237,281 @@ Identify and stop the process that's listening on port 8060 or configure this ap
 2024-10-03T09:54:27.491+07:00  INFO 15162 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - Re-registering apps/BANKING-LOAN-SERVICE
 2024-10-03T09:54:27.492+07:00  INFO 15162 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060: registering service...
 2024-10-03T09:54:27.496+07:00  INFO 15162 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
+2024-10-03T16:36:23.579+07:00  INFO 15538 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 22.0.2 with PID 15538 (/Users/nvs/Downloads/Work/KLB/microservices-core-banking/banking-loan-service/build/classes/java/main started by nvs in /Users/nvs/Downloads/Work/KLB/microservices-core-banking)
+2024-10-03T16:36:23.581+07:00  INFO 15538 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-10-03T16:36:23.611+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2024-10-03T16:36:23.611+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
+2024-10-03T16:36:24.200+07:00  INFO 15538 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-03T16:36:24.339+07:00  INFO 15538 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 134 ms. Found 7 JPA repository interfaces.
+2024-10-03T16:36:24.532+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=20d9ee34-d672-333f-80fd-749be067e8ac
+2024-10-03T16:36:24.730+07:00  WARN 15538 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-03T16:36:24.731+07:00  WARN 15538 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-03T16:36:24.883+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
+2024-10-03T16:36:24.901+07:00  INFO 15538 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-03T16:36:24.901+07:00  INFO 15538 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-03T16:36:24.948+07:00  INFO 15538 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-03T16:36:24.948+07:00  INFO 15538 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1336 ms
+2024-10-03T16:36:24.980+07:00 DEBUG 15538 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
+2024-10-03T16:36:25.052+07:00  INFO 15538 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-03T16:36:25.089+07:00  INFO 15538 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-03T16:36:25.109+07:00  INFO 15538 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-03T16:36:25.288+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-03T16:36:25.304+07:00  INFO 15538 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-03T16:36:25.610+07:00  INFO 15538 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7d108063
+2024-10-03T16:36:25.611+07:00  INFO 15538 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-03T16:36:26.417+07:00  INFO 15538 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-03T16:36:26.883+07:00  INFO 15538 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-03T16:36:27.170+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-03T16:36:27.658+07:00  WARN 15538 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-03T16:36:28.365+07:00  INFO 15538 --- [banking-loan-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2024-10-03T16:36:28.380+07:00  WARN 15538 --- [banking-loan-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-03T16:36:28.404+07:00  INFO 15538 --- [banking-loan-service] [main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-admin-0
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2024-10-03T16:36:28.510+07:00  INFO 15538 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-03T16:36:28.510+07:00  INFO 15538 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-03T16:36:28.510+07:00  INFO 15538 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1727948188509
+2024-10-03T16:36:28.521+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:28.522+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:28.625+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:28.625+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:28.828+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:28.828+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:29.133+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:29.134+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:29.644+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:29.645+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:30.561+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:30.562+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:31.482+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:31.482+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:32.498+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:32.499+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:33.520+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:33.521+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:34.434+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:34.435+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:35.452+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:35.453+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:36.468+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:36.469+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:37.483+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:37.484+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:38.510+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:38.511+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:39.527+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:39.527+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:40.541+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:40.542+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:41.472+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:41.473+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:42.489+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:42.490+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:43.409+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:43.410+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:44.430+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:44.431+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:45.448+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:45.449+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:46.465+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:46.466+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:47.483+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:47.484+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:48.499+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:48.500+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:49.514+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:49.515+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:50.531+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:50.532+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:51.549+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:51.550+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:52.565+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:52.565+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:53.483+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:53.484+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:54.500+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:54.501+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:55.517+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:55.518+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:56.433+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:56.434+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:57.447+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:57.449+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:58.462+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:58.463+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:36:58.513+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.k.c.a.i.AdminMetadataManager         : [AdminClient clientId=banking-loan-service-admin-0] Metadata update failed
+
+org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
+
+2024-10-03T16:36:58.524+07:00 ERROR 15538 --- [banking-loan-service] [main] o.springframework.kafka.core.KafkaAdmin  : Could not configure topics
+
+org.springframework.kafka.KafkaException: Timed out waiting to get existing topics
+	at org.springframework.kafka.core.KafkaAdmin.lambda$checkPartitions$13(KafkaAdmin.java:550) ~[spring-kafka-3.2.3.jar:3.2.3]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
+	at org.springframework.kafka.core.KafkaAdmin.checkPartitions(KafkaAdmin.java:529) ~[spring-kafka-3.2.3.jar:3.2.3]
+	at org.springframework.kafka.core.KafkaAdmin.addOrModifyTopicsIfNeeded(KafkaAdmin.java:422) ~[spring-kafka-3.2.3.jar:3.2.3]
+	at org.springframework.kafka.core.KafkaAdmin.initialize(KafkaAdmin.java:274) ~[spring-kafka-3.2.3.jar:3.2.3]
+	at org.springframework.kafka.core.KafkaAdmin.afterSingletonsInstantiated(KafkaAdmin.java:238) ~[spring-kafka-3.2.3.jar:3.2.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:986) ~[spring-beans-6.1.12.jar:6.1.12]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:971) ~[spring-context-6.1.12.jar:6.1.12]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625) ~[spring-context-6.1.12.jar:6.1.12]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.3.3.jar:3.3.3]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.3.jar:3.3.3]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.3.jar:3.3.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.3.jar:3.3.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363) ~[spring-boot-3.3.3.jar:3.3.3]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.3.jar:3.3.3]
+	at com.app.bankingloanservice.BankingLoanServiceApplication.main(BankingLoanServiceApplication.java:16) ~[main/:na]
+Caused by: java.util.concurrent.TimeoutException: null
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095) ~[na:na]
+	at org.apache.kafka.common.internals.KafkaFutureImpl.get(KafkaFutureImpl.java:180) ~[kafka-clients-3.7.1.jar:na]
+	at org.springframework.kafka.core.KafkaAdmin.lambda$checkPartitions$13(KafkaAdmin.java:532) ~[spring-kafka-3.2.3.jar:3.2.3]
+	... 15 common frames omitted
+
+2024-10-03T16:36:59.543+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:36:59.544+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:00.563+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:00.564+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:01.586+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:01.587+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:02.500+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:02.500+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:03.514+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:03.515+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:04.429+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:04.430+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:05.446+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:05.446+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:06.361+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:06.362+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:07.378+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:07.379+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:08.293+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Node -1 disconnected.
+2024-10-03T16:37:08.294+07:00  WARN 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] org.apache.kafka.clients.NetworkClient   : [AdminClient clientId=banking-loan-service-admin-0] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available.
+2024-10-03T16:37:08.533+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.k.clients.admin.KafkaAdminClient     : [AdminClient clientId=banking-loan-service-admin-0] Forcing a hard I/O thread shutdown. Requests in progress will be aborted.
+2024-10-03T16:37:08.535+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for banking-loan-service-admin-0 unregistered
+2024-10-03T16:37:08.537+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.k.c.a.i.AdminMetadataManager         : [AdminClient clientId=banking-loan-service-admin-0] Metadata update failed
+
+org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: fetchMetadata
+
+2024-10-03T16:37:08.538+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.k.clients.admin.KafkaAdminClient     : [AdminClient clientId=banking-loan-service-admin-0] Timed out 2 remaining operation(s) during close.
+2024-10-03T16:37:08.556+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-10-03T16:37:08.556+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-10-03T16:37:08.557+07:00  INFO 15538 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-10-03T16:37:08.584+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2024-10-03T16:37:08.604+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2024-10-03T16:37:08.607+07:00  INFO 15538 --- [banking-loan-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-03T16:37:08.612+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2024-10-03T16:37:08.613+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2024-10-03T16:37:08.812+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2024-10-03T16:37:08.813+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2024-10-03T16:37:08.814+07:00  INFO 15538 --- [banking-loan-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-03T16:37:08.814+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1727948228814 with initial instances count: 4
+2024-10-03T16:37:08.817+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application BANKING-LOAN-SERVICE with eureka with status UP
+2024-10-03T16:37:08.817+07:00  INFO 15538 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1727948228817, current=UP, previous=STARTING]
+2024-10-03T16:37:08.818+07:00  INFO 15538 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060: registering service...
+2024-10-03T16:37:08.828+07:00  INFO 15538 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8060 (http) with context path '/'
+2024-10-03T16:37:08.829+07:00  INFO 15538 --- [banking-loan-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8060
+2024-10-03T16:37:08.843+07:00  INFO 15538 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - registration status: 204
+2024-10-03T16:37:08.845+07:00  INFO 15538 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Started BankingLoanServiceApplication in 45.999 seconds (process running for 46.467)
+2024-10-03T16:37:25.356+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-03T16:37:25.356+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-10-03T16:37:25.358+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-10-03T16:37:25.369+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /swagger-ui/index.html, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"none", connection:"keep-alive", upgrade-insecure-requests:"1", sec-fetch-mode:"navigate", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", accept-language:"en-GB,en-US;q=0.9,en;q=0.8", sec-fetch-dest:"document", accept-encoding:"gzip, deflate"]]
+2024-10-03T16:37:25.391+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /swagger-ui/index.html, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"none", connection:"keep-alive", upgrade-insecure-requests:"1", sec-fetch-mode:"navigate", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", accept-language:"en-GB,en-US;q=0.9,en;q=0.8", sec-fetch-dest:"document", accept-encoding:"gzip, deflate"]]
+2024-10-03T16:37:25.520+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /swagger-ui/swagger-initializer.js, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"no-cors", accept:"*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"script", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:25.528+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /swagger-ui/swagger-initializer.js, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"no-cors", accept:"*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"script", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:25.554+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /v3/api-docs/swagger-config, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:25.579+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /v3/api-docs/swagger-config, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:25.587+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /v3/api-docs, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"application/json,*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:26.040+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-4] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 440 ms
+2024-10-03T16:37:26.053+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /v3/api-docs, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"application/json,*/*", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:40.218+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-5] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /api/v1/loan-service/loans?accountId=1&page=0&size=20, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"application/json", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:37:40.224+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.controller.LoanController          : Received request to fetch loans for accountId: 1 with pageable: Page request [number: 0, size 20, sort: UNSORTED]
+2024-10-03T16:37:40.254+07:00  INFO 15538 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.service.impl.LoanServiceImpl       : Fetching loans for account ID: 1 with pagination: Page request [number: 0, size 20, sort: UNSORTED]
+2024-10-03T16:37:40.333+07:00  WARN 15538 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.service.impl.LoanServiceImpl       : No loans found for account ID: 1
+2024-10-03T16:37:40.336+07:00  WARN 15538 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.controller.LoanController          : No loans found for accountId: 1
+2024-10-03T16:37:40.340+07:00  WARN 15538 --- [banking-loan-service] [http-nio-8060-exec-5] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2024-10-03T16:37:40.342+07:00 DEBUG 15538 --- [banking-loan-service] [http-nio-8060-exec-5] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /api/v1/loan-service/loans?accountId=1&page=0&size=20, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", sec-fetch-site:"same-origin", accept-encoding:"gzip, deflate", cookie:"Idea-29640bab=1102b967-8677-48d0-b1d8-007b89b44a7d", connection:"keep-alive", sec-fetch-mode:"cors", accept:"application/json", user-agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15", referer:"http://localhost:8060/swagger-ui/index.html", sec-fetch-dest:"empty", accept-language:"en-GB,en-US;q=0.9,en;q=0.8"]]
+2024-10-03T16:42:08.620+07:00  INFO 15538 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-03T16:47:08.644+07:00  INFO 15538 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
