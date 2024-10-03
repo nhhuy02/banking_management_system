@@ -1,7 +1,5 @@
 package com.ctv_it.klb.service.format.impl;
 
-import com.ctv_it.klb.common.Default.File;
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.AccountReportDTO;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
@@ -17,23 +15,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountExcelServiceImpl implements ReportFormatService<AccountReportDTO> {
 
-
   private final FileUtil fileUtil;
 
   @Override
-  public byte[] export(String fileName, AccountReportDTO accountReportData) {
-    log.info(Translator.toLocale("msg.called", "AccountExcelServiceImpl::export"));
-    log.info("ReportData: {}", accountReportData);
+  public byte[] export(AccountReportDTO accountReportData) {
+    log.info("AccountExcelServiceImpl::export is processing for data: {}", accountReportData);
 
-    // custom file name
-    fileName += getFormat().getExtension(); // example: "fileAccount" + ".pdf" = "fileAccount.pdf"
+    String fileName = this.generateFileName();
 
     Map<String, Object> data = Map.of(
         "customer", accountReportData.getCustomer(),
         "accounts", accountReportData.getAccounts());
     log.info("DataMap: {}", data);
 
-    byte[] byteData = fileUtil.export(fileName, getTemplate(), data);
+    byte[] byteData = fileUtil.export(getFormat(), fileName, this.getTemplateFile(), data);
 
     log.info("byteData: {}", byteData);
     log.info("fileName: {}", fileName);
@@ -51,9 +46,5 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   @Override
   public ReportFormat getFormat() {
     return ReportFormat.EXCEL;
-  }
-
-  private String getTemplate() {
-    return File.TEMPLATE_PATH + "/" + getType().getValue() + getFormat().getExtension();
   }
 }
