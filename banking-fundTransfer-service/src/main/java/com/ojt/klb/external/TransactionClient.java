@@ -13,9 +13,6 @@ import java.util.List;
 @FeignClient(name = "banking-transaction-service", url= "http://localhost:8070/api/v1/transactions")
 public interface TransactionClient {
 
-    @PostMapping
-    ResponseEntity<ApiResponse> handleTransaction(@RequestBody Transaction transaction);
-
     @PostMapping("/internal")
-    ResponseEntity<ApiResponse> makeInternalTransactions(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
+    ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
 }
