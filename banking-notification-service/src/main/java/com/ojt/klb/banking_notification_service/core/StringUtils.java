@@ -4,6 +4,7 @@ import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -46,12 +47,15 @@ public class StringUtils {
         return content;
     }
 
-    public static String convertContentLoanApplication(Long contractNumber) {
-
-        return "";
+    public static String convertContentLoanApplication(Long contractNumber, String status) {
+        String content = "Khoản vay của bạn Số HĐ: " + contractNumber.toString()+ SPACE+ status;
+        return content;
     }
 
-
+    public static String convertContentLoanReminder(Long contractNumber, LocalDate deadline) {
+        String content = "Nhăc nhở thanh toán khoản vay số HĐ: " + contractNumber.toString()+ SPACE+ "trước ngày "+ deadline;
+        return content;
+    }
 
 
 }

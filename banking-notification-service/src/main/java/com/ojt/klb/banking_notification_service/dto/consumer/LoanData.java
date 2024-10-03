@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -18,5 +19,5 @@ public class LoanData {
     private String email;
     private Long contractNumber;
     private BigDecimal amounts;
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 }
