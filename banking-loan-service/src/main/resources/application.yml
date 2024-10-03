@@ -40,6 +40,7 @@ springdoc:
     path: /v3/api-docs
 
 app:
+
   file:
     storage:
       directory: banking-loan-docs/
@@ -47,6 +48,8 @@ app:
   loan:
     disbursement:
       source-account-number: 1234567890
+    repayment:
+      collection-account-number: 1234567890
 
   fund-transfer-client:
     url: http://localhost:8090/api/v1/fund_transfer
