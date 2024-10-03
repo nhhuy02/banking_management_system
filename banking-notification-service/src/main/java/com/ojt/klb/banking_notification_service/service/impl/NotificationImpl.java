@@ -1,5 +1,6 @@
 package com.ojt.klb.banking_notification_service.service.impl;
 
+import com.ojt.klb.banking_notification_service.core.Status;
 import com.ojt.klb.banking_notification_service.core.StringUtils;
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
 import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
@@ -123,14 +124,16 @@ public class NotificationImpl implements NotificationService {
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
 
         Map<String, Object> variables2  = new HashMap<>();
-        String content,transactionAmount = "";
+        String content = "",transactionAmount= "",temp = "";
 
         if(transData.getTransactionType().equalsIgnoreCase("DEPOSIT")){
-            content = "NẠP TIỀN";
+            content = ResponseMessage.DEPOSIT.statusCodeValue();
             transactionAmount = ResponseMessage.INCREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+            temp= StringUtils.convertContentIncreaseBalance(transData.getAccountNumber(),transData.getAmount(), transData.getBalance());
         } else {
-            content = "RÚT TIỀN";
+            content = ResponseMessage.WITHDRAWAL.statusCodeValue();
             transactionAmount = ResponseMessage.DECREASE.statusCodeValue() + StringUtils.convertVND(transData.getAmount());
+            temp= StringUtils.convertContentDecreaseBalance(transData.getAccountNumber(),transData.getAmount(), transData.getBalance());
         }
 
         variables2.put("customerName", transData.getCustomerName());
@@ -140,7 +143,16 @@ public class NotificationImpl implements NotificationService {
         variables2.put("transactionDate", StringUtils.convertDateTime(transData.getLocalDateTime()));
         variables2.put("content", content);
 
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setSendDate(LocalDateTime.now());
+        notification.setNotificationTemplateId(notificationTemplate.getId());
+        notification.setCustomerId(transData.getCustomerId());
+        notification.setContent(temp);
+
         mailConfig.send(email,subject,"balance_change_notification",variables2);
+
+        notificationRepository.save(notification);
     }
 
     @Override
@@ -152,17 +164,33 @@ public class NotificationImpl implements NotificationService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", loanDto.getCustomerName());
         variables.put("applicationNumber", loanDto.getLoanApplicationId());
+        variables.put("time", loanDto.getSubmissionDate());
+        variables.put("loanTermMonths", loanDto.getLoanTermMonths());
+        variables.put("reviewTimeDays", loanDto.getReviewTimeDays());
         variables.put("loanAmount", StringUtils.convertVND(loanDto.getAmounts()));
-        String status = "";
-        if (loanDto.getStatus().equalsIgnoreCase("PENDING")) { status = "Chờ Duyệt";}
+        String status = "",content = "";
+        if (loanDto.getStatus().equalsIgnoreCase(ResponseMessage.PENDING.statusCodeValue())) {
+            status = Status.PENDING.getText();
+            content = StringUtils.convertContentLoanApplication(loanDto.getLoanApplicationId(),status);
+        }
         variables.put("status", status);
+
+
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setSendDate(LocalDateTime.now());
+        notification.setNotificationTemplateId(notificationTemplate.getId());
+        notification.setCustomerId(loanDto.getCustomerId());
+        notification.setContent(content);
+
         mailConfig.send(email, subject, "loan_application", variables);
+        notificationRepository.save(notification);
     }
 
 
 
     @Override
-    @KafkaListener(topics = "loan-topic", groupId = "group_id")
+    @KafkaListener(topics = "loan-topic", groupId = "loan_group", containerFactory = "loanDataKafkaListenerContainerFactory")
     public void sendMailPaymentReminder(LoanData loanData) {
         String email = loanData.getEmail();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_REMINDER.statusCodeValue());
@@ -171,8 +199,16 @@ public class NotificationImpl implements NotificationService {
         variables.put("customerName", loanData.getCustomerName());
         variables.put("contractNumber", loanData.getContractNumber());
         variables.put("amounts", StringUtils.convertVND(loanData.getAmounts()));
-        variables.put("deadline",StringUtils.convertDateTime(loanData.getDeadline()));
-         mailConfig.send(email, subject, "payment_reminder", variables);
+        variables.put("deadline",loanData.getDeadline());
+
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setSendDate(LocalDateTime.now());
+        notification.setNotificationTemplateId(notificationTemplate.getId());
+        notification.setCustomerId(loanData.getCustomerId());
+        notification.setContent(StringUtils.convertContentLoanReminder(loanData.getContractNumber(), loanData.getDeadline()));
+        mailConfig.send(email, subject, "payment_reminder", variables);
+        notificationRepository.save(notification);
     }
 
     @Override
