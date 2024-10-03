@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,13 +50,14 @@ public class ReportController {
       @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))
   })
-  @PostMapping("")
+  @PostMapping("/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
+      @PathVariable long accountId,
       @RequestBody ReportRequestDTO reportRequestDTO) {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
-    Object reportData = reportService.report(reportRequestDTO);
+    Object reportData = reportService.report(accountId, reportRequestDTO);
     SuccessResponseDTO response;
     ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.ok();
 

@@ -17,7 +17,5 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "Filter for account reports")
 public class AccountFilterDTO extends ReportFilterDTO {
 
-  @NotNull
-  private Long accountId;
   private Long savingAccountId;
 }

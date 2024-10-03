@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
   @Override
-  public LoanReportDTO search(ReportRequestDTO reportRequestDTO) {
+  public LoanReportDTO search(long accountId, ReportRequestDTO reportRequestDTO) {
     log.info("LoanReportServiceImpl::search is processing with request: {}", reportRequestDTO);
 
     return null;

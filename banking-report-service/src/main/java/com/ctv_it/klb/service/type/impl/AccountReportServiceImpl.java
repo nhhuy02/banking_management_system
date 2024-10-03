@@ -27,17 +27,15 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
   private final FetchAccountServiceFC fetchAccountServiceFC;
 
   @Override
-  public AccountReportDTO search(ReportRequestDTO reportRequestDTO) {
+  public AccountReportDTO search(long accountId, ReportRequestDTO reportRequestDTO) {
     log.info("AccountReportServiceImpl::search started");
 
     AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
     log.info("Received valid accountFilterDTO: {}", accountFilterDTO);
 
     AccountReportDTO reportDTO = AccountReportDTO.builder()
-        .customer(this.fetchCustomerByAccountId(accountFilterDTO.getAccountId()))
-        .accounts(this.fetchAccounts(
-            accountFilterDTO.getAccountId(),
-            accountFilterDTO.getSavingAccountId()))
+        .customer(this.fetchCustomerByAccountId(accountId))
+        .accounts(this.fetchAccounts(accountId, accountFilterDTO.getSavingAccountId()))
         .build();
 
     log.info("AccountReportDTO successfully built: {}", reportDTO);
@@ -75,10 +73,12 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
   private AccountInfoDTO fetchAccountById(long accountId) {
     log.info("Fetching account by accountId: {}", accountId);
+
     FetchAccountDataDTO data = fetchAccountServiceFC.getAccountById(accountId);
     AccountInfoDTO account = map(data);
     account.setType("Tài khoản thanh toán");
     log.info("Mapped account data: {}", account);
+
     return account;
   }
 
@@ -87,9 +87,9 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
     FetchAccountDataDTO data = fetchAccountServiceFC.getSavingsAccountById(savingAccountId);
     AccountInfoDTO savingAccount = map(data);
-
     savingAccount.setType("Tài khoản tiết kiệm");
     log.info("Mapped saving account data: {}", savingAccount);
+
     return savingAccount;
   }
 

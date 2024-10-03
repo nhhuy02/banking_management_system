@@ -1,6 +1,5 @@
 package com.ctv_it.klb.service.type.impl;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.TransactionReportDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.enumeration.ReportType;
@@ -13,8 +12,9 @@ import org.springframework.stereotype.Service;
 public class TransactionReportServiceImpl implements ReportTypeService<TransactionReportDTO> {
 
   @Override
-  public TransactionReportDTO search(ReportRequestDTO reportRequestDTO) {
-    log.info("TransactionReportServiceImpl::search is processing with request: {}", reportRequestDTO);
+  public TransactionReportDTO search(long accountId, ReportRequestDTO reportRequestDTO) {
+    log.info("TransactionReportServiceImpl::search is processing with request: {}",
+        reportRequestDTO);
 
     return null;
   }

@@ -5,7 +5,7 @@ import com.ctv_it.klb.enumeration.ReportType;
 
 public interface ReportTypeService<T> {
 
-  T search(ReportRequestDTO reportRequestDTO);
+  T search(long accountId, ReportRequestDTO reportRequestDTO);
 
   ReportType getType();
 }
