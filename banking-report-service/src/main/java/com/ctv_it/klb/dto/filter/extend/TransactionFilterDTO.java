@@ -1,7 +1,7 @@
 package com.ctv_it.klb.dto.filter.extend;
 
-import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.RangeDTO;
+import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -18,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "Filter for transaction reports")
 public class TransactionFilterDTO extends ReportFilterDTO {
 
-  private Long accountId;
   private String transactionType;
   private String transactionCategory;
   private RangeDTO<LocalDate> transactionDateRange;

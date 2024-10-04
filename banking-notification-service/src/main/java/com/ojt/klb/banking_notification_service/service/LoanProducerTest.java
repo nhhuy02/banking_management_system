@@ -1,6 +1,6 @@
 package com.ojt.klb.banking_notification_service.service;
 
-import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

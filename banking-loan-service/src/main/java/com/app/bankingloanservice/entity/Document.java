@@ -15,7 +15,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Document extends AuditModel {
 
     //The unique identifier for the document.
@@ -49,5 +48,4 @@ public class Document extends AuditModel {
     //A description of the document.
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
 }

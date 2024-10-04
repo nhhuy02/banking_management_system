@@ -1,13 +1,14 @@
 package com.ojt.klb.banking_notification_service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
 
 public class GenericDeserializer<T> implements Deserializer<T> {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private Class<T> type;
 
     public GenericDeserializer() {
