@@ -20,8 +20,8 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @PostMapping("/registerNapasCard")
-    public ResponseEntity<ApiResponse<String>> registerNapasCard(@RequestParam Long accountId) {
+    @PostMapping("/registerNapasCard/{accountId}")
+    public ResponseEntity<ApiResponse<String>> registerNapasCard(@PathVariable Long accountId) {
         try {
             cardService.registerCardNapas(accountId);
             logger.info("Card Napas created successfully for accountId: {}", accountId);

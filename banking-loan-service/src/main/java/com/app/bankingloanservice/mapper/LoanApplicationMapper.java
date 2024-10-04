@@ -31,7 +31,7 @@ public abstract class LoanApplicationMapper {
     }
 
     // Map LoanApplication to LoanApplicationResponse
-    @Mapping(target = "loanTypeDto", source = "loanType")
+    @Mapping(target = "loanTypeResponse", source = "loanType")
     @Mapping(target = "collateralResponse", source = "collateral")
     public abstract LoanApplicationResponse toResponse(LoanApplication loanApplication);
 

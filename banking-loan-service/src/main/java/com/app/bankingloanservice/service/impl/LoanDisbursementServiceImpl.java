@@ -78,8 +78,12 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
 
         // 8. Return LoanDisbursementResponseDto with relevant information
         return LoanDisbursementResponse.builder()
+                .loanId(loan.getLoanId())
                 .loanContractNo(loan.getLoanContractNo())
-                .borrowerAccountNumber(accountInfo.getAccountNumber())
+                .customerName(accountInfo.getFullName())
+                .customerEmail(accountInfo.getEmail())
+                .customerPhone(accountInfo.getPhoneNumber())
+                .customerAccountNumber(accountInfo.getAccountNumber())
                 .disbursedAmount(loan.getLoanAmount())
                 .transactionReference(fundTransferResponse.getTransactionReference())
                 .disbursementDate(LocalDate.now())
