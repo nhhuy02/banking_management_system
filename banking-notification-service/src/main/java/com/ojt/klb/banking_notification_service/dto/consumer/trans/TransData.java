@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.consumer;
+package com.ojt.klb.banking_notification_service.dto.consumer.trans;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

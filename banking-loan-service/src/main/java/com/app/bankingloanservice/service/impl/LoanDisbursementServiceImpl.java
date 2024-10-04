@@ -97,6 +97,7 @@ public class LoanDisbursementServiceImpl implements LoanDisbursementService {
     private void sendNotification(Loan loan, AccountDto accountInfo) {
         // Prepare notification DTO with loan and borrower information
         LoanDisbursementNotification notification = LoanDisbursementNotification.builder()
+                .customerId(accountInfo.getCustomerId())
                 .loanId(loan.getLoanId())
                 .customerAccountNumber(accountInfo.getAccountNumber())
                 .loanContractNo(loan.getLoanContractNo())

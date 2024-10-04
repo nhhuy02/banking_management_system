@@ -6,6 +6,12 @@ import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
 import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
 import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
 import com.ojt.klb.banking_notification_service.dto.consumer.*;
+import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanApplicationNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDisbursementNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransData;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import com.ojt.klb.banking_notification_service.entity.Notification;
 import com.ojt.klb.banking_notification_service.entity.NotificationTemplate;
 import com.ojt.klb.banking_notification_service.repository.NotificationRepository;
@@ -155,9 +161,10 @@ public class NotificationImpl implements NotificationService {
         notificationRepository.save(notification);
     }
 
+
     @Override
     @KafkaListener(topics = "loan_application", groupId = "loan_group",containerFactory = "loanAppKafkaListenerContainerFactory")
-    public void sendMailLoanApplication(LoanDto loanDto) {
+    public void sendMailLoanApplication(LoanApplicationNotification loanDto) {
         String email = loanDto.getEmail();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.LOAN.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
@@ -186,8 +193,30 @@ public class NotificationImpl implements NotificationService {
         mailConfig.send(email, subject, "loan_application", variables);
         notificationRepository.save(notification);
     }
+    @KafkaListener(topics = "loan-disbursement-notification", groupId = "loan_group",containerFactory = "loanDisbursementNotificationConcurrentKafkaListenerContainerFactory")
+    @Override
+    public void sendMailLoanDisbursement(LoanDisbursementNotification loanDisbursementNotification) {
+        String email = loanDisbursementNotification.getCustomerEmail();
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.LOAN.statusCodeValue());
+        String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("customerName", loanDisbursementNotification.getCustomerName());
+        variables.put("contractNumber", loanDisbursementNotification.getLoanContractNo());
+        variables.put("disbursedAmount", StringUtils.convertVND(loanDisbursementNotification.getDisbursedAmount()));
+        variables.put("disbursementTime", loanDisbursementNotification.getDisbursementDate());
+        variables.put("bankAccount", loanDisbursementNotification.getCustomerAccountNumber());
 
 
+        Notification notification = new Notification();
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setSendDate(LocalDateTime.now());
+        notification.setNotificationTemplateId(notificationTemplate.getId());
+        notification.setCustomerId(loanDisbursementNotification.getCustomerId());
+        notification.setContent(StringUtils.convertContentLoanDisbursement(loanDisbursementNotification.getLoanContractNo(),loanDisbursementNotification.getDisbursedAmount()));
+
+        mailConfig.send(email, subject, "loan_disbursement", variables);
+        notificationRepository.save(notification);
+    }
 
     @Override
     @KafkaListener(topics = "loan-topic", groupId = "loan_group", containerFactory = "loanDataKafkaListenerContainerFactory")

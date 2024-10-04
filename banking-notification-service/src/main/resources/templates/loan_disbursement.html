@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đơn đăng ký khoản vay</title>
+    <title>Thông báo giải ngân khoản vay</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,23 +66,21 @@
     </style>
 </head>
 <body>
-<table style="width: 100%; max-width: 800px; margin: 20px auto;  border: 1px solid #ddd;">
+<table style="width: 100%; max-width: 800px; margin: 20px auto; border: 1px solid #ddd;">
     <tr>
         <td style="text-align: center;">
             <div class="container">
                 <div class="header">
                     <img src="https://firebasestorage.googleapis.com/v0/b/klb-project.appspot.com/o/images%2FEIGHT%20BANK.png?alt=media&token=34615cbe-189f-4d27-8a88-ba5819452403" alt="Logo Bank">
-                    <h1>Đơn đăng ký khoản vay</h1>
+                    <h1>Thông báo giải ngân khoản vay</h1>
                 </div>
                 <div class="content">
                     <p>Kính gửi <strong th:text="${customerName}">[Customer Name]</strong>,</p>
-                    <p>Chúng tôi xin thông báo rằng đơn đăng ký khoản vay của bạn tại <strong style="color: #0066cc;">EIGHT BANK</strong> đã được tiếp nhận và đang trong quá trình xử lý.</p>
-                    <p>Đơn đăng ký vay số: <strong th:text="${applicationNumber}">[Số đơn]</strong></p>
-                    <p>Thời gian đăng ký: <strong th:text="${time}">[...]</strong></p>
-                    <p>Số tiền khoản vay: <strong th:text="${loanAmount}">[...]</strong> </p>
-                    <p>Kỳ hạn: <strong th:text="${loanTermMonths}">[...]</strong> tháng.</p>
-                    <p>Quá trình xử lý: <strong th:text="${status}">[Trạng thái]</strong>.</p>
-                    <p>Hồ sơ của bạn sẽ được xem xét và phản hồi trong thời gian <span th:text="${reviewTimeDays}">...</span> ngày làm việc tiếp theo.</p>
+                    <p>Chúng tôi rất vui thông báo rằng khoản vay của bạn tại <strong style="color: #0066cc;">EIGHT BANK</strong> đã được giải ngân thành công.</p>
+                    <p>Số Hợp Đồng: <strong th:text="${contractNumber}">[Số hợp đồng]</strong></p>
+                    <p>Số tiền giải ngân: <strong th:text="${disbursedAmount}">[...]</strong> </p>
+                    <p>Thời gian giải ngân: <strong th:text="${disbursementTime}">[...]</strong></p>
+                    <p>Tài khoản nhận giải ngân: <strong th:text="${bankAccount}">[...]</strong></p>
                     <p>Nếu bạn cần thêm thông tin hoặc hỗ trợ, vui lòng liên hệ với chúng tôi qua <a href="mailto:support@eightbank.com" style="color: #0066cc; text-decoration: none;">support@eightbank.com</a>.</p>
                     <p>Trân trọng,<br>
                         <strong style="color: #0066cc;">EIGHT BANK</strong></p>

@@ -1,6 +1,12 @@
 package com.ojt.klb.banking_notification_service.config;
 
 import com.ojt.klb.banking_notification_service.dto.consumer.*;
+import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanApplicationNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDisbursementNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransData;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -32,8 +38,13 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, LoanDto> loanAppConsumerFactory() {
-        return createConsumerFactory(LoanDto.class, "loan_group");
+    public ConsumerFactory<String, LoanApplicationNotification> loanAppConsumerFactory() {
+        return createConsumerFactory(LoanApplicationNotification.class, "loan_group");
+    }
+
+    @Bean
+    public ConsumerFactory<String, LoanDisbursementNotification> loanDisbursementNotificationConsumerFactory() {
+        return createConsumerFactory(LoanDisbursementNotification.class, "loan_group");
     }
 
     @Bean
@@ -78,9 +89,16 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, LoanDto> loanAppKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, LoanDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, LoanApplicationNotification> loanAppKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, LoanApplicationNotification> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(loanAppConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, LoanDisbursementNotification> loanDisbursementNotificationConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, LoanDisbursementNotification> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(loanDisbursementNotificationConsumerFactory());
         return factory;
     }
 
