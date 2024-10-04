@@ -2,6 +2,7 @@ package com.app.bankingloanservice.exception;
 
 import com.app.bankingloanservice.dto.ApiResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -107,6 +108,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InvalidLoanException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleInvalidLoanException(InvalidLoanException ex) {
+        log.error("Loan not found: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.BAD_REQUEST.value(),
+                false,
+                "Invalid Loan: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(LoanCreationException.class)
     public ResponseEntity<ApiResponseWrapper<String>> handleLoanCreationException(LoanCreationException ex) {
         log.error("Loan creation failed: {}", ex.getMessage(), ex);
@@ -155,6 +168,84 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // Handler for InvalidRepaymentException
+    @ExceptionHandler(InvalidRepaymentException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleInvalidRepaymentException(InvalidRepaymentException ex) {
+        log.error("Invalid repayment: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.BAD_REQUEST.value(),
+                false,
+                "Invalid repayment: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Handler for FundTransferException
+    @ExceptionHandler(FundTransferException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleFundTransferException(FundTransferException ex) {
+        log.error("Fund transfer failed: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                false,
+                "Fund transfer failed: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Handler for AccountServiceException
+    @ExceptionHandler(AccountServiceException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleAccountServiceException(AccountServiceException ex) {
+        log.error("Account service error: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                false,
+                "Account service error: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Handler for KafkaNotificationException
+    @ExceptionHandler(KafkaNotificationException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleKafkaNotificationException(KafkaNotificationException ex) {
+        log.error("Kafka notification error: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                false,
+                "Kafka notification error: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Handler for RepaymentNotFoundException
+    @ExceptionHandler(RepaymentNotFoundException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleRepaymentNotFoundException(RepaymentNotFoundException ex) {
+        log.error("Repayment not found: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.NOT_FOUND.value(),
+                false,
+                "Repayment not found: " + ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponseWrapper<String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        log.error("Data integrity violation: {}", ex.getMessage(), ex);
+        ApiResponseWrapper<String> response = new ApiResponseWrapper<>(
+                HttpStatus.BAD_REQUEST.value(), // Sử dụng BAD_REQUEST thay vì INTERNAL_SERVER_ERROR
+                false,
+                "Data integrity violation occurred. Please check your data and try again.",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponseWrapper<String>> handleIllegalArgumentException(IllegalArgumentException ex) {
