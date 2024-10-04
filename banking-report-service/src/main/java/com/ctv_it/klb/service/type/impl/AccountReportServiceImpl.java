@@ -7,6 +7,7 @@ import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
+import com.ctv_it.klb.enumeration.BaseStatus;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.fetch.FetchAccountServiceFC;
 import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
@@ -75,6 +76,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
     log.info("Fetching account by accountId: {}", accountId);
     FetchAccountDataDTO data = fetchAccountServiceFC.getAccountById(accountId);
     AccountInfoDTO account = map(data);
+    account.setNo(1L);
     account.setType("Tài khoản thanh toán");
     log.info("Mapped account data: {}", account);
     return account;
@@ -85,7 +87,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
     FetchAccountDataDTO data = fetchAccountServiceFC.getSavingsAccountById(savingAccountId);
     AccountInfoDTO savingAccount = map(data);
-
+    savingAccount.setNo(2L);
     savingAccount.setType("Tài khoản tiết kiệm");
     log.info("Mapped saving account data: {}", savingAccount);
     return savingAccount;
@@ -98,7 +100,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
         .number(fetchAccountDataDTO.getAccountNumber())
         .availableBalance(fetchAccountDataDTO.getBalance())
         .name(fetchAccountDataDTO.getAccountName())
-        .status(fetchAccountDataDTO.getStatus())
+        .status(BaseStatus.valueOf(fetchAccountDataDTO.getStatus().toUpperCase()).getValue())
         .build();
   }
 
