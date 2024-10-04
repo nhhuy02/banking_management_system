@@ -7,7 +7,7 @@ import com.ojt.klb.model.dto.BankAccountDto;
 import com.ojt.klb.model.entity.BankAccount;
 import com.ojt.klb.model.mapper.BankAccountMapper;
 import com.ojt.klb.repository.BankAccountRepository;
-import com.ojt.klb.response.ApiResponse;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
