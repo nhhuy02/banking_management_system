@@ -1,6 +1,5 @@
 package com.ctv_it.klb.service.format.impl;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.TransactionReportDTO;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
@@ -13,11 +12,8 @@ import org.springframework.stereotype.Service;
 public class TransactionPDFServiceImpl implements ReportFormatService<TransactionReportDTO> {
 
   @Override
-  public byte[] export(String fileName, TransactionReportDTO reportData) {
-    log.info(Translator.toLocale("msg.called", "TransactionPDFServiceImpl::export"));
-    log.info("ReportData: {}", reportData);
-
-    fileName += getFormat().getExtension(); // example: "fileTransaction" + ".pdf" = "fileTransaction.pdf"
+  public byte[] export(TransactionReportDTO reportData) {
+    log.info("TransactionPDFServiceImpl::export is processing with data: {}", reportData);
 
     return new byte[0];
   }

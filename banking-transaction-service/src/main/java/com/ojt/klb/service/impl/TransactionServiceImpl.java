@@ -17,11 +17,14 @@ import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -133,6 +136,44 @@ public class TransactionServiceImpl implements TransactionService {
                     transactionRequest.setTransactionType(transaction.getTransactionType().toString());
                     return transactionRequest;
                 }).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<TransactionDto> findTransactions(
+            TransactionType transactionType,
+            LocalDate fromDate,
+            LocalDate toDate,
+            TransactionStatus status) {
+
+        Specification<Transaction> spec = (root, query, cb) -> {
+            query.distinct(true);
+            return null;
+        };
+
+        if (transactionType != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("transactionType"), transactionType));
+        }
+
+        if (fromDate != null) {
+            LocalDateTime fromDateTime = fromDate.atStartOfDay();
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("transactionDate"), fromDateTime));
+        }
+
+        if (toDate != null) {
+            LocalDateTime toDateTime = toDate.plusDays(1).atStartOfDay().minusNanos(1);
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("transactionDate"), toDateTime));
+        }
+
+        if (status != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+
+        List<Transaction> transactions = repository.findAll(spec);
+
+        return transactions.stream()
+                .map(mapper::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override

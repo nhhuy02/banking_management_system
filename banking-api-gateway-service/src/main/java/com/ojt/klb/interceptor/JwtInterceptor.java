@@ -89,7 +89,18 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/account/data/\\d+",
                     "/api/v1/loan-service/loans/\\d+/disburse",
                     "/api/v1/loan-service/loan-applications/\\d+/status",
-                    "/api/v1/loan-service/loan-applications/\\d+/loans"
+                    "/api/v1/loan-service/loan-applications/\\d+/loans",
+                    "/api/v1/account/users/forgetPassword/code/\\d+",
+                    "/api/v1/loan-service/\\d+/repayments/\\d+/pay",
+                    "/api/v1/loan-service/\\d+/repayments",
+                    "/api/v1/loan-service/collaterals/\\d+/documents",
+                    "/api/v1/loan-service/loans/\\d+/disburse",
+                    "/api/v1/loan-service/loans/\\d+",
+                    "/api/v1/loan-service/loan-applications/\\d+/loans",
+                    "/api/v1/loan-service/loan-applications/\\d+/documents",
+                    "/api/v1/loan-service/loan-applications/\\d+/documents",
+                    "/api/v1/loan-service/loan-applications/\\d+ ",
+                    "/api/v1/loan-service/loan-types/\\d+"
             );
 
             for (String pattern : urlPatterns) {
@@ -97,7 +108,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     if (pattern.startsWith("/api/v1/account")) {
                         logger.info("Skipping ID checks and data filling for URL: {}", url);
                         targetUrl = urlMappings.get("account");
-                    } else if (pattern.startsWith("/api/v1/loan-applications")) {
+                    } else if (pattern.startsWith("/api/v1/loan-service")) {
                         logger.info("Processing URL for loan-related operations: {}", url);
                         targetUrl = urlMappings.get("loan-service");
                     }

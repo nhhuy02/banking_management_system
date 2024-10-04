@@ -1,6 +1,5 @@
 package com.ctv_it.klb.factory;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.format.ReportFormatService;
@@ -36,9 +35,6 @@ public class ReportFormatServiceFactory {
 
   // Get the service by ReportType and ReportFormat using the composite key
   public ReportFormatService<?> getReportFormatService(ReportType type, ReportFormat format) {
-    log.info(Translator.toLocale("msg.called",
-        "ReportFormatServiceFactory::getReportFormatService: " + reportServiceMap.toString()));
-
     return reportServiceMap.get(new AbstractMap.SimpleEntry<>(type, format));
   }
 }

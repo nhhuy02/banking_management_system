@@ -17,6 +17,8 @@ public class MultiFormatLocalDateTimeDeserializer extends JsonDeserializer<Local
   private static final List<DateTimeFormatter> FORMATTERS = Arrays.asList(
       DateTimeFormatter.ISO_LOCAL_DATE_TIME,
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),
+      DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"),
+      DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"),
       DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
   );
 

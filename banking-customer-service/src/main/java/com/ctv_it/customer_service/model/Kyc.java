@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -36,12 +37,14 @@ public class Kyc {
     @Column(name = "document_image_url")
     private String documentImageUrl;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
+    @CreationTimestamp
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
+    @CreationTimestamp
     private Instant updatedAt;
 
     public enum VerificationStatus {

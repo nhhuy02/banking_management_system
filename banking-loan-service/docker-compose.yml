@@ -1,16 +1,76 @@
 services:
+  #  mysql:
+  #    image: mysql:9.0.1
+  #    container_name: mysql_container
+  #    environment:
+  #      MYSQL_ROOT_PASSWORD: root_password
+  #      MYSQL_DATABASE: loan_service
+  #      MYSQL_USER: chienma
+  #      MYSQL_PASSWORD: chienma_password
+  #    ports:
+  #      - "3306:3306"
+  #    volumes:
+  #      - mysql_data:/var/lib/mysql
+  #    networks:
+  #      - my_custom_network
+
   mysql:
-    image: mysql:9.0.1
-    container_name: mysql_container
+    container_name: mysql
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: loan_service
-      MYSQL_USER: chienma
-      MYSQL_PASSWORD: chienma_password
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./docker-volumes/mysql:/data/mysql
     ports:
       - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - my_custom_network
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./docker-volumes/postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - my_custom_network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+    networks:
+      - my_custom_network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./docker-volumes/kafka:/data/kafka
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
     networks:
       - my_custom_network
 

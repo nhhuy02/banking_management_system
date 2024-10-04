@@ -1,9 +1,8 @@
 package com.app.bankingloanservice.service.impl;
 
-import com.app.bankingloanservice.client.account.AccountClient;
+import com.app.bankingloanservice.client.account.AccountClientService;
 import com.app.bankingloanservice.client.account.dto.AccountDto;
-import com.app.bankingloanservice.client.account.dto.ApiResponse;
-import com.app.bankingloanservice.client.fundtransfer.FundTransferClient;
+import com.app.bankingloanservice.client.fundtransfer.FundTransferService;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
 import com.app.bankingloanservice.dto.LoanRepaymentResponse;
@@ -37,8 +36,8 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
     private final LoanRepaymentRepository loanRepaymentRepository;
     private final LoanRepository loanRepository;
     private final RepaymentCalculatorFactory repaymentCalculatorFactory;
-    private final AccountClient accountClient;
-    private final FundTransferClient fundTransferClient;
+    private final AccountClientService accountClientService;
+    private final FundTransferService fundTransferService;
     private final LoanRepaymentMapper loanRepaymentMapper;
 
     @Value("${app.loan.repayment.collection-account-number}")
@@ -85,7 +84,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         BigDecimal totalAmountDue = repayment.getTotalAmount();
 
         // 5. Retrieve customer account information from Account Service
-        AccountDto borrowerAccount = getAccountInfo(repaymentRequest.getAccountId());
+        AccountDto borrowerAccount = accountClientService.getAccountInfoById(repaymentRequest.getAccountId());
 
         // 6. Perform fund transfer from customer account to loan collection account
         FundTransferRequest fundTransferRequest = FundTransferRequest.builder()
@@ -94,8 +93,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
                 .amount(totalAmountDue)
                 .description("Loan Repayment for Loan ID: " + loanId + ", Repayment ID: " + repaymentId)
                 .build();
-
-        FundTransferResponse fundTransferResponse = performFundTransfer(fundTransferRequest);
+        FundTransferResponse fundTransferResponse = fundTransferService.performFundTransfer(fundTransferRequest);
 
         // 7. Validate fund transfer result
         if (!"SUCCESS".equalsIgnoreCase(fundTransferResponse.getMessage())) {
@@ -133,40 +131,4 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         return repayments.map(loanRepaymentMapper::toResponse);
     }
 
-    /**
-     * Retrieve customer account information from Account Service
-     *
-     * @param accountId ID of the customer's account
-     * @return Account information
-     */
-    private AccountDto getAccountInfo(Long accountId) {
-        try {
-            ApiResponse<AccountDto> apiResponse = accountClient.getAccountById(accountId);
-            if (!apiResponse.isSuccess()) {
-                throw new ExternalServiceException("Unable to retrieve account information from Account Service: " + apiResponse.getMessage());
-            }
-            return apiResponse.getData();
-        } catch (Exception e) {
-            throw new ExternalServiceException("Error calling Account Service for Account ID: " + accountId, e);
-        }
-    }
-
-    /**
-     * Perform fund transfer via FundTransferClient
-     *
-     * @param fundTransferRequest Fund transfer request
-     * @return Response from Fund Transfer Service
-     */
-    private FundTransferResponse performFundTransfer(FundTransferRequest fundTransferRequest) {
-        try {
-            FundTransferResponse response = fundTransferClient.transferFunds(fundTransferRequest);
-            if (response == null || response.getTransactionReference() == null) {
-                throw new FundTransferException("Repayment transfer failed for Loan ID " + fundTransferRequest.getDescription());
-            }
-            // Additional checks if necessary, e.g., status in response
-            return response;
-        } catch (Exception e) {
-            throw new FundTransferException("Error performing fund transfer for repayment: " + fundTransferRequest.getDescription(), e);
-        }
-    }
 }

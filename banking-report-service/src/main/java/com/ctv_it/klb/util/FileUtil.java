@@ -1,102 +1,152 @@
 package com.ctv_it.klb.util;
 
-import com.ctv_it.klb.common.Default;
-import com.ctv_it.klb.dto.request.ReportRequestDTO;
+import com.ctv_it.klb.enumeration.ReportFormat;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class FileUtil {
 
-  public byte[] export(String fileName, String templateName, Map<String, Object> data) {
+  private final TemplateEngine templateEngine;
+  private static final String PATTERN = "P@TTERN";
+  private static final String BASE_DIR = "./file/";
+
+  public byte[] export(ReportFormat reportFormat, String fileName, String templateName,
+      Map<String, Object> data) {
+    String targetFile = BASE_DIR + fileName;
+
     try {
-      File file = new File(fileName);
-      File parentDir = file.getParentFile();
-      if (parentDir != null && !parentDir.exists()) {
-        boolean dirsCreated = parentDir.mkdirs();  // Create directories if they don't exist
-        if (dirsCreated) {
-          log.info("Created missing directories: {}", parentDir.getAbsolutePath());
-        } else {
-          log.error("Failed to create directories: {}", parentDir.getAbsolutePath());
-          throw new IOException("Failed to create directories");
-        }
+      ensureDirectoryExists(targetFile);
+      return processFileExport(reportFormat, templateName, data, targetFile);
+    } catch (IOException e) {
+      log.error("Error occurred while exporting the report: {}", e.getMessage(), e);
+      throw new InternalError();
+    }
+  }
+
+  private void ensureDirectoryExists(String targetFile) throws IOException {
+    File file = new File(targetFile);
+    File parentDir = file.getParentFile();
+    if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
+      log.error("Failed to create directories: {}", parentDir.getAbsolutePath());
+      throw new IOException("Failed to create directories");
+    }
+    log.info("Directories are already existed: {}", parentDir);
+  }
+
+  private byte[] processFileExport(ReportFormat reportFormat, String templateName,
+      Map<String, Object> data, String targetFile) throws IOException {
+    try (OutputStream outStream = new FileOutputStream(new File(targetFile))) {
+      log.info("File exporting is processing");
+
+      if (ReportFormat.EXCEL.equals(reportFormat)) {
+        writeFileExcel(outStream, templateName, data);
+      } else if (ReportFormat.PDF.equals(reportFormat)) {
+        writeFilePDF(outStream, templateName, data);
+      } else {
+        log.error("Unsupported to export for type {}", reportFormat.name());
+        throw new InternalError();
       }
 
-      // Create and export the document using FileExportUtil
-      OutputStream outStream = new FileOutputStream(file);
-      this.writeFile(outStream, templateName, data);
       log.info("File is exported successfully");
-
-      return this.readFile(fileName);
-    } catch (IOException e) {
-      log.error("Error occurred while exporting the report", e);
-      throw new InternalError("Error while exporting report");
+      return readFile(targetFile);
     }
   }
 
-  public void writeFile(OutputStream outStream, String pathTemplateName, Map<String, Object> data) {
-    log.debug("Start creation of document");
-    log.info("pathTemplateName: {}", pathTemplateName);
+  private void writeFilePDF(OutputStream outStream, String pathTemplateName,
+      Map<String, Object> data) {
+    log.debug("Start creation of PDF");
 
-    try (InputStream input = this.getClass().getResourceAsStream(pathTemplateName)) {
-      if (input == null) {
-        log.error("Template file not found: {}", pathTemplateName);
-        throw new FileNotFoundException("Template file not found: " + pathTemplateName);
-      }
+    try (InputStream input = getTemplateInputStream(pathTemplateName)) {
+      org.thymeleaf.context.Context context = new org.thymeleaf.context.Context();
+      data.forEach(context::setVariable); // Fill context with data
 
-      Context context = new Context();
-      // Fill context with data
-      data.forEach(context::putVar);
+      // Process the HTML template
+      String processedHtml = templateEngine.process(pathTemplateName, context);
 
-      // Process the template and write to the output stream
-      JxlsHelper.getInstance()
-          .processTemplate(input, outStream, context);
-      log.info("Template processed successfully");
+      ITextRenderer renderer = new ITextRenderer();
+      renderer.setDocumentFromString(
+          Arrays.toString(processedHtml.getBytes(StandardCharsets.UTF_8)));
+      renderer.layout();
 
-    } catch (FileNotFoundException e) {
-      log.error("FileNotFoundException: {}", e.getMessage(), e);
-      throw new InternalError("Error generating the document: Template not found", e);
+      // Create the PDF
+      renderer.createPDF(outStream, true);
+
+      log.info("PDF created successfully for template {}", pathTemplateName);
     } catch (IOException e) {
-      log.error("IOException while processing template", e);
-      throw new InternalError("Error generating the document: I/O exception", e);
+      log.error("IOException while processing template {}: {}", pathTemplateName, e.toString());
+      throw new InternalError();
     } catch (Exception e) {
-      log.error("General error while generating the document", e);
-      throw new InternalError("Error generating the document", e);
+      log.error("General error while generating the PDF document: {}", e.toString());
+      throw new InternalError();
     }
   }
 
-  public byte[] readFile(String filePath) throws IOException {
+  private void writeFileExcel(OutputStream outStream, String pathTemplateName,
+      Map<String, Object> data) {
+    log.debug("Start creation of Excel");
+
+    try (InputStream input = getTemplateInputStream(pathTemplateName)) {
+      Context context = new Context();
+      data.forEach(context::putVar); // Fill context with data
+
+      JxlsHelper.getInstance().processTemplate(input, outStream, context);
+      log.info("Excel created successfully for template {}", pathTemplateName);
+    } catch (IOException e) {
+      log.error("IOException while processing template {}: {}", pathTemplateName, e.getMessage(),
+          e);
+      throw new InternalError();
+    } catch (Exception e) {
+      log.error("General error while generating the Excel document: {}", e.getMessage(), e);
+      throw new InternalError();
+    }
+  }
+
+  private InputStream getTemplateInputStream(String pathTemplateName) {
+    InputStream input = getClass().getResourceAsStream(pathTemplateName);
+    if (input == null) {
+      log.error("Template file not found for {}", pathTemplateName);
+      throw new InternalError();
+    }
+    return input;
+  }
+
+  private byte[] readFile(String filePath) throws IOException {
     File file = new File(filePath);
-    try (FileInputStream fis = new FileInputStream(file)) {
-      return fis.readAllBytes();
+    try (FileInputStream fis = new FileInputStream(file);
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+      byte[] data = new byte[1024];
+      int bytesRead;
+      while ((bytesRead = fis.read(data, 0, data.length)) != -1) {
+        buffer.write(data, 0, bytesRead);
+      }
+      return buffer.toByteArray();
     }
   }
 
-  // Method to add filename to data
   public byte[] addFileNameToData(byte[] data, String fileName) {
-    // Convert the filename to bytes using UTF-8 encoding
     byte[] fileNameBytes = fileName.getBytes(StandardCharsets.UTF_8);
-    // Convert the pattern to bytes
-    byte[] patternBytes = Default.File.PATTERN.getBytes(StandardCharsets.UTF_8);
+    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
 
-    // Create a new array to hold the combined data
     byte[] combined = new byte[data.length + patternBytes.length + fileNameBytes.length];
 
-    // Copy the original data, pattern, and filename bytes into the new array
     System.arraycopy(data, 0, combined, 0, data.length);
     System.arraycopy(patternBytes, 0, combined, data.length, patternBytes.length);
     System.arraycopy(fileNameBytes, 0, combined, data.length + patternBytes.length,
@@ -105,30 +155,23 @@ public class FileUtil {
     return combined;
   }
 
-  // Method to split combined byte array back into data and filename
   public Map<String, Object> splitDataAndFileName(byte[] combined) {
-    // Convert the pattern to bytes
-    byte[] patternBytes = Default.File.PATTERN.getBytes(StandardCharsets.UTF_8);
-
-    // Find the index of the pattern in the combined array
+    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
     int patternIndex = indexOf(combined, patternBytes);
+
     if (patternIndex == -1) {
-      log.error("PATTERN {} is not found", Default.File.PATTERN);
+      log.error("PATTERN {} is not found", PATTERN);
       throw new InternalError();
     }
 
-    // Extract data and filename based on the pattern index
     byte[] data = Arrays.copyOfRange(combined, 0, patternIndex);
     byte[] fileNameBytes = Arrays.copyOfRange(combined, patternIndex + patternBytes.length,
         combined.length);
-
-    // Create a result object and return it
     String fileName = new String(fileNameBytes, StandardCharsets.UTF_8);
-    return Map.of("data", data, "fileName", fileName);
 
+    return Map.of("data", data, "fileName", fileName);
   }
 
-  // Helper method to find the index of a byte array within another byte array
   private int indexOf(byte[] array, byte[] target) {
     for (int i = 0; i <= array.length - target.length; i++) {
       boolean found = true;
@@ -143,10 +186,5 @@ public class FileUtil {
       }
     }
     return -1;
-  }
-
-  public String generateReportingFileName(ReportRequestDTO requestDTO) {
-    return requestDTO.getReportType() + "_" + requestDTO.getReportFormat() + "_"
-        + LocalDateTime.now();
   }
 }

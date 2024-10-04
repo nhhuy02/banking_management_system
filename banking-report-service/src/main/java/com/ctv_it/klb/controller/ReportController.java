@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,13 +50,14 @@ public class ReportController {
       @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))
   })
-  @PostMapping("")
+  @PostMapping("/account/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
+      @PathVariable Long accountId,
       @RequestBody ReportRequestDTO reportRequestDTO) {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
 
-    Object reportData = reportService.report(reportRequestDTO);
+    Object reportData = reportService.report(accountId, reportRequestDTO);
     SuccessResponseDTO response;
     ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.ok();
 
@@ -63,10 +66,15 @@ public class ReportController {
       // Split byte[] to get fileName and actual data
       Map<String, Object> reportDataBytesSplit = fileUtil.splitDataAndFileName(reportDataBytes);
       String fileName = (String) reportDataBytesSplit.get("fileName");
-      reportData = (byte[]) reportDataBytesSplit.get("data");
+      reportData = reportDataBytesSplit.get("data");
 
-      // Set filename in response header
-      responseBuilder.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+      // Set response header
+      responseBuilder
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+          .header(HttpHeaders.CONTENT_TYPE,
+              reportRequestDTO.getReportFormat().getHeaderContentType());
+
+      return responseBuilder.body(reportData);
     }
 
 // Handle non-byte[] report data

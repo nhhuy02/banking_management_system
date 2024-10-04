@@ -25,7 +25,7 @@ public abstract class LoanMapper {
     @Mapping(target = "disbursementDate", source = "desiredDisbursementDate")
     @Mapping(target = "renewalCount", constant = "0")
     @Mapping(target = "remainingBalance", source = "desiredLoanAmount")
-    @Mapping(target = "totalPaidAmount", constant = "0L")
+    @Mapping(target = "totalPaidAmount", constant = "0")
     @Mapping(target = "isBadDebt", constant = "false")
     @Mapping(target = "debtClassification", constant = "NORMAL")
     @Mapping(target = "status", constant = "PENDING")
@@ -44,7 +44,7 @@ public abstract class LoanMapper {
     @Mapping(target = "maturityDate", expression = "java(maturityDate)")
     @Mapping(target = "loanType", expression = "java(loanType)")
     @Mapping(target = "remainingBalance", source = "loanAmount")
-    @Mapping(target = "totalPaidAmount", constant = "0L")
+    @Mapping(target = "totalPaidAmount", constant = "0")
     @Mapping(target = "renewalCount", constant = "0")
     @Mapping(target = "isBadDebt", constant = "false")
     @Mapping(target = "debtClassification", constant = "NORMAL")
@@ -56,7 +56,7 @@ public abstract class LoanMapper {
                                   @Context LoanType loanType);
 
 
-    @Mapping(target = "loanTypeDto", source = "loanType")
+    @Mapping(target = "loanTypeName", source = "loanType.loanTypeName")
     @Mapping(target = "loanApplicationId", source = "loanApplication.loanApplicationId")
     public abstract LoanResponse toResponse(Loan loan);
 
