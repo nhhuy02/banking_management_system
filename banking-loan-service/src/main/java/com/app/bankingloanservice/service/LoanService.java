@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface LoanService {
 
     LoanResponse createLoanFromApplicationId(Long loanApplicationId);
@@ -18,5 +20,5 @@ public interface LoanService {
 
     LoanResponse createLoan(LoanRequest loanRequest);
 
-    Page<LoanResponse> getLoansByAccountId(Long customerId, Pageable pageable);
+    List<LoanResponse> getLoansByAccountId(Long accountId);
 }
