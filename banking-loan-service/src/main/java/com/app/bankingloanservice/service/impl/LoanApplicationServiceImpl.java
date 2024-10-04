@@ -102,7 +102,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         loanApplicationProducer.setAmounts(BigDecimal.valueOf(loanApplicationResponse.getDesiredLoanAmount()));
         loanApplicationProducer.setLoanTermMonths(loanApplicationResponse.getDesiredLoanTermMonths());
         loanApplicationProducer.setStatus(String.valueOf(loanApplicationResponse.getApplicationStatus()));
-        loanApplicationProducer.setReviewTimeDays(loanApplicationResponse.getLoanTypeDto().getReviewTimeDays());
+        loanApplicationProducer.setReviewTimeDays(loanApplicationResponse.getLoanTypeResponse().getReviewTimeDays());
         loanApplicationProducer.setCustomerId(accountInfo.getCustomerId());
         loanApplicationProducer.setEmail(accountInfo.getEmail());
         loanApplicationProducer.setCustomerName(accountInfo.getFullName());

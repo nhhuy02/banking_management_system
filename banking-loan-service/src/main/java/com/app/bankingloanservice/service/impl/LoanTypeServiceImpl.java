@@ -1,6 +1,7 @@
 package com.app.bankingloanservice.service.impl;
 
-import com.app.bankingloanservice.dto.LoanTypeDto;
+import com.app.bankingloanservice.dto.LoanTypeRequest;
+import com.app.bankingloanservice.dto.LoanTypeResponse;
 import com.app.bankingloanservice.entity.LoanType;
 import com.app.bankingloanservice.exception.LoanTypeNotFoundException;
 import com.app.bankingloanservice.mapper.LoanTypeMapper;
@@ -8,6 +9,7 @@ import com.app.bankingloanservice.repository.LoanTypeRepository;
 import com.app.bankingloanservice.service.LoanTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,19 +38,40 @@ public class LoanTypeServiceImpl implements LoanTypeService {
     }
 
     @Override
-    public LoanTypeDto getLoanTypeDtoById(Long loanTypeId) {
+    public LoanTypeResponse getLoanTypeDtoById(Long loanTypeId) {
         log.info("Converting LoanType entity to DTO for ID: {}", loanTypeId); // Log conversion to DTO
-        return loanTypeMapper.toDto(getLoanTypeById(loanTypeId));
+        return loanTypeMapper.toResponse(getLoanTypeById(loanTypeId));
     }
 
     @Override
-    public List<LoanTypeDto> getAllLoanTypes() {
+    public List<LoanTypeResponse> getAllLoanTypes() {
         log.info("Fetching all LoanTypes"); // Log fetching all loan types
         List<LoanType> loanTypeList = loanTypeRepository.findAll();
 
         log.info("Converting {} LoanType entities to DTOs", loanTypeList.size()); // Log number of loan types
         return loanTypeList.stream()
-                .map(loanTypeMapper::toDto)
+                .map(loanTypeMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public LoanTypeResponse createLoanType(LoanTypeRequest loanTypeRequest) {
+        log.info("Creating new LoanType with name: {}", loanTypeRequest.getLoanTypeName());
+
+        try {
+            // Convert DTO to Entity
+            LoanType loanType = loanTypeMapper.toEntity(loanTypeRequest);
+
+            // Save Entity to Database
+            LoanType savedLoanType = loanTypeRepository.save(loanType);
+
+            log.info("LoanType created with ID: {}", savedLoanType.getLoanTypeId());
+
+            // Convert Entity to Response DTO
+            return loanTypeMapper.toResponse(savedLoanType);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Loan Type creation failed due to duplicate name: {}", loanTypeRequest.getLoanTypeName());
+            throw new DataIntegrityViolationException("Loan Type name must be unique.");
+        }
     }
 }
