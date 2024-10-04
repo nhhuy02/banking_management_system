@@ -14,12 +14,6 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      group-id: group_id
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -27,6 +21,7 @@ spring:
       properties:
         spring.json.type.mapping: transactionNotification:com.ojt.klb.kafka.TransactionNotification
 
-application:
-  config:
-    account-url: http://localhost:8040/api/v1/accounts
+logging:
+  level:
+    org.apache.kafka.clients.producer: DEBUG
+    org.springframework.kafka: DEBUG

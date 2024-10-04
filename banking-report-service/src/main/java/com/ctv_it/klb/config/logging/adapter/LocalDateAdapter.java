@@ -1,6 +1,5 @@
 package com.ctv_it.klb.config.logging.adapter;
 
-import com.ctv_it.klb.common.Default;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -10,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LocalDateAdapter extends TypeAdapter<LocalDate> {
 
-  private static final DateTimeFormatter formatter = Default.LocalDateTimeFormat.LOCAL_DATE_FORMAT;
+  private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
   @Override
   public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {

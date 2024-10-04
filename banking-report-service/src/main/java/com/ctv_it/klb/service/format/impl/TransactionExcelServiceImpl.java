@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 public class TransactionExcelServiceImpl implements ReportFormatService<TransactionReportDTO> {
 
   @Override
-  public Byte[] export(TransactionReportDTO reportData) {
-    log.info(Translator.toLocale("msg.called", "TransactionExcelServiceImpl::export"));
-    log.info("ReportData: {}", reportData);
+  public byte[] export(TransactionReportDTO reportData) {
+    log.info("TransactionExcelServiceImpl::export is processing with data: {}", reportData);
 
-    return new Byte[0];
+    return new byte[0];
   }
 
   @Override

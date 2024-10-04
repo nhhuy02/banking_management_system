@@ -1,6 +1,7 @@
 package com.ctv_it.klb.config.exception;
 
 import com.ctv_it.klb.config.i18n.Translator;
+import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import com.fasterxml.jackson.core.JsonParser;
@@ -28,34 +29,40 @@ import org.springframework.web.client.HttpServerErrorException.InternalServerErr
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+  // Handle 404 Not Found
   @ExceptionHandler(NotFoundExceptionCustomize.class)
   public ResponseEntity<ErrorResponseDTO> handleNotFoundException(NotFoundExceptionCustomize ex,
       HttpServletRequest request) {
+
     log.error("Not found exception: {}", ex.getErrors());
     return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex.getErrors(), request);
   }
 
+  // Handle 409 Conflict
   @ExceptionHandler(ConflictExceptionCustomize.class)
   public ResponseEntity<ErrorResponseDTO> handleConflictException(ConflictExceptionCustomize ex,
       HttpServletRequest request) {
+
     log.error("Conflict exception: {}", ex.getErrors());
     return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), ex.getErrors(), request);
   }
 
+  // Handle validation errors (400 Bad Request)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException ex, HttpServletRequest request) {
-    List<ErrorDetailDTO> errors = ex.getBindingResult().getFieldErrors().stream()
-        .map(fieldError -> ErrorDetailDTO.builder()
-            .field(fieldError.getField())
-            .rejectedValue(fieldError.getRejectedValue())
-            .message(Translator.toLocale(fieldError.getDefaultMessage()))
-            .build())
+
+    List<ErrorDetailDTO> errors = ex.getBindingResult().getFieldErrors().stream().map(
+            fieldError -> ErrorDetailDTO.builder().field(fieldError.getField())
+                .rejectedValue(fieldError.getRejectedValue())
+                .message(Translator.toLocale(fieldError.getDefaultMessage())).build())
         .collect(Collectors.toList());
+
     return buildErrorResponse(HttpStatus.BAD_REQUEST, Translator.toLocale("error.invalid.data"),
         errors, request);
   }
 
+  // Handle InvalidExceptionCustomize (400 Bad Request)
   @ExceptionHandler(InvalidExceptionCustomize.class)
   public ResponseEntity<ErrorResponseDTO> handleInvalidException(InvalidExceptionCustomize ex,
       HttpServletRequest request) {
@@ -63,6 +70,7 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getErrors(), request);
   }
 
+  // Handle generic BadRequestException (400 Bad Request)
   @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<ErrorResponseDTO> handleBadRequestException(BadRequestException ex,
       HttpServletRequest request) {
@@ -70,6 +78,7 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null, request);
   }
 
+  // Handle Internal Server Error
   @ExceptionHandler({InternalServerError.class, InternalError.class, Exception.class})
   public ResponseEntity<ErrorResponseDTO> handleInternalError(Exception ex,
       HttpServletRequest request) {
@@ -78,6 +87,7 @@ public class GlobalExceptionHandler {
         Translator.toLocale("error.internal-server"), null, request);
   }
 
+  // Handle HttpMessageNotReadableException
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(
       HttpMessageNotReadableException ex, HttpServletRequest request) {
@@ -86,37 +96,25 @@ public class GlobalExceptionHandler {
         Collections.singletonList(errorDetail), request);
   }
 
+  // Handle UnrecognizedPropertyException
   @ExceptionHandler(UnrecognizedPropertyException.class)
   public ResponseEntity<ErrorResponseDTO> handleUnrecognizedPropertyException(
       UnrecognizedPropertyException ex, HttpServletRequest request) {
 
-    // Extract the unrecognized field's name
     String fieldName = ex.getPropertyName();
-
-    // Extract the rejected value if available
     JsonParser parser = (JsonParser) ex.getProcessor();
-    String rejectedValue = null;
-    if (parser != null && parser.getCurrentToken() != null) {
-      rejectedValue = parser.getCurrentToken().toString();
-    }
+    String rejectedValue = parser != null && parser.getCurrentToken() != null ?
+        parser.getCurrentToken().toString() : "null";
 
-    // Construct a detailed message
     String message = String.format(
         Translator.toLocale("error.invalid.unrecognized-2", fieldName, rejectedValue));
-
-    // Create an error detail object
     ErrorDetailDTO errorDetail = createErrorDetail(fieldName, message);
 
-    // Return a well-formatted error response
-    return buildErrorResponse(
-        HttpStatus.BAD_REQUEST,
-        Translator.toLocale("error.invalid.data"),
-        Collections.singletonList(errorDetail),
-        request
-    );
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, Translator.toLocale("error.invalid.data"),
+        Collections.singletonList(errorDetail), request);
   }
 
-
+  // Handle JsonProcessingException
   @ExceptionHandler(JsonProcessingException.class)
   public ResponseEntity<ErrorResponseDTO> handleJsonProcessingException(JsonProcessingException ex,
       HttpServletRequest request) {
@@ -127,40 +125,42 @@ public class GlobalExceptionHandler {
         Collections.singletonList(errorDetail), request);
   }
 
+  // Handle JsonMappingException
   @ExceptionHandler(JsonMappingException.class)
   public ResponseEntity<ErrorResponseDTO> handleJsonMappingException(JsonMappingException ex,
       HttpServletRequest request) {
-    List<ErrorDetailDTO> errors = ex.getPath().stream()
-        .map(ref -> createErrorDetail(ref.getFieldName(),
-            "Error mapping field '" + ref.getFieldName() + "'"))
+    List<ErrorDetailDTO> errors = ex.getPath().stream().map(
+            ref -> createErrorDetail(ref.getFieldName(),
+                Translator.toLocale("error.invalid.mapping", ref.getFieldName())))
         .collect(Collectors.toList());
     return buildErrorResponse(HttpStatus.BAD_REQUEST, Translator.toLocale("error.invalid.data"),
         errors, request);
   }
 
-  // Helper method to create an error response
+  // Handle FetchErrorResponseExceptionCustomize
+  @ExceptionHandler(FetchErrorResponseExceptionCustomize.class)
+  public ResponseEntity<ErrorResponseDTO> handleFetchErrorResponseExceptionCustomize(
+      FetchErrorResponseExceptionCustomize ex, HttpServletRequest request) {
+    FetchResponseDTO<?> fetchResponseDTO = ex.getFetchResponseDTO();
+    return buildErrorResponse(HttpStatus.valueOf(fetchResponseDTO.getStatus()),
+        fetchResponseDTO.getMessage(), null, request);
+  }
+
+  // Helper: Build error response
   private ResponseEntity<ErrorResponseDTO> buildErrorResponse(HttpStatus status, String message,
       List<ErrorDetailDTO> errors, HttpServletRequest request) {
-    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
-        .success(false)
-        .message(message)
-        .url(request.getServletPath())
-        .status(status.value())
-        .errors(errors)
-        .build();
+    ErrorResponseDTO errorResponse = ErrorResponseDTO.builder().success(false).message(message)
+        .url(request.getServletPath()).status(status.value()).errors(errors).build();
     log.error("Error occurred at URL {}: {}", request.getServletPath(), errors);
     return ResponseEntity.status(status).body(errorResponse);
   }
 
-  // Helper method to create ErrorDetailDTO
+  // Helper: Create error detail
   private ErrorDetailDTO createErrorDetail(String field, String message) {
-    return ErrorDetailDTO.builder()
-        .field(field)
-        .message(message)
-        .build();
+    return ErrorDetailDTO.builder().field(field).message(message).build();
   }
 
-  // Extract error details from HttpMessageNotReadableException
+  // Helper: Extract error details from HttpMessageNotReadableException
   private ErrorDetailDTO extractErrorDetails(HttpMessageNotReadableException ex) {
     if (ex.getCause() instanceof InvalidFormatException ife) {
       return handleInvalidFormatException(ife);
@@ -170,13 +170,10 @@ public class GlobalExceptionHandler {
     return createErrorDetail("request", "Malformed JSON request");
   }
 
+  // Handle InvalidFormatException
   private ErrorDetailDTO handleInvalidFormatException(InvalidFormatException ife) {
-    // Extract the field name
-    String field = ife.getPath().stream()
-        .map(Reference::getFieldName)
-        .findFirst()
+    String field = ife.getPath().stream().map(Reference::getFieldName).findFirst()
         .orElse("unknown");
-
     String rejectedValue = ife.getValue() != null ? ife.getValue().toString() : "null";
     String targetType =
         ife.getTargetType() != null ? ife.getTargetType().getSimpleName() : "unknown";
@@ -188,12 +185,13 @@ public class GlobalExceptionHandler {
     return createErrorDetail(field, message);
   }
 
-
+  // Handle MismatchedInputException
   private ErrorDetailDTO handleMismatchedInputException(MismatchedInputException mie) {
     String field = mie.getPath().stream().map(Reference::getFieldName).findFirst()
         .orElse("unknown");
-    String message =
-        "Malformed JSON request. " + (mie.getMessage() != null ? mie.getMessage() : "");
+    String message = "Malformed JSON request. " + (mie.getMessage() != null ? mie.getMessage()
+        : "Unknown error");
+
     log.error("MismatchedInputException: Field: {}, Message: {}", field, message);
     return createErrorDetail(field, message);
   }

@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 public class LoanPDFServiceImpl implements ReportFormatService<LoanReportDTO> {
 
   @Override
-  public Byte[] export(LoanReportDTO reportData) {
-    log.info(Translator.toLocale("msg.called", "LoanPDFServiceImpl::export"));
-    log.info("ReportData: {}", reportData);
+  public byte[] export(LoanReportDTO reportData) {
+    log.info("LoanPDFServiceImpl::export is processing with data: {}", reportData);
 
-    return new Byte[0];
+    return new byte[0];
   }
 
   @Override

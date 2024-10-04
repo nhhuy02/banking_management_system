@@ -96,6 +96,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             );
 
+
             String targetUrl = null;
 
             List<String> urlPatterns = List.of(

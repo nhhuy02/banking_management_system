@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -55,12 +57,14 @@ public class Customer {
     @JoinColumn(name = "kyc_id")
     private Kyc kyc;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private Instant updatedAt;
 
     public enum Gender {

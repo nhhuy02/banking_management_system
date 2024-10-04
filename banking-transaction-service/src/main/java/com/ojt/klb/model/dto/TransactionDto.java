@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Builder
 public class TransactionDto {
 
-    @NotBlank(message = "Account number cannot be blank")
+    @NotNull
     private String accountNumber;
 
     @NotBlank(message = "Transaction type cannot be blank")

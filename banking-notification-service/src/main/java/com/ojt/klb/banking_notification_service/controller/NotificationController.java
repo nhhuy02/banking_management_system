@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "API quản lí thông báo")
-@RequestMapping("/api/v1/notificationService")
+@RequestMapping("/api/v1/notification")
 public class NotificationController {
 
     @Autowired
