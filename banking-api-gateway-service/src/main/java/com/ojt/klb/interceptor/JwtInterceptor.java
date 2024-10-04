@@ -80,7 +80,9 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "customer", "http://localhost:8082",
                     "notification", "http://localhost:8083",
                     "reports", "http://localhost:8086",
-                    "loan-service", "http://localhost:8060"
+                    "loan-service", "http://localhost:8060",
+                    "transaction", "http://localhost:8070",
+                    "fundTransfer", "http://localhost:8090"
             );
 
             String targetUrl = null;
