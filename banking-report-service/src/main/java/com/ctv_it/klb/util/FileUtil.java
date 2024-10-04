@@ -78,20 +78,23 @@ public class FileUtil {
       org.thymeleaf.context.Context context = new org.thymeleaf.context.Context();
       data.forEach(context::setVariable); // Fill context with data
 
+      // Process the HTML template
       String processedHtml = templateEngine.process(pathTemplateName, context);
+
       ITextRenderer renderer = new ITextRenderer();
-      renderer.setDocumentFromString(processedHtml);
+      renderer.setDocumentFromString(
+          Arrays.toString(processedHtml.getBytes(StandardCharsets.UTF_8)));
       renderer.layout();
-      renderer.createPDF(outStream, false);
-      renderer.finishPDF();
+
+      // Create the PDF
+      renderer.createPDF(outStream, true);
 
       log.info("PDF created successfully for template {}", pathTemplateName);
     } catch (IOException e) {
-      log.error("IOException while processing template {}: {}", pathTemplateName, e.getMessage(),
-          e);
+      log.error("IOException while processing template {}: {}", pathTemplateName, e.toString());
       throw new InternalError();
     } catch (Exception e) {
-      log.error("General error while generating the PDF document: {}", e.getMessage(), e);
+      log.error("General error while generating the PDF document: {}", e.toString());
       throw new InternalError();
     }
   }
