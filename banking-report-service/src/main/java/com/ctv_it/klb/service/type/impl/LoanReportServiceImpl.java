@@ -1,6 +1,5 @@
 package com.ctv_it.klb.service.type.impl;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.LoanReportDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.enumeration.ReportType;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
   @Override
-  public LoanReportDTO search(ReportRequestDTO reportRequestDTO) {
-    log.info(Translator.toLocale("msg.called", "LoanReportServiceImpl::search"));
+  public LoanReportDTO search(Long accountId, ReportRequestDTO reportRequestDTO) {
+    log.info("LoanReportServiceImpl::search is processing with request: {}", reportRequestDTO);
 
     return null;
   }

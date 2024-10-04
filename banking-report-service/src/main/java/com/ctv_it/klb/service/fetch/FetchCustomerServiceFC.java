@@ -1,15 +1,11 @@
 package com.ctv_it.klb.service.fetch;
 
-import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
+import com.ctv_it.klb.config.exception.FetchErrorResponseExceptionCustomize;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
-import com.ctv_it.klb.dto.response.ErrorDetailDTO;
 import com.ctv_it.klb.feignClient.CustomerServiceFC;
-import java.util.Collections;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,27 +15,20 @@ public class FetchCustomerServiceFC {
 
   private final CustomerServiceFC customerServiceFC;
 
-  public FetchCustomerDataDTO findById(long accountId) {
+  public FetchCustomerDataDTO findByAccountId(long accountId) {
     try {
-      FetchResponseDTO<FetchCustomerDataDTO> fetchResponseDTO = customerServiceFC.findById(
+      log.info("findByAccountId(accountId = {}) is processing", accountId);
+      FetchResponseDTO<FetchCustomerDataDTO> fetchResponseDTO = customerServiceFC.findByAccountId(
           accountId);
+      log.info("findByAccountId(accountId = {}) passed: {}", accountId, fetchResponseDTO);
 
-      if (fetchResponseDTO.isSuccess() && fetchResponseDTO.getData() != null) {
+      if (fetchResponseDTO.isSuccess()) {
         return fetchResponseDTO.getData();
       } else {
-        if (Objects.equals(HttpStatus.SC_BAD_REQUEST, fetchResponseDTO.getStatus())) {
-          throw new InvalidExceptionCustomize(
-              Collections.singletonList(
-                  ErrorDetailDTO.builder()
-                      .message(fetchResponseDTO.getMessage())
-                      .build()));
-
-        } else {
-          throw new InternalError(fetchResponseDTO.getMessage());
-        }
+        throw new FetchErrorResponseExceptionCustomize(fetchResponseDTO);
       }
     } catch (Exception ex) {
-      log.error("Error fetch customer service: {}", ex.getMessage());
+      log.error("findByAccountId(accountId = {}) by {}", accountId, ex.getMessage());
       throw ex;
     }
   }

@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class GenericCustomDeserializer extends JsonDeserializer<Object> {
@@ -30,10 +27,6 @@ public class GenericCustomDeserializer extends JsonDeserializer<Object> {
         return Long.parseLong(value);
       } else if (targetType == BigDecimal.class) {
         return new BigDecimal(value);
-      } else if (targetType == LocalDate.class) {
-        return LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE);
-      } else if (targetType == LocalDateTime.class) {
-        return LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
       } else if (targetType == Float.class) {
         return Float.parseFloat(value);
       } else if (targetType == Double.class) {

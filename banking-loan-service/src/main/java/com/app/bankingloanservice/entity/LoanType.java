@@ -43,7 +43,7 @@ public class LoanType extends AuditModel {
 
     // Maximum amount that can be borrowed for this loan type (VND)
     @Column(name = "max_loan_amount", nullable = false)
-    private Long maxLoanAmount;
+    private BigDecimal maxLoanAmount;
 
     // Maximum term for the loan in months
     @Column(name = "max_loan_term_months", nullable = false)

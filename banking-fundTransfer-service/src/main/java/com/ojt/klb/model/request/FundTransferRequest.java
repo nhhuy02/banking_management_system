@@ -17,10 +17,10 @@ import java.math.BigDecimal;
 @Builder
 public class FundTransferRequest {
 
-    @NotBlank(message = "From account cannot be blank")
+    @NotNull(message = "From account cannot be null")
     private String fromAccount;
 
-    @NotBlank(message = "To account cannot be blank")
+    @NotNull(message = "To account cannot be null")
     private String toAccount;
 
     @NotNull(message = "Amount cannot be null")

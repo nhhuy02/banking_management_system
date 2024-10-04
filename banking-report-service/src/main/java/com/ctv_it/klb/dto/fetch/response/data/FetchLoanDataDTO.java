@@ -1,12 +1,18 @@
 package com.ctv_it.klb.dto.fetch.response.data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.poi.hpsf.Decimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Setter
 @Getter
@@ -17,15 +23,15 @@ public class FetchLoanDataDTO {
   private int customerId;
   private String loanContractNo;
   private LoanType loanType;
-  private double loanAmount;
+  private BigDecimal loanAmount;
   private CurrentInterestRate currentInterestRate;
   private int loanTermMonths;
   private LocalDate disbursementDate;
   private LocalDate maturityDate;
   private LocalDate settlementDate;
   private int renewalCount;
-  private double remainingBalance;
-  private double totalPaidAmount;
+  private BigDecimal remainingBalance;
+  private BigDecimal totalPaidAmount;
   private boolean isBadDebt;
   private LocalDate badDebtDate;
   private String badDebtReason;
@@ -50,7 +56,7 @@ public class FetchLoanDataDTO {
   @ToString
   public static class CurrentInterestRate {
 
-    private double rate;
+    private Decimal rate;
   }
 
   @Builder
@@ -60,7 +66,7 @@ public class FetchLoanDataDTO {
   public static class Collateral {
 
     private String collateralType;
-    private double collateralValue;
+    private BigDecimal collateralValue;
   }
 
   @Builder
@@ -70,10 +76,10 @@ public class FetchLoanDataDTO {
   public static class LoanRepayment {
 
     private int loanPaymentId;
-    private double principalAmount;
-    private double interestAmount;
-    private double latePaymentInterestAmount;
-    private double totalAmount;
+    private BigDecimal principalAmount;
+    private Decimal interestAmount;
+    private Decimal latePaymentInterestAmount;
+    private BigDecimal totalAmount;
     private LocalDate paymentDueDate;
     private LocalDate actualPaymentDate;
     private int accountId;
@@ -90,10 +96,10 @@ public class FetchLoanDataDTO {
 
     private int loanSettlementId;
     private LocalDate settlementDate;
-    private double pastDueInterestAmount;
-    private double latePaymentInterestAmount;
-    private double prepaymentPenaltyAmount;
-    private double settlementAmount;
+    private Decimal pastDueInterestAmount;
+    private Decimal latePaymentInterestAmount;
+    private BigDecimal prepaymentPenaltyAmount;
+    private BigDecimal settlementAmount;
     private String settlementStatus;
   }
 }
