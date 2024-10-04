@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionNotification {
+    private String email;
     private String referenceNumber;
 
     private Long customerId;
@@ -20,7 +21,7 @@ public class TransactionNotification {
 
     private String customerName;
 
-    private String balance;
+    private BigDecimal balance;
 
     private String transactionType;
 

@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.consumer;
+package com.ojt.klb.banking_notification_service.dto.consumer.loan;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +18,5 @@ public class LoanData {
     private String email;
     private Long contractNumber;
     private BigDecimal amounts;
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 }

@@ -10,7 +10,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class CustomerDto {
+public class  CustomerDto {
 
 //    @JsonIgnore
     private Long customerId;

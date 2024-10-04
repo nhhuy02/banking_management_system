@@ -1,6 +1,7 @@
 package com.app.bankingloanservice.controller;
 
 import com.app.bankingloanservice.dto.ApiResponseWrapper;
+import com.app.bankingloanservice.dto.LoanDisbursementResponse;
 import com.app.bankingloanservice.dto.LoanRequest;
 import com.app.bankingloanservice.dto.LoanResponse;
 import com.app.bankingloanservice.service.LoanDisbursementService;
@@ -145,14 +146,14 @@ public class LoanController {
      * Endpoint for loan disbursement.
      *
      * @param loanId ID of the loan to be disbursed
-     * @return ApiResponseWrapper with success message
+     * @return ApiResponseWrapper with LoanDisbursementResponse
      */
     @PostMapping("/{loanId}/disburse")
     @Operation(summary = "Disburse Loan", description = "Disburse the loan with the given ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loan disbursed successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ApiResponseWrapper.class))),
+                            schema = @Schema(implementation = LoanDisbursementResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid loan ID or loan status",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Loan not found",
@@ -160,18 +161,24 @@ public class LoanController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    public ResponseEntity<ApiResponseWrapper<Void>> disburseLoan(
+    public ResponseEntity<ApiResponseWrapper<LoanDisbursementResponse>> disburseLoan(
             @Parameter(description = "ID of the loan to be disbursed", required = true)
             @PathVariable Long loanId) {
         log.info("Received request to disburse loan with ID: {}", loanId);
-        loanDisbursementService.disburseLoan(loanId);
-        ApiResponseWrapper<Void> response = new ApiResponseWrapper<>(
+
+        // Call the disbursement service to process the loan
+        LoanDisbursementResponse loanDisbursementResponse = loanDisbursementService.disburseLoan(loanId);
+
+        // Return the response wrapped in ApiResponseWrapper
+        ApiResponseWrapper<LoanDisbursementResponse> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 "Loan disbursed successfully.",
-                null
+                loanDisbursementResponse
         );
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

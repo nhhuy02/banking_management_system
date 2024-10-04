@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Data
 public class AccountDto {
+    private Long customerId;
 
     private String fullName;
 

@@ -30,7 +30,7 @@ public class LoanApplicationResponse {
 
     private String occupation; // Occupation
 
-    private LoanTypeDto loanTypeDto;
+    private LoanTypeResponse loanTypeResponse;
 
     private Long desiredLoanAmount; // Desired loan amount
 

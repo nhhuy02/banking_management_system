@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+	<meta charset="UTF-8" />
+	<title>Thông Tin Khách Hàng</title>
+	<link href="https://fonts.googleapis.com/css?family=Amarante" rel="stylesheet" />
+	<style>
+		body {
+				font-family: 'CharisSIL', sans-serif;
+				background-color: #fff;
+				margin: 0;
+				padding: 0;
+				font-size: 12px; /* Set a base font size */
+		}
+
+		#wrapper {
+				max-width: 800px;
+				margin: 20px auto;
+				padding: 20px;
+				background-color: #fff;
+				border-radius: 8px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+				text-align: center;
+				color: #333;
+				font-size: 28px; /* Increased size */
+		}
+
+		h2 {
+				text-align: center;
+				color: #333;
+				font-size: 24px; /* Increased size */
+				margin: 20px 0 10px;
+		}
+
+		table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 20px;
+				font-size: 10px;
+		}
+
+		th, td {
+				padding: 12px;
+				text-align: left;
+				border: 1px solid #ddd;
+		}
+
+		th {
+				background-color: #f2f2f2;
+				color: #333;
+				font-weight: bold;
+		}
+
+		.title {
+				font-weight: bold;
+				font-size: 10px; /* Use fixed size */
+		}
+
+		.subtitle {
+				font-size: 8px; /* Use fixed size */
+				color: #888;
+		}
+
+		@media print {
+				body {
+						font-size: 10px; /* Adjust for print */
+				}
+
+				h1 {
+						font-size: 20px; /* Adjust for print */
+				}
+
+				h2 {
+						font-size: 18px; /* Adjust for print */
+				}
+		}
+
+		@page {
+				size: A4;
+				margin: 10mm;
+		}
+	</style>
+</head>
+
+<body>
+<div id="wrapper">
+	<h1>Thông Tin Khách Hàng / Customer</h1>
+
+	<!-- Customer Information Table -->
+	<table id="customer" aria-label="Customer Information">
+		<thead>
+		<tr>
+			<th>
+				<span class="title">Họ Và Tên</span><br />
+				<span class="subtitle">(Full Name)</span>
+			</th>
+			<th>
+				<span class="title">Số Điện Thoại</span><br />
+				<span class="subtitle">(Phone Number)</span>
+			</th>
+			<th>
+				<span class="title">Số CCCD/Hộ chiếu</span><br />
+				<span class="subtitle">(ID/Passport No)</span>
+			</th>
+			<th>
+				<span class="title">Email</span><br />
+				<span class="subtitle">(Email)</span>
+			</th>
+			<th>
+				<span class="title">Ngày Sinh</span><br />
+				<span class="subtitle">(Date of Birth)</span>
+			</th>
+			<th>
+				<span class="title">Địa Chỉ</span><br />
+				<span class="subtitle">(Address)</span>
+			</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td th:text="${customer.fullName}"></td>
+			<td th:text="${customer.phoneNumber}"></td>
+			<td th:text="${customer.kycDocumentNumber}"></td>
+			<td th:text="${customer.email}"></td>
+			<td th:text="${customer.dateOfBirth}"></td>
+			<td th:text="${customer.address}"></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<h2>Tài khoản đã đăng ký / Registered accounts</h2>
+	<!-- Account Information Table -->
+	<table id="accountInfo" aria-label="Account Information">
+		<thead>
+		<tr>
+			<th>
+				<span class="title">STT</span><br />
+				<span class="subtitle">(No)</span>
+			</th>
+			<th>
+				<span class="title">Loại Tài Khoản</span><br />
+				<span class="subtitle">(Account Type)</span>
+			</th>
+			<th>
+				<span class="title">Tên Tài Khoản</span><br />
+				<span class="subtitle">(Account Name)</span>
+			</th>
+			<th>
+				<span class="title">Số Tài Khoản</span><br />
+				<span class="subtitle">(Account Number)</span>
+			</th>
+			<th>
+				<span class="title">Loại Tiền Tệ</span><br />
+				<span class="subtitle">(Currency)</span>
+			</th>
+			<th>
+				<span class="title">Số Dư Khả Dụng</span><br />
+				<span class="subtitle">(Available Balance)</span>
+			</th>
+			<th>
+				<span class="title">Ngày Mở Tài Khoản</span><br />
+				<span class="subtitle">(Opening Date)</span>
+			</th>
+			<th>
+				<span class="title">Trạng Thái</span><br />
+				<span class="subtitle">(Status)</span>
+			</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="account, iterStat : ${accounts}">
+			<td th:text="${iterStat.index + 1}"></td>
+			<td th:text="${account.type}"></td>
+			<td th:text="${account.name}"></td>
+			<td th:text="${account.number}"></td>
+			<td th:text="${account.currency}"></td>
+			<td th:text="${account.availableBalance}"></td>
+			<td th:text="${account.openingDate}"></td>
+			<td th:text="${account.status}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

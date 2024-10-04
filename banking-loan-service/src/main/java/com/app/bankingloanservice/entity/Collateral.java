@@ -58,7 +58,7 @@ public class Collateral extends AuditModel {
     /**
      * The value of the collateral in VND.
      */
-    @Column(name = "collateral_value")
+    @Column(name = "collateral_value", nullable = false)
     private BigDecimal collateralValue;
 
     /**

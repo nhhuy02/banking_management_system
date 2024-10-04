@@ -23,8 +23,7 @@ public class ReportTypeServiceFactory {
   }
 
   public ReportTypeService<?> getReportTypeService(ReportType reportType) {
-    log.info(Translator.toLocale("msg.called",
-        "ReportTypeServiceFactory::getReportTypeService " + reportTypeServiceMap));
+    log.info("ReportTypeServiceFactory::getReportTypeService is processing for type: {}", reportType);
 
     return reportTypeServiceMap.get(reportType);
   }

@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,14 +44,20 @@ public class JwtService {
                 .compact();
     }
 
-    public String invalidateToken(String token) {
-        Claims claims = jwtUtil.extractAllClaims(token);
-        claims.setExpiration(new Date(System.currentTimeMillis() - (expiration * 2)));
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+    public Duration getTokenExpiryDuration(String token) {
+        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        Date expiration = claims.getExpiration();
+        long durationInMillis = expiration.getTime() - System.currentTimeMillis();
+        return Duration.ofMillis(durationInMillis);
     }
 
 }

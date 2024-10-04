@@ -39,8 +39,8 @@ public class LoanResponse {
     // Date of customer confirmation
     private LocalDate customerConfirmationDate;
 
-    // Loan type
-    private LoanTypeDto loanTypeDto;
+    // Name of Loan Type
+    private String loanTypeName;
 
     // Loan amount in VND
     private Long loanAmount;

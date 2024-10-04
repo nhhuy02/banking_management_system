@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Data
 public class AccountDto {
 
-//    @JsonIgnore
-//    private Long id;
     private Long customerId;
+
+    private Long accountId;
 
     private String fullName;
 

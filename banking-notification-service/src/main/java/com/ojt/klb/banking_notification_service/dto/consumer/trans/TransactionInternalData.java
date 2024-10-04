@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.consumer;
+package com.ojt.klb.banking_notification_service.dto.consumer.trans;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 @Getter
-public class TransactionData {
+public class TransactionInternalData {
     private String transactionType;
     @Schema(description = "Email người chuyển")
     private String emailCustomerSend;
