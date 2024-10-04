@@ -132,12 +132,12 @@ public class JwtInterceptor implements HandlerInterceptor {
                         }
                     }
 
-                    if (targetUrl != null) {
-                        url = targetUrl + url;
-                        logger.info("New URL: {}", url);
-                        response.sendRedirect(url);
-                        return false;
-                    }
+//                    if (targetUrl != null) {
+//                        url = targetUrl + url;
+//                        logger.info("New URL: {}", url);
+//                        response.sendRedirect(url);
+//                        return false;
+//                    }
                 }
             }
 
@@ -173,21 +173,33 @@ public class JwtInterceptor implements HandlerInterceptor {
                     }
                 }
 
+//            if (targetUrl != null) {
+//                url = targetUrl + url;
+//                logger.info("Processed URL: {}", url);
+//
+//                if (!request.getRequestURI().equals(url)) {
+//                    logger.info("Redirecting to: {}", url);
+//                    response.sendRedirect(url);
+//                    return false;
+//                }
+//            } else {
+//                logger.error("No matching URL found in urlMappings.");
+//            }
+//        } else {
+//            logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
             if (targetUrl != null) {
-                url = targetUrl + url;
-                logger.info("Processed URL: {}", url);
-
-                if (!request.getRequestURI().equals(url)) {
-                    logger.info("Redirecting to: {}", url);
-                    response.sendRedirect(url);
-                    return false;
+                String queryString = request.getQueryString();
+                if (queryString != null && !queryString.isEmpty()) {
+                    url = targetUrl + url + "?" + queryString;
+                } else {
+                    url = targetUrl + url;
                 }
-            } else {
-                logger.error("No matching URL found in urlMappings.");
+
+                logger.info("New URL with query string: {}", url);
+                response.sendRedirect(url);
+                return false;
             }
-        } else {
-            logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
-        }
+       }
 
         return true;
     }
