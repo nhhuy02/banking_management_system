@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -118,29 +119,17 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+"
             );
 
+            Map<String, String> urlMappingPrefixes = getUrlMappingPrefixes();
+
             for (String pattern : urlPatterns) {
                 if (url.matches(pattern)) {
-                    if (pattern.startsWith("/api/v1/account")) {
-                        logger.info("Skipping ID checks and data filling for URL: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/account");
-                    } else if (pattern.startsWith("/api/v1/loan-service")) {
-                        logger.info("Processing URL for loan-related operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/loan-service");
-                    } else if (pattern.startsWith("/api/v1/customer")) {
-                        logger.info("Processing URL for customer operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/customer");
-                    } else if (pattern.startsWith("/api/v1/reports")) {
-                        logger.info("Processing URL for reports operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/reports");
-                    } else if (pattern.startsWith("/api/v1/notification")) {
-                        logger.info("Processing URL for notification operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/notification");
-                    } else if (pattern.startsWith("/api/v1/transaction")) {
-                        logger.info("Processing URL for transaction operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/transaction");
-                    }else if (pattern.startsWith("/api/v1/fund_transfer")) {
-                        logger.info("Processing URL for fund transfer operations: {}", url);
-                        targetUrl = urlMappings.get("/api/v1/fund_transfer");
+                    for (Map.Entry<String, String> entry : urlMappingPrefixes.entrySet()) {
+                        String key = entry.getKey();
+                        if (pattern.startsWith(key)) {
+                            logger.info("Processing URL for {} operations: {}", key.substring(key.lastIndexOf("/") + 1), url);
+                            targetUrl = urlMappings.get(key);
+                            break;
+                        }
                     }
 
                     if (targetUrl != null) {
@@ -152,7 +141,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                 }
             }
 
-                for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
+
+            for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
                     logger.info("Checking URL mapping for: {}", entry.getKey());
                     if (url.contains(entry.getKey())) {
                         targetUrl = entry.getValue();
@@ -200,6 +190,18 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    private static Map<String, String> getUrlMappingPrefixes() {
+        Map<String, String> urlMappingPrefixes = new HashMap<>();
+        urlMappingPrefixes.put("/api/v1/account", "/api/v1/account");
+        urlMappingPrefixes.put("/api/v1/loan-service", "/api/v1/loan-service");
+        urlMappingPrefixes.put("/api/v1/customer", "/api/v1/customer");
+        urlMappingPrefixes.put("/api/v1/reports", "/api/v1/reports");
+        urlMappingPrefixes.put("/api/v1/notification", "/api/v1/notification");
+        urlMappingPrefixes.put("/api/v1/transaction", "/api/v1/transaction");
+        urlMappingPrefixes.put("/api/v1/fund_transfer", "/api/v1/fund_transfer");
+        return urlMappingPrefixes;
     }
 
     private boolean isValidReferer(String referer) {
