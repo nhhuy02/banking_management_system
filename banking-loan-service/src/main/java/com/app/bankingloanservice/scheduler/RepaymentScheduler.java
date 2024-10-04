@@ -87,7 +87,9 @@ public class RepaymentScheduler {
             // Use builder to create notification
             DueDateNotificationProducer notification = DueDateNotificationProducer.builder()
                     .loanRepaymentId(repayment.getLoanPaymentId())
+                    .loanContractNo(repayment.getLoan().getLoanContractNo())
                     .accountId(repayment.getLoan().getAccountId())
+                    .customerId(accountInfo.getCustomerId())
                     .customerName(accountInfo.getFullName())
                     .email(accountInfo.getEmail())
                     .dueDate(repayment.getPaymentDueDate())
@@ -109,7 +111,9 @@ public class RepaymentScheduler {
             // Use builder to create notification
             OverdueNotificationProducer notification = OverdueNotificationProducer.builder()
                     .loanRepaymentId(repayment.getLoanPaymentId())
+                    .loanContractNo(repayment.getLoan().getLoanContractNo())
                     .accountId(repayment.getLoan().getAccountId())
+                    .customerId(accountInfo.getCustomerId())
                     .customerName(accountInfo.getFullName())
                     .email(accountInfo.getEmail())
                     .dueDate(repayment.getPaymentDueDate())
