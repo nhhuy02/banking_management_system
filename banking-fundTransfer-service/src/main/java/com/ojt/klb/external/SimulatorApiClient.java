@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @FeignClient(name = "banking-simulatorApi-service", url = "http://localhost:8020/api/v1/bankAccounts")
 public interface SimulatorApiClient {

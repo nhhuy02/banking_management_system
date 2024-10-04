@@ -2,7 +2,7 @@ package com.ojt.klb.service;
 
 import com.ojt.klb.model.dto.BankAccountDto;
 import com.ojt.klb.model.entity.BankAccount;
-import com.ojt.klb.response.ApiResponse;
+import com.ojt.klb.model.response.ApiResponse;
 
 import java.math.BigDecimal;
 

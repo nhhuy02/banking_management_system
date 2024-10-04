@@ -2,7 +2,7 @@ package com.ojt.klb.controller;
 
 import com.ojt.klb.model.dto.BankAccountDto;
 import com.ojt.klb.model.entity.BankAccount;
-import com.ojt.klb.response.ApiResponse;
+import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
