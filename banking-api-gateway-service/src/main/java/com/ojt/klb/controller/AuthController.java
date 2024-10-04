@@ -5,12 +5,12 @@ import com.ojt.klb.dto.RegisterRequest;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.AuthLoginService;
 import com.ojt.klb.service.AuthRegisterService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.ojt.klb.security.JwtService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,12 +19,10 @@ public class AuthController {
 
     private final AuthLoginService authLoginService;
     private final AuthRegisterService authRegisterService;
-    private final JwtService jwtService;
 
-    public AuthController(AuthLoginService authLoginService, AuthRegisterService authRegisterService, JwtService jwtService) {
+    public AuthController(AuthLoginService authLoginService, AuthRegisterService authRegisterService) {
         this.authLoginService = authLoginService;
         this.authRegisterService = authRegisterService;
-        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -62,30 +60,32 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String tokenHeader) {
-        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
-            String token = tokenHeader.substring(7);
-
-            String invalidToken = jwtService.invalidateToken(token);
-
-            ApiResponse<String> response = new ApiResponse<>(
-                    HttpStatus.OK.value(),
-                    "Logout success, see you again!",
-                    true,
-                    invalidToken
-            );
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<String> response = new ApiResponse<>(
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Invalid token or not provided",
-                    false,
-                    null
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    public ResponseEntity<ApiResponse<String>> logout(HttpServletRequest request) {
+        String token = extractTokenFromRequest(request);
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(
+                            HttpStatus.BAD_REQUEST.value(),
+                            "Token is required",
+                            false,
+                            null));
         }
+
+        authLoginService.logout(token);
+        return ResponseEntity.ok(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Logout successful",
+                true,
+                null));
     }
 
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
+    }
 
 }
 

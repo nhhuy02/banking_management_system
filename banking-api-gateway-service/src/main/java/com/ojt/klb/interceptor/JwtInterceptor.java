@@ -2,6 +2,7 @@ package com.ojt.klb.interceptor;
 
 import com.ojt.klb.exception.ErrorResponseHandler;
 import com.ojt.klb.security.JwtUtil;
+import com.ojt.klb.service.impl.LoginServiceImpl;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,15 +22,18 @@ import java.util.regex.Pattern;
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
 
-    private final JwtUtil jwtUtil;
-    private final RateLimiter rateLimiter;
     private static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 
-    public JwtInterceptor(JwtUtil jwtUtil) {
+    private final JwtUtil jwtUtil;
+    private final RateLimiter rateLimiter;
+    private final LoginServiceImpl loginService;
+
+    public JwtInterceptor(JwtUtil jwtUtil, LoginServiceImpl loginService) {
         this.jwtUtil = jwtUtil;
+        this.loginService = loginService;
 
         RateLimiterConfig config = RateLimiterConfig.custom()
-                .limitForPeriod(2)
+                .limitForPeriod(5)
                 .limitRefreshPeriod(Duration.ofSeconds(1))
                 .timeoutDuration(Duration.ZERO)
                 .build();
@@ -62,7 +66,13 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             if (!jwtUtil.isTokenValid(token)) {
                 logger.warn("Invalid token for request URI: {}", request.getRequestURI());
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Token");
+                ErrorResponseHandler.setErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), "Invalid Token");
+                return false;
+            }
+
+            if (loginService.isTokenBlacklisted(token)) {
+                logger.error("JWT Token in blacklisted");
+                ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Token is blacklisted! Login again get new token");
                 return false;
             }
 
@@ -76,11 +86,11 @@ public class JwtInterceptor implements HandlerInterceptor {
             url = url.replace("%7B", "").replace("%7D", "");
 
             Map<String, String> urlMappings = Map.of(
-                    "account", "http://localhost:8080",
-                    "customer", "http://localhost:8082",
-                    "notification", "http://localhost:8083",
-                    "reports", "http://localhost:8086",
-                    "loan-service", "http://localhost:8060"
+                    "/api/v1/account", "http://localhost:8080",
+                    "/api/v1/customer", "http://localhost:8082",
+                    "/api/v1/notification", "http://localhost:8083",
+                    "/api/v1/reports", "http://localhost:8086",
+                    "/api/v1/loan-service", "http://localhost:8060"
             );
 
             String targetUrl = null;
@@ -111,6 +121,15 @@ public class JwtInterceptor implements HandlerInterceptor {
                     } else if (pattern.startsWith("/api/v1/loan-service")) {
                         logger.info("Processing URL for loan-related operations: {}", url);
                         targetUrl = urlMappings.get("loan-service");
+                    } else if (pattern.startsWith("/api/v1/customer")) {
+                        logger.info("Processing URL for customer operations: {}", url);
+                        targetUrl = urlMappings.get("customer");
+                    } else if (pattern.startsWith("/api/v1/reports")) {
+                        logger.info("Processing URL for reports operations: {}", url);
+                        targetUrl = urlMappings.get("reports");
+                    } else if (pattern.startsWith("/api/v1/notification")) {
+                        logger.info("Processing URL for notification operations: {}", url);
+                        targetUrl = urlMappings.get("notification");
                     }
 
                     if (targetUrl != null) {
@@ -135,7 +154,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                         url = url.replace("userId", userId)
                                 .replace("accountId", accountId)
                                 .replace("customerId", customerId)
-                                .replace("savingAccountId", savingAccountId);
+                                .replace("savingAccountId", savingAccountId != null ? savingAccountId : "");
 
                         while (matcher.find()) {
                             String foundId = matcher.group();

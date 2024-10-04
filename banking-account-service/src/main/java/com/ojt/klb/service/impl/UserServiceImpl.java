@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isValidPassword(String password) {
-        return password.length() >= 8 &&
+        return password.length() >= 5 &&
                 password.matches(".*[!@#$%^&*()].*") &&
                 password.matches(".*[A-Z].*");
     }
