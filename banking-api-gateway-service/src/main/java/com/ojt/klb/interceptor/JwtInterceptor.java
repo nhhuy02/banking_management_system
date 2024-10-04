@@ -92,8 +92,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/notification", "http://localhost:8083",
                     "/api/v1/reports", "http://localhost:8086",
                     "/api/v1/loan-service", "http://localhost:8060",
-                    "/api/v1/transaction", "http://localhost:8070",
-                    "/api/v1/fundTransfer", "http://localhost:8090"
+                    "/api/v1/transactions", "http://localhost:8070",
+                    "/api/v1/fund_transfer", "http://localhost:8090"
 
             );
 
