@@ -86,14 +86,15 @@ public class JwtInterceptor implements HandlerInterceptor {
             url = url.replace("%7B", "").replace("%7D", "");
 
             Map<String, String> urlMappings = Map.of(
-                    "/api/v1/account", "http://localhost:8080",
-                    "/api/v1/customer", "http://localhost:8082",
-                    "/api/v1/notification", "http://localhost:8083",
-                    "/api/v1/reports", "http://localhost:8086",
-                    "/api/v1/loan-service", "http://localhost:8060",
-                    "/api/v1/transactions", "http://localhost:8070",
-                    "/api/v1/fund_transfer", "http://localhost:8090"
+                    "account", "http://localhost:8080",
+                    "customer", "http://localhost:8082",
+                    "notification", "http://localhost:8083",
+                    "reports", "http://localhost:8086",
+                    "loan-service", "http://localhost:8060",
+                    "transaction", "http://localhost:8070",
+                    "fundTransfer", "http://localhost:8090"
             );
+
 
             String targetUrl = null;
 
