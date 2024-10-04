@@ -121,25 +121,25 @@ public class JwtInterceptor implements HandlerInterceptor {
                 if (url.matches(pattern)) {
                     if (pattern.startsWith("/api/v1/account")) {
                         logger.info("Skipping ID checks and data filling for URL: {}", url);
-                        targetUrl = urlMappings.get("account");
+                        targetUrl = urlMappings.get("/api/v1/account");
                     } else if (pattern.startsWith("/api/v1/loan-service")) {
                         logger.info("Processing URL for loan-related operations: {}", url);
-                        targetUrl = urlMappings.get("loan-service");
+                        targetUrl = urlMappings.get("/api/v1/loan-service");
                     } else if (pattern.startsWith("/api/v1/customer")) {
                         logger.info("Processing URL for customer operations: {}", url);
-                        targetUrl = urlMappings.get("customer");
+                        targetUrl = urlMappings.get("/api/v1/customer");
                     } else if (pattern.startsWith("/api/v1/reports")) {
                         logger.info("Processing URL for reports operations: {}", url);
-                        targetUrl = urlMappings.get("reports");
+                        targetUrl = urlMappings.get("/api/v1/reports");
                     } else if (pattern.startsWith("/api/v1/notification")) {
                         logger.info("Processing URL for notification operations: {}", url);
-                        targetUrl = urlMappings.get("notification");
-                    }else if (pattern.startsWith("/api/v1/transactions")) {
+                        targetUrl = urlMappings.get("/api/v1/notification");
+                    } else if (pattern.startsWith("/api/v1/transaction")) {
                         logger.info("Processing URL for transaction operations: {}", url);
-                        targetUrl = urlMappings.get("transaction");
+                        targetUrl = urlMappings.get("/api/v1/transaction");
                     }else if (pattern.startsWith("/api/v1/fund_transfer")) {
                         logger.info("Processing URL for fund transfer operations: {}", url);
-                        targetUrl = urlMappings.get("fund_transfer");
+                        targetUrl = urlMappings.get("/api/v1/fund_transfer");
                     }
 
                     if (targetUrl != null) {
