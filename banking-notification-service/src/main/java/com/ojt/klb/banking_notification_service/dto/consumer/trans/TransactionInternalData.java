@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.consumer;
+package com.ojt.klb.banking_notification_service.dto.consumer.trans;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

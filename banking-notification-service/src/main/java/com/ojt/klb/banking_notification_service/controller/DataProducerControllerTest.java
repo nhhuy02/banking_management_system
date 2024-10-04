@@ -1,10 +1,9 @@
 package com.ojt.klb.banking_notification_service.controller;
 
-import com.ojt.klb.banking_notification_service.dto.consumer.AccountData;
+import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
-import com.ojt.klb.banking_notification_service.dto.consumer.LoanData;
-import com.ojt.klb.banking_notification_service.dto.consumer.TransactionInternalData;
-import com.ojt.klb.banking_notification_service.service.AccountProducerTest;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import com.ojt.klb.banking_notification_service.service.CustomerProducerTest;
 import com.ojt.klb.banking_notification_service.service.LoanProducerTest;
 import com.ojt.klb.banking_notification_service.service.TransactionProducerTest;
@@ -21,8 +20,7 @@ public class DataProducerControllerTest {
     private TransactionProducerTest transaction;
     @Autowired
     private LoanProducerTest loan;
-    @Autowired
-    private AccountProducerTest account;
+
 
     @PostMapping("/customer-producer/send-data")
     public String sendOtp(@RequestBody OtpEmailRequestDto customerData) {
@@ -40,9 +38,5 @@ public class DataProducerControllerTest {
         return "data sent successfully";
     }
 
-    @PostMapping("/account-producer/send-data")
-    public String sendAccountData(@RequestBody AccountData accountData) {
-        account.sendAccountData(accountData);
-        return "data sent successfully";
-    }
+
 }
