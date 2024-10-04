@@ -6,7 +6,7 @@ import com.app.bankingloanservice.constant.PaymentStatus;
 import com.app.bankingloanservice.dto.kafka.DueDateNotificationProducer;
 import com.app.bankingloanservice.dto.kafka.OverdueNotificationProducer;
 import com.app.bankingloanservice.entity.LoanRepayment;
-import com.app.bankingloanservice.exception.ExternalServiceException;
+import com.app.bankingloanservice.exception.KafkaNotificationException;
 import com.app.bankingloanservice.repository.LoanRepaymentRepository;
 import com.app.bankingloanservice.util.LatePaymentInterestCalculator;
 import lombok.RequiredArgsConstructor;
@@ -97,7 +97,7 @@ public class RepaymentScheduler {
             dueDateKafkaTemplate.send(REPAYMENT_DUE_TOPIC, notification);
         } catch (Exception e) {
             log.error("Error sending due date notification for Repayment ID {}: {}", repayment.getLoanPaymentId(), e.getMessage(), e);
-            throw new ExternalServiceException("Failed to send due date notification", e);
+            throw new KafkaNotificationException("Failed to send due date notification", e);
         }
     }
 
@@ -121,7 +121,7 @@ public class RepaymentScheduler {
             overdueKafkaTemplate.send(REPAYMENT_OVERDUE_TOPIC, notification);
         } catch (Exception e) {
             log.error("Error sending overdue notification for Repayment ID {}: {}", repayment.getLoanPaymentId(), e.getMessage(), e);
-            throw new ExternalServiceException("Failed to send overdue notification", e);
+            throw new KafkaNotificationException("Failed to send overdue notification", e);
         }
     }
 

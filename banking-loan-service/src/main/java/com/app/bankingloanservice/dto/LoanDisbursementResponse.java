@@ -14,11 +14,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class LoanDisbursementResponse {
 
+    // Loan ID
+    private Long loanId;
+
     // Loan contract number
     private String loanContractNo;
 
+    private String customerName;
+
+    private String customerEmail;
+
+    private String customerPhone;
+
     // Borrower's account number
-    private String borrowerAccountNumber;
+    private String customerAccountNumber;
 
     // Disbursed loan amount
     private BigDecimal disbursedAmount;
