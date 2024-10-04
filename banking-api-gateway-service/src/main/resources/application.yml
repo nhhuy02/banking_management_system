@@ -31,6 +31,15 @@ spring:
           uri: http://locallhost:8060
           predicates:
             - Path:/api/v1/loan-service/**
+        - id: transaction_service_banking
+          uri: http://localhost:8070
+          predicates:
+            - Path:/api/v1/transactions/**
+        - id: fundTransfer_service_banking
+          uri: http://localhost:8090
+          predicates:
+            - Path:/api/v1/fund_transfer/**
+
   data:
     redis:
       host: localhost
