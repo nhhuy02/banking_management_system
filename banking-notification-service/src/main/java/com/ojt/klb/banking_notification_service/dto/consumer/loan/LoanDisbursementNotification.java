@@ -1,4 +1,4 @@
-package com.app.bankingloanservice.dto.kafka;
+package com.ojt.klb.banking_notification_service.dto.consumer.loan;
 
 import lombok.Builder;
 import lombok.Data;
