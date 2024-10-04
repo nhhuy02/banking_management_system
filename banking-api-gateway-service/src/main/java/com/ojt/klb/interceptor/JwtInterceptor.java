@@ -135,7 +135,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                         targetUrl = urlMappings.get("notification");
                     } else if (pattern.startsWith("/api/v1/transactions")) {
                         logger.info("Processing URL for transaction operations: {}", url);
-                        targetUrl = urlMappings.get("transactions");
+                        targetUrl = urlMappings.get("transaction");
                     }else if (pattern.startsWith("/api/v1/fund_transfer")) {
                         logger.info("Processing URL for fund transfer operations: {}", url);
                         targetUrl = urlMappings.get("fund_transfer");
