@@ -18,13 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -43,8 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public ApiResponse handleTransaction(TransactionDto transactionDto) {
         Account account;
-        ResponseEntity<ApiResponse<Account>> response = accountClient.getDataAccountNumber(transactionDto.getAccountNumber());
-        ApiResponse<Account> apiResponse = response.getBody();
+        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(transactionDto.getAccountNumber()).getBody();
         if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
             log.error("requested account " + transactionDto.getAccountNumber() + " is not found on the server");
             throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
@@ -147,7 +144,7 @@ public class TransactionServiceImpl implements TransactionService {
             TransactionStatus status) {
 
         Specification<Transaction> spec = (root, query, cb) -> {
-            query.distinct(true);
+            query.distinct(false);
             return null;
         };
 

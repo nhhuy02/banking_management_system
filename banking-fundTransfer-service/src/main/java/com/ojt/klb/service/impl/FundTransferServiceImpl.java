@@ -143,24 +143,6 @@ public class FundTransferServiceImpl implements FundTransferService {
         var fromAccountBalance  = accountClient.accountBalance(fromAccount.getAccountNumber()).getBody();
         var toAccountBalance = simulatorApiClient.accountBalance(toAccount.getAccountNumber()).getBody();
 
-//        internalTransferProducer.sendInternalTransferNotification(
-//                new InternalTransferNotification(
-//                        fromAccount.getEmail(),
-//                        toAccount.getEmail(),
-//                        fromAccount.getCustomerId(),
-//                        toAccount.getCustomerId(),
-//                        transactionReference,
-//                        TransferType.INTERNAL.toString(),
-//                        transferredOn,
-//                        fromAccount.getAccountNumber(),
-//                        toAccount.getAccountNumber(),
-//                        toAccountResponse.getData().getFullName(),
-//                        fundTransferRequest.getAmount(),
-//                        fundTransfer.getDescription(),
-//                        fromAccountBalance,
-//                        toAccountBalance
-//                )
-//        );
         return FundTransferResponse.builder()
                 .transactionReference(transactionReference)
                 .message("Fund transfer was successful").build();
@@ -231,8 +213,7 @@ public class FundTransferServiceImpl implements FundTransferService {
     }
 
     private Account validateFromAccount(String fromAccountNumber, BigDecimal transferAmount) {
-        ResponseEntity<ApiResponse<Account>> response = accountClient.getDataAccountNumber(fromAccountNumber);
-        ApiResponse<Account> apiResponse = response.getBody();
+        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(fromAccountNumber).getBody();
 
         if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
             log.error("Requested account " + fromAccountNumber + " is not found on the server");
