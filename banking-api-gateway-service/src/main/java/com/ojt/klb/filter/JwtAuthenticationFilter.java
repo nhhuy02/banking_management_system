@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = (String) claims.get("role");
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                List<String> allowedRoles = List.of("ROLE_employee", "ROLE_admin");
+                List<String> allowedRoles = List.of("ROLE_customer","ROLE_employee", "ROLE_admin");
 
                 if (role == null || !allowedRoles.contains(role)) {
                     ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this resource");
