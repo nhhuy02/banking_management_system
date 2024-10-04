@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @Data
 public class  CustomerDto {
 
-    @JsonIgnore
-    private Long id;
+//    @JsonIgnore
+    private Long customerId;
 
     private Long accountId;
 

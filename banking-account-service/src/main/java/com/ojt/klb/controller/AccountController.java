@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -98,6 +99,16 @@ public class AccountController {
             );
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+    }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse> updateAccount(@RequestParam String accountNumber, @RequestBody AccountDto accountDto) {
+        return ResponseEntity.ok(accountService.updateAccount(accountNumber, accountDto));
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<BigDecimal> accountBalance(@RequestParam String accountNumber) {
+        return ResponseEntity.ok(accountService.getBalance(accountNumber));
     }
 }
 

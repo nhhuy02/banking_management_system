@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Data
 public class AccountDto {
 
+    private Long customerId;
+
     private Long accountId;
 
     private String fullName;
