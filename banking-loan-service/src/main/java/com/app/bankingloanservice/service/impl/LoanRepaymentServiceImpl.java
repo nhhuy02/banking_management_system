@@ -22,7 +22,9 @@ import com.app.bankingloanservice.util.RepaymentCalculatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,9 +127,36 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         }
     }
 
+    /**
+     * Retrieves the repayment schedule for a loan, with pagination and sorting.
+     * Handles sorting direction and any exceptions related to invalid direction values.
+     *
+     * @param loanId    The ID of the loan.
+     * @param page      The current page number.
+     * @param size      The page size.
+     * @param sortBy    The field to sort by.
+     * @param direction The sorting direction (asc/desc).
+     * @return Page of LoanRepaymentResponse.
+     */
     @Override
-    public Page<LoanRepaymentResponse> getRepaymentSchedule(Long loanId, Pageable pageable) {
+    public Page<LoanRepaymentResponse> getRepaymentSchedule(Long loanId, int page, int size, String sortBy, String direction) {
+        Sort.Direction sortDirection;
+
+        // Try to convert the direction string to Sort.Direction
+        try {
+            sortDirection = Sort.Direction.fromString(direction); // Handles both uppercase and lowercase
+        } catch (IllegalArgumentException e) {
+            // Log and throw exception if the sort direction is invalid
+            throw new IllegalArgumentException("Invalid sort direction value: " + direction);
+        }
+
+        // Build pageable with sorting
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        // Fetch loan repayments with pagination
         Page<LoanRepayment> repayments = loanRepaymentRepository.findByLoanLoanId(loanId, pageable);
+
+        // Map LoanRepayment to LoanRepaymentResponse
         return repayments.map(loanRepaymentMapper::toResponse);
     }
 

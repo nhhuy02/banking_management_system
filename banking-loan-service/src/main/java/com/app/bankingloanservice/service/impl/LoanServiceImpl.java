@@ -16,13 +16,14 @@ import com.app.bankingloanservice.repository.LoanRepository;
 import com.app.bankingloanservice.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -156,28 +157,25 @@ public class LoanServiceImpl implements LoanService {
         return generateLoanResponse(getLoanEntityById(loanId));
     }
 
-    /**
-     * Retrieves loans based on accountId with pagination support.
-     *
-     * @param accountId The ID of the account.
-     * @param pageable  Pagination information.
-     * @return A page of LoanResponse.
-     */
+
     @Override
-    public Page<LoanResponse> getLoansByAccountId(Long accountId, Pageable pageable) {
+    public List<LoanResponse> getLoansByAccountId(Long accountId) {
 
-        log.info("Fetching loans for account ID: {} with pagination: {}", accountId, pageable);
+        log.info("Fetching loans for account ID: {}", accountId);
 
-        Page<Loan> loanPage = loanRepository.findByAccountId(accountId, pageable);
+        List<Loan> loanList = loanRepository.findByAccountId(accountId);
 
-        if (loanPage.isEmpty()) {
+        if (loanList.isEmpty()) {
             log.warn("No loans found for account ID: {}", accountId);
-            // Return an empty page
-            return Page.empty(pageable);
+            return Collections.emptyList();
         }
 
-        Page<LoanResponse> responseDtos = loanPage.map(this::generateLoanResponse);
-        log.info("Fetched {} loans for account ID: {}", responseDtos.getContent().size(), accountId);
+        // Map Loan to LoanResponse
+        List<LoanResponse> responseDtos = loanList.stream()
+                .map(this::generateLoanResponse)
+                .collect(Collectors.toList());
+
+        log.info("Fetched {} loans for account ID: {}", responseDtos.size(), accountId);
 
         return responseDtos;
     }

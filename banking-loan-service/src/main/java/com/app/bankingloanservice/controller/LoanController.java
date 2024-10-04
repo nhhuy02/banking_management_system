@@ -15,12 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/loan-service/loans")
@@ -55,14 +54,12 @@ public class LoanController {
     }
 
     /**
-     * Get all loans by Account ID with pagination.
+     * Get all loans by Account ID without pagination.
      *
      * @param accountId the ID of the account whose loans to retrieve
-     * @param pageable  the pagination information
-     * @return paginated list of loans wrapped in ApiResponseWrapper
+     * @return list of loans wrapped in ApiResponseWrapper
      */
-    @GetMapping
-    @Operation(summary = "Get Loans by Account ID", description = "Retrieve all loans for a specific account with pagination support.")
+    @Operation(summary = "Get Loans by Account ID", description = "Retrieve all loans for a specific account without pagination.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loans retrieved successfully",
                     content = @Content(mediaType = "application/json",
@@ -74,28 +71,31 @@ public class LoanController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    public ResponseEntity<ApiResponseWrapper<Page<LoanResponse>>> getLoansByAccountId(
+    @GetMapping
+    public ResponseEntity<ApiResponseWrapper<List<LoanResponse>>> getLoansByAccountId(
             @Parameter(description = "ID of the account to retrieve loans for", required = true)
-            @RequestParam Long accountId,
+            @RequestParam Long accountId) {
 
-            @Parameter(description = "Pagination information")
-            @ParameterObject Pageable pageable) {
+        log.info("Received request to fetch loans for accountId: {}", accountId);
 
-        log.info("Received request to fetch loans for accountId: {} with pageable: {}", accountId, pageable);
-
-        Page<LoanResponse> loans = loanService.getLoansByAccountId(accountId, pageable);
+        List<LoanResponse> loans = loanService.getLoansByAccountId(accountId);
 
         String message;
 
         if (loans.isEmpty()) {
             log.warn("No loans found for accountId: {}", accountId);
             message = "No loans found for the given accountId.";
+            return new ResponseEntity<>(new ApiResponseWrapper<>(
+                    HttpStatus.NO_CONTENT.value(),
+                    true,
+                    message,
+                    null), HttpStatus.NO_CONTENT);
         } else {
             log.info("Successfully retrieved loans for accountId: {}", accountId);
             message = "Loans retrieved successfully.";
         }
 
-        ApiResponseWrapper<Page<LoanResponse>> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<List<LoanResponse>> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 message,

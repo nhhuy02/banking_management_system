@@ -12,7 +12,9 @@ import java.math.BigDecimal;
 @Builder
 public class OverdueNotificationProducer {
     private Long loanRepaymentId;
+    private String loanContractNo;
     private Long accountId;
+    private Long customerId;
     private String customerName;
     private String email;
     private LocalDate dueDate;

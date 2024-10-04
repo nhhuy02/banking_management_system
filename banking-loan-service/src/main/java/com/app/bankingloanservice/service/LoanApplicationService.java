@@ -5,6 +5,8 @@ import com.app.bankingloanservice.entity.LoanApplication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface LoanApplicationService {
 
     LoanApplicationResponse createLoanApplication(LoanApplicationRequest loanApplicationRequest);
@@ -13,7 +15,7 @@ public interface LoanApplicationService {
 
     LoanApplicationResponse getResponseDtoById(Long loanApplicationId);
 
-    Page<LoanApplicationResponse> getLoanApplicationsByAccountId(Long customerId, Pageable pageable);
+    List<LoanApplicationResponse> getLoanApplicationsByAccountId(Long accountId);
 
     DocumentResponse uploadLoanApplicationDocument(Long loanApplicationId, DocumentUploadRequest documentUploadRequest);
 

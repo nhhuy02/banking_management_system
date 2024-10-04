@@ -13,6 +13,7 @@ public class StringUtils {
     public static final String SPACE = " ";
     public static final String EMPTY = "";
     public static final String HYPHEN = "-";
+    public static final String COLON = ":";
     public static final String LOAN_APP = "Đơn Đăng ký khoản vay của bạn số: ";
     public static final String LOAN_CONTRACT = "Khoản vay của bạn số HĐ: ";
     public static final String LOAN_DISBURSEMENT = "được giải ngân";
@@ -57,7 +58,7 @@ public class StringUtils {
     }
 
     public static String convertContentLoanDisbursement(String contractNumber, BigDecimal amounts) {
-        String content = LOAN_CONTRACT + contractNumber+LOAN_DISBURSEMENT+ HYPHEN+ convertVND(amounts);
+        String content = LOAN_CONTRACT + contractNumber+LOAN_DISBURSEMENT+ COLON+ convertVND(amounts);
         return content;
     }
 

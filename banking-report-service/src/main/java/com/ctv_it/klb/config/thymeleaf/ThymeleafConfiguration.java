@@ -3,28 +3,35 @@ package com.ctv_it.klb.config.thymeleaf;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.ITemplateResolver;
+
 @Configuration
 public class ThymeleafConfiguration {
 
   @Bean
-  public ITemplateResolver xmlTemplateResolver() {
-    final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-    templateResolver.setCacheable(false);
-    templateResolver.setTemplateMode(TemplateMode.HTML);
-    templateResolver.setSuffix(".html");
-    templateResolver.setCharacterEncoding("UTF-8");
-    templateResolver.setOrder(1);
-    return templateResolver;
+  public ClassLoaderTemplateResolver fileTemplateResolver() {
+    ClassLoaderTemplateResolver fileTemplateResolver = new ClassLoaderTemplateResolver();
+    fileTemplateResolver.setTemplateMode("HTML");
+    fileTemplateResolver.setSuffix(".html");
+    fileTemplateResolver.setCharacterEncoding("UTF-8");
+    fileTemplateResolver.setOrder(1);
+    return fileTemplateResolver;
   }
 
   @Bean
-  public SpringTemplateEngine templateProcessorEngine() {
-    final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-    templateEngine.setEnableSpringELCompiler(true);
-    templateEngine.addTemplateResolver(xmlTemplateResolver());
-    return templateEngine;
+  public SpringTemplateEngine templateEngine() {
+    SpringTemplateEngine springTemplateEngine = new SpringTemplateEngine();
+    springTemplateEngine.setEnableSpringELCompiler(true);
+    springTemplateEngine.setTemplateResolver(fileTemplateResolver());
+    return springTemplateEngine;
+  }
+
+  @Bean
+  public ThymeleafViewResolver thymeleafViewResolver() {
+    ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+    resolver.setTemplateEngine(templateEngine());
+    resolver.setCharacterEncoding("UTF-8");
+    return resolver;
   }
 }

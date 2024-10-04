@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -86,13 +87,14 @@ public class JwtInterceptor implements HandlerInterceptor {
             url = url.replace("%7B", "").replace("%7D", "");
 
             Map<String, String> urlMappings = Map.of(
-                    "account", "http://localhost:8080",
-                    "customer", "http://localhost:8082",
-                    "notification", "http://localhost:8083",
-                    "reports", "http://localhost:8086",
-                    "loan-service", "http://localhost:8060",
-                    "transactions", "http://localhost:8070",
-                    "fund_transfer", "http://localhost:8090"
+                    "/api/v1/account", "http://localhost:8080",
+                    "/api/v1/customer", "http://localhost:8082",
+                    "/api/v1/notification", "http://localhost:8083",
+                    "/api/v1/reports", "http://localhost:8086",
+                    "/api/v1/loan-service", "http://localhost:8060",
+                    "/api/v1/transaction", "http://localhost:8070",
+                    "/api/v1/fundTransfer", "http://localhost:8090"
+
             );
 
 
@@ -113,44 +115,34 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+ ",
-                    "/api/v1/loan-service/loan-types/\\d+"
+                    "/api/v1/loan-service/loan-types/\\d+",
+                    "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+"
             );
+
+            Map<String, String> urlMappingPrefixes = getUrlMappingPrefixes();
 
             for (String pattern : urlPatterns) {
                 if (url.matches(pattern)) {
-                    if (pattern.startsWith("/api/v1/account")) {
-                        logger.info("Skipping ID checks and data filling for URL: {}", url);
-                        targetUrl = urlMappings.get("account");
-                    } else if (pattern.startsWith("/api/v1/loan-service")) {
-                        logger.info("Processing URL for loan-related operations: {}", url);
-                        targetUrl = urlMappings.get("loan-service");
-                    } else if (pattern.startsWith("/api/v1/customer")) {
-                        logger.info("Processing URL for customer operations: {}", url);
-                        targetUrl = urlMappings.get("customer");
-                    } else if (pattern.startsWith("/api/v1/reports")) {
-                        logger.info("Processing URL for reports operations: {}", url);
-                        targetUrl = urlMappings.get("reports");
-                    } else if (pattern.startsWith("/api/v1/notification")) {
-                        logger.info("Processing URL for notification operations: {}", url);
-                        targetUrl = urlMappings.get("notification");
-                    }else if (pattern.startsWith("/api/v1/transactions")) {
-                        logger.info("Processing URL for transaction operations: {}", url);
-                        targetUrl = urlMappings.get("transactions");
-                    }else if (pattern.startsWith("/api/v1/fund_transfer")) {
-                        logger.info("Processing URL for fund transfer operations: {}", url);
-                        targetUrl = urlMappings.get("fund_transfer");
+                    for (Map.Entry<String, String> entry : urlMappingPrefixes.entrySet()) {
+                        String key = entry.getKey();
+                        if (pattern.startsWith(key)) {
+                            logger.info("Processing URL for {} operations: {}", key.substring(key.lastIndexOf("/") + 1), url);
+                            targetUrl = urlMappings.get(key);
+                            break;
+                        }
                     }
 
-                    if (targetUrl != null) {
-                        url = targetUrl + url;
-                        logger.info("New URL: {}", url);
-                        response.sendRedirect(url);
-                        return false;
-                    }
+//                    if (targetUrl != null) {
+//                        url = targetUrl + url;
+//                        logger.info("New URL: {}", url);
+//                        response.sendRedirect(url);
+//                        return false;
+//                    }
                 }
             }
 
-                for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
+
+            for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
                     logger.info("Checking URL mapping for: {}", entry.getKey());
                     if (url.contains(entry.getKey())) {
                         targetUrl = entry.getValue();
@@ -181,23 +173,47 @@ public class JwtInterceptor implements HandlerInterceptor {
                     }
                 }
 
+//            if (targetUrl != null) {
+//                url = targetUrl + url;
+//                logger.info("Processed URL: {}", url);
+//
+//                if (!request.getRequestURI().equals(url)) {
+//                    logger.info("Redirecting to: {}", url);
+//                    response.sendRedirect(url);
+//                    return false;
+//                }
+//            } else {
+//                logger.error("No matching URL found in urlMappings.");
+//            }
+//        } else {
+//            logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
             if (targetUrl != null) {
-                url = targetUrl + url;
-                logger.info("Processed URL: {}", url);
-
-                if (!request.getRequestURI().equals(url)) {
-                    logger.info("Redirecting to: {}", url);
-                    response.sendRedirect(url);
-                    return false;
+                String queryString = request.getQueryString();
+                if (queryString != null && !queryString.isEmpty()) {
+                    url = targetUrl + url + "?" + queryString;
+                } else {
+                    url = targetUrl + url;
                 }
-            } else {
-                logger.error("No matching URL found in urlMappings.");
+
+                logger.info("New URL with query string: {}", url);
+                response.sendRedirect(url);
+                return false;
             }
-        } else {
-            logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
-        }
+       }
 
         return true;
+    }
+
+    private static Map<String, String> getUrlMappingPrefixes() {
+        Map<String, String> urlMappingPrefixes = new HashMap<>();
+        urlMappingPrefixes.put("/api/v1/account", "/api/v1/account");
+        urlMappingPrefixes.put("/api/v1/loan-service", "/api/v1/loan-service");
+        urlMappingPrefixes.put("/api/v1/customer", "/api/v1/customer");
+        urlMappingPrefixes.put("/api/v1/reports", "/api/v1/reports");
+        urlMappingPrefixes.put("/api/v1/notification", "/api/v1/notification");
+        urlMappingPrefixes.put("/api/v1/transaction", "/api/v1/transaction");
+        urlMappingPrefixes.put("/api/v1/fund_transfer", "/api/v1/fund_transfer");
+        return urlMappingPrefixes;
     }
 
     private boolean isValidReferer(String referer) {

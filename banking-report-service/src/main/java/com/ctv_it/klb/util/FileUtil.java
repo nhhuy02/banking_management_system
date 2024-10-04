@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
@@ -58,11 +59,29 @@ public class FileUtil {
 
   private byte[] processFileExport(ReportFormat reportFormat, String templateName,
       Map<String, Object> data, String targetFile) throws IOException {
-    try (OutputStream outStream = new FileOutputStream(new File(targetFile))) {
+
+    File target = new File(targetFile);
+
+    try (OutputStream outStream = new FileOutputStream(target)) {
       log.info("File exporting is processing");
+
       writeFileBasedOnFormat(reportFormat, outStream, templateName, data);
       log.info("File is exported successfully");
+
       return readFile(targetFile);
+    } catch (IOException e) {
+      log.error("Error occurred while exporting the file: {}", e.getMessage(), e);
+      // Delete the partially created file to prevent incomplete file issues
+      if (target.exists() && !target.delete()) {
+        log.error("Failed to delete incomplete file: {}", targetFile);
+      }
+      throw new InternalError();
+    } catch (Exception e) {
+      log.error("General error while exporting the file: {}", e.getMessage(), e);
+      if (target.exists() && !target.delete()) {
+        log.error("Failed to delete incomplete file: {}", targetFile);
+      }
+      throw new InternalError();
     }
   }
 
@@ -87,11 +106,13 @@ public class FileUtil {
     try (InputStream input = getTemplateInputStream(pathTemplateName);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       log.info("Data: {}", data);
+
       String processedHtml = processHtmlTemplate(pathTemplateName, data);
       log.info("Processed HTML: {}", processedHtml);
 
       ITextRenderer renderer = createPdfRenderer(processedHtml);
-      renderer.createPDF(byteArrayOutputStream, true);
+      renderer.createPDF(byteArrayOutputStream, false);
+      renderer.finishPDF();
 
       byte[] pdfBytes = byteArrayOutputStream.toByteArray();
       log.info("pdfBytes: {}", pdfBytes);
@@ -119,21 +140,25 @@ public class FileUtil {
 
   private ITextRenderer createPdfRenderer(String processedHtml)
       throws DocumentException, IOException {
+
     ITextRenderer renderer = new ITextRenderer();
+
+    ITextFontResolver fontResolver = renderer.getFontResolver();
+    addFonts(fontResolver);
+
     renderer.setDocumentFromString(processedHtml, null);
-//    ITextFontResolver fontResolver = renderer.getFontResolver();
-//    addFonts(fontResolver);
     renderer.layout();
     return renderer;
   }
 
-//  private void addFonts(ITextFontResolver fontResolver) throws DocumentException, IOException {
-//    fontResolver.addFont("charis-sil-cufonfonts/CharisSIL-Regular.ttf", BaseFont.IDENTITY_H,
-//        BaseFont.EMBEDDED);
-//  }
+  private void addFonts(ITextFontResolver fontResolver) throws DocumentException, IOException {
+    fontResolver.addFont(new ClassPathResource("font/DejaVuSans.ttf").getPath(),
+        BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+  }
 
   private void writeFileExcel(OutputStream outStream, String pathTemplateName,
       Map<String, Object> data) {
+
     log.debug("Start creation of Excel");
     try (InputStream input = getTemplateInputStream(pathTemplateName)) {
       Context context = new Context();
@@ -202,6 +227,7 @@ public class FileUtil {
     return Map.of("data", data, "fileName", fileName);
   }
 
+  // find index of target in array
   private int indexOf(byte[] array, byte[] target) {
     for (int i = 0; i <= array.length - target.length; i++) {
       boolean found = true;

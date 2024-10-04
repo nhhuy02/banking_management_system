@@ -7,7 +7,7 @@ import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
 import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
 import com.ojt.klb.banking_notification_service.dto.consumer.*;
 import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
-import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanApplicationNotification;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDisbursementNotification;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransData;
@@ -219,23 +219,23 @@ public class NotificationImpl implements NotificationService {
     }
 
     @Override
-    @KafkaListener(topics = "loan-topic", groupId = "loan_group", containerFactory = "loanDataKafkaListenerContainerFactory")
-    public void sendMailPaymentReminder(LoanData loanData) {
+    @KafkaListener(topics = "repayment_due_notification", groupId = "loan_group", containerFactory = "loanDataKafkaListenerContainerFactory")
+    public void sendMailPaymentReminder(LoanDueDate loanData) {
         String email = loanData.getEmail();
         NotificationTemplate notificationTemplate = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_REMINDER.statusCodeValue());
         String subject =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate.getSubjectTemplate();
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", loanData.getCustomerName());
-        variables.put("contractNumber", loanData.getContractNumber());
-        variables.put("amounts", StringUtils.convertVND(loanData.getAmounts()));
-        variables.put("deadline",loanData.getDeadline());
+//        variables.put("contractNumber", loanData.getContractNumber());
+        variables.put("amounts", StringUtils.convertVND(loanData.getAmountDue()));
+        variables.put("deadline",loanData.getDueDate());
 
         Notification notification = new Notification();
         notification.setCreatedAt(LocalDateTime.now());
         notification.setSendDate(LocalDateTime.now());
         notification.setNotificationTemplateId(notificationTemplate.getId());
         notification.setCustomerId(loanData.getCustomerId());
-        notification.setContent(StringUtils.convertContentLoanReminder(loanData.getContractNumber(), loanData.getDeadline()));
+//        notification.setContent(StringUtils.convertContentLoanReminder(loanData.getContractNumber(), loanData.getDueDate()));
         mailConfig.send(email, subject, "payment_reminder", variables);
         notificationRepository.save(notification);
     }

@@ -12,7 +12,9 @@ import java.time.LocalDate;
 @Builder
 public class DueDateNotificationProducer {
     private Long loanRepaymentId;
+    private String loanContractNo;
     private Long accountId;
+    private Long customerId;
     private String customerName;
     private String email;
     private LocalDate dueDate;
