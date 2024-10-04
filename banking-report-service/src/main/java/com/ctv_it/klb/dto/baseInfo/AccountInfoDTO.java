@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class AccountInfoDTO {
 
-  private int no;
+  private long no;
   private Long id;
   private String type;
   private String name;
