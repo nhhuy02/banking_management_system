@@ -1,8 +1,9 @@
 package com.app.bankingloanservice.service;
 
+import com.app.bankingloanservice.dto.LoanDisbursementResponse;
 import org.springframework.transaction.annotation.Transactional;
-// Add loan disbursement function
+
 public interface LoanDisbursementService {
     @Transactional
-    void disburseLoan(Long loanId);
+    LoanDisbursementResponse disburseLoan(Long loanId);
 }

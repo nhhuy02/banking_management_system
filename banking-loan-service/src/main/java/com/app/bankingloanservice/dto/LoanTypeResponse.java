@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanTypeDto {
+public class LoanTypeResponse {
 
     @Schema(description = "Unique identifier for the loan type", example = "1")
     private Long loanTypeId;

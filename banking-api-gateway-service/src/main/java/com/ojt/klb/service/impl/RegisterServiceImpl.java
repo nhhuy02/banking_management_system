@@ -34,7 +34,7 @@ public class RegisterServiceImpl implements AuthRegisterService {
         logger.info("Response body: {}", response.getBody());
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             logger.error("Sleep interrupted", e);
             return null;

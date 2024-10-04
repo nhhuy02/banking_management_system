@@ -40,9 +40,16 @@ spring:
           predicates:
             - Path:/api/v1/fund_transfer/**
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      connect-timeout: 60000
+
 resilience4j.ratelimiter:
   instances:
     ipRateLimiter:
-      limitForPeriod: 2          # max request form 1 ip
+      limitForPeriod: 5         # max request form 1 ip
       limitRefreshPeriod: 1s     # refresh
       timeoutDuration: 0         # time waiting

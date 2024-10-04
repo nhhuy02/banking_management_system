@@ -1,6 +1,7 @@
 package com.app.bankingloanservice.service;
 
-import com.app.bankingloanservice.dto.LoanTypeDto;
+import com.app.bankingloanservice.dto.LoanTypeRequest;
+import com.app.bankingloanservice.dto.LoanTypeResponse;
 import com.app.bankingloanservice.entity.LoanType;
 
 import java.util.List;
@@ -9,7 +10,9 @@ public interface LoanTypeService {
 
     LoanType getLoanTypeById(Long loanTypeId);
 
-    LoanTypeDto getLoanTypeDtoById(Long loanTypeId);
+    LoanTypeResponse getLoanTypeDtoById(Long loanTypeId);
 
-    List<LoanTypeDto> getAllLoanTypes();
+    List<LoanTypeResponse> getAllLoanTypes();
+
+    LoanTypeResponse createLoanType(LoanTypeRequest loanTypeRequest);
 }

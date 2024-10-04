@@ -1,11 +1,11 @@
 package com.app.bankingloanservice.service.impl;
 
+import com.app.bankingloanservice.client.account.AccountClientService;
+import com.app.bankingloanservice.client.account.dto.AccountDto;
 import com.app.bankingloanservice.constant.ApplicationStatus;
 import com.app.bankingloanservice.dto.*;
-import com.app.bankingloanservice.entity.Collateral;
-import com.app.bankingloanservice.entity.Document;
-import com.app.bankingloanservice.entity.LoanApplication;
-import com.app.bankingloanservice.entity.LoanType;
+import com.app.bankingloanservice.dto.kafka.LoanApplicationProducer;
+import com.app.bankingloanservice.entity.*;
 import com.app.bankingloanservice.exception.InvalidLoanApplicationException;
 import com.app.bankingloanservice.exception.LoanApplicationNotFoundException;
 import com.app.bankingloanservice.mapper.DocumentMapper;
@@ -19,9 +19,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -36,6 +38,10 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final LoanTypeService loanTypeService;
     private final LoanApplicationMapper loanApplicationMapper;
     private final DocumentMapper documentMapper;
+    private final AccountClientService accountClientService;
+    private final KafkaTemplate<String, LoanApplicationProducer> kafkaTemplate;
+
+    private static final String TOPIC = "loan_application";
 
     @Override
     public LoanApplicationResponse createLoanApplication(LoanApplicationRequest loanApplicationRequest) {
@@ -85,8 +91,23 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.debug("Saved LoanApplication entity: {}", loanApplication);
 
         // Create a DTO to return the saved Loan Application
-        LoanApplicationResponse loanApplicationResponse = loanApplicationMapper.toResponse(loanApplication);
-        log.debug("Converted LoanApplicationResponse: {}", loanApplicationResponse);
+        LoanApplicationResponse loanApplicationResponse = generateLoanApplicationResponse(loanApplication);
+
+        // Get Account info from Account Service:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+
+        // Kafka producer
+        LoanApplicationProducer loanApplicationProducer = new LoanApplicationProducer();
+        loanApplicationProducer.setLoanApplicationId(loanApplicationResponse.getLoanApplicationId());
+        loanApplicationProducer.setAmounts(BigDecimal.valueOf(loanApplicationResponse.getDesiredLoanAmount()));
+        loanApplicationProducer.setLoanTermMonths(loanApplicationResponse.getDesiredLoanTermMonths());
+        loanApplicationProducer.setStatus(String.valueOf(loanApplicationResponse.getApplicationStatus()));
+        loanApplicationProducer.setReviewTimeDays(loanApplicationResponse.getLoanTypeResponse().getReviewTimeDays());
+        loanApplicationProducer.setCustomerId(accountInfo.getCustomerId());
+        loanApplicationProducer.setEmail(accountInfo.getEmail());
+        loanApplicationProducer.setCustomerName(accountInfo.getFullName());
+        loanApplicationProducer.setSubmissionDate(loanApplicationResponse.getSubmissionDate());
+        kafkaTemplate.send(TOPIC, loanApplicationProducer);
 
         return loanApplicationResponse;
     }
@@ -103,13 +124,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     @Override
     public LoanApplicationResponse getResponseDtoById(Long loanApplicationId) {
-        LoanApplication loanApplication = getEntityById(loanApplicationId);
-
-        // Convert LoanApplication to LoanApplicationResponse and return
-        LoanApplicationResponse responseDto = loanApplicationMapper.toResponse(loanApplication);
-        log.debug("Converted LoanApplicationResponse: {}", responseDto);
-
-        return responseDto;
+        return generateLoanApplicationResponse(getEntityById(loanApplicationId));
     }
 
     @Override
@@ -125,7 +140,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         }
 
         // Map loanApplication to LoanApplicationResponse
-        Page<LoanApplicationResponse> responseDtos = loanApplications.map(loanApplicationMapper::toResponse);
+        Page<LoanApplicationResponse> responseDtos = loanApplications.map(this::generateLoanApplicationResponse);
         log.debug("Fetched {} loan applications for accountId: {}", responseDtos.getContent().size(), accountId);
 
         return responseDtos;
@@ -187,7 +202,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         log.info("Loan application with ID {} updated to status {}", applicationId, newStatus);
 
         // Return the updated response DTO
-        return loanApplicationMapper.toResponse(savedApplication);
+        return generateLoanApplicationResponse(savedApplication);
     }
 
 
@@ -227,4 +242,23 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         }
         return false;
     }
+
+    // Add Account information from Account Service:
+    private LoanApplicationResponse generateLoanApplicationResponse(LoanApplication loanApplication) {
+
+        // Map Loan Application to response:
+        LoanApplicationResponse loanApplicationResponse = loanApplicationMapper.toResponse(loanApplication);
+
+        // Get Account info from Account Service:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+
+        // Set Account info:
+        loanApplicationResponse.setCustomerFullName(accountInfo.getFullName());
+        loanApplicationResponse.setContactPhone(accountInfo.getPhoneNumber());
+        loanApplicationResponse.setContactEmail(accountInfo.getEmail());
+        loanApplicationResponse.setAccountNumber(accountInfo.getAccountNumber());
+        log.debug("Converted LoanApplicationResponse with Loan Application ID: {}", loanApplication.getLoanApplicationId());
+        return loanApplicationResponse;
+    }
+
 }

@@ -2,7 +2,6 @@
 
 package com.ctv_it.klb.service;
 
-import com.ctv_it.klb.common.Default.File;
 import com.ctv_it.klb.config.exception.InvalidExceptionCustomize;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
@@ -26,7 +25,7 @@ public class ReportService {
   private final ReportFormatServiceFactory reportFormatServiceFactory;
   private final FileUtil fileUtil;
 
-  public Object report(ReportRequestDTO requestDTO) {
+  public Object report(Long accountId, ReportRequestDTO requestDTO) {
     // check support type
     ReportTypeService<?> reportTypeService = reportTypeServiceFactory.getReportTypeService(
         requestDTO.getReportType());
@@ -41,7 +40,7 @@ public class ReportService {
 
     // Return Object if request format NONE
     if (ReportFormat.NONE.equals(requestDTO.getReportFormat())) {
-      return this.search(requestDTO, reportTypeService);
+      return this.search(accountId, requestDTO, reportTypeService);
     } else { // Else, check support format for type
       ReportFormatService<?> reportFormatService = reportFormatServiceFactory.getReportFormatService(
           requestDTO.getReportType(), requestDTO.getReportFormat());
@@ -53,24 +52,20 @@ public class ReportService {
                     "Report format '" + requestDTO.getReportFormat() + "' for type '"
                         + requestDTO.getReportType() + "' is not supported").build()));
       } else {
-        String fileName = File.TARGET_PATH + "/" + generateFileName(requestDTO);
-        return exportReport(fileName, this.search(requestDTO, reportTypeService), reportFormatService);
+        return exportReport(this.search(accountId, requestDTO, reportTypeService),
+            reportFormatService);
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Object exportReport(String fileName, Object reportData,
+  private <T> Object exportReport(Object reportData,
       ReportFormatService<T> reportFormatService) {
-
-    return reportFormatService.export(fileName, (T) reportData);
+    return reportFormatService.export((T) reportData);
   }
 
-  private Object search(ReportRequestDTO requestDTO, ReportTypeService<?> reportTypeService) {
-    return reportTypeService.search(requestDTO);
-  }
-
-  private String generateFileName(ReportRequestDTO requestDTO) {
-    return fileUtil.generateReportingFileName(requestDTO);
+  private Object search(Long accountId, ReportRequestDTO requestDTO,
+      ReportTypeService<?> reportTypeService) {
+    return reportTypeService.search(accountId, requestDTO);
   }
 }

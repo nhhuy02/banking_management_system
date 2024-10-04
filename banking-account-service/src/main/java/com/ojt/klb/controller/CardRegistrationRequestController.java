@@ -4,7 +4,6 @@ import com.ojt.klb.dto.CardRegistrationRequestDto;
 import com.ojt.klb.dto.CardRegistrationRequestResponseDto;
 import com.ojt.klb.dto.CardRegistrationRequestUpdateDto;
 import com.ojt.klb.exception.CardNotFoundException;
-import com.ojt.klb.model.CardRegistrationRequest;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.CardRegistrationRequestService;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public class CardRegistrationRequestController {
         this.cardRegistrationRequestService = cardRegistrationRequestService;
     }
 
-    @PostMapping("/register/{accountId}")
+    @PostMapping("/regis/{accountId}")
     public ResponseEntity<ApiResponse<CardRegistrationRequestDto>> registerCard(
             @PathVariable Long accountId,
             @RequestBody CardRegistrationRequestDto cardRegistrationRequestDto) {
@@ -58,7 +57,7 @@ public class CardRegistrationRequestController {
             logger.error("Error while registering card for accountId {}: {}", accountId, e.getMessage());
             ApiResponse<CardRegistrationRequestDto> response = new ApiResponse<>(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "An error occurred while processing your request.",
+                    "You already have a request to register for this card",
                     false,
                     null
             );

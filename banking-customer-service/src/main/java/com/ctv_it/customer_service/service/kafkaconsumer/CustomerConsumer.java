@@ -5,16 +5,13 @@ import com.ctv_it.customer_service.mapper.CustomerMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.Kyc;
 import com.ctv_it.customer_service.repository.CustomerRepository;
-import com.ctv_it.customer_service.repository.KycRepository;
 import com.ctv_it.customer_service.service.KycService;
 import com.ctv_it.customer_service.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 @Service
@@ -22,14 +19,15 @@ public class CustomerConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerConsumer.class);
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final KycService kycService;
+    private final CustomerMapper customerMapper;
 
-    @Autowired
-    private KycService kycService;
-
-    @Autowired
-    private CustomerMapper customerMapper;
+    public CustomerConsumer(CustomerRepository customerRepository, KycService kycService, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
+        this.kycService = kycService;
+        this.customerMapper = customerMapper;
+    }
 
     @KafkaListener(topics = "customer-topic", groupId = "customer-group")
     public void consumeSave(String data) {

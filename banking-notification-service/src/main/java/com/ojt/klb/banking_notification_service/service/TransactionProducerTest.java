@@ -1,7 +1,7 @@
 package com.ojt.klb.banking_notification_service.service;
 
 
-import com.ojt.klb.banking_notification_service.dto.consumer.TransactionData;
+import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,9 @@ public class TransactionProducerTest {
     private static final String TOPIC = "transaction-topic";
 
     @Autowired
-    private KafkaTemplate<String, TransactionData> kafkaTemplate;
+    private KafkaTemplate<String, TransactionInternalData> kafkaTemplate;
 
-    public void sendTransData(TransactionData transactionData) {
+    public void sendTransData(TransactionInternalData transactionData) {
         kafkaTemplate.send(TOPIC, transactionData);
     }
 }

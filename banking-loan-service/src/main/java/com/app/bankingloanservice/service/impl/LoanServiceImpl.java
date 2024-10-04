@@ -1,5 +1,7 @@
 package com.app.bankingloanservice.service.impl;
 
+import com.app.bankingloanservice.client.account.AccountClientService;
+import com.app.bankingloanservice.client.account.dto.AccountDto;
 import com.app.bankingloanservice.constant.ApplicationStatus;
 import com.app.bankingloanservice.dto.LoanInterestRateRequest;
 import com.app.bankingloanservice.dto.LoanRequest;
@@ -35,6 +37,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanApplicationService loanApplicationService;
     private final LoanTypeService loanTypeService;
     private final CollateralRepository collateralRepository;
+    private final AccountClientService accountClientService;
 
 
     /**
@@ -86,7 +89,7 @@ public class LoanServiceImpl implements LoanService {
             log.info("Loan created successfully with contract number: {}", newLoan.getLoanContractNo());
 
             // Map to LoanResponse and return
-            return loanMapper.toResponse(newLoan);
+            return generateLoanResponse(newLoan);
         } catch (Exception e) {
             // Log error with detailed information and throw LoanCreationException
             String errorMessage = String.format("Error occurred while creating loan from application with ID: %s", loanApplication.getLoanApplicationId());
@@ -119,7 +122,7 @@ public class LoanServiceImpl implements LoanService {
             newLoan = loanRepository.save(newLoan);
 
             log.info("Loan created successfully with contract number: {}", newLoan.getLoanContractNo());
-            return loanMapper.toResponse(newLoan);
+            return generateLoanResponse(newLoan);
         } catch (Exception e) {
             // Log error with detailed information and throw LoanCreationException
             String errorMessage = String.format("Error occurred while creating loan with application ID: %s", loanApplication.getLoanApplicationId());
@@ -150,14 +153,14 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanResponse getLoanResponseDtoById(Long loanId) {
-        return loanMapper.toResponse(getLoanEntityById(loanId));
+        return generateLoanResponse(getLoanEntityById(loanId));
     }
 
     /**
      * Retrieves loans based on accountId with pagination support.
      *
      * @param accountId The ID of the account.
-     * @param pageable   Pagination information.
+     * @param pageable  Pagination information.
      * @return A page of LoanResponse.
      */
     @Override
@@ -173,7 +176,7 @@ public class LoanServiceImpl implements LoanService {
             return Page.empty(pageable);
         }
 
-        Page<LoanResponse> responseDtos = loanPage.map(loanMapper::toResponse);
+        Page<LoanResponse> responseDtos = loanPage.map(this::generateLoanResponse);
         log.info("Fetched {} loans for account ID: {}", responseDtos.getContent().size(), accountId);
 
         return responseDtos;
@@ -205,6 +208,24 @@ public class LoanServiceImpl implements LoanService {
     // Calculate maturity date based on disbursement date and loan term
     private LocalDate calculateMaturityDate(LocalDate disbursementDate, int loanTerm) {
         return disbursementDate.plusMonths(loanTerm);
+    }
+
+    // Add Account information from Account Service:
+    private LoanResponse generateLoanResponse(Loan loan) {
+
+        // Map Loan to response:
+        LoanResponse loanResponse = loanMapper.toResponse(loan);
+
+        // Get Account info from Account Service:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loan.getAccountId());
+
+        // Set Account info:
+        loanResponse.setCustomerName(accountInfo.getFullName());
+        loanResponse.setContactPhone(accountInfo.getPhoneNumber());
+        loanResponse.setContactEmail(accountInfo.getEmail());
+        loanResponse.setAccountNumber(accountInfo.getAccountNumber());
+
+        return loanResponse;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.ctv_it.klb.dto.baseInfo;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,14 +13,16 @@ import lombok.ToString;
 @ToString
 public class AccountInfoDTO {
 
+  private long no;
   private Long id;
   private String type;
   private String name;
   private String number;
-  private String currency;
+  @Default
+  private String currency = "VND";
   private BigDecimal accountingBalance;
   private BigDecimal availableBalance;
   private String branch;
   private String status;
-  private LocalDate openingDate;
+  private String openingDate;
 }

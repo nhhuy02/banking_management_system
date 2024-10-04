@@ -2,7 +2,7 @@ package com.ctv_it.customer_service.service.impl;
 
 import com.ctv_it.customer_service.client.AccountClient;
 import com.ctv_it.customer_service.dto.AccountData;
-import com.ctv_it.customer_service.dto.OtpEmailRequestDto;
+import com.ctv_it.customer_service.dto.OtpRequestDto;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.VerificationCode;
@@ -32,11 +32,11 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     private final AccountClient accountClient;
     private final VerificationCodeRepository verificationCodeRepository;
     private final CustomerRepository customerRepository;
-    private final KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate;
+    private final KafkaTemplate<String, OtpRequestDto> kafkaTemplate;
     private final KafkaTemplate<String, AccountData> kafkaTemplate1;
 //    private final EmailService emailService;
 
-    public VerificationCodeServiceImpl(AccountClient accountClient, VerificationCodeRepository verificationCodeRepository, CustomerRepository customerRepository, KafkaTemplate<String, OtpEmailRequestDto> kafkaTemplate, KafkaTemplate<String, AccountData> kafkaTemplate1) {
+    public VerificationCodeServiceImpl(AccountClient accountClient, VerificationCodeRepository verificationCodeRepository, CustomerRepository customerRepository, KafkaTemplate<String, OtpRequestDto> kafkaTemplate, KafkaTemplate<String, AccountData> kafkaTemplate1) {
         this.accountClient = accountClient;
         this.verificationCodeRepository = verificationCodeRepository;
         this.customerRepository = customerRepository;
@@ -77,7 +77,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         logger.info("Verification code saved for customer ID: {}", customerId);
 
         // Send code via Kafka
-        OtpEmailRequestDto otpEmailRequestDto = new OtpEmailRequestDto();
+        OtpRequestDto otpEmailRequestDto = new OtpRequestDto();
         otpEmailRequestDto.setCustomerId(customerId);
         otpEmailRequestDto.setCustomerName(customer.get().getFullName());
         otpEmailRequestDto.setEmail(email);

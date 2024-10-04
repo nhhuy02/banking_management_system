@@ -1,9 +1,6 @@
 package com.ojt.klb.controller;
 
-import com.ojt.klb.dto.ForgetPasswordDto;
-import com.ojt.klb.dto.LoginDto;
-import com.ojt.klb.dto.RegisterDto;
-import com.ojt.klb.dto.RegisterResponseDto;
+import com.ojt.klb.dto.*;
 import com.ojt.klb.exception.PhoneNumberAlreadyExistsException;
 import com.ojt.klb.exception.UserNotFoundException;
 import com.ojt.klb.service.UserService;
@@ -77,6 +74,15 @@ public class UserController {
                     null
             );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (IllegalArgumentException e) {
+            ApiResponse<RegisterResponseDto> response = new ApiResponse<>(
+                    HttpStatus.BAD_REQUEST.value(),
+                    e.getMessage(),
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
         } catch (Exception e) {
             logger.error("Error creating user: {}", e.getMessage());
             ApiResponse<RegisterResponseDto> response = new ApiResponse<>(
@@ -89,47 +95,81 @@ public class UserController {
         }
     }
 
+    @PostMapping("/forgetPassword/code/{phoneNumber}")
+    public ResponseEntity<ApiResponse<String>> forgetPasswordGetCode(@PathVariable String phoneNumber) {
+        logger.info("Forget password code request received for phone number: {}", phoneNumber);
+        try {
+            userService.forgetPasswordGetCode(phoneNumber);
 
-//    @PostMapping("/forgetPassword/{userId}")
-//    public ResponseEntity<ApiResponse<String>> forgetPassword(
-//            @PathVariable Long userId,
-//            @Valid @RequestBody ForgetPasswordDto forgetPasswordDto) {
-//
-//        logger.info("Forget password request received for user ID: {}", userId);
-//
-//        try {
-//            userService.forgetPassword(userId, forgetPasswordDto.getNewPassword());
-//
-//            ApiResponse<String> response = new ApiResponse<>(
-//                    HttpStatus.OK.value(),
-//                    "Password updated successfully",
-//                    true,
-//                    null
-//            );
-//            return ResponseEntity.ok(response);
-//
-//        } catch (UserNotFoundException e) {
-//            logger.warn("User not found with ID: {}", userId);
-//            ApiResponse<String> response = new ApiResponse<>(
-//                    HttpStatus.NOT_FOUND.value(),
-//                    "User not found",
-//                    false,
-//                    null
-//            );
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-//
-//        } catch (Exception e) {
-//            logger.error("Error updating password for user ID: {}", userId, e);
-//            ApiResponse<String> response = new ApiResponse<>(
-//                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                    "An error occurred while updating the password",
-//                    false,
-//                    null
-//            );
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//        }
-//    }
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Password reset code sent successfully",
+                    true,
+                    null
+            );
+            return ResponseEntity.ok(response);
 
+        } catch (UserNotFoundException e) {
+            logger.warn("User not found with phone number: {}", phoneNumber);
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.NOT_FOUND.value(),
+                    "User not found",
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
+        } catch (Exception e) {
+            logger.error("Error sending password reset code for phone number: {}", phoneNumber, e);
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "An error occurred while sending the password reset code",
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        try {
+            userService.changePassword(changePasswordDto.getPhoneNumber(), changePasswordDto.getPassword());
+
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.CREATED.value(),
+                    "Change password success",
+                    true,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (UserNotFoundException e) {
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.NOT_FOUND.value(),
+                    "PhoneNumber not found",
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
+        } catch (IllegalArgumentException e) {
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.BAD_REQUEST.value(),
+                    e.getMessage(),
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "An error occurred while updating the password.",
+                    false,
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }
 

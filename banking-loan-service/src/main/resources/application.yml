@@ -8,13 +8,13 @@ spring:
     import: optional:configserver:http://localhost:8888
 
   datasource:
-    url: jdbc:mysql://localhost:3306/loan_service
-    username: chienma
-    password: chienma_password
+#    url: jdbc:mysql://localhost:3306/loan_service
+#    username: chienma
+#    password: chienma_password
 
-  #    url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
-  #    username: root
-  #    password: root
+      url: jdbc:mysql://localhost:3306/loan_service?createDatabaseIfNotExist=true
+      username: root
+      password: root
   jpa:
     hibernate:
       ddl-auto: update
@@ -40,13 +40,16 @@ springdoc:
     path: /v3/api-docs
 
 app:
+
   file:
     storage:
       directory: banking-loan-docs/
 
   loan:
     disbursement:
-      source-account-number: 1234567890
+      source-account-number: 6677738940
+    repayment:
+      collection-account-number: 6677738940
 
   fund-transfer-client:
     url: http://localhost:8090/api/v1/fund_transfer

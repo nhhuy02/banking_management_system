@@ -19,15 +19,19 @@ public class JacksonConfiguration {
   public ObjectMapper objectMapper() {
 
     ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(createJavaTimeModule());
 
+    // Configure the ObjectMapper for deserialization behavior
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
     mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
     mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
     mapper.configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
 
+    // Disable timestamp serialization
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    // Register the JavaTime module with custom serializers and deserializers
+    mapper.registerModule(createJavaTimeModule());
 
     return mapper;
   }
@@ -35,12 +39,14 @@ public class JacksonConfiguration {
   private JavaTimeModule createJavaTimeModule() {
     JavaTimeModule javaTimeModule = new JavaTimeModule();
 
-    javaTimeModule.addDeserializer(Object.class, new GenericCustomDeserializer());
-
+    // Add custom deserializers
+    javaTimeModule.addDeserializer(LocalDateTime.class, new MultiFormatLocalDateTimeDeserializer());
+    javaTimeModule.addDeserializer(LocalDate.class, new MultiFormatLocalDateDeserializer());
+    // Configure serializers to format dates
     javaTimeModule.addSerializer(LocalDate.class,
-        new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));
+        new LocalDateSerializer(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
     javaTimeModule.addSerializer(LocalDateTime.class,
-        new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
 
     return javaTimeModule;
   }

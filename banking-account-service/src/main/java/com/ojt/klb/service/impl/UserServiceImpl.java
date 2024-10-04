@@ -1,19 +1,19 @@
 package com.ojt.klb.service.impl;
 
-import com.ojt.klb.dto.CustomerDto;
-import com.ojt.klb.dto.LoginDto;
-import com.ojt.klb.dto.RegisterDto;
-import com.ojt.klb.dto.RegisterResponseDto;
+import com.ojt.klb.client.AccountClient;
+import com.ojt.klb.dto.*;
 import com.ojt.klb.exception.PhoneNumberAlreadyExistsException;
 import com.ojt.klb.exception.UserNotFoundException;
 import com.ojt.klb.model.Account;
 import com.ojt.klb.model.User;
 import com.ojt.klb.repository.AccountRepository;
 import com.ojt.klb.repository.UserRepository;
+import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.UserService;
 import com.ojt.klb.utils.GenerateUniqueNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,19 +29,24 @@ public class UserServiceImpl implements UserService {
 
     private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final String TOPIC = "customer-topic";
+    private static final String TOPIC_SMS = "gen-code-verify-password-topic";
 
+    private final AccountClient accountClient;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
     private final GenerateUniqueNumber generateUniqueAccountNumber;
     private final KafkaTemplate<String, CustomerDto> kafkaTemplate;
+    private final KafkaTemplate<String, AccountDto> kafkaTemplateSMS;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AccountRepository accountRepository, GenerateUniqueNumber generateUniqueAccountNumber, KafkaTemplate<String, CustomerDto> kafkaTemplate) {
+    public UserServiceImpl(AccountClient accountClient, UserRepository userRepository, PasswordEncoder passwordEncoder, AccountRepository accountRepository, GenerateUniqueNumber generateUniqueAccountNumber, KafkaTemplate<String, CustomerDto> kafkaTemplate, KafkaTemplate<String, AccountDto> kafkaTemplateSMS) {
+        this.accountClient = accountClient;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.accountRepository = accountRepository;
         this.generateUniqueAccountNumber = generateUniqueAccountNumber;
         this.kafkaTemplate = kafkaTemplate;
+        this.kafkaTemplateSMS = kafkaTemplateSMS;
     }
 
     @Override
@@ -74,6 +79,11 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByPhoneNumber(registerDto.getPhoneNumber())) {
             logger.warn("Phone number already in use: {} ", registerDto.getPhoneNumber());
             throw new PhoneNumberAlreadyExistsException("Phone number already exists: " + registerDto.getPhoneNumber());
+        }
+
+        if (!isValidPassword(registerDto.getPassword())) {
+            logger.warn("Password must be at least 8 characters long and contain a special character: {}", registerDto.getPassword());
+            throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
         User newUser = new User();
@@ -117,13 +127,58 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void forgetPassword(String email) {
-        Optional<User> user = userRepository.findByPhoneNumber(email);
+    public void forgetPasswordGetCode (String phoneNumber) {
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
-            logger.info("Updated password for user: {}", user.get().getUsername());
+            Optional<Account> account = accountRepository.findByUserId(user.get().getId());
+                ResponseEntity<ApiResponse<AccountDto>> data = accountClient.getData(account.get().getId());
+                if (data.getBody() != null && data.getBody().isSuccess()) {
+                    AccountDto accountDto = data.getBody().getData();
+                    accountDto.setAccountId(account.get().getId());
+                    if (accountDto.getPhoneNumber().equals(phoneNumber)) {
+                        accountDto.setAccountId(account.get().getId());
+                        kafkaTemplateSMS.send(TOPIC_SMS, accountDto);
+                        logger.info("Send messages to: {}", TOPIC_SMS);
+                        logger.info("Data: {}", accountDto);
+                    } else {
+                        logger.info("Phone number does not match");
+                    }
+                }
         } else {
-            throw new UserNotFoundException("User with phoneNumber " + email + " not found.");
+            logger.warn("User not found: {} ", phoneNumber);
+            throw new UserNotFoundException("User with phoneNumber " + phoneNumber + " not found.");
         }
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void changePassword(String phoneNumber, String password) {
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+
+        if (user.isPresent()) {
+            User existingUser = user.get();
+
+            if (isValidPassword(password)) {
+                logger.warn("Password does not meet security requirements for phone number: {}", phoneNumber);
+                throw new IllegalArgumentException("Password does not meet security requirements.");
+            }
+
+            String encodedPassword = passwordEncoder.encode(password);
+            existingUser.setPassword(encodedPassword);
+
+            userRepository.save(existingUser);
+            logger.info("Password for {} has been updated.", phoneNumber);
+
+        } else {
+            logger.warn("PhoneNumber not found: {}", phoneNumber);
+            throw new UserNotFoundException("User with phoneNumber " + phoneNumber + " not found.");
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 5 &&
+                password.matches(".*[!@#$%^&*()].*") &&
+                password.matches(".*[A-Z].*");
+    }
+
 }
