@@ -1,0 +1,23 @@
+server:
+  port: 8092
+spring:
+  application:
+    name: banking-utilityPayment-service
+
+config:
+  import: optional:configserver:http://localhost:8888
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/utility_payment
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org.apache.kafka.clients.producer: DEBUG
+    org.springframework.kafka: DEBUG

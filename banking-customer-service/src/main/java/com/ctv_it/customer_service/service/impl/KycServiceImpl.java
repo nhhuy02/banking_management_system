@@ -55,7 +55,12 @@ public class KycServiceImpl implements KycService {
         logger.info("CustomerId: {}, KycId: {}", customerId, customer.getKyc().getId());
 
         return kycRepository.findById(customer.getKyc().getId())
-                .map(existingKyc -> updateKycDetails(existingKyc, updatedKycDto))
+                .map(existingKyc -> {
+                    if (existingKyc.getVerificationStatus() == Kyc.VerificationStatus.verified) {
+                        throw new IllegalArgumentException("KYC record is already verified and cannot be updated.");
+                    }
+                    return updateKycDetails(existingKyc, updatedKycDto);
+                })
                 .map(kycRepository::save)
                 .map(kycMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("KYC not found with id: " + customer.getKyc().getId()));
@@ -85,6 +90,7 @@ public class KycServiceImpl implements KycService {
         existingKyc.setUpdatedAt(Instant.now());
         return existingKyc;
     }
+
 
     @Override
     public Optional<KycResponseDto> getKycByCustomerId(Long customerId) {

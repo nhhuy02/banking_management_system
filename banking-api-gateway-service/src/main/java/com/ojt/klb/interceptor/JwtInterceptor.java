@@ -86,14 +86,16 @@ public class JwtInterceptor implements HandlerInterceptor {
             url = url.replace("%7B", "").replace("%7D", "");
 
             Map<String, String> urlMappings = Map.of(
-                    "account", "http://localhost:8080",
-                    "customer", "http://localhost:8082",
-                    "notification", "http://localhost:8083",
-                    "reports", "http://localhost:8086",
-                    "loan-service", "http://localhost:8060",
-                    "transaction", "http://localhost:8070",
-                    "fundTransfer", "http://localhost:8090"
+                    "/api/v1/account", "http://localhost:8080",
+                    "/api/v1/customer", "http://localhost:8082",
+                    "/api/v1/notification", "http://localhost:8083",
+                    "/api/v1/reports", "http://localhost:8086",
+                    "/api/v1/loan-service", "http://localhost:8060",
+                    "/api/v1/transaction", "http://localhost:8070",
+                    "/api/v1/fundTransfer", "http://localhost:8090"
+
             );
+
 
             String targetUrl = null;
 
@@ -112,26 +114,33 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+ ",
-                    "/api/v1/loan-service/loan-types/\\d+"
+                    "/api/v1/loan-service/loan-types/\\d+",
+                    "/api/v1/notification/getAllNotification?customer"
             );
 
             for (String pattern : urlPatterns) {
                 if (url.matches(pattern)) {
                     if (pattern.startsWith("/api/v1/account")) {
                         logger.info("Skipping ID checks and data filling for URL: {}", url);
-                        targetUrl = urlMappings.get("account");
+                        targetUrl = urlMappings.get("/api/v1/account");
                     } else if (pattern.startsWith("/api/v1/loan-service")) {
                         logger.info("Processing URL for loan-related operations: {}", url);
-                        targetUrl = urlMappings.get("loan-service");
+                        targetUrl = urlMappings.get("/api/v1/loan-service");
                     } else if (pattern.startsWith("/api/v1/customer")) {
                         logger.info("Processing URL for customer operations: {}", url);
-                        targetUrl = urlMappings.get("customer");
+                        targetUrl = urlMappings.get("/api/v1/customer");
                     } else if (pattern.startsWith("/api/v1/reports")) {
                         logger.info("Processing URL for reports operations: {}", url);
-                        targetUrl = urlMappings.get("reports");
+                        targetUrl = urlMappings.get("/api/v1/reports");
                     } else if (pattern.startsWith("/api/v1/notification")) {
                         logger.info("Processing URL for notification operations: {}", url);
-                        targetUrl = urlMappings.get("notification");
+                        targetUrl = urlMappings.get("/api/v1/notification");
+                    } else if (pattern.startsWith("/api/v1/transaction")) {
+                        logger.info("Processing URL for transaction operations: {}", url);
+                        targetUrl = urlMappings.get("/api/v1/transaction");
+                    }else if (pattern.startsWith("/api/v1/fund_transfer")) {
+                        logger.info("Processing URL for fund transfer operations: {}", url);
+                        targetUrl = urlMappings.get("/api/v1/fund_transfer");
                     }
 
                     if (targetUrl != null) {

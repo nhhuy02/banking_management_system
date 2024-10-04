@@ -8,16 +8,21 @@ import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.entity.Transaction;
+import com.ojt.klb.model.entity.UtilityAccount;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
 import com.ojt.klb.model.request.TransactionRequest;
+import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
+import com.ojt.klb.model.response.UtilityPaymentResponse;
 import com.ojt.klb.repository.TransactionRepository;
+import com.ojt.klb.repository.UtilityAccountRepository;
 import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final AccountClient accountClient;
     private final TransactionMapper mapper = new TransactionMapper();
     private final TransactionProducer transactionProducer;
+    private final UtilityAccountRepository utilityAccountRepository;
 
     @Override
     public ApiResponse handleTransaction(TransactionDto transactionDto) {
@@ -138,6 +145,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> findTransactions(
+            String accountNumber,
             TransactionType transactionType,
             LocalDate fromDate,
             LocalDate toDate,
@@ -147,6 +155,10 @@ public class TransactionServiceImpl implements TransactionService {
             query.distinct(false);
             return null;
         };
+
+        if (accountNumber != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("accountNumber"), accountNumber));
+        }
 
         if (transactionType != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("transactionType"), transactionType));
@@ -171,6 +183,41 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.stream()
                 .map(mapper::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {
+        String referenceNumber = generateUniqueReferenceNumber();
+
+        Account fromAccount;
+        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(utilityPaymentRequest.getAccount()).getBody();
+        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
+            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
+        }
+        fromAccount = apiResponse.getData();
+
+        if(fromAccount.getBalance().compareTo(utilityPaymentRequest.getAmount()) < 0){
+            log.error("insufficient balance in the account");
+            throw new InsufficientBalance("Insufficient balance in the account");
+        }
+
+        Optional<UtilityAccount> utilityAccount = utilityAccountRepository.findById(utilityPaymentRequest.getProviderId());
+        if(utilityAccount.isEmpty()){
+            throw new ResourceNotFound("Utility account not found", GlobalErrorCode.NOT_FOUND);
+        }
+
+        fromAccount.setBalance(fromAccount.getBalance().subtract(utilityPaymentRequest.getAmount()));
+        accountClient.updateAccount(utilityPaymentRequest.getAccount(), fromAccount);
+
+        repository.save(
+                Transaction.builder()
+                        .accountNumber(utilityPaymentRequest.getAccount())
+                        .transactionType(TransactionType.UTILITY_PAYMENT)
+                        .referenceNumber(referenceNumber)
+                        .amount(utilityPaymentRequest.getAmount().negate())
+                        .build());
+        return UtilityPaymentResponse.builder().message("Utility payment successfully completed")
+                .referenceNumber(referenceNumber).build();
     }
 
     @Override
