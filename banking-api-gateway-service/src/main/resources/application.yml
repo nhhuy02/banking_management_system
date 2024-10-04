@@ -31,10 +31,16 @@ spring:
           uri: http://locallhost:8060
           predicates:
             - Path:/api/v1/loan-service/**
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      connect-timeout: 60000
 
 resilience4j.ratelimiter:
   instances:
     ipRateLimiter:
-      limitForPeriod: 2          # max request form 1 ip
+      limitForPeriod: 5         # max request form 1 ip
       limitRefreshPeriod: 1s     # refresh
       timeoutDuration: 0         # time waiting
