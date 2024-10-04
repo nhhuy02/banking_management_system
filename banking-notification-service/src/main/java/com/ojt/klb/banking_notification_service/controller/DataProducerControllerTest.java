@@ -1,8 +1,7 @@
 package com.ojt.klb.banking_notification_service.controller;
 
-import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.OtpEmailRequestDto;
-import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanData;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import com.ojt.klb.banking_notification_service.service.CustomerProducerTest;
 import com.ojt.klb.banking_notification_service.service.LoanProducerTest;
@@ -33,7 +32,7 @@ public class DataProducerControllerTest {
         return "data sent successfully";
     }
     @PostMapping("/loan-producer/send-data")
-    public String sendLoan(@RequestBody LoanData loanData) {
+    public String sendLoan(@RequestBody LoanDueDate loanData) {
         loan.sendLoanData(loanData);
         return "data sent successfully";
     }
