@@ -22,9 +22,6 @@ import lombok.ToString;
 @JsonDeserialize(using = ReportRequestDTODeserializerUtil.class)
 public class ReportRequestDTO {
 
-//  @NotNull
-//  private Long customerId;
-
   @NotNull
   @Schema(implementation = ReportType.class)
   private ReportType reportType;

@@ -50,9 +50,9 @@ public class ReportController {
       @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))
   })
-  @PostMapping("/{accountId}")
+  @PostMapping("/account/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
-      @PathVariable long accountId,
+      @PathVariable Long accountId,
       @RequestBody ReportRequestDTO reportRequestDTO) {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);

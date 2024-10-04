@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ForgetPasswordDto {
 
-    @NotBlank(message = "{newPassword.notBlank}")
-    @Size(min = 6,max = 150, message = "{newPassword.size}")
-    private String newPassword;
+    @NotBlank(message = "Phone number is required")
+    @Size(min = 10, max = 15, message = "Phone number size {min} to {max}")
+    private String phoneNumber;
 }

@@ -10,6 +10,7 @@ import com.ctv_it.klb.factory.ReportFormatServiceFactory;
 import com.ctv_it.klb.factory.ReportTypeServiceFactory;
 import com.ctv_it.klb.service.format.ReportFormatService;
 import com.ctv_it.klb.service.type.ReportTypeService;
+import com.ctv_it.klb.util.FileUtil;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,9 @@ public class ReportService {
 
   private final ReportTypeServiceFactory reportTypeServiceFactory;
   private final ReportFormatServiceFactory reportFormatServiceFactory;
+  private final FileUtil fileUtil;
 
-  public Object report(long accountId, ReportRequestDTO requestDTO) {
+  public Object report(Long accountId, ReportRequestDTO requestDTO) {
     // check support type
     ReportTypeService<?> reportTypeService = reportTypeServiceFactory.getReportTypeService(
         requestDTO.getReportType());
@@ -50,8 +52,7 @@ public class ReportService {
                     "Report format '" + requestDTO.getReportFormat() + "' for type '"
                         + requestDTO.getReportType() + "' is not supported").build()));
       } else {
-        return exportReport(
-            this.search(accountId, requestDTO, reportTypeService),
+        return exportReport(this.search(accountId, requestDTO, reportTypeService),
             reportFormatService);
       }
     }
@@ -63,7 +64,7 @@ public class ReportService {
     return reportFormatService.export((T) reportData);
   }
 
-  private Object search(long accountId, ReportRequestDTO requestDTO,
+  private Object search(Long accountId, ReportRequestDTO requestDTO,
       ReportTypeService<?> reportTypeService) {
     return reportTypeService.search(accountId, requestDTO);
   }

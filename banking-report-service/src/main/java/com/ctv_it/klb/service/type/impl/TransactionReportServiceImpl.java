@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class TransactionReportServiceImpl implements ReportTypeService<TransactionReportDTO> {
 
   @Override
-  public TransactionReportDTO search(long accountId, ReportRequestDTO reportRequestDTO) {
+  public TransactionReportDTO search(Long accountId, ReportRequestDTO reportRequestDTO) {
     log.info("TransactionReportServiceImpl::search is processing with request: {}",
         reportRequestDTO);
 

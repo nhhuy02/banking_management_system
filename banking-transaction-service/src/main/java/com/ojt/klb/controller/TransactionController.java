@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,12 +41,13 @@ public class TransactionController {
         return new ResponseEntity<>(service.getTransactionByTransactionReference(referenceNumber), HttpStatus.OK);
     }
 
+
     @GetMapping("/search")
     public ResponseEntity<List<TransactionDto>> findTransactions(
-            @RequestParam TransactionType transactionType,
-            @RequestParam LocalDateTime fromDate,
-            @RequestParam LocalDateTime toDate,
-            @RequestParam TransactionStatus status) {
+            @RequestParam(required = false) TransactionType transactionType,
+            @RequestParam(required = false) LocalDate fromDate,
+            @RequestParam(required = false) LocalDate toDate,
+            @RequestParam(required = false) TransactionStatus status) {
 
         List<TransactionDto> transactions = service.findTransactions(transactionType, fromDate, toDate, status);
         return ResponseEntity.ok(transactions);
