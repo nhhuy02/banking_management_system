@@ -1,7 +1,5 @@
 package com.ojt.klb.dto;
 
-import com.ojt.klb.model.CardType;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
