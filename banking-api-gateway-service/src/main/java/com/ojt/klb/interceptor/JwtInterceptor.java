@@ -90,7 +90,9 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/customer", "http://localhost:8082",
                     "/api/v1/notification", "http://localhost:8083",
                     "/api/v1/reports", "http://localhost:8086",
-                    "/api/v1/loan-service", "http://localhost:8060"
+                    "/api/v1/loan-service", "http://localhost:8060",
+                    "/api/v1/transactions", "http://localhost:8070",
+                    "/api/v1/fund_transfer", "http://localhost:8090"
             );
 
             String targetUrl = null;
@@ -130,6 +132,12 @@ public class JwtInterceptor implements HandlerInterceptor {
                     } else if (pattern.startsWith("/api/v1/notification")) {
                         logger.info("Processing URL for notification operations: {}", url);
                         targetUrl = urlMappings.get("notification");
+                    }else if (pattern.startsWith("/api/v1/transactions")) {
+                        logger.info("Processing URL for transaction operations: {}", url);
+                        targetUrl = urlMappings.get("transactions");
+                    }else if (pattern.startsWith("/api/v1/fund_transfer")) {
+                        logger.info("Processing URL for fund transfer operations: {}", url);
+                        targetUrl = urlMappings.get("fund_transfer");
                     }
 
                     if (targetUrl != null) {
