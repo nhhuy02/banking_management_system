@@ -4,6 +4,7 @@ import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.request.TransactionRequest;
+import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.service.TransactionService;
 import jakarta.validation.Valid;
@@ -44,12 +45,18 @@ public class TransactionController {
 
     @GetMapping("/search")
     public ResponseEntity<List<TransactionDto>> findTransactions(
+            @RequestParam String accountNumber,
             @RequestParam(required = false) TransactionType transactionType,
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate,
             @RequestParam(required = false) TransactionStatus status) {
 
-        List<TransactionDto> transactions = service.findTransactions(transactionType, fromDate, toDate, status);
+        List<TransactionDto> transactions = service.findTransactions(accountNumber, transactionType, fromDate, toDate, status);
         return ResponseEntity.ok(transactions);
+    }
+
+    @PostMapping("/util-payment")
+    public ResponseEntity utilPayment(@RequestBody UtilityPaymentRequest utilityPaymentRequest) {
+        return ResponseEntity.ok(service.utilPayment(utilityPaymentRequest));
     }
 }
