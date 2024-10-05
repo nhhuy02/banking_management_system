@@ -35,7 +35,7 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       throws IOException {
 
     JsonNode node = p.getCodec().readTree(p);
-    log.info("Deserializing node: {}", node.toPrettyString());
+    log.info("Deserializing request");
 
     checkForUnrecognizedFields(node, ReportRequestDTO.class);
 
@@ -106,7 +106,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
                   Arrays.toString(ReportType.values()))).build()));
     }
 
-    log.info("{}: {}", fieldName, reportType);
     return reportType;
   }
 
@@ -131,7 +130,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
                   Arrays.toString(ReportFormat.values()))).build()));
     }
 
-    log.info("{}: {}", fieldName, reportFormat);
     return reportFormat;
   }
 
@@ -154,7 +152,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       checkForUnrecognizedFields(filtersNode, filters.getClass());
     }
 
-    log.info("{}: {}", fieldName, filters);
     return filters;
   }
 
@@ -172,7 +169,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       while (fieldNames.hasNext()) {
         String fieldName = fieldNames.next();
         JsonNode fieldValueNode = objectNode.get(fieldName);
-        log.info("Valid fields for {}: {}", fieldName, validFieldNames);
 
         if (!validFieldNames.contains(fieldName)) {
           throw new InvalidExceptionCustomize(Collections.singletonList(

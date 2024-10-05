@@ -35,8 +35,8 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
     log.info("Received valid accountFilterDTO: {}", accountFilterDTO);
 
     AccountReportDTO reportDTO = AccountReportDTO.builder()
-        .customer(this.fetchCustomerByAccountId(accountId))
-        .accounts(this.fetchAccounts(accountId, accountFilterDTO.getSavingAccountId()))
+        .customer(fetchCustomerByAccountId(accountId))
+        .accounts(fetchAccounts(accountId, accountFilterDTO.getSavingAccountId()))
         .build();
 
     log.info("AccountReportDTO successfully built: {}", reportDTO);
@@ -51,7 +51,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
   private CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
     log.info("Fetching customer data for accountId: {}", accountId);
     FetchCustomerDataDTO data = fetchCustomerServiceFC.findByAccountId(accountId);
-    CustomerInfoDTO customer = this.map(data);
+    CustomerInfoDTO customer = map(data);
     log.info("Mapped customer data: {}", customer);
     return customer;
   }
@@ -61,11 +61,11 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
         savingAccountId);
 
     List<AccountInfoDTO> accounts = new ArrayList<>();
-    accounts.add(this.fetchAccountById(accountId));
+    accounts.add(fetchAccountById(accountId));
 
     if (savingAccountId != null) {
       log.info("Fetching saving account for savingAccountId: {}", savingAccountId);
-      accounts.add(this.fetchSavingAccountById(savingAccountId));
+      accounts.add(fetchSavingAccountById(savingAccountId));
     }
 
     log.info("Mapped accounts: {}", accounts);

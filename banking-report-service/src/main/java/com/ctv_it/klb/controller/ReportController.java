@@ -4,7 +4,6 @@ import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.dto.response.ErrorResponseDTO;
 import com.ctv_it.klb.dto.response.SuccessResponseDTO;
 import com.ctv_it.klb.service.ReportService;
-import com.ctv_it.klb.util.FileUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,10 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.Tika;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportController {
 
   private final ReportService reportService;
-  private final FileUtil fileUtil;
 
   @Operation(summary = "Generate report", description = "Generates a report based on the report type specified.")
   @ApiResponses(value = {
@@ -53,36 +55,37 @@ public class ReportController {
   @PostMapping("/account/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
       @PathVariable Long accountId,
-      @RequestBody ReportRequestDTO reportRequestDTO) {
+      @RequestBody ReportRequestDTO reportRequestDTO) throws IOException {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
+    log.info("Accept Header: {}", request.getHeader("Accept"));
 
     Object reportData = reportService.report(accountId, reportRequestDTO);
-    SuccessResponseDTO response;
-    ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.ok();
 
-    // Check if reportData is a byte array
-    if (reportData instanceof byte[] reportDataBytes) {
-      // Split byte[] to get fileName and actual data
-      Map<String, Object> reportDataBytesSplit = fileUtil.splitDataAndFileName(reportDataBytes);
-      String fileName = (String) reportDataBytesSplit.get("fileName");
-      reportData = reportDataBytesSplit.get("data");
+    if (reportData instanceof Resource reportDataBytes) {
+      HttpHeaders headers = new HttpHeaders();
 
-      // Set response header
-      responseBuilder
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-          .header(HttpHeaders.CONTENT_TYPE,
-              reportRequestDTO.getReportFormat().getHeaderContentType());
+      String fileName = reportDataBytes.getFilename();
+      log.info("FileName: {}", fileName);
+      headers.setContentDisposition(ContentDisposition.attachment().filename(fileName).build());
 
-      return responseBuilder.body(reportData);
+      String mediaType = new Tika().detect(fileName);
+      log.info("MediaType: {}", mediaType);
+      headers.setContentType(MediaType.parseMediaType(mediaType));
+
+      reportData = ((Resource) reportData).getContentAsByteArray();
+
+      return ResponseEntity.ok()
+          .headers(headers)
+          .body(reportData);
+    } else {
+      return ResponseEntity.ok()
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(SuccessResponseDTO.builder()
+              .url(request.getServletPath())
+              .data(reportData)
+              .build());
     }
-
-// Handle non-byte[] report data
-    response = SuccessResponseDTO.builder()
-        .url(request.getServletPath())
-        .data(reportData)
-        .build();
-
-    return responseBuilder.body(response);
   }
+
 }
