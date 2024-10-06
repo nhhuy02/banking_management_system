@@ -36,26 +36,25 @@ public class ReportController {
   private final ReportService reportService;
 
   @Operation(summary = "Generate report", description = "Generates a report based on the report type specified.")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = """
-            Successfully generated the report.
-            The response data will be one of the following based on the reportType and reportFormat:
-            - reportType:
-                + `ACCOUNT` -> AccountReportDTO
-                + `LOAN` -> LoanReportDTO
-                + `TRANSACTION` -> TransactionReportDTO
-            - reportFormat:
-                + `NONE` -> `application/json` for JSON
-                + `PDF` -> `application/pdf` for PDF file
-                + `EXCEL` -> `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` for Excel file
-          """, content = @Content(mediaType = "application/json", schema = @Schema(implementation = SuccessResponseDTO.class))),
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = """
+        Successfully generated the report.
+        The response data will be one of the following based on the reportType and reportFormat:
+        - reportType:
+            + `ACCOUNT` -> AccountReportDTO
+            + `LOAN` -> LoanReportDTO
+            + `TRANSACTION` -> TransactionReportDTO
+        - reportFormat:
+            + `NONE` -> `application/json` for JSON
+            + `PDF` -> `application/pdf` for PDF file
+            + `EXCEL` -> `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` for Excel file
+      """, content = @Content(mediaType = "application/json", schema = @Schema(implementation = SuccessResponseDTO.class))),
       @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class))),
-      @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))
-  })
+      @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponseDTO.class)))})
   @PostMapping("/account/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
-      @PathVariable Long accountId,
-      @RequestBody ReportRequestDTO reportRequestDTO) throws IOException {
+      @PathVariable @Schema(description = "Id of account") Long accountId,
+      @RequestBody @Schema(description = "Report request body", implementation = ReportRequestDTO.class) ReportRequestDTO reportRequestDTO)
+      throws IOException {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);
     log.info("Accept Header: {}", request.getHeader("Accept"));
@@ -75,16 +74,10 @@ public class ReportController {
 
       reportData = ((Resource) reportData).getContentAsByteArray();
 
-      return ResponseEntity.ok()
-          .headers(headers)
-          .body(reportData);
+      return ResponseEntity.ok().headers(headers).body(reportData);
     } else {
-      return ResponseEntity.ok()
-          .contentType(MediaType.APPLICATION_JSON)
-          .body(SuccessResponseDTO.builder()
-              .url(request.getServletPath())
-              .data(reportData)
-              .build());
+      return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(
+          SuccessResponseDTO.builder().url(request.getServletPath()).data(reportData).build());
     }
   }
 

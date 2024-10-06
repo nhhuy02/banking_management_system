@@ -15,7 +15,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class FetchTransactionDataDTO {
+public class FetchTransactionDataResponseDTO {
 
   private List<TransactionInfoDTO> transactions;
 }

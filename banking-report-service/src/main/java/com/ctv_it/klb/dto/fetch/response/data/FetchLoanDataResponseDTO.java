@@ -17,7 +17,7 @@ import org.apache.poi.hpsf.Decimal;
 @Setter
 @Getter
 @ToString
-public class FetchLoanDataDTO {
+public class FetchLoanDataResponseDTO {
 
   private int loanId;
   private int customerId;
