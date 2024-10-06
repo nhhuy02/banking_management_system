@@ -34,6 +34,7 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
     AccountFilterDTO accountFilterDTO = (AccountFilterDTO) reportRequestDTO.getReportFilters();
     log.info("Received valid accountFilterDTO: {}", accountFilterDTO);
 
+
     AccountReportDTO reportDTO = AccountReportDTO.builder()
         .customer(fetchCustomerByAccountId(accountId))
         .accounts(fetchAccounts(accountId, accountFilterDTO.getSavingAccountId()))
