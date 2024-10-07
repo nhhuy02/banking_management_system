@@ -19,8 +19,6 @@ import lombok.experimental.SuperBuilder;
 public class LoanFilterDTO extends ReportFilterDTO {
 
   private String loanType;
-  private String loanStatus;
   private RangeDTO<LocalDate> loanRepaymentScheduleRange;
-  private RangeDTO<LocalDate> loanStartDateRange;
-  private RangeDTO<LocalDate> loanEndDateRange;
+  private String loanStatus;
 }

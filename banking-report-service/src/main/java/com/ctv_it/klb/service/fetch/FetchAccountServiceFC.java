@@ -6,6 +6,7 @@ import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataResponseDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.enumeration.BaseStatus;
 import com.ctv_it.klb.feignClient.AccountServiceFC;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,9 @@ public class FetchAccountServiceFC {
         .number(fetchDataResponseDTO.getAccountNumber())
         .availableBalance(fetchDataResponseDTO.getBalance())
         .name(fetchDataResponseDTO.getAccountName())
+        .openingDate(fetchDataResponseDTO.getOpeningDate() == null ?
+            null : fetchDataResponseDTO.getOpeningDate()
+            .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
         .status(
             BaseStatus.valueOf(fetchDataResponseDTO.getStatus().toUpperCase()).getValue())
         .build();
