@@ -24,10 +24,6 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String extractUserName(String token) {
-        return extractAllClaims(token).get("username", String.class);
-    }
-
     public String extractUserId(String token) {
         return extractAllClaims(token).get("userId", String.class);
     }
@@ -40,9 +36,6 @@ public class JwtUtil {
         return extractAllClaims(token).get("customerId", String.class);
     }
 
-    public String extractRole(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
 
     public String extractSavingAccountId(String token) {
         return extractAllClaims(token).get("savingAccountId", String.class);

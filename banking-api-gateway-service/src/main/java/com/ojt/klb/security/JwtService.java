@@ -14,7 +14,6 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private final JwtUtil jwtUtil;
 
     @Value("${spring.jwt.secret-key}")
     private String SECRET_KEY ;
@@ -22,9 +21,6 @@ public class JwtService {
     @Value("${spring.jwt.expiration}")
     private long expiration;
 
-    public JwtService(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
 
     public String createToken(String username, String userId, String accountId, String role, String customerId, String savingAccountId) {
         Map<String, Object> claims = new HashMap<>();
