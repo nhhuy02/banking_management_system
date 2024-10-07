@@ -6,6 +6,7 @@ import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.format.ReportFormatService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Service;
 public class TransactionExcelServiceImpl implements ReportFormatService<TransactionReportDTO> {
 
   @Override
-  public byte[] export(TransactionReportDTO reportData) {
+  public Resource export(TransactionReportDTO reportData) {
     log.info("TransactionExcelServiceImpl::export is processing with data: {}", reportData);
 
-    return new byte[0];
+    return null;
   }
 
   @Override

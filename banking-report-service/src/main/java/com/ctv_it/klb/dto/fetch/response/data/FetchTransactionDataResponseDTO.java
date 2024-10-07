@@ -15,9 +15,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class FetchTransactionDataDTO {
+public class FetchTransactionDataResponseDTO {
 
-  private Long customerId;
-  private Long accountId;
   private List<TransactionInfoDTO> transactions;
 }

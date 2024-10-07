@@ -2,11 +2,15 @@ package com.ctv_it.klb.dto.baseInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Setter
 @Getter
@@ -17,8 +21,8 @@ public class TransactionInfoDTO {
   private Long sourceAccountId;
   private Long destinationAccountId;
   private LocalDateTime date;
-  private BigDecimal amount;
   private BigDecimal balanceBeforeTransaction;
+  private BigDecimal amount;
   private BigDecimal balanceAfterTransaction;
   private String type;  // deposit, withdraw...
   private String category; // shopping, education, sport...

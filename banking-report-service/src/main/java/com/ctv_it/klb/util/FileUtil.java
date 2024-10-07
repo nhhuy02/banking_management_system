@@ -5,19 +5,21 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
@@ -29,16 +31,18 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class FileUtil {
 
   private final TemplateEngine templateEngine;
-  private static final String PATTERN = "P@TTERN";
   private static final String BASE_DIR = "./banking-report-service/file/";
 
-  public byte[] export(ReportFormat reportFormat, String fileName, String templateName,
+  public Resource export(ReportFormat reportFormat, String fileName, String templateName,
       Map<String, Object> data) {
+
     String targetFile = BASE_DIR + fileName;
 
     try {
       ensureDirectoryExists(targetFile);
-      return processFileExport(reportFormat, templateName, data, targetFile);
+      processFileExport(reportFormat, templateName, data, targetFile);
+
+      return readFile(targetFile);
     } catch (IOException e) {
       log.error("Error occurred while exporting the report: {}", e.getMessage(), e);
       throw new InternalError();
@@ -57,7 +61,7 @@ public class FileUtil {
     log.info("Directories are already existed: {}", parentDir);
   }
 
-  private byte[] processFileExport(ReportFormat reportFormat, String templateName,
+  private void processFileExport(ReportFormat reportFormat, String templateName,
       Map<String, Object> data, String targetFile) throws IOException {
 
     File target = new File(targetFile);
@@ -68,7 +72,6 @@ public class FileUtil {
       writeFileBasedOnFormat(reportFormat, outStream, templateName, data);
       log.info("File is exported successfully");
 
-      return readFile(targetFile);
     } catch (IOException e) {
       log.error("Error occurred while exporting the file: {}", e.getMessage(), e);
       // Delete the partially created file to prevent incomplete file issues
@@ -105,17 +108,14 @@ public class FileUtil {
     log.info("Start creation of PDF for template: {}", pathTemplateName);
     try (InputStream input = getTemplateInputStream(pathTemplateName);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-      log.info("Data: {}", data);
 
       String processedHtml = processHtmlTemplate(pathTemplateName, data);
-      log.info("Processed HTML: {}", processedHtml);
 
       ITextRenderer renderer = createPdfRenderer(processedHtml);
       renderer.createPDF(byteArrayOutputStream, false);
       renderer.finishPDF();
 
       byte[] pdfBytes = byteArrayOutputStream.toByteArray();
-      log.info("pdfBytes: {}", pdfBytes);
       outStream.write(pdfBytes);
 
       log.info("PDF created successfully for template {}", pathTemplateName);
@@ -164,13 +164,9 @@ public class FileUtil {
       Context context = new Context();
       data.forEach(context::putVar);
       JxlsHelper.getInstance().processTemplate(input, outStream, context);
-      log.info("Excel created successfully for template {}", pathTemplateName);
-    } catch (IOException e) {
-      log.error("IOException while processing template {}: {}", pathTemplateName, e.getMessage(),
-          e);
-      throw new InternalError();
+      log.info("Excel file created successfully for template {}", pathTemplateName);
     } catch (Exception e) {
-      log.error("General error while generating the Excel document: {}", e.getMessage(), e);
+      log.error("Excel file created fail for template {}: {}", pathTemplateName, e.getMessage());
       throw new InternalError();
     }
   }
@@ -184,63 +180,25 @@ public class FileUtil {
     return input;
   }
 
-  private byte[] readFile(String filePath) throws IOException {
-    File file = new File(filePath);
-    try (FileInputStream fis = new FileInputStream(file);
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-      byte[] data = new byte[1024];
-      int bytesRead;
-      while ((bytesRead = fis.read(data, 0, data.length)) != -1) {
-        buffer.write(data, 0, bytesRead);
-      }
-      return buffer.toByteArray();
-    }
-  }
-
-  public byte[] addFileNameToData(byte[] data, String fileName) {
-    byte[] fileNameBytes = fileName.getBytes(StandardCharsets.UTF_8);
-    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
-    byte[] combined = new byte[data.length + patternBytes.length + fileNameBytes.length];
-
-    System.arraycopy(data, 0, combined, 0, data.length);
-    System.arraycopy(patternBytes, 0, combined, data.length, patternBytes.length);
-    System.arraycopy(fileNameBytes, 0, combined, data.length + patternBytes.length,
-        fileNameBytes.length);
-
-    return combined;
-  }
-
-  public Map<String, Object> splitDataAndFileName(byte[] combined) {
-    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
-    int patternIndex = indexOf(combined, patternBytes);
-
-    if (patternIndex == -1) {
-      log.error("PATTERN {} is not found", PATTERN);
+  public Resource readFile(String fileName) {
+    if (fileName == null || fileName.isEmpty()) {
+      log.warn("File name is null or empty for download request");
       throw new InternalError();
     }
 
-    byte[] data = Arrays.copyOfRange(combined, 0, patternIndex);
-    byte[] fileNameBytes = Arrays.copyOfRange(combined, patternIndex + patternBytes.length,
-        combined.length);
-    String fileName = new String(fileNameBytes, StandardCharsets.UTF_8);
-
-    return Map.of("data", data, "fileName", fileName);
-  }
-
-  // find index of target in array
-  private int indexOf(byte[] array, byte[] target) {
-    for (int i = 0; i <= array.length - target.length; i++) {
-      boolean found = true;
-      for (int j = 0; j < target.length; j++) {
-        if (array[i + j] != target[j]) {
-          found = false;
-          break;
-        }
+    Resource resource;
+    try {
+      resource = new UrlResource(Paths.get(fileName).toUri());
+      if (!resource.exists() || !resource.isReadable()) {
+        log.warn("File not found or not readable: {}", fileName);
+        throw new InternalError();
       }
-      if (found) {
-        return i;
-      }
+    } catch (MalformedURLException e) {
+      log.error("Malformed URL for file: {}", fileName, e);
+      throw new InternalError();
     }
-    return -1;
+
+    log.info("Successfully read file: {}", fileName);
+    return resource;
   }
 }

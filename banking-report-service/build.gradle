@@ -45,6 +45,9 @@ dependencies {
 
     implementation 'org.xhtmlrenderer:flying-saucer-core:9.1.4'
     implementation 'org.xhtmlrenderer:flying-saucer-pdf-itext5:9.1.4'
+
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0-BETA2'
+    implementation group: 'com.antkorwin', name: 'ioutils', version: '0.8'
 }
 
 dependencyManagement {
