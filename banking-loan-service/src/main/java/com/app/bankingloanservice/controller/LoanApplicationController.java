@@ -14,13 +14,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controller for managing loan applications.
@@ -180,17 +179,13 @@ public class LoanApplicationController {
      * Endpoint to retrieve loan applications by accountId.
      *
      * @param accountId The ID of the account.
-     * @param pageable  Pagination information.
-     * @return ResponseEntity containing ApiResponseWrapper with a page of LoanApplicationResponse and HTTP status.
+     * @return ResponseEntity containing ApiResponseWrapper with a list of LoanApplicationResponse and HTTP status.
      */
     @Operation(
             summary = "Get Loan Applications by Account ID",
-            description = "Retrieves loan applications for a specific account based on accountId with pagination support.",
+            description = "Retrieves all loan applications for a specific account based on accountId.",
             parameters = {
-                    @Parameter(name = "accountId", description = "The ID of the account", required = true, example = "12345"),
-                    @Parameter(name = "page", description = "Current page (0-based)", example = "0"),
-                    @Parameter(name = "size", description = "Page size", example = "10"),
-                    @Parameter(name = "sort", description = "Sort the result by a specific field, e.g.: loanDate,desc", example = "submissionDate,desc")
+                    @Parameter(name = "accountId", description = "The ID of the account", required = true, example = "1")
             },
             responses = {
                     @ApiResponse(
@@ -224,28 +219,31 @@ public class LoanApplicationController {
                     )
             }
     )
-    @GetMapping
-    public ResponseEntity<ApiResponseWrapper<Page<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
+    @GetMapping("/loans")
+    public ResponseEntity<ApiResponseWrapper<List<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
             @Parameter(description = "The ID of the account to fetch loan applications", required = true)
-            @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId,
-
-            @ParameterObject Pageable pageable) {
+            @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId) {
 
         log.info("Received request to fetch loan applications for accountId: {}", accountId);
 
-        Page<LoanApplicationResponse> loanApplications = loanApplicationService.getLoanApplicationsByAccountId(accountId, pageable);
+        List<LoanApplicationResponse> loanApplications = loanApplicationService.getLoanApplicationsByAccountId(accountId);
 
         String message;
 
         if (loanApplications.isEmpty()) {
             log.warn("No loan applications found for accountId: {}", accountId);
             message = "No loan applications found for the given accountId.";
+            return new ResponseEntity<>(new ApiResponseWrapper<>(
+                    HttpStatus.NO_CONTENT.value(),
+                    true,
+                    message,
+                    null), HttpStatus.NO_CONTENT);
         } else {
             log.info("Successfully retrieved loan applications for accountId: {}", accountId);
             message = "Loan applications retrieved successfully.";
         }
 
-        ApiResponseWrapper<Page<LoanApplicationResponse>> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<List<LoanApplicationResponse>> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 message,
@@ -254,6 +252,7 @@ public class LoanApplicationController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 
     @Operation(

@@ -12,11 +12,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Setter
 @Getter
-public class LoanData {
+public class LoanDueDate {
+    private String loanContractNo;
     private Long customerId;
+    private Long loanRepaymentId;
+    private Long accountId;
     private String customerName;
     private String email;
-    private Long contractNumber;
-    private BigDecimal amounts;
-    private LocalDate deadline;
+    private LocalDate dueDate;
+    private BigDecimal amountDue;
 }

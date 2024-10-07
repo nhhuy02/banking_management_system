@@ -6,6 +6,7 @@ import com.ojt.klb.kafka.TransactionNotification;
 import com.ojt.klb.kafka.TransactionProducer;
 import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
+import com.ojt.klb.model.dto.SearchDataDto;
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.entity.UtilityAccount;
@@ -22,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -144,7 +144,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public List<TransactionDto> findTransactions(
+    public List<SearchDataDto> findTransactions(
             String accountNumber,
             TransactionType transactionType,
             LocalDate fromDate,
@@ -181,9 +181,18 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions = repository.findAll(spec);
 
         return transactions.stream()
-                .map(mapper::convertToDto)
+                .map(transaction -> {
+                    SearchDataDto dto = new SearchDataDto();
+                    dto.setAccountNumber(transaction.getAccountNumber());
+                    dto.setTransactionType(transaction.getTransactionType().name());
+                    dto.setAmount(transaction.getAmount());
+                    dto.setDescription(transaction.getDescription());
+                    dto.setTransactionDate(transaction.getTransactionDate());
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {

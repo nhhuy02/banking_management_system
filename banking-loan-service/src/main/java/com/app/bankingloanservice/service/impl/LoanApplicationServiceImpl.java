@@ -17,14 +17,15 @@ import com.app.bankingloanservice.service.LoanApplicationService;
 import com.app.bankingloanservice.service.LoanTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -128,20 +129,22 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     }
 
     @Override
-    public Page<LoanApplicationResponse> getLoanApplicationsByAccountId(Long accountId, Pageable pageable) {
-        log.debug("Fetching loan applications for accountId: {} with pagination: {}", accountId, pageable);
+    public List<LoanApplicationResponse> getLoanApplicationsByAccountId(Long accountId) {
+        log.debug("Fetching loan applications for accountId: {}", accountId);
 
-        Page<LoanApplication> loanApplications = loanApplicationRepository.findByAccountId(accountId, pageable);
+        List<LoanApplication> loanApplications = loanApplicationRepository.findByAccountId(accountId);
 
         if (loanApplications.isEmpty()) {
             log.warn("No loan applications found for accountId: {}", accountId);
-            // Returns a blank page but retains pagination information
-            return Page.empty(pageable);
+            return Collections.emptyList();
         }
 
         // Map loanApplication to LoanApplicationResponse
-        Page<LoanApplicationResponse> responseDtos = loanApplications.map(this::generateLoanApplicationResponse);
-        log.debug("Fetched {} loan applications for accountId: {}", responseDtos.getContent().size(), accountId);
+        List<LoanApplicationResponse> responseDtos = loanApplications.stream()
+                .map(this::generateLoanApplicationResponse)
+                .collect(Collectors.toList());
+
+        log.debug("Fetched {} loan applications for accountId: {}", responseDtos.size(), accountId);
 
         return responseDtos;
     }
@@ -200,6 +203,21 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         // Save updated loan application
         LoanApplication savedApplication = loanApplicationRepository.save(loanApplication);
         log.info("Loan application with ID {} updated to status {}", applicationId, newStatus);
+
+        // Get Account info from Account Service:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+        // Kafka producer
+        LoanApplicationProducer loanApplicationProducer = new LoanApplicationProducer();
+        loanApplicationProducer.setLoanApplicationId(loanApplication.getLoanApplicationId());
+        loanApplicationProducer.setAmounts(loanApplication.getDesiredLoanAmount());
+        loanApplicationProducer.setLoanTermMonths(loanApplication.getDesiredLoanTermMonths());
+        loanApplicationProducer.setStatus(String.valueOf(loanApplication.getApplicationStatus()));
+
+        loanApplicationProducer.setCustomerId(accountInfo.getCustomerId());
+        loanApplicationProducer.setEmail(accountInfo.getEmail());
+        loanApplicationProducer.setCustomerName(accountInfo.getFullName());
+        loanApplicationProducer.setSubmissionDate(loanApplication.getSubmissionDate());
+        kafkaTemplate.send(TOPIC, loanApplicationProducer);
 
         // Return the updated response DTO
         return generateLoanApplicationResponse(savedApplication);

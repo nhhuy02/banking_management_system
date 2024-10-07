@@ -1,8 +1,6 @@
-package com.app.bankingloanservice.dto.kafka;
+package com.ojt.klb.banking_notification_service.dto.consumer.loan;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,7 +8,9 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Builder
-public class DueDateNotificationProducer {
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoanOverdue {
     private Long loanRepaymentId;
     private String loanContractNo;
     private Long accountId;
@@ -18,5 +18,7 @@ public class DueDateNotificationProducer {
     private String customerName;
     private String email;
     private LocalDate dueDate;
-    private BigDecimal amountDue;
+    private LocalDate overdueDate;
+    private BigDecimal lateInterestAmount;
+    private BigDecimal totalAmountDue;
 }
