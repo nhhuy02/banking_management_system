@@ -5,6 +5,7 @@ import com.ojt.klb.security.JwtUtil;
 import com.ojt.klb.service.impl.LoginServiceImpl;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -135,11 +136,16 @@ public class JwtInterceptor implements HandlerInterceptor {
                     if (targetUrl != null) {
                         url = targetUrl + url;
                         logger.info("New URL: {}", url);
-                        response.sendRedirect(url);
+
+                        response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+                        response.setHeader("Location", url);
+
+//                        response.sendRedirect(url);
                         return false;
                     }
                 }
             }
+
 
 
             for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
@@ -160,6 +166,10 @@ public class JwtInterceptor implements HandlerInterceptor {
                         while (matcher.find()) {
                             String foundId = matcher.group();
                             logger.info("Found ID in URL: {}", foundId);
+
+                            if(foundId.equals("8082")){
+                                continue;
+                            }
 
                             if (!foundId.equals(userId) && !foundId.equals(accountId)
                                     && !foundId.equals(customerId) && !foundId.equals(savingAccountId)) {
@@ -196,7 +206,10 @@ public class JwtInterceptor implements HandlerInterceptor {
                 }
 
                 logger.info("New URL with query string: {}", url);
-                response.sendRedirect(url);
+
+                response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+                response.setHeader("Location", url);
+
                 return false;
             }
        }
@@ -211,7 +224,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         urlMappingPrefixes.put("/api/v1/customer", "/api/v1/customer");
         urlMappingPrefixes.put("/api/v1/reports", "/api/v1/reports");
         urlMappingPrefixes.put("/api/v1/notification", "/api/v1/notification");
-        urlMappingPrefixes.put("/api/v1/transaction", "/api/v1/transaction");
+        urlMappingPrefixes.put("/api/v1/transactions", "/api/v1/transaction");
         urlMappingPrefixes.put("/api/v1/fund_transfer", "/api/v1/fund_transfer");
         return urlMappingPrefixes;
     }

@@ -26,7 +26,17 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${spring.jwt.secret-key}")
-    private String jwtSecret;
+    private String SECRET_KEY;
+
+    private static final List<String> employeeEndpoints = List.of(
+            "/api/v1/account/card-registration/pending-requests",
+            "/api/v1/notification/getAllNotification",
+            "/api/v1/account/card-types/**",
+            "/api/v1/loan-service/loans/",
+            "/api/v1/loan-service/loans/{loanId}/disburse",
+            "/api/v1/loan-service/loan-applications/{applicationId}/status",
+            "/api/v1/loan-service/loan-applications/{loanApplicationId}/loans"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -56,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(jwtSecret)
+                    .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(jwtToken)
                     .getBody();
 
@@ -68,6 +78,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (role == null || !allowedRoles.contains(role)) {
                     ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this resource");
+                    return;
+                }
+
+                if (role.equals("ROLE_customer") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)) {
+                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this employee resource");
                     return;
                 }
 
