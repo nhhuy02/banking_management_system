@@ -14,13 +14,6 @@ import org.springframework.stereotype.Service;
 public class TransactionExcelServiceImpl implements ReportFormatService<TransactionReportDTO> {
 
   @Override
-  public Resource export(TransactionReportDTO reportData) {
-    log.info("TransactionExcelServiceImpl::export is processing with data: {}", reportData);
-
-    return null;
-  }
-
-  @Override
   public ReportType getType() {
     return ReportType.TRANSACTION;
   }
@@ -28,5 +21,12 @@ public class TransactionExcelServiceImpl implements ReportFormatService<Transact
   @Override
   public ReportFormat getFormat() {
     return ReportFormat.EXCEL;
+  }
+
+  @Override
+  public Resource export(TransactionReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
+
+    return null;
   }
 }

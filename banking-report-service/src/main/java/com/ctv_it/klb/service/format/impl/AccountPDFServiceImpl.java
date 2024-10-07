@@ -29,11 +29,11 @@ public class AccountPDFServiceImpl implements ReportFormatService<AccountReportD
   }
 
   @Override
-  public Resource export(AccountReportDTO accountReportDTO) {
-    log.info("AccountPDFServiceImpl::export is processing for data: {}", accountReportDTO);
+  public Resource export(AccountReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
 
     return fileUtil.export(getFormat(), generateFileName(), getTemplateFile(),
-        customData(accountReportDTO));
+        customData(data));
   }
 
   private Map<String, Object> customData(AccountReportDTO accountReportDTO) {

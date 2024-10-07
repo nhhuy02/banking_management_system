@@ -22,17 +22,17 @@ public class FetchCustomerServiceFC {
       log.info("Fetch customer(accountId={}) is processing", accountId);
       FetchResponseDTO<FetchCustomerDataResponseDTO> fetchResponseDTO = customerServiceFC.findByAccountId(
           accountId);
-      log.info("Fetch customer(accountId={}) passed: {}", accountId, fetchResponseDTO);
+      log.info("Fetch customer(accountId={}) completed successfully: \n{}", accountId,
+          fetchResponseDTO);
 
       return handleFetchResponse.handle(fetchResponseDTO);
     } catch (Exception ex) {
-      log.error("Fetch customer(accountId={}) failed: {}", accountId, ex.toString());
+      log.error("Fetch customer(accountId={}) failed: \n{}", accountId, ex.toString());
       throw ex;
     }
   }
 
   public CustomerInfoDTO map(FetchCustomerDataResponseDTO fetchDataResponseDTO) {
-    log.debug("Mapping FetchCustomerDataDTO to CustomerInfoDTO: {}", fetchDataResponseDTO);
     return CustomerInfoDTO.builder()
         .id(fetchDataResponseDTO.getCustomerId())
         .fullName(fetchDataResponseDTO.getFullName())
@@ -47,10 +47,6 @@ public class FetchCustomerServiceFC {
   }
 
   public CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
-    log.info("Fetching customer data for accountId: {}", accountId);
-    FetchCustomerDataResponseDTO data = findByAccountId(accountId);
-    CustomerInfoDTO customer = map(data);
-    log.info("Mapped customer data: {}", customer);
-    return customer;
+    return map(findByAccountId(accountId));
   }
 }

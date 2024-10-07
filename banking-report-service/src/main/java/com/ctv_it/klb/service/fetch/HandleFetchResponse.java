@@ -16,29 +16,24 @@ public class HandleFetchResponse<T> {
 
   public T handle(FetchResponseDTO<T> fetchResponseDTO) {
     // Log the incoming fetch response
-    log.info("Handling fetch response: {}", fetchResponseDTO);
+    log.info("Handle fetch response(fetchResponseDTO={}) is processing", fetchResponseDTO);
 
     if (fetchResponseDTO.isSuccess() && fetchResponseDTO.getData() != null) {
-      log.info("Fetch response successful with data: {}", fetchResponseDTO.getData());
+      log.info("Handle fetch response(fetchResponseDTO={}) completed successfully: \n{}",
+          fetchResponseDTO, fetchResponseDTO.getData());
 
       return fetchResponseDTO.getData();
     } else {
       // Log the status and message when the response is not successful
-      log.warn("Fetch response not successful. Status: {}, Message: {}",
-          fetchResponseDTO.getStatus(), fetchResponseDTO.getMessage());
+      log.warn("Handle fetch response failed: \n{}", fetchResponseDTO);
 
       if (Objects.equals(HttpStatus.SC_BAD_REQUEST, fetchResponseDTO.getStatus())) {
-        // Log specific details for bad requests
-        log.warn("Invalid request: {}", fetchResponseDTO.getMessage());
         throw new InvalidExceptionCustomize(
             Collections.singletonList(
                 ErrorDetailDTO.builder()
                     .message(fetchResponseDTO.getMessage())
                     .build()));
       } else {
-        // Log error for fetch failures
-        log.warn("Fetch error: Status {}, Message: {}", fetchResponseDTO.getStatus(),
-            fetchResponseDTO.getMessage());
         throw new FetchErrorResponseExceptionCustomize(fetchResponseDTO);
       }
     }

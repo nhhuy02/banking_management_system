@@ -23,8 +23,8 @@ public class TransactionPDFServiceImpl implements ReportFormatService<Transactio
   }
 
   @Override
-  public Resource export(TransactionReportDTO reportData) {
-    log.info("TransactionPDFServiceImpl::export is processing with data: {}", reportData);
+  public Resource export(TransactionReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
 
     return null;
   }

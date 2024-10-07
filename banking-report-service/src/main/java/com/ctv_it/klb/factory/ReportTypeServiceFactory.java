@@ -1,6 +1,5 @@
 package com.ctv_it.klb.factory;
 
-import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.type.ReportTypeService;
 import java.util.EnumMap;
@@ -23,8 +22,7 @@ public class ReportTypeServiceFactory {
   }
 
   public ReportTypeService<?> getReportTypeService(ReportType reportType) {
-    log.info("ReportTypeServiceFactory::getReportTypeService is processing for type: {}", reportType);
-
+    log.info("Get reportTypeService(reportType={}) is processing", reportType);
     return reportTypeServiceMap.get(reportType);
   }
 }

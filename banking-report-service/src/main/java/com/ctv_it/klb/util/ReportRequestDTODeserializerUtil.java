@@ -35,22 +35,20 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       throws IOException {
 
     JsonNode node = p.getCodec().readTree(p);
-    log.info("Deserializing request");
+    log.info("Deserializing request: {}", node);
 
     checkForUnrecognizedFields(node, ReportRequestDTO.class);
 
-    log.info("Deserializing reportType");
     ReportType type = getType(node);
-    log.info("Deserialized reportType pass: {}", type);
+    log.info("Deserialize reportType complete successfully: {}", type);
 
-    log.info("Deserializing reportFormat");
     ReportFormat format = getFormat(node);
-    log.info("Deserialized reportFormat pass: {}", format);
+    log.info("Deserialize reportFormat complete successfully: {}", type);
 
     // Now handle the reportFilters field
     log.info("Deserializing reportFilters");
     ReportFilterDTO filters = getFilters(p, node, type);
-    log.info("Deserialized reportFilters pass: {}", filters);
+    log.info("Deserialize reportFilters complete successfully: {}", filters);
 
     return ReportRequestDTO.builder()
         .reportType(type)

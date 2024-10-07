@@ -13,6 +13,6 @@ public interface AccountServiceFC {
   @GetMapping("/{accountId}")
   FetchResponseDTO<FetchAccountDataResponseDTO> getAccountById(@PathVariable long accountId);
 
-  @GetMapping("/savings-accounts/information/{accountId}")
+  @GetMapping("/savings-accounts/information/{savingAccountId}")
   FetchResponseDTO<FetchAccountDataResponseDTO> getSavingsAccountById(@PathVariable long savingAccountId);
 }

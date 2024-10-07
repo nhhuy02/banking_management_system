@@ -2,14 +2,12 @@ package com.ctv_it.klb.dto.fetch.response.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.poi.hpsf.Decimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +17,28 @@ import org.apache.poi.hpsf.Decimal;
 @ToString
 public class FetchLoanDataResponseDTO {
 
-  private List<FetchLoanContentResponseDTO> content;
+  private long loanId;
+  private long loanApplicationId;
+  private long accountId;
+  private String loanContractNo;
+  private String loanTypeName;
+  private BigDecimal loanAmount;
+  private String interestRateType;
+  private CurrentInterestRate currentInterestRate;
+  private String repaymentMethod;
+  private int loanTermMonths;
+  private LocalDate disbursementDate;
+  private LocalDate maturityDate;
+  private LocalDate settlementDate;
+  private int renewalCount;
+  private BigDecimal remainingBalance;
+  private BigDecimal totalPaidAmount;
+  private boolean isBadDebt;
+  private LocalDate badDebtDate;
+  private String badDebtReason;
+  private String debtClassification;
+  private LoanSettlement loanSettlementResponse;
+  private String status;
 
   @NoArgsConstructor
   @AllArgsConstructor
@@ -27,45 +46,14 @@ public class FetchLoanDataResponseDTO {
   @Setter
   @Getter
   @ToString
-  public static class FetchLoanContentResponseDTO {
+  public static class CurrentInterestRate {
 
-    private long loanId;
-    private long loanApplicationId;
-    private long accountId;
-    private String loanContractNo;
-    private String loanTypeName;
-    private BigDecimal loanAmount;
-    private String interestRateType;
-    private CurrentInterestRate currentInterestRate;
-    private String repaymentMethod;
-    private int loanTermMonths;
-    private LocalDate disbursementDate;
-    private LocalDate maturityDate;
-    private LocalDate settlementDate;
-    private int renewalCount;
-    private BigDecimal remainingBalance;
-    private BigDecimal totalPaidAmount;
-    private boolean isBadDebt;
-    private LocalDate badDebtDate;
-    private String badDebtReason;
-    private String debtClassification;
-    private LoanSettlement loanSettlementResponse;
-    private String status;
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    @Setter
-    @Getter
-    @ToString
-    public static class CurrentInterestRate {
-
-      private BigDecimal annualInterestRate;
-      private BigDecimal pastDueInterestRate;
-      private BigDecimal latePaymentInterestRate;
-      private BigDecimal prepaymentPenaltyRate;
-      private LocalDate effectiveFrom;
-    }
+    private BigDecimal annualInterestRate;
+    private BigDecimal pastDueInterestRate;
+    private BigDecimal latePaymentInterestRate;
+    private BigDecimal prepaymentPenaltyRate;
+    private LocalDate effectiveFrom;
+  }
 //
 //    @Builder
 //    @Setter
@@ -85,21 +73,20 @@ public class FetchLoanDataResponseDTO {
 //      private boolean isLate;
 //    }
 
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    @Setter
-    @Getter
-    @ToString
-    public static class LoanSettlement {
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  @Setter
+  @Getter
+  @ToString
+  public static class LoanSettlement {
 
-      private int loanSettlementId;
-      private LocalDate settlementDate;
-      private BigDecimal pastDueInterestAmount;
-      private BigDecimal latePaymentInterestAmount;
-      private BigDecimal prepaymentPenaltyAmount;
-      private BigDecimal settlementAmount;
-      private String settlementStatus;
-    }
+    private int loanSettlementId;
+    private LocalDate settlementDate;
+    private BigDecimal pastDueInterestAmount;
+    private BigDecimal latePaymentInterestAmount;
+    private BigDecimal prepaymentPenaltyAmount;
+    private BigDecimal settlementAmount;
+    private String settlementStatus;
   }
 }
