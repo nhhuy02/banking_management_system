@@ -101,8 +101,8 @@ public class NotificationImpl implements NotificationService {
         notification1.setCreatedAt(LocalDateTime.now());
         notification1.setSendDate(LocalDateTime.now());
         notification1.setNotificationTemplateId(notificationTemplate1.getId());
-        notification1.setCustomerId(transactionData.getCustomerReceiveId());
-        notification1.setContent(StringUtils.convertContentDecreaseBalance(transactionData.getSenderBankAccount(),transactionData.getAmounts(), transactionData.getBalanceAccountReceive()));
+        notification1.setCustomerId(transactionData.getCustomerSendId());
+        notification1.setContent(StringUtils.convertContentDecreaseBalance(transactionData.getSenderBankAccount(),transactionData.getAmounts(), transactionData.getBalanceAccountSend()));
 
         Map<String, Object> variables1  = new HashMap<>();
         variables1.put("transactionDate", StringUtils.convertDateTime(transactionData.getTransactionDate()));
