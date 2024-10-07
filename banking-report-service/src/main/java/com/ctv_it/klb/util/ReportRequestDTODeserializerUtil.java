@@ -35,16 +35,20 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       throws IOException {
 
     JsonNode node = p.getCodec().readTree(p);
-    log.info("Deserializing node: {}", node.toPrettyString());
+    log.info("Deserializing request: {}", node);
 
     checkForUnrecognizedFields(node, ReportRequestDTO.class);
 
-//    long customerId = getCustomerId(node);
     ReportType type = getType(node);
+    log.info("Deserialize reportType complete successfully: {}", type);
+
     ReportFormat format = getFormat(node);
+    log.info("Deserialize reportFormat complete successfully: {}", type);
 
     // Now handle the reportFilters field
+    log.info("Deserializing reportFilters");
     ReportFilterDTO filters = getFilters(p, node, type);
+    log.info("Deserialize reportFilters complete successfully: {}", filters);
 
     return ReportRequestDTO.builder()
         .reportType(type)
@@ -52,38 +56,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
         .reportFilters(filters)
         .build();
   }
-
-//  private long getCustomerId(JsonNode node) {
-//    JsonNode customerIdNode = node.get("customerId");
-//    if (customerIdNode == null) {
-//      throw new InvalidExceptionCustomize(Collections.singletonList(
-//          ErrorDetailDTO.builder()
-//              .field("customerId")
-//              .rejectedValue(null)
-//              .message(Translator.toLocale("error.invalid.null")).build()));
-//    }
-//
-//    // Ensure that the value is an integral number (not floating-point)
-//    if (!customerIdNode.isIntegralNumber()) {
-//      throw new InvalidExceptionCustomize(Collections.singletonList(
-//          ErrorDetailDTO.builder()
-//              .field("customerId")
-//              .rejectedValue(customerIdNode)
-//              .message(
-//                  Translator.toLocale(
-//                      "error.invalid.json-parse-3",
-//                      "'" + customerIdNode + "'",
-//                      "'Long'",
-//                      "'customerId'"
-//                  ))
-//              .build()));
-//    }
-//
-//    long customerId = customerIdNode.asLong();
-//    log.info("customerId: {}", customerId);
-//
-//    return customerId;
-//  }
 
   private ReportType getType(JsonNode node) {
     String fieldName = "reportType";
@@ -106,7 +78,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
                   Arrays.toString(ReportType.values()))).build()));
     }
 
-    log.info("{}: {}", fieldName, reportType);
     return reportType;
   }
 
@@ -131,7 +102,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
                   Arrays.toString(ReportFormat.values()))).build()));
     }
 
-    log.info("{}: {}", fieldName, reportFormat);
     return reportFormat;
   }
 
@@ -154,7 +124,6 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       checkForUnrecognizedFields(filtersNode, filters.getClass());
     }
 
-    log.info("{}: {}", fieldName, filters);
     return filters;
   }
 
@@ -172,9 +141,9 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       while (fieldNames.hasNext()) {
         String fieldName = fieldNames.next();
         JsonNode fieldValueNode = objectNode.get(fieldName);
-        log.info("Valid fields for {}: {}", fieldName, validFieldNames);
 
         if (!validFieldNames.contains(fieldName)) {
+
           throw new InvalidExceptionCustomize(Collections.singletonList(
               ErrorDetailDTO.builder()
                   .field(fieldName)

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class LoanDueDate {
+    private String loanContractNo;
     private Long customerId;
     private Long loanRepaymentId;
     private Long accountId;

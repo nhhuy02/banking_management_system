@@ -2,7 +2,7 @@ package com.ctv_it.klb.feignClient;
 
 import com.ctv_it.klb.config.feignClient.FeignClientConfiguration;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataDTO;
+import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CustomerServiceFC {
 
   @GetMapping("/{accountId}")
-  FetchResponseDTO<FetchCustomerDataDTO> findByAccountId(@PathVariable Long accountId);
+  FetchResponseDTO<FetchCustomerDataResponseDTO> findByAccountId(@PathVariable Long accountId);
 }

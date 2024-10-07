@@ -20,7 +20,7 @@ public class ReportFormatServiceFactory {
 
   @Autowired
   public ReportFormatServiceFactory(List<ReportFormatService<?>> reportFormatServices) {
-    this.reportServiceMap = reportFormatServices.stream()
+    reportServiceMap = reportFormatServices.stream()
         .collect(
             Collectors.toMap(
                 // Create a composite key for the map using AbstractMap.SimpleEntry

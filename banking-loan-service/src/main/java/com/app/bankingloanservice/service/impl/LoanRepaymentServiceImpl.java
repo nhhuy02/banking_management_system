@@ -6,7 +6,6 @@ import com.app.bankingloanservice.client.fundtransfer.FundTransferService;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
 import com.app.bankingloanservice.dto.LoanRepaymentResponse;
-import com.app.bankingloanservice.dto.RepaymentRequest;
 import com.app.bankingloanservice.entity.Loan;
 import com.app.bankingloanservice.entity.LoanRepayment;
 import com.app.bankingloanservice.constant.LoanStatus;
@@ -16,6 +15,7 @@ import com.app.bankingloanservice.mapper.LoanRepaymentMapper;
 import com.app.bankingloanservice.repository.LoanRepaymentRepository;
 import com.app.bankingloanservice.repository.LoanRepository;
 import com.app.bankingloanservice.service.LoanRepaymentService;
+import com.app.bankingloanservice.service.LoanService;
 import com.app.bankingloanservice.util.LatePaymentInterestCalculator;
 import com.app.bankingloanservice.util.RepaymentCalculator;
 import com.app.bankingloanservice.util.RepaymentCalculatorFactory;
@@ -36,6 +36,7 @@ import java.time.LocalDate;
 public class LoanRepaymentServiceImpl implements LoanRepaymentService {
 
     private final LoanRepaymentRepository loanRepaymentRepository;
+    private final LoanService loanService;
     private final LoanRepository loanRepository;
     private final RepaymentCalculatorFactory repaymentCalculatorFactory;
     private final AccountClientService accountClientService;
@@ -51,13 +52,18 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         calculator.calculateRepaymentSchedule(loan);
     }
 
-    @Override
+    /**
+     * Make a repayment and return the repayment response including transaction reference.
+     *
+     * @param loanId      ID of the loan
+     * @param repaymentId ID of the repayment schedule
+     * @return LoanRepaymentResponse containing repayment details and transaction reference
+     */
     @Transactional
-    public void makeRepayment(Long loanId, Long repaymentId, RepaymentRequest repaymentRequest) {
+    @Override
+    public LoanRepaymentResponse makeRepayment(Long loanId, Long repaymentId) {
         // 1. Retrieve and validate the loan
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + loanId + " not found"));
-
+        Loan loan = loanService.getLoanEntityById(loanId);
         if (loan.getStatus() != LoanStatus.ACTIVE) {
             throw new InvalidLoanException("Loan is not active for repayment.");
         }
@@ -74,21 +80,33 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
             throw new InvalidRepaymentException("This repayment has already been paid.");
         }
 
-        // 3. Check and calculate late payment interest
-        boolean isLate = LatePaymentInterestCalculator.isLate(repayment);
+        // 3. Check if the repayment is for the current period
+        LocalDate now = LocalDate.now();
+        LocalDate paymentDueDate = repayment.getPaymentDueDate();
+
+        // Check if the repayment due date is for the next month
+        if (now.isBefore(paymentDueDate.minusMonths(1).plusDays(1))) {
+            throw new InvalidRepaymentException("Repayment can only be made for the current period.");
+        }
+
+        // 4. Check and calculate late payment interest
+        boolean isLate = now.isAfter(paymentDueDate);
         BigDecimal latePaymentInterest = BigDecimal.ZERO;
         if (isLate) {
             latePaymentInterest = LatePaymentInterestCalculator.calculateLatePaymentInterest(loan, repayment);
             repayment.setLatePaymentInterestAmount(latePaymentInterest);
+            // Update late payment status and save
+            repayment.setPaymentStatus(PaymentStatus.OVERDUE);
+            loanRepaymentRepository.save(repayment);
         }
 
-        // 4. Calculate the total amount due
+        // 5. Calculate the total amount due
         BigDecimal totalAmountDue = repayment.getTotalAmount();
 
-        // 5. Retrieve customer account information from Account Service
-        AccountDto borrowerAccount = accountClientService.getAccountInfoById(repaymentRequest.getAccountId());
+        // 6. Retrieve customer account information from Account Service
+        AccountDto borrowerAccount = accountClientService.getAccountInfoById(loan.getAccountId());
 
-        // 6. Perform fund transfer from customer account to loan collection account
+        // 7. Perform fund transfer from customer account to loan collection account
         FundTransferRequest fundTransferRequest = FundTransferRequest.builder()
                 .fromAccount(borrowerAccount.getAccountNumber()) // Customer's account
                 .toAccount(collectionAccountNumber) // Bank's loan collection account
@@ -96,11 +114,6 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
                 .description("Loan Repayment for Loan ID: " + loanId + ", Repayment ID: " + repaymentId)
                 .build();
         FundTransferResponse fundTransferResponse = fundTransferService.performFundTransfer(fundTransferRequest);
-
-        // 7. Validate fund transfer result
-        if (!"SUCCESS".equalsIgnoreCase(fundTransferResponse.getMessage())) {
-            throw new FundTransferException("Fund transfer failed: " + fundTransferResponse.getMessage());
-        }
 
         // 8. Update repayment information
         repayment.setActualPaymentDate(LocalDate.now());
@@ -118,14 +131,23 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
             loan.setSettlementDate(LocalDate.now());
             if (isLate) {
                 loan.setStatus(LoanStatus.SETTLED_LATE);
-            } else if (repayment.getPaymentDueDate().isAfter(LocalDate.now())) {
+            } else if (paymentDueDate.isAfter(LocalDate.now())) {
                 loan.setStatus(LoanStatus.SETTLED_EARLY);
             } else {
                 loan.setStatus(LoanStatus.SETTLED_ON_TIME);
             }
             loanRepository.save(loan);
         }
+
+        // 11. Map repayment to response and include transaction reference, account info
+        LoanRepaymentResponse repaymentResponse = loanRepaymentMapper.toResponse(repayment);
+        repaymentResponse.setTransactionReference(fundTransferResponse.getTransactionReference());
+        repaymentResponse.setAccountNumber(borrowerAccount.getAccountNumber());
+        repaymentResponse.setCustomerFullName(borrowerAccount.getFullName());
+
+        return repaymentResponse;
     }
+
 
     /**
      * Retrieves the repayment schedule for a loan, with pagination and sorting.
@@ -156,8 +178,15 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         // Fetch loan repayments with pagination
         Page<LoanRepayment> repayments = loanRepaymentRepository.findByLoanLoanId(loanId, pageable);
 
-        // Map LoanRepayment to LoanRepaymentResponse
-        return repayments.map(loanRepaymentMapper::toResponse);
+        // Get Account information and map to response:
+        Loan loan = loanService.getLoanEntityById(loanId);
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loan.getAccountId());
+        return repayments.map(repayment -> {
+            LoanRepaymentResponse repaymentResponse = loanRepaymentMapper.toResponse(repayment);
+            repaymentResponse.setAccountNumber(accountInfo.getAccountNumber());
+            repaymentResponse.setCustomerFullName(accountInfo.getFullName());
+            return repaymentResponse;
+        });
     }
 
 }

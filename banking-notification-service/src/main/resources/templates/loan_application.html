@@ -82,7 +82,7 @@
                     <p>Số tiền khoản vay: <strong th:text="${loanAmount}">[...]</strong> </p>
                     <p>Kỳ hạn: <strong th:text="${loanTermMonths}">[...]</strong> tháng.</p>
                     <p>Quá trình xử lý: <strong th:text="${status}">[Trạng thái]</strong>.</p>
-                    <p>Hồ sơ của bạn sẽ được xem xét và phản hồi trong thời gian <span th:text="${reviewTimeDays}">...</span> ngày làm việc tiếp theo.</p>
+                    <p th:if="${type == 'PENDING'}">Hồ sơ của bạn sẽ được xem xét và phản hồi trong thời gian <span th:text="${reviewTimeDays}">...</span> ngày làm việc tiếp theo.</p>
                     <p>Nếu bạn cần thêm thông tin hoặc hỗ trợ, vui lòng liên hệ với chúng tôi qua <a href="mailto:support@eightbank.com" style="color: #0066cc; text-decoration: none;">support@eightbank.com</a>.</p>
                     <p>Trân trọng,<br>
                         <strong style="color: #0066cc;">EIGHT BANK</strong></p>

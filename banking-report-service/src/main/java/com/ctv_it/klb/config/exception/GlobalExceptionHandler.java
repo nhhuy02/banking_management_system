@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({InternalServerError.class, InternalError.class, Exception.class})
   public ResponseEntity<ErrorResponseDTO> handleInternalError(Exception ex,
       HttpServletRequest request) {
-    log.error("Internal server error: {}", ex.getMessage(), ex);
+    log.error("Internal server error exception: {}", ex.toString());
     return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
         Translator.toLocale("error.internal-server"), null, request);
   }

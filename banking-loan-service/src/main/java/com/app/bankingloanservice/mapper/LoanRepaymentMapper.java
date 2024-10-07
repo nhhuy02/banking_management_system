@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 public interface LoanRepaymentMapper {
 
     @Mapping(source = "loan.loanId", target = "loanId")
+    @Mapping(source = "loan.loanContractNo", target = "loanContractNo")
     LoanRepaymentResponse toResponse(LoanRepayment loanRepayment);
 
 }

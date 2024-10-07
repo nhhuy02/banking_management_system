@@ -14,10 +14,9 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class FetchCustomerDataDTO {
+public class FetchCustomerDataResponseDTO {
 
-  private Long id;
-  private Long accountId;
+  private Long customerId;
   private String fullName;
   private LocalDate dateOfBirth;
   private String gender;

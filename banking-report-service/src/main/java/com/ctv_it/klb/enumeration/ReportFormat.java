@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public enum ReportFormat {
-  NONE("none", "", "", "application/json"),
-  PDF(".pdf", "/template/pdf", ".html", "application/pdf"),
-  EXCEL(".xlsx", "/template/excel", ".xlsx", "application/octet-stream");
+  NONE("none", "", ""),
+  PDF(".pdf", "/template/pdf", ".html"),
+  EXCEL(".xlsx", "/template/excel", ".xlsx");
 
   private String extension;
   private String templatePath;
   private String templateExtension;
-  private String headerContentType;
 
   public static ReportFormat fromString(String value) {
     try {

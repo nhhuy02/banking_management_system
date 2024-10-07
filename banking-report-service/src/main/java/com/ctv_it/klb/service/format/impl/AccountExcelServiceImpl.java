@@ -8,6 +8,7 @@ import com.ctv_it.klb.util.FileUtil;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,27 +19,6 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   private final FileUtil fileUtil;
 
   @Override
-  public byte[] export(AccountReportDTO accountReportData) {
-    log.info("AccountExcelServiceImpl::export is processing for data: {}", accountReportData);
-
-    String fileName = this.generateFileName();
-
-    Map<String, Object> data = Map.of(
-        "customer", accountReportData.getCustomer(),
-        "accounts", accountReportData.getAccounts());
-    log.info("DataMap: {}", data);
-
-    byte[] byteData = fileUtil.export(getFormat(), fileName, this.getTemplateFile(), data);
-
-    log.info("byteData: {}", byteData);
-    log.info("fileName: {}", fileName);
-
-    // return a byte[] include data and fileName => allow controller split into data and file name to set header and body response
-    return fileUtil.addFileNameToData(byteData, fileName);
-  }
-
-
-  @Override
   public ReportType getType() {
     return ReportType.ACCOUNT;
   }
@@ -46,5 +26,17 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   @Override
   public ReportFormat getFormat() {
     return ReportFormat.EXCEL;
+  }
+
+  @Override
+  public Resource export(AccountReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
+
+    return fileUtil.export(getFormat(), generateFileName(), getTemplateFile(), customData(data));
+  }
+
+  private Map<String, Object> customData(AccountReportDTO accountReportDTO) {
+    return Map.of("customer", accountReportDTO.getCustomer(), "accounts",
+        accountReportDTO.getAccounts());
   }
 }

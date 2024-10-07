@@ -3,14 +3,15 @@ package com.ctv_it.klb.service.format;
 import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
 import java.time.LocalDateTime;
+import org.springframework.core.io.Resource;
 
 public interface ReportFormatService<T> {
-
-  byte[] export(T data);
 
   ReportType getType();
 
   ReportFormat getFormat();
+
+  Resource export(T data);
 
   // file template example: /template/excel/account.xlsx
   default String getTemplateFile() {

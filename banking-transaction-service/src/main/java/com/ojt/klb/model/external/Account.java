@@ -1,7 +1,6 @@
 package com.ojt.klb.model.external;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +15,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class Account {
-
-//    @JsonIgnore
-//    private Long id;
 
     private String fullName;
 

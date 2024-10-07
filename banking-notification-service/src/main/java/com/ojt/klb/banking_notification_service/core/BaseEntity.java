@@ -45,4 +45,9 @@ public abstract class BaseEntity {
     @Column(name = "status", nullable = false)
     @Convert(converter = Status.Converter.class)
     private Status status = Status.ACTIVE;
+
+    public BaseEntity(String createdBy, LocalDateTime createdAt) {
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+    }
 }

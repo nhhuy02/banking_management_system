@@ -5,19 +5,21 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
@@ -29,18 +31,20 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class FileUtil {
 
   private final TemplateEngine templateEngine;
-  private static final String PATTERN = "P@TTERN";
   private static final String BASE_DIR = "./banking-report-service/file/";
 
-  public byte[] export(ReportFormat reportFormat, String fileName, String templateName,
+  public Resource export(ReportFormat reportFormat, String fileName, String templateName,
       Map<String, Object> data) {
     String targetFile = BASE_DIR + fileName;
 
     try {
       ensureDirectoryExists(targetFile);
-      return processFileExport(reportFormat, templateName, data, targetFile);
+      processFileExport(reportFormat, templateName, data, targetFile);
+      return readFile(targetFile);
     } catch (IOException e) {
-      log.error("Error occurred while exporting the report: {}", e.getMessage(), e);
+      log.error("Export(format={}, filename={}, templateName={}, data={}) failed: \n{}",
+          reportFormat, fileName, templateName, data, e.toString());
+
       throw new InternalError();
     }
   }
@@ -50,38 +54,31 @@ public class FileUtil {
     File parentDir = file.getParentFile();
 
     if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
-      log.error("Failed to create directories: {}", parentDir.getAbsolutePath());
-      throw new IOException("Failed to create directories");
+      log.error("Failed to create directories for targetFile: {}", targetFile);
+      throw new InternalError();
     }
-
-    log.info("Directories are already existed: {}", parentDir);
+    log.info("Directories checked or created: {} for file: {}", parentDir, targetFile);
   }
 
-  private byte[] processFileExport(ReportFormat reportFormat, String templateName,
+  private void processFileExport(ReportFormat reportFormat, String templateName,
       Map<String, Object> data, String targetFile) throws IOException {
-
     File target = new File(targetFile);
 
     try (OutputStream outStream = new FileOutputStream(target)) {
-      log.info("File exporting is processing");
-
+      log.info("File export in progress for format: {}", reportFormat);
       writeFileBasedOnFormat(reportFormat, outStream, templateName, data);
-      log.info("File is exported successfully");
-
-      return readFile(targetFile);
-    } catch (IOException e) {
-      log.error("Error occurred while exporting the file: {}", e.getMessage(), e);
-      // Delete the partially created file to prevent incomplete file issues
-      if (target.exists() && !target.delete()) {
-        log.error("Failed to delete incomplete file: {}", targetFile);
-      }
-      throw new InternalError();
+      log.info("File export completed successfully");
     } catch (Exception e) {
-      log.error("General error while exporting the file: {}", e.getMessage(), e);
-      if (target.exists() && !target.delete()) {
-        log.error("Failed to delete incomplete file: {}", targetFile);
-      }
+      log.error("File export failed: {}", e.getMessage());
+      cleanupIncompleteFile(targetFile);
       throw new InternalError();
+    }
+  }
+
+  private void cleanupIncompleteFile(String targetFile) {
+    File target = new File(targetFile);
+    if (target.exists() && !target.delete()) {
+      log.error("Failed to delete incomplete file: {}", targetFile);
     }
   }
 
@@ -95,59 +92,47 @@ public class FileUtil {
         writeFilePDF(outStream, templateName, data);
         break;
       default:
-        log.error("Unsupported to export for type {}", reportFormat.name());
+        log.error("Unsupported export format: {}", reportFormat.name());
         throw new InternalError();
     }
   }
 
-  private void writeFilePDF(OutputStream outStream, String pathTemplateName,
-      Map<String, Object> data) {
-    log.info("Start creation of PDF for template: {}", pathTemplateName);
-    try (InputStream input = getTemplateInputStream(pathTemplateName);
+  private void writeFilePDF(OutputStream outStream, String templateName, Map<String, Object> data) {
+    log.info("Generating PDF for template: {}", templateName);
+    try (InputStream input = getTemplateInputStream(templateName);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-      log.info("Data: {}", data);
 
-      String processedHtml = processHtmlTemplate(pathTemplateName, data);
-      log.info("Processed HTML: {}", processedHtml);
-
+      String processedHtml = processHtmlTemplate(templateName, data);
       ITextRenderer renderer = createPdfRenderer(processedHtml);
+
       renderer.createPDF(byteArrayOutputStream, false);
       renderer.finishPDF();
 
-      byte[] pdfBytes = byteArrayOutputStream.toByteArray();
-      log.info("pdfBytes: {}", pdfBytes);
-      outStream.write(pdfBytes);
-
-      log.info("PDF created successfully for template {}", pathTemplateName);
-    } catch (IOException e) {
-      log.error("IOException while processing template {}: {}", pathTemplateName, e.getMessage(),
-          e);
-      throw new InternalError();
+      outStream.write(byteArrayOutputStream.toByteArray());
+      log.info("PDF generation completed for template: {}", templateName);
     } catch (Exception e) {
-      log.error("General error while generating the PDF document: {}", e.getMessage(), e);
+      log.error("PDF generation failed for template: {}\n{}", templateName, e.toString());
       throw new InternalError();
     }
   }
 
-
-  private String processHtmlTemplate(String pathTemplateName, Map<String, Object> data) {
+  private String processHtmlTemplate(String templateName, Map<String, Object> data) {
     org.thymeleaf.context.Context context = new org.thymeleaf.context.Context();
-    data.forEach((key, value) -> context.setVariable(key,
-        value instanceof String ? new String(((String) value).getBytes(), StandardCharsets.UTF_8)
-            : value));
-    return templateEngine.process(pathTemplateName, context);
+    data.forEach((key, value) -> context.setVariable(key, value instanceof String
+        ? new String(((String) value).getBytes(), StandardCharsets.UTF_8) : value));
+
+    return templateEngine.process(templateName, context);
   }
 
   private ITextRenderer createPdfRenderer(String processedHtml)
       throws DocumentException, IOException {
 
     ITextRenderer renderer = new ITextRenderer();
-
     ITextFontResolver fontResolver = renderer.getFontResolver();
     addFonts(fontResolver);
-
     renderer.setDocumentFromString(processedHtml, null);
     renderer.layout();
+
     return renderer;
   }
 
@@ -156,91 +141,49 @@ public class FileUtil {
         BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
   }
 
-  private void writeFileExcel(OutputStream outStream, String pathTemplateName,
+  private void writeFileExcel(OutputStream outStream, String templateName,
       Map<String, Object> data) {
 
-    log.debug("Start creation of Excel");
-    try (InputStream input = getTemplateInputStream(pathTemplateName)) {
+    log.info("Generating Excel for template: {}", templateName);
+    try (InputStream input = getTemplateInputStream(templateName)) {
       Context context = new Context();
       data.forEach(context::putVar);
+
       JxlsHelper.getInstance().processTemplate(input, outStream, context);
-      log.info("Excel created successfully for template {}", pathTemplateName);
-    } catch (IOException e) {
-      log.error("IOException while processing template {}: {}", pathTemplateName, e.getMessage(),
-          e);
-      throw new InternalError();
+      log.info("Excel generation completed for template: {}", templateName);
     } catch (Exception e) {
-      log.error("General error while generating the Excel document: {}", e.getMessage(), e);
+      log.error("Excel generation failed for template: {}, error: {}", templateName, e.toString());
+
       throw new InternalError();
     }
   }
 
-  private InputStream getTemplateInputStream(String pathTemplateName) {
-    InputStream input = getClass().getResourceAsStream(pathTemplateName);
+  private InputStream getTemplateInputStream(String templateName) {
+    InputStream input = getClass().getResourceAsStream(templateName);
     if (input == null) {
-      log.error("Template file not found for {}", pathTemplateName);
+      log.error("Template file not found: {}", templateName);
       throw new InternalError();
     }
     return input;
   }
 
-  private byte[] readFile(String filePath) throws IOException {
-    File file = new File(filePath);
-    try (FileInputStream fis = new FileInputStream(file);
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-      byte[] data = new byte[1024];
-      int bytesRead;
-      while ((bytesRead = fis.read(data, 0, data.length)) != -1) {
-        buffer.write(data, 0, bytesRead);
-      }
-      return buffer.toByteArray();
-    }
-  }
-
-  public byte[] addFileNameToData(byte[] data, String fileName) {
-    byte[] fileNameBytes = fileName.getBytes(StandardCharsets.UTF_8);
-    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
-    byte[] combined = new byte[data.length + patternBytes.length + fileNameBytes.length];
-
-    System.arraycopy(data, 0, combined, 0, data.length);
-    System.arraycopy(patternBytes, 0, combined, data.length, patternBytes.length);
-    System.arraycopy(fileNameBytes, 0, combined, data.length + patternBytes.length,
-        fileNameBytes.length);
-
-    return combined;
-  }
-
-  public Map<String, Object> splitDataAndFileName(byte[] combined) {
-    byte[] patternBytes = PATTERN.getBytes(StandardCharsets.UTF_8);
-    int patternIndex = indexOf(combined, patternBytes);
-
-    if (patternIndex == -1) {
-      log.error("PATTERN {} is not found", PATTERN);
+  public Resource readFile(String fileName) {
+    if (fileName == null || fileName.isEmpty()) {
+      log.warn("File name is null or empty for download.");
       throw new InternalError();
     }
 
-    byte[] data = Arrays.copyOfRange(combined, 0, patternIndex);
-    byte[] fileNameBytes = Arrays.copyOfRange(combined, patternIndex + patternBytes.length,
-        combined.length);
-    String fileName = new String(fileNameBytes, StandardCharsets.UTF_8);
-
-    return Map.of("data", data, "fileName", fileName);
-  }
-
-  // find index of target in array
-  private int indexOf(byte[] array, byte[] target) {
-    for (int i = 0; i <= array.length - target.length; i++) {
-      boolean found = true;
-      for (int j = 0; j < target.length; j++) {
-        if (array[i + j] != target[j]) {
-          found = false;
-          break;
-        }
+    try {
+      Resource resource = new UrlResource(Paths.get(fileName).toUri());
+      if (!resource.exists() || !resource.isReadable()) {
+        log.warn("File not found or unreadable: {}", fileName);
+        throw new InternalError();
       }
-      if (found) {
-        return i;
-      }
+      log.info("File read successfully: {}", fileName);
+      return resource;
+    } catch (MalformedURLException e) {
+      log.error("Malformed URL for file: {}, error: {}", fileName, e.toString());
+      throw new InternalError();
     }
-    return -1;
   }
 }

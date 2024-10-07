@@ -23,11 +23,11 @@ import lombok.ToString;
 public class ReportRequestDTO {
 
   @NotNull
-  @Schema(implementation = ReportType.class)
+  @Schema(description = "Type of reporting", implementation = ReportType.class)
   private ReportType reportType;
 
   @NotNull
-  @Schema(implementation = ReportFormat.class)
+  @Schema(description = "Format of reporting export",implementation = ReportFormat.class)
   private ReportFormat reportFormat;
 
   @Schema(
