@@ -8,6 +8,7 @@ import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanApplicationNotification;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDisbursementNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanOverdue;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransData;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface NotificationService {
     void sendMailLoanApplication(LoanApplicationNotification loanDto);
     void sendMailTrans(TransData transData);
     void sendMailLoanDisbursement(LoanDisbursementNotification loanDisbursementNotification);
+    void sendMailLoanOverdue(LoanOverdue loanOverdue);
+    void sendMailVerifyPassword(OtpEmailRequestDto otpEmailRequestDto);
 }

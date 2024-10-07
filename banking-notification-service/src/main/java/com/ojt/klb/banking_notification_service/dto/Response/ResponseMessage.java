@@ -10,7 +10,7 @@ public enum ResponseMessage {
     VALIDATED_ERROR(2002, "VALIDATED_ERROR"),
     VND(204, " VND"),
     NO_REPLY(205, "[NoReply-JD]"),
-    BALANCE_CHANGE(206, "BALANCE_CHANGE"),
+    BALANCE_CHANGE(206, "BALANCE CHANGE"),
     INCREASE(207, "+"),
     DECREASE(208, "-"),
     CONTENT_BALANCE(209, "Biến động số dư: TK "),
@@ -19,6 +19,12 @@ public enum ResponseMessage {
     DEPOSIT(212, "NẠP TIỀN"),
     WITHDRAWAL(213, "RÚT TIỀN"),
     PENDING(214, "PENDING"),
+    REVIEWING(215, "REVIEWING"),
+    APPROVED(216, "APPROVED"),
+    CANCELLED(217, "CANCELLED"),
+    LOAN_DISBURSEMENT(218, "LOAN DISBURSEMENT"),
+    LOAN_PAYMENT_OVERDUE(219, "LOAN PAYMENT OVERDUE"),
+
     ;
     private final int statusCode;
     private final String statusCodeValue;

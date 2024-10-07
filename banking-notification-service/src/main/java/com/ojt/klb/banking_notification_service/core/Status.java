@@ -43,8 +43,8 @@ public enum Status {
     @Schema(description = "Đang hiển thị")
     SHOWING(3),
 
-    @Schema(description = "Chờ xác thực")
-    CONFIRMING(4),
+    @Schema(description = "Đang xem xét")
+    REVIEWING(4),
 
     @Schema(description = "Chưa hiển thị")
     NOTDISPLAYED(5),
@@ -52,14 +52,14 @@ public enum Status {
     @Schema(description = "Gửi")
     SEND(6),
 
-    @Schema(description = "Đã hủy")
-    CANCEL(7),
+    @Schema(description = "Từ chối")
+    CANCELLED(7),
 
     @Schema(description = "Đã trả")
     RETURNED(8),
 
     @Schema(description = "Đã duyệt")
-    ACCEPTED(9),
+    APPROVED(9),
 
     @Schema(description = "Chờ gửi")
     SENDING(10),

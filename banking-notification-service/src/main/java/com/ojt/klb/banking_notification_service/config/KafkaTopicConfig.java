@@ -5,6 +5,7 @@ import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanApplicationNotification;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDisbursementNotification;
+import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanOverdue;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransData;
 import com.ojt.klb.banking_notification_service.dto.consumer.trans.TransactionInternalData;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -45,6 +46,11 @@ public class KafkaTopicConfig {
     @Bean
     public ConsumerFactory<String, LoanDisbursementNotification> loanDisbursementNotificationConsumerFactory() {
         return createConsumerFactory(LoanDisbursementNotification.class, "loan_group");
+    }
+
+    @Bean
+    public ConsumerFactory<String, LoanOverdue> loanOverdueConsumerFactory() {
+        return createConsumerFactory(LoanOverdue.class, "loan_group");
     }
 
     @Bean
@@ -99,6 +105,13 @@ public class KafkaTopicConfig {
     public ConcurrentKafkaListenerContainerFactory<String, LoanDisbursementNotification> loanDisbursementNotificationConcurrentKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, LoanDisbursementNotification> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(loanDisbursementNotificationConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, LoanOverdue> loanOverdueConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, LoanOverdue> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(loanOverdueConsumerFactory());
         return factory;
     }
 
