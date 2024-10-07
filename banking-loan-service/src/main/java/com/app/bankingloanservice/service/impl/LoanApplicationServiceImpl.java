@@ -204,6 +204,21 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         LoanApplication savedApplication = loanApplicationRepository.save(loanApplication);
         log.info("Loan application with ID {} updated to status {}", applicationId, newStatus);
 
+        // Get Account info from Account Service:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+        // Kafka producer
+        LoanApplicationProducer loanApplicationProducer = new LoanApplicationProducer();
+        loanApplicationProducer.setLoanApplicationId(loanApplication.getLoanApplicationId());
+        loanApplicationProducer.setAmounts(loanApplication.getDesiredLoanAmount());
+        loanApplicationProducer.setLoanTermMonths(loanApplication.getDesiredLoanTermMonths());
+        loanApplicationProducer.setStatus(String.valueOf(loanApplication.getApplicationStatus()));
+
+        loanApplicationProducer.setCustomerId(accountInfo.getCustomerId());
+        loanApplicationProducer.setEmail(accountInfo.getEmail());
+        loanApplicationProducer.setCustomerName(accountInfo.getFullName());
+        loanApplicationProducer.setSubmissionDate(loanApplication.getSubmissionDate());
+        kafkaTemplate.send(TOPIC, loanApplicationProducer);
+
         // Return the updated response DTO
         return generateLoanApplicationResponse(savedApplication);
     }

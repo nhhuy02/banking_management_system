@@ -1,24 +1,24 @@
 package com.ojt.klb.banking_notification_service.dto.consumer.loan;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Getter
-public class LoanDueDate {
-    private String loanContractNo;
-    private Long customerId;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoanOverdue {
     private Long loanRepaymentId;
+    private String loanContractNo;
     private Long accountId;
+    private Long customerId;
     private String customerName;
     private String email;
     private LocalDate dueDate;
-    private BigDecimal amountDue;
+    private LocalDate overdueDate;
+    private BigDecimal lateInterestAmount;
+    private BigDecimal totalAmountDue;
 }

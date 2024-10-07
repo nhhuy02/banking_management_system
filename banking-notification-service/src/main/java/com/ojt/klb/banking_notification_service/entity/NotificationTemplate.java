@@ -7,12 +7,26 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @Data
 @Table(name = "notification_template")
 @TableComment("Mẫu thông báo")
 public class NotificationTemplate extends BaseEntity {
+
+    public NotificationTemplate(String templateName, String subjectTemplate) {
+        this.templateName = templateName;
+        this.subjectTemplate = subjectTemplate;
+    }
+
+    public NotificationTemplate(String createdBy, LocalDateTime createdAt, String templateName, String subjectTemplate) {
+        super(createdBy, createdAt);
+        this.templateName = templateName;
+        this.subjectTemplate = subjectTemplate;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,5 +38,7 @@ public class NotificationTemplate extends BaseEntity {
     @Column(name = "subject_template")
     @ColumnComment("Tiêu đề thông báo")
     private String subjectTemplate;
+
+
 
 }

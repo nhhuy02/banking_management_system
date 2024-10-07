@@ -132,12 +132,12 @@ public class JwtInterceptor implements HandlerInterceptor {
                         }
                     }
 
-//                    if (targetUrl != null) {
-//                        url = targetUrl + url;
-//                        logger.info("New URL: {}", url);
-//                        response.sendRedirect(url);
-//                        return false;
-//                    }
+                    if (targetUrl != null) {
+                        url = targetUrl + url;
+                        logger.info("New URL: {}", url);
+                        response.sendRedirect(url);
+                        return false;
+                    }
                 }
             }
 
