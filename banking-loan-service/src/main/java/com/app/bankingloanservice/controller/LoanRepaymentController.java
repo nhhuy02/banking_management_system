@@ -72,10 +72,9 @@ public class LoanRepaymentController {
     /**
      * Endpoint to make a payment for a specific repayment schedule.
      *
-     * @param loanId           ID of the loan
-     * @param repaymentId      ID of the repayment schedule
-     * @param repaymentRequest Payment data
-     * @return Success message for repayment
+     * @param loanId      ID of the loan
+     * @param repaymentId ID of the repayment schedule
+     * @return Repayment details including transaction reference
      */
     @PostMapping("/loans/{loanId}/repayments/{repaymentId}/pay")
     @Operation(summary = "Make a Repayment", description = "Make a payment for a specific repayment schedule.")
@@ -90,27 +89,24 @@ public class LoanRepaymentController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    public ResponseEntity<ApiResponseWrapper<Void>> makeRepayment(
+    public ResponseEntity<ApiResponseWrapper<LoanRepaymentResponse>> makeRepayment(
             @Parameter(description = "ID of the loan", required = true)
             @PathVariable Long loanId,
 
             @Parameter(description = "ID of the repayment schedule", required = true)
-            @PathVariable Long repaymentId,
-
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "RepaymentRequest contains payment details",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = RepaymentRequest.class)))
-            @RequestBody RepaymentRequest repaymentRequest) {
+            @PathVariable Long repaymentId) {
 
         log.info("Making repayment for loanId: {}, repaymentId: {}", loanId, repaymentId);
-        loanRepaymentService.makeRepayment(loanId, repaymentId, repaymentRequest);
 
-        ApiResponseWrapper<Void> response = new ApiResponseWrapper<>(
+        // Process loan payments
+        LoanRepaymentResponse repaymentResponse = loanRepaymentService.makeRepayment(loanId, repaymentId);
+
+        // Return response
+        ApiResponseWrapper<LoanRepaymentResponse> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 "Repayment made successfully.",
-                null
+                repaymentResponse
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

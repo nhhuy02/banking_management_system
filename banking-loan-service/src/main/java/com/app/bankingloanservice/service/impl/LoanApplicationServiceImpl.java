@@ -51,10 +51,19 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         // Convert DTO to Entity
         LoanApplication loanApplication = loanApplicationMapper.toEntity(loanApplicationRequest);
 
+        // Get Account info from Account Service, throws exception if does not exist:
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+
         // Get LoanType
         LoanType loanType = loanTypeService.getLoanTypeById(loanApplicationRequest.getLoanTypeId());
         loanApplication.setLoanType(loanType);
         log.debug("Retrieved LoanType: {}", loanType);
+
+        // Check if Loan Type is active
+        if (!loanType.getIsActive()) {
+            log.error("Loan type is not active!");
+            throw new InvalidLoanApplicationException("Loan type is not active.");
+        }
 
         // Check to see if there is any Collateral (if Loan Type requires it)
         if (loanType.getRequiresCollateral() && loanApplicationRequest.getCollateralRequest() == null) {
@@ -93,9 +102,6 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
         // Create a DTO to return the saved Loan Application
         LoanApplicationResponse loanApplicationResponse = generateLoanApplicationResponse(loanApplication);
-
-        // Get Account info from Account Service:
-        AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
 
         // Kafka producer
         LoanApplicationProducer loanApplicationProducer = new LoanApplicationProducer();
