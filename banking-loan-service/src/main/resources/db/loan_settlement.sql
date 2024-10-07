@@ -1,0 +1,3 @@
+insert into loan_service.loan_settlement (loan_settlement_id, loan_id, settlement_date, past_due_interest_amount, late_payment_interest_amount, prepayment_penalty_amount, settlement_amount, settlement_status, created_by, created_date, last_modified_by, last_modified_date)
+values  (1, 1, '2034-10-01', 0.00, 0.00, 0.00, 300000000.00, 'ON_TIME', 'SYSTEM', '2024-10-03 03:29:21', 'SYSTEM', '2024-10-03 03:29:21'),
+        (2, 2, '2028-11-01', 0.00, 0.00, 0.00, 150000000.00, 'ON_TIME', 'SYSTEM', '2024-10-03 03:29:21', 'SYSTEM', '2024-10-03 03:29:21');

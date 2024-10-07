@@ -219,7 +219,7 @@ public class LoanApplicationController {
                     )
             }
     )
-    @GetMapping("/loans")
+    @GetMapping
     public ResponseEntity<ApiResponseWrapper<List<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
             @Parameter(description = "The ID of the account to fetch loan applications", required = true)
             @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId) {

@@ -33,6 +33,12 @@ public class LoanRepayment extends AuditModel {
     private Loan loan;
 
     /**
+     * The account ID used for the repayment, if applicable.
+     */
+    @Column(name = "account_id")
+    private Long accountId;
+
+    /**
      * The principal amount to be repaid in this schedule.
      */
     @Column(name = "principal_amount", nullable = false)
@@ -69,10 +75,16 @@ public class LoanRepayment extends AuditModel {
     private LocalDate actualPaymentDate;
 
     /**
-     * The account ID used for the repayment, if applicable.
+     * The reference ID for the transaction related to the repayment.
      */
-    @Column(name = "account_id")
-    private Long accountId;
+    @Column(name = "transaction_reference")
+    private String transactionReference;
+
+    /**
+     * Indicates whether the payment is late.
+     */
+    @Column(name = "is_late", nullable = false)
+    private Boolean isLate;
 
     /**
      * The current status of the repayment schedule.
@@ -80,12 +92,6 @@ public class LoanRepayment extends AuditModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
-
-    /**
-     * Indicates whether the payment is late.
-     */
-    @Column(name = "is_late", nullable = false)
-    private Boolean isLate;
 
     @Transient
     public BigDecimal getTotalAmount() {
