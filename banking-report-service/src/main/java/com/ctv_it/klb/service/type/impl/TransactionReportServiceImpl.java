@@ -41,8 +41,8 @@ public class TransactionReportServiceImpl implements ReportTypeService<Transacti
 
     TransactionFilterDTO transactionFilters = (TransactionFilterDTO) reportFilterDTO;
 
-    CustomerInfoDTO customer = fetchCustomerByAccountId(accountId);
-    AccountInfoDTO account = fetchAccountById(accountId);
+    CustomerInfoDTO customer = fetchCustomerServiceFC.fetchCustomerByAccountId(accountId);
+    AccountInfoDTO account = fetchAccountServiceFC.fetchAccountById(accountId);
     List<TransactionInfoDTO> transactions = search(account.getNumber(), transactionFilters);
 
     return TransactionReportDTO.builder()
@@ -50,24 +50,6 @@ public class TransactionReportServiceImpl implements ReportTypeService<Transacti
         .account(account)
         .transactions(transactions)
         .build();
-  }
-
-  private CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
-    log.info("Fetching customer data for accountId: {}", accountId);
-    FetchCustomerDataResponseDTO data = fetchCustomerServiceFC.findByAccountId(accountId);
-    CustomerInfoDTO customer = fetchCustomerServiceFC.map(data);
-    log.info("Mapped customer data: {}", customer);
-    return customer;
-  }
-
-  private AccountInfoDTO fetchAccountById(long accountId) {
-    log.info("Fetching account by accountId: {}", accountId);
-    FetchAccountDataResponseDTO data = fetchAccountServiceFC.getAccountById(accountId);
-    AccountInfoDTO account = fetchAccountServiceFC.map(data);
-    account.setNo(1L);
-    account.setType("Tài khoản thanh toán");
-    log.info("Mapped account data: {}", account);
-    return account;
   }
 
   private List<TransactionInfoDTO> search(

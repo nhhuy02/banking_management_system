@@ -3,8 +3,11 @@ package com.ctv_it.klb.service.fetch;
 import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
 import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataResponseDTO;
+import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.enumeration.BaseStatus;
 import com.ctv_it.klb.feignClient.AccountServiceFC;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,5 +58,43 @@ public class FetchAccountServiceFC {
         .status(
             BaseStatus.valueOf(fetchDataResponseDTO.getStatus().toUpperCase()).getValue())
         .build();
+  }
+
+  public List<AccountInfoDTO> fetchAccounts(Long accountId, AccountFilterDTO accountFilterDTO) {
+    log.info("Fetching accounts(accountId: {}, accountFilterDTO: {})", accountId,
+        accountFilterDTO);
+
+    List<AccountInfoDTO> accounts = new ArrayList<>();
+    accounts.add(fetchAccountById(accountId));
+
+    if (accountFilterDTO != null && accountFilterDTO.getSavingAccountId() != null) {
+      log.info("Fetching savingAccountId(savingAccountId={})",
+          accountFilterDTO.getSavingAccountId());
+      accounts.add(fetchSavingAccountById(accountFilterDTO.getSavingAccountId()));
+    }
+
+    log.info("Mapped accounts: {}", accounts);
+    return accounts;
+  }
+
+  public AccountInfoDTO fetchAccountById(long accountId) {
+    log.info("Fetching account(accountId={})", accountId);
+    FetchAccountDataResponseDTO data = getAccountById(accountId);
+    AccountInfoDTO account = map(data);
+    account.setNo(1L);
+    account.setType("Tài khoản thanh toán");
+    log.info("Mapped account data: {}", account);
+    return account;
+  }
+
+  public AccountInfoDTO fetchSavingAccountById(long savingAccountId) {
+    log.info("Fetching saving account by savingAccountId: {}", savingAccountId);
+
+    FetchAccountDataResponseDTO data = getSavingsAccountById(savingAccountId);
+    AccountInfoDTO savingAccount = map(data);
+    savingAccount.setNo(2L);
+    savingAccount.setType("Tài khoản tiết kiệm");
+    log.info("Mapped saving account data: {}", savingAccount);
+    return savingAccount;
   }
 }

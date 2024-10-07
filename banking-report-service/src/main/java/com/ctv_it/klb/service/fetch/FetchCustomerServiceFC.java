@@ -45,4 +45,12 @@ public class FetchCustomerServiceFC {
         .kycDocumentNumber(fetchDataResponseDTO.getKyc().getDocumentNumber())
         .build();
   }
+
+  public CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
+    log.info("Fetching customer data for accountId: {}", accountId);
+    FetchCustomerDataResponseDTO data = findByAccountId(accountId);
+    CustomerInfoDTO customer = map(data);
+    log.info("Mapped customer data: {}", customer);
+    return customer;
+  }
 }
