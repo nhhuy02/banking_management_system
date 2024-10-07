@@ -18,14 +18,17 @@ public class LoanRepaymentResponse {
 
     private Long loanPaymentId;
     private Long loanId;
+    private String loanContractNo;
+    private String customerFullName;
+    private String accountNumber;
     private Long principalAmount;
     private Long interestAmount;
     private Long latePaymentInterestAmount;
     private Long totalAmount;
     private LocalDate paymentDueDate;
     private LocalDate actualPaymentDate;
-    private Long accountId;
-    private PaymentStatus paymentStatus;
+    private String transactionReference;
     private Boolean isLate;
+    private PaymentStatus paymentStatus;
 
 }

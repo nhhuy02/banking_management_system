@@ -1,0 +1,4 @@
+insert into loan_service.loan_type (loan_type_id, loan_type_name, annual_interest_rate, past_due_interest_rate, late_payment_interest_rate, prepayment_penalty_rate, max_loan_amount, max_loan_term_months, requires_collateral, review_time_days, description, is_active, created_by, created_date, last_modified_by, last_modified_date)
+values  (1, 'Home Loan', 7.50, 150.00, 10.00, 3.00, 500000000.00, 240, 1, 14, 'Loan for purchasing or renovating a home.', 1, 'SYSTEM', '2024-10-03 03:29:21', 'SYSTEM', '2024-10-03 03:29:21'),
+        (2, 'Car Loan', 9.00, 160.00, 12.00, 4.00, 300000000.00, 60, 1, 7, 'Loan for purchasing a vehicle.', 1, 'SYSTEM', '2024-10-03 03:29:21', 'SYSTEM', '2024-10-03 03:29:21'),
+        (3, 'Personal Loan', 5.50, 2.00, 1.50, 0.50, 500000000.00, 60, 1, 3, 'This loan type is suitable for personal use.', 1, 'SYSTEM', '2024-10-04 08:36:09', 'SYSTEM', '2024-10-04 08:36:09');

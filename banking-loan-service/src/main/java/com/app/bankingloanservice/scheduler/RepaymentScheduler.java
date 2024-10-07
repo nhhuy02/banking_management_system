@@ -59,9 +59,9 @@ public class RepaymentScheduler {
     }
 
     /**
-     * Scheduler runs every day at 1 A.M to check for upcoming due payments.
+     * Scheduler runs every day at 8 A.M to check for upcoming due payments.
      */
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void checkUpcomingDueDates() {
         LocalDate today = LocalDate.now();
         LocalDate upcomingDate = today.plusDays(3); // Example: notify 3 days before due date

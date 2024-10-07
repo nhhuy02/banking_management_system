@@ -23,37 +23,49 @@ public class ReducingBalanceRepaymentCalculator implements RepaymentCalculator {
     public List<LoanRepayment> calculateRepaymentSchedule(Loan loan) {
         List<LoanRepayment> repaymentSchedule = new ArrayList<>();
 
+        // Get loan details
         BigDecimal principal = loan.getLoanAmount();
         int term = loan.getLoanTermMonths();
         LocalDate disbursementDate = loan.getDisbursementDate();
 
+        // Convert annual interest rate to monthly interest rate
         BigDecimal annualInterestRate = loan.getCurrentInterestRate().getAnnualInterestRate();
         BigDecimal monthlyInterestRate = annualInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP)
-                .divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP); // Convert from % to decimal
+                .divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP); // Convert from percentage to decimal
 
-        BigDecimal principalPerMonth = principal.divide(BigDecimal.valueOf(term), 2, RoundingMode.HALF_UP);
+        // Calculate principal to pay each month
+        BigDecimal principalPerMonth = principal.divide(BigDecimal.valueOf(term), 0, RoundingMode.HALF_UP); // No decimal places
         BigDecimal remainingBalance = principal;
 
+        // Loop through each month to create repayment schedule
         for (int i = 1; i <= term; i++) {
             LocalDate dueDate = disbursementDate.plusMonths(i);
-            BigDecimal interest = remainingBalance.multiply(monthlyInterestRate).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal totalAmount = principalPerMonth.add(interest).setScale(2, RoundingMode.HALF_UP);
 
+            // Calculate interest for the current remaining balance and round to whole number
+            BigDecimal interest = remainingBalance.multiply(monthlyInterestRate).setScale(0, RoundingMode.HALF_UP);
+
+            // Calculate total amount to be paid this month (principal + interest)
+            BigDecimal totalAmount = principalPerMonth.add(interest).setScale(0, RoundingMode.HALF_UP);
+
+            // Create LoanRepayment entry for this month
             LoanRepayment repayment = LoanRepayment.builder()
                     .loan(loan)
-                    .principalAmount(principalPerMonth)
-                    .interestAmount(interest)
-                    .latePaymentInterestAmount(BigDecimal.ZERO)
-                    .totalAmount(totalAmount)
-                    .paymentDueDate(dueDate)
-                    .paymentStatus(PaymentStatus.PENDING)
-                    .isLate(false)
+                    .accountId(loan.getAccountId())
+                    .principalAmount(principalPerMonth) // Monthly principal repayment
+                    .interestAmount(interest) // Monthly interest amount
+                    .latePaymentInterestAmount(BigDecimal.ZERO) // Default late payment interest as zero
+                    .totalAmount(totalAmount) // Total payment for this month
+                    .paymentDueDate(dueDate) // Due date for this payment
+                    .paymentStatus(PaymentStatus.PENDING) // Set status to pending
+                    .isLate(false) // Initially, no late payment
                     .build();
-            repaymentSchedule.add(repayment);
+            repaymentSchedule.add(repayment); // Add repayment to schedule
 
-            remainingBalance = remainingBalance.subtract(principalPerMonth);
+            // Update remaining balance after the principal payment
+            remainingBalance = remainingBalance.subtract(principalPerMonth).setScale(0, RoundingMode.HALF_UP);
         }
 
+        // Save the repayment schedule
         return loanRepaymentRepository.saveAll(repaymentSchedule);
     }
 }

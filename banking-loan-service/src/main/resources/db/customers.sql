@@ -1,0 +1,3 @@
+insert into banking_customer_service.customers (id, account_id, created_at, current_address, date_of_birth, email, full_name, gender, permanent_address, phone_number, updated_at, kyc_id)
+values  (1, 66, '2024-10-03 10:32:21.543200', 'Ha Noi', '2024-10-03', 'chienma@mail.com', 'Chien Ma', 'MALE', 'Ha Noi', '0123456678', '2024-10-03 10:37:54.620478', 1),
+        (2, 67, '2024-10-03 11:26:54.649291', 'Ha Noi', '2024-10-03', 'tttd@mail.com', 'Trung Tam Tin Dung', 'MALE', 'Ha Noi', '0101010101', '2024-10-03 11:29:30.742426', 2);

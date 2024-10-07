@@ -64,17 +64,17 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
   // Find loans with renewal count greater than a specific value
   List<Loan> findByRenewalCountGreaterThan(Integer count);
 
-  @Query(value = "SELECT * FROM loan l "
-      + "WHERE l.account_id = :accountId "
-      + "AND (:loanTypeId IS NULL OR l.loan_type_id = :loanTypeId) "
-      + "AND (:loanRepaymentScheduleFrom IS NULL OR DAY(l.disbursement_date) >= DAY(:loanRepaymentScheduleFrom)) "
-      + "AND (:loanRepaymentScheduleTo IS NULL OR DAY(l.disbursement_date) <= DAY(:loanRepaymentScheduleTo)) "
-      + "AND (:loanStatus IS NULL OR UPPER(l.status) IN (:loanStatus))",
-      nativeQuery = true)
+  @Query(value = "SELECT l FROM Loan l "
+      + "WHERE l.accountId = :accountId "
+      + "AND (:loanTypeId IS NULL OR l.loanType.loanTypeId = :loanTypeId) "
+      + "AND (:loanRepaymentScheduleFrom IS NULL OR DAY(l.disbursementDate) >= DAY(:loanRepaymentScheduleFrom)) "
+      + "AND (:loanRepaymentScheduleTo IS NULL OR DAY(l.disbursementDate) <= DAY(:loanRepaymentScheduleTo)) "
+      + "AND (:loanStatus IS NULL OR UPPER(l.status) IN (:loanStatus))")
   List<Loan> filters(
       @Param("accountId") long accountId,
       @Param("loanTypeId") Long loanTypeId,
       @Param("loanRepaymentScheduleFrom") LocalDate loanRepaymentScheduleFrom,
       @Param("loanRepaymentScheduleTo") LocalDate loanRepaymentScheduleTo,
       @Param("loanStatus") Set<String> loanStatus);
+
 }

@@ -209,18 +209,19 @@ public class LoanServiceImpl implements LoanService {
       LocalDate loanRepaymentScheduleFrom, LocalDate loanRepaymentScheduleTo,
       Set<LoanStatus> loanStatus) {
 
+    Set<String> loanStatusStrings = (loanStatus == null || loanStatus.isEmpty()) ? null :
+        loanStatus.stream().map(Enum::name).collect(Collectors.toSet());
+
     List<Loan> loans = loanRepository.filters(
         accountId,
         loanTypeId,
         loanRepaymentScheduleFrom,
         loanRepaymentScheduleTo,
-        (loanStatus == null || loanStatus.isEmpty()) ? null
-            : loanStatus.stream().map(Enum::name).collect(
-                Collectors.toSet()));
+        loanStatusStrings
+    );
 
     return loans.stream().map(this::generateLoanResponse).collect(Collectors.toList());
   }
-
 
   // Method to generate contract number
   private String generateUniqueLoanContractNo() {
