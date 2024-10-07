@@ -4,8 +4,6 @@ import com.ctv_it.klb.dto.TransactionReportDTO;
 import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
 import com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataResponseDTO;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO;
 import com.ctv_it.klb.enumeration.ReportType;
@@ -35,9 +33,8 @@ public class TransactionReportServiceImpl implements ReportTypeService<Transacti
 
   @Override
   public TransactionReportDTO search(Long accountId, ReportFilterDTO reportFilterDTO) {
-    log.info(
-        "TransactionReportServiceImpl::search(accountId={}, reportFilterDTO={}) is processing",
-        accountId, reportFilterDTO);
+    log.info("Search(type={}, accountId={}, filters={}) is processing",
+        getType(), accountId, reportFilterDTO);
 
     TransactionFilterDTO transactionFilters = (TransactionFilterDTO) reportFilterDTO;
 

@@ -31,13 +31,13 @@ public class FetchTransactionServiceFC {
           .build();
 
       log.info(
-          "Fetched transaction(accountNumber={}, transactionType={}, fromDate={}, toDate={}, status={}) successfully: {}",
+          "Fetch transaction(accountNumber={}, transactionType={}, fromDate={}, toDate={}, status={}) completed successfully: \n{}",
           accountNumber, transactionType, fromDate, toDate, status, fetchDataResponseDTO);
 
       return fetchDataResponseDTO;
     } catch (Exception ex) {
       log.error(
-          "Fetch transaction(accountNumber={}, transactionType={}, fromDate={}, toDate={}, status={}) fail: {}",
+          "Fetch transaction(accountNumber={}, transactionType={}, fromDate={}, toDate={}, status={}) failed: \n{}",
           accountNumber, transactionType, fromDate, toDate, status, ex.toString());
 
       throw ex;

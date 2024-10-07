@@ -11,7 +11,9 @@ import com.ctv_it.klb.service.fetch.FetchAccountServiceFC;
 import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
 import com.ctv_it.klb.service.fetch.FetchLoanServiceFC;
 import com.ctv_it.klb.service.type.ReportTypeService;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,15 +34,14 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
   @Override
   public LoanReportDTO search(Long accountId, ReportFilterDTO reportFilterDTO) {
-    log.info(
-        "LoanReportServiceImpl::search(accountId={}, reportFilterDTO={}) is processing",
-        accountId, reportFilterDTO);
+    log.info("Search(type={}, accountId={}, filters={}) is processing",
+        getType(), accountId, reportFilterDTO);
 
     LoanFilterDTO filters = (LoanFilterDTO) reportFilterDTO;
 
     CustomerInfoDTO customer = fetchCustomerServiceFC.fetchCustomerByAccountId(accountId);
     AccountInfoDTO account = fetchAccountServiceFC.fetchAccountById(accountId);
-    List<LoanInfoDTO> loans = search(accountId);
+    List<LoanInfoDTO> loans = filters(accountId, filters);
 
     return LoanReportDTO.builder()
         .customer(customer)
@@ -49,7 +50,27 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
         .build();
   }
 
-  private List<LoanInfoDTO> search(long accountId) {
-    return fetchLoanServiceFC.fetchLoanByAccountId(accountId);
+  private List<LoanInfoDTO> filters(long accountId, LoanFilterDTO loanFilterDTO) {
+
+    Long loanTypeId = null;
+    LocalDate loanRepaymentScheduleFrom = null;
+    LocalDate loanRepaymentScheduleTo = null;
+    Set<String> loanStatus = null;
+
+    if (loanFilterDTO != null) {
+      loanTypeId = loanFilterDTO.getLoanTypeId();
+      if (loanFilterDTO.getLoanRepaymentScheduleRange() != null) {
+        loanRepaymentScheduleFrom = loanFilterDTO.getLoanRepaymentScheduleRange().getMin();
+        loanRepaymentScheduleTo = loanFilterDTO.getLoanRepaymentScheduleRange().getMax();
+      }
+      loanStatus = loanFilterDTO.getLoanStatus();
+    }
+
+    return fetchLoanServiceFC.fetchLoanByAccountId(
+        accountId,
+        loanTypeId,
+        loanRepaymentScheduleFrom,
+        loanRepaymentScheduleTo,
+        loanStatus);
   }
 }

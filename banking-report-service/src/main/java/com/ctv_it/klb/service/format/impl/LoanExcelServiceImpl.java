@@ -23,8 +23,8 @@ public class LoanExcelServiceImpl implements ReportFormatService<LoanReportDTO> 
   }
 
   @Override
-  public Resource export(LoanReportDTO reportData) {
-    log.info("LoanExcelServiceImpl::export is processing with data: {}", reportData);
+  public Resource export(LoanReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
 
     return null;
   }

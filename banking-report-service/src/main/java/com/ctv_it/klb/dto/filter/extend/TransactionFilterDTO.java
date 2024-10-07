@@ -18,14 +18,14 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "Filter for transaction reports")
 public class TransactionFilterDTO extends ReportFilterDTO {
 
-  @Schema(description = "Type of transaction (allow null)", allowableValues = {"DEPOSIT",
+  @Schema(description = "Type of transaction (null OR one of)", allowableValues = {"DEPOSIT",
       "WITHDRAWAL", "INTERNAL_TRANSFER", "EXTERNAL_TRANSFER", "UTILITY_PAYMENT"})
   private String transactionType;
 
   @Schema(description = "Transaction date range")
   private RangeDTO<LocalDate> transactionDateRange;
 
-  @Schema(description = "Status of transaction (allow null)", allowableValues = {"COMPLETED",
+  @Schema(description = "Status of transaction (null OR one of)", allowableValues = {"COMPLETED",
       "PENDING", "FAILED"})
   private String transactionStatus;
 }

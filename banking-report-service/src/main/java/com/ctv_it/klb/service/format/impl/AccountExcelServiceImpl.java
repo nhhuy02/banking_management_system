@@ -29,16 +29,14 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   }
 
   @Override
-  public Resource export(AccountReportDTO accountReportData) {
-    log.info("AccountExcelServiceImpl::export is processing for data: {}", accountReportData);
+  public Resource export(AccountReportDTO data) {
+    log.info("Export(type={}, format={}) is processing for data: {}", getType(), getFormat(), data);
 
-    return fileUtil.export(getFormat(), generateFileName(), getTemplateFile(),
-        customData(accountReportData));
+    return fileUtil.export(getFormat(), generateFileName(), getTemplateFile(), customData(data));
   }
 
   private Map<String, Object> customData(AccountReportDTO accountReportDTO) {
-    return Map.of(
-        "customer", accountReportDTO.getCustomer(),
-        "accounts", accountReportDTO.getAccounts());
+    return Map.of("customer", accountReportDTO.getCustomer(), "accounts",
+        accountReportDTO.getAccounts());
   }
 }

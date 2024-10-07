@@ -26,18 +26,14 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
 
   @Override
   public AccountReportDTO search(Long accountId, ReportFilterDTO reportFilterDTO) {
-    log.info(
-        "AccountReportServiceImpl::search(accountId={}, reportFilterDTO={}) is processing",
-        accountId, reportFilterDTO);
+    log.info("Search(type={}, accountId={}, filters={}) is processing",
+        getType(), accountId, reportFilterDTO);
 
     AccountFilterDTO accountFilters = (AccountFilterDTO) reportFilterDTO;
 
-    AccountReportDTO reportDTO = AccountReportDTO.builder()
+    return AccountReportDTO.builder()
         .customer(fetchCustomerServiceFC.fetchCustomerByAccountId(accountId))
         .accounts(fetchAccountServiceFC.fetchAccounts(accountId, accountFilters))
         .build();
-
-    log.info("AccountReportDTO successfully built: {}", reportDTO);
-    return reportDTO;
   }
 }
