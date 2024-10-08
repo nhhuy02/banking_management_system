@@ -234,10 +234,10 @@ public class LoanApplicationController {
             log.warn("No loan applications found for accountId: {}", accountId);
             message = "No loan applications found for the given accountId.";
             return new ResponseEntity<>(new ApiResponseWrapper<>(
-                    HttpStatus.NO_CONTENT.value(),
+                    HttpStatus.OK.value(),
                     true,
                     message,
-                    null), HttpStatus.NO_CONTENT);
+                    null), HttpStatus.OK);
         } else {
             log.info("Successfully retrieved loan applications for accountId: {}", accountId);
             message = "Loan applications retrieved successfully.";
