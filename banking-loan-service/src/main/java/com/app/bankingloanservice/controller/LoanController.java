@@ -1,5 +1,6 @@
 package com.app.bankingloanservice.controller;
 
+import com.app.bankingloanservice.constant.LoanStatus;
 import com.app.bankingloanservice.dto.ApiResponseWrapper;
 import com.app.bankingloanservice.dto.LoanDisbursementResponse;
 import com.app.bankingloanservice.dto.LoanRequest;
@@ -19,7 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/loan-service/loans")
@@ -177,32 +180,32 @@ public class LoanController {
                 loanDisbursementResponse
         );
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-  @GetMapping("/filters")
-  public ResponseEntity<ApiResponseWrapper<List<LoanResponse>>> filters(
-      @RequestParam long accountId,
-      @RequestParam(required = false) Long loanTypeId,
-      @RequestParam(required = false) LocalDate loanRepaymentScheduleFrom,
-      @RequestParam(required = false) LocalDate loanRepaymentScheduleTo,
-      @RequestParam(required = false) Set<LoanStatus> loanStatus
-  ) {
-    log.info(
-        "Received request to filters loan(accountId={}, loanTypeId={}, loanRepaymentScheduleFrom={}, loanRepaymentScheduleTo={}, loanStatus={})",
-        accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
+    @GetMapping("/filters")
+    public ResponseEntity<ApiResponseWrapper<List<LoanResponse>>> filters(
+            @RequestParam long accountId,
+            @RequestParam(required = false) Long loanTypeId,
+            @RequestParam(required = false) LocalDate loanRepaymentScheduleFrom,
+            @RequestParam(required = false) LocalDate loanRepaymentScheduleTo,
+            @RequestParam(required = false) Set<LoanStatus> loanStatus
+    ) {
+        log.info(
+                "Received request to filters loan(accountId={}, loanTypeId={}, loanRepaymentScheduleFrom={}, loanRepaymentScheduleTo={}, loanStatus={})",
+                accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
 
-    List<LoanResponse> loanResponses = loanService.filters(accountId, loanTypeId,
-        loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
+        List<LoanResponse> loanResponses = loanService.filters(accountId, loanTypeId,
+                loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
 
-    ApiResponseWrapper<List<LoanResponse>> response = new ApiResponseWrapper<>(
-        HttpStatus.OK.value(),
-        true,
-        "Loan filters successfully.",
-        loanResponses
-    );
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
+        ApiResponseWrapper<List<LoanResponse>> response = new ApiResponseWrapper<>(
+                HttpStatus.OK.value(),
+                true,
+                "Loan filters successfully.",
+                loanResponses
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 }
