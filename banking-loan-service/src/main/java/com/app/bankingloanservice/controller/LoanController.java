@@ -53,13 +53,13 @@ public class LoanController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**
+    /** Revised Loan Repayment endpoint
      * Get all loans by Account ID without pagination.
      *
      * @param accountId the ID of the account whose loans to retrieve
      * @return list of loans wrapped in ApiResponseWrapper
      */
-    @Operation(summary = "Get Loans by Account ID", description = "Retrieve all loans for a specific account without pagination.")
+    @Operation(summary = "Get Loans by Account ID", description = "Retrieve all loans for a specific account based on accountId.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loans retrieved successfully",
                     content = @Content(mediaType = "application/json",

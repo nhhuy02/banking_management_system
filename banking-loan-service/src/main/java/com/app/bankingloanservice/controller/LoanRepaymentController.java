@@ -2,7 +2,6 @@ package com.app.bankingloanservice.controller;
 
 import com.app.bankingloanservice.dto.ApiResponseWrapper;
 import com.app.bankingloanservice.dto.LoanRepaymentResponse;
-import com.app.bankingloanservice.dto.RepaymentRequest;
 import com.app.bankingloanservice.service.LoanRepaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,10 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/loan-service")
@@ -30,10 +30,7 @@ public class LoanRepaymentController {
     /**
      * Endpoint to view the repayment schedule of a loan.
      *
-     * @param loanId    ID of the loan
-     * @param page      Page number
-     * @param size      Number of records per page
-     * @param direction Sort in ascending or descending order
+     * @param loanId ID of the loan
      * @return List of repayment schedules
      */
     @GetMapping("/loans/{loanId}/repayments")
@@ -47,22 +44,60 @@ public class LoanRepaymentController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    public ResponseEntity<ApiResponseWrapper<Page<LoanRepaymentResponse>>> getRepaymentSchedule(
-            @PathVariable Long loanId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sortBy", defaultValue = "paymentDueDate") String sortBy,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+    public ResponseEntity<ApiResponseWrapper<List<LoanRepaymentResponse>>> getRepaymentSchedule(
+            @PathVariable Long loanId) {
 
-        log.info("Fetching repayment schedule for loanId: {}, page: {}, size: {}, sortBy: {}, direction: {}",
-                loanId, page, size, sortBy, direction);
+        log.info("Fetching repayment schedule for loanId: {}", loanId);
 
-        Page<LoanRepaymentResponse> repayments = loanRepaymentService.getRepaymentSchedule(loanId, page, size, sortBy, direction);
+        // Get all repayments by loanId
+        List<LoanRepaymentResponse> repayments = loanRepaymentService.getRepaymentSchedule(loanId);
 
-        ApiResponseWrapper<Page<LoanRepaymentResponse>> response = new ApiResponseWrapper<>(
+        ApiResponseWrapper<List<LoanRepaymentResponse>> response = new ApiResponseWrapper<>(
                 HttpStatus.OK.value(),
                 true,
                 "Repayment schedule retrieved successfully.",
+                repayments
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/accounts/{accountId}/repayments/available")
+    @Operation(summary = "Get Available Loan Repayments", description = "Retrieve all available loan repayments for a specific account.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Available loan repayments retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponseWrapper.class))),
+            @ApiResponse(responseCode = "404", description = "No available repayments found for this account",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    public ResponseEntity<ApiResponseWrapper<List<LoanRepaymentResponse>>> getAvailableLoanRepayments(
+            @Parameter(description = "ID of the account", required = true)
+            @PathVariable Long accountId) {
+
+        log.info("Fetching available loan repayments for accountId: {}", accountId);
+
+        // Get all available repayments for the account
+        List<LoanRepaymentResponse> repayments = loanRepaymentService.getAvailableLoanRepayments(accountId);
+
+        // Check if repayments list is empty
+        if (repayments.isEmpty()) {
+            log.warn("No available loan repayments found for accountId: {}", accountId);
+            ApiResponseWrapper<List<LoanRepaymentResponse>> emptyResponse = new ApiResponseWrapper<>(
+                    HttpStatus.OK.value(),
+                    false,
+                    "No available loan repayments found for this account.",
+                    null
+            );
+            return new ResponseEntity<>(emptyResponse, HttpStatus.OK);
+        }
+
+        // If repayments are found, return the data
+        ApiResponseWrapper<List<LoanRepaymentResponse>> response = new ApiResponseWrapper<>(
+                HttpStatus.OK.value(),
+                true,
+                "Available loan repayments retrieved successfully.",
                 repayments
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
