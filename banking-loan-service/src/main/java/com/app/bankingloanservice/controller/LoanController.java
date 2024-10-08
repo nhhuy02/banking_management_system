@@ -89,10 +89,10 @@ public class LoanController {
             log.warn("No loans found for accountId: {}", accountId);
             message = "No loans found for the given accountId.";
             return new ResponseEntity<>(new ApiResponseWrapper<>(
-                    HttpStatus.NO_CONTENT.value(),
+                    HttpStatus.OK.value(),
                     true,
                     message,
-                    null), HttpStatus.NO_CONTENT);
+                    null), HttpStatus.OK);
         } else {
             log.info("Successfully retrieved loans for accountId: {}", accountId);
             message = "Loans retrieved successfully.";
