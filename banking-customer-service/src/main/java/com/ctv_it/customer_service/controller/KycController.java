@@ -24,7 +24,6 @@ public class KycController {
     private static final Logger logger = LoggerFactory.getLogger(KycController.class);
 
     private final KycService kycService;
-
     public KycController(KycService kycService) {
         this.kycService = kycService;
     }

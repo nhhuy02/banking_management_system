@@ -1,7 +1,6 @@
 package com.ctv_it.customer_service.service.kafkaconsumer;
 
 import com.ctv_it.customer_service.dto.ChangeStatusDto;
-import com.ctv_it.customer_service.mapper.CustomersStatusHistoryMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.CustomersStatusHistory;
 import com.ctv_it.customer_service.repository.CustomerRepository;
@@ -9,7 +8,6 @@ import com.ctv_it.customer_service.repository.CustomersStatusHistoryRepository;
 import com.ctv_it.customer_service.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +19,14 @@ public class CustomerStatusConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerStatusConsumer.class);
 
-    @Autowired
-    private CustomersStatusHistoryMapper customersStatusHistoryMapper;
 
-    @Autowired
-    private CustomersStatusHistoryRepository customersStatusHistoryRepository;
+    private final CustomersStatusHistoryRepository customersStatusHistoryRepository;
+    private final CustomerRepository customerRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerStatusConsumer( CustomersStatusHistoryRepository customersStatusHistoryRepository, CustomerRepository customerRepository) {
+        this.customersStatusHistoryRepository = customersStatusHistoryRepository;
+        this.customerRepository = customerRepository;
+    }
 
     @KafkaListener(topics = "account-status-topics", groupId = "customer-group")
     public void consumeCustomerStatus(String data) {

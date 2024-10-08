@@ -2,7 +2,6 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.client.AccountClient;
 import com.ojt.klb.dto.*;
-import com.ojt.klb.exception.AccountNotFoundException;
 import com.ojt.klb.exception.ResourceNotFound;
 import com.ojt.klb.mapper.AccountMapper;
 import com.ojt.klb.model.Account;
@@ -162,7 +161,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BigDecimal getBalance(String accountNumber) {
         return accountRepository.findAccountByAccountNumber(accountNumber)
-                .map(account -> account.getBalance())
+                .map(Account::getBalance)
                 .orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
     }
 
