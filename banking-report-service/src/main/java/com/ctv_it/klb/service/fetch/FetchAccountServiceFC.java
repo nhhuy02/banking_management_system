@@ -65,21 +65,21 @@ public class FetchAccountServiceFC {
         .build();
   }
 
-  public List<AccountInfoDTO> fetchAccounts(Long accountId, AccountFilterDTO accountFilterDTO) {
+  public List<AccountInfoDTO> findAccountsMapped(Long accountId, AccountFilterDTO accountFilterDTO) {
     log.info("Fetch accounts(accountId: {}, accountFilterDTO: {}) is processing", accountId,
         accountFilterDTO);
 
     List<AccountInfoDTO> accounts = new ArrayList<>();
-    accounts.add(fetchAccountById(accountId));
+    accounts.add(findAccountByAccountIdMapped(accountId));
 
     if (accountFilterDTO != null && accountFilterDTO.getSavingAccountId() != null) {
-      accounts.add(fetchSavingAccountById(accountFilterDTO.getSavingAccountId()));
+      accounts.add(findSavingAccountBySavingAccountIdMapped(accountFilterDTO.getSavingAccountId()));
     }
 
     return accounts;
   }
 
-  public AccountInfoDTO fetchAccountById(long accountId) {
+  public AccountInfoDTO findAccountByAccountIdMapped(long accountId) {
     log.info("Fetch account(accountId={}) is processing", accountId);
 
     FetchAccountDataResponseDTO data = getAccountById(accountId);
@@ -92,7 +92,7 @@ public class FetchAccountServiceFC {
     return account;
   }
 
-  public AccountInfoDTO fetchSavingAccountById(long savingAccountId) {
+  public AccountInfoDTO findSavingAccountBySavingAccountIdMapped(long savingAccountId) {
     log.info("Fetch account(savingAccountId={}) is processing", savingAccountId);
 
     FetchAccountDataResponseDTO data = getSavingsAccountById(savingAccountId);

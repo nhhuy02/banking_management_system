@@ -39,8 +39,9 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
     LoanFilterDTO filters = (LoanFilterDTO) reportFilterDTO;
 
-    CustomerInfoDTO customer = fetchCustomerServiceFC.fetchCustomerByAccountId(accountId);
-    AccountInfoDTO account = fetchAccountServiceFC.fetchAccountById(accountId);
+    CustomerInfoDTO customer = fetchCustomerServiceFC.findByAccountIdMapped(accountId);
+    AccountInfoDTO account = fetchAccountServiceFC.findAccountByAccountIdMapped(accountId);
+
     List<LoanInfoDTO> loans = filters(accountId, filters);
 
     return LoanReportDTO.builder()
