@@ -5,7 +5,6 @@ import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,11 @@ public class CustomersStatusHistoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomersStatusHistoryController.class);
 
-    @Autowired
-    private CustomersStatusHistoryService customersStatusHistoryService;
+    private final CustomersStatusHistoryService customersStatusHistoryService;
+
+    public CustomersStatusHistoryController(CustomersStatusHistoryService customersStatusHistoryService) {
+        this.customersStatusHistoryService = customersStatusHistoryService;
+    }
 
     @GetMapping("/{customerId}/latest")
     public ResponseEntity<ApiResponse<CustomersStatusHistoryDto>> getLatestStatusByCustomerId(@PathVariable Long customerId) {

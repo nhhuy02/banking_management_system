@@ -5,7 +5,6 @@ import com.ojt.klb.security.JwtUtil;
 import com.ojt.klb.service.impl.LoginServiceImpl;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -117,7 +116,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+ ",
                     "/api/v1/loan-service/loan-types/\\d+",
-                    "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+"
+                    "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+",
+                    "/api/v1/account/card-types/update/\\d+"
             );
 
             Map<String, String> urlMappingPrefixes = getUrlMappingPrefixes();
@@ -224,7 +224,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         urlMappingPrefixes.put("/api/v1/customer", "/api/v1/customer");
         urlMappingPrefixes.put("/api/v1/reports", "/api/v1/reports");
         urlMappingPrefixes.put("/api/v1/notification", "/api/v1/notification");
-        urlMappingPrefixes.put("/api/v1/transactions", "/api/v1/transaction");
+        urlMappingPrefixes.put("/api/v1/transactions", "/api/v1/transactions");
         urlMappingPrefixes.put("/api/v1/fund_transfer", "/api/v1/fund_transfer");
         return urlMappingPrefixes;
     }

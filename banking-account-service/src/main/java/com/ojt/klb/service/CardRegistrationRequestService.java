@@ -3,7 +3,6 @@ package com.ojt.klb.service;
 import com.ojt.klb.dto.CardRegistrationRequestDto;
 import com.ojt.klb.dto.CardRegistrationRequestResponseDto;
 import com.ojt.klb.dto.CardRegistrationRequestUpdateDto;
-import com.ojt.klb.model.CardRegistrationRequest;
 
 import java.util.List;
 import java.util.Optional;
