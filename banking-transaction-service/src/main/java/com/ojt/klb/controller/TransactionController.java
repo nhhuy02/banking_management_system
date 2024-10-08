@@ -25,40 +25,54 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> handleTransaction(@Valid @RequestBody TransactionDto transactionDto) {
-        return new ResponseEntity<>(service.handleTransaction(transactionDto), HttpStatus.CREATED);
+        ApiResponse response = service.handleTransaction(transactionDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/internal")
-    public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.saveInternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos,
+            @RequestParam String transactionReference) {
+        ApiResponse response = service.saveInternalTransaction(transactionDtos, transactionReference);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/external")
-    public ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.saveExternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<TransactionDto> transactionDtos,
+            @RequestParam String transactionReference) {
+        ApiResponse response = service.saveExternalTransaction(transactionDtos, transactionReference);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponse>> getTransactions(@RequestParam String accountNumber) {
-        return new ResponseEntity<>(service.getTransaction(accountNumber), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getTransactions(@RequestParam String accountNumber) {
+        List<TransactionResponse> transactions = service.getTransaction(accountNumber);
+        ApiResponse<List<TransactionResponse>> response = new ApiResponse<>(HttpStatus.OK.value(),
+                "Transactions retrieved successfully", true, transactions);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{referenceNumber}")
-    public ResponseEntity<List<TransactionResponse>> getTransactionByTransactionReference(@PathVariable String referenceNumber) {
-        return new ResponseEntity<>(service.getTransactionByTransactionReference(referenceNumber), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getTransactionByTransactionReference(
+            @PathVariable String referenceNumber) {
+        List<TransactionResponse> transactions = service.getTransactionByTransactionReference(referenceNumber);
+        ApiResponse<List<TransactionResponse>> response = new ApiResponse<>(HttpStatus.OK.value(),
+                "Transaction retrieved successfully", true, transactions);
+        return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/search")
-    public ResponseEntity<List<SearchDataDto>> findTransactions(
+    public ResponseEntity<ApiResponse<List<SearchDataDto>>> findTransactions(
             @RequestParam String accountNumber,
             @RequestParam(required = false) TransactionType transactionType,
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate,
             @RequestParam(required = false) TransactionStatus status) {
 
-        List<SearchDataDto> transactions = service.findTransactions(accountNumber, transactionType, fromDate, toDate, status);
-        return ResponseEntity.ok(transactions);
+        List<SearchDataDto> transactions = service.findTransactions(accountNumber, transactionType, fromDate, toDate,
+                status);
+        ApiResponse<List<SearchDataDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Transactions found", true,
+                transactions);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/util-payment")

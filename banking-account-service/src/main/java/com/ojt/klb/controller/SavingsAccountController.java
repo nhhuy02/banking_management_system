@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -32,8 +33,7 @@ public class SavingsAccountController {
                     HttpStatus.CREATED.value(),
                     "Savings account created successfully.",
                     true,
-                    null
-            );
+                    null);
             logger.info("Create savings account for user {} success", userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
@@ -42,8 +42,7 @@ public class SavingsAccountController {
                     HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
             logger.error("Create savings account failed: ", e);
@@ -51,14 +50,14 @@ public class SavingsAccountController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "An unexpected error occurred.",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @GetMapping("/information/{savingAccountId}")
-    public ResponseEntity<ApiResponse<SavingsAccountResponseDto>> getSavingsAccount(@PathVariable Long savingAccountId) {
+    public ResponseEntity<ApiResponse<SavingsAccountResponseDto>> getSavingsAccount(
+            @PathVariable Long savingAccountId) {
         logger.info("Fetch savings account with ID {}", savingAccountId);
         Optional<SavingsAccountResponseDto> accountDto = savingsAccountService.findBySavingAccountId(savingAccountId);
 
@@ -67,8 +66,7 @@ public class SavingsAccountController {
                     HttpStatus.OK.value(),
                     "Savings account fetched successfully.",
                     true,
-                    accountDto.get()
-            );
+                    accountDto.get());
             logger.info("Fetched savings account with ID {} successfully", savingAccountId);
             return ResponseEntity.ok(response);
         } else {
@@ -77,10 +75,36 @@ public class SavingsAccountController {
                     HttpStatus.NOT_FOUND.value(),
                     "Savings account not found.",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ApiResponse<SavingsAccountResponseDto>> getSavingsAccountByUserId(@PathVariable Long userId) {
+        logger.info("Fetch savings account for user with ID {}", userId);
+        Optional<SavingsAccountResponseDto> accountDto = savingsAccountService.findByUserId(userId);
+
+        ApiResponse<SavingsAccountResponseDto> response;
+
+        if (accountDto.isPresent()) {
+            response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Savings account fetched successfully.",
+                    true,
+                    accountDto.get());
+            logger.info("Fetched savings account for user ID {} successfully", userId);
+        } else {
+            logger.warn("Savings account for user ID {} not found", userId);
+            response = new ApiResponse<>(
+                    HttpStatus.OK.value(), // Trả về trạng thái OK
+                    "No savings account found.", // Cập nhật thông báo
+                    true, // Giữ lại thành công
+                    null // Trả về mảng trống
+            );
+        }
+
+        return ResponseEntity.ok(response); // Luôn trả về ResponseEntity.ok()
     }
 
 }

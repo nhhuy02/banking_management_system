@@ -44,10 +44,10 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         String authorizationHeader = request.getHeader("Authorization");
         String referer = request.getHeader("Referer");
-
 
         if (!isValidReferer(referer)) {
             logger.warn("Invalid Referer: {}", referer);
@@ -74,7 +74,8 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             if (loginService.isTokenBlacklisted(token)) {
                 logger.error("JWT Token in blacklisted");
-                ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Token is blacklisted! Login again get new token");
+                ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
+                        "Unauthorized: Token is blacklisted! Login again get new token");
                 return false;
             }
 
@@ -98,7 +99,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             );
 
-
             String targetUrl = null;
 
             List<String> urlPatterns = List.of(
@@ -117,8 +117,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+ ",
                     "/api/v1/loan-service/loan-types/\\d+",
-                    "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+"
-            );
+                    "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+");
 
             Map<String, String> urlMappingPrefixes = getUrlMappingPrefixes();
 
@@ -127,7 +126,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                     for (Map.Entry<String, String> entry : urlMappingPrefixes.entrySet()) {
                         String key = entry.getKey();
                         if (pattern.startsWith(key)) {
-                            logger.info("Processing URL for {} operations: {}", key.substring(key.lastIndexOf("/") + 1), url);
+                            logger.info("Processing URL for {} operations: {}", key.substring(key.lastIndexOf("/") + 1),
+                                    url);
                             targetUrl = urlMappings.get(key);
                             break;
                         }
@@ -140,63 +140,61 @@ public class JwtInterceptor implements HandlerInterceptor {
                         response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
                         response.setHeader("Location", url);
 
-//                        response.sendRedirect(url);
+                        // response.sendRedirect(url);
                         return false;
                     }
                 }
             }
 
-
-
             for (Map.Entry<String, String> entry : urlMappings.entrySet()) {
-                    logger.info("Checking URL mapping for: {}", entry.getKey());
-                    if (url.contains(entry.getKey())) {
-                        targetUrl = entry.getValue();
+                logger.info("Checking URL mapping for: {}", entry.getKey());
+                if (url.contains(entry.getKey())) {
+                    targetUrl = entry.getValue();
 
+                    String regex = "(?<!v)\\d+";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(url);
 
-                        String regex = "(?<!v)\\d+";
-                        Pattern pattern = Pattern.compile(regex);
-                        Matcher matcher = pattern.matcher(url);
+                    url = url.replace("userId", userId)
+                            .replace("accountId", accountId)
+                            .replace("customerId", customerId)
+                            .replace("savingAccountId", savingAccountId != null ? savingAccountId : "");
 
-                        url = url.replace("userId", userId)
-                                .replace("accountId", accountId)
-                                .replace("customerId", customerId)
-                                .replace("savingAccountId", savingAccountId != null ? savingAccountId : "");
+                    while (matcher.find()) {
+                        String foundId = matcher.group();
+                        logger.info("Found ID in URL: {}", foundId);
 
-                        while (matcher.find()) {
-                            String foundId = matcher.group();
-                            logger.info("Found ID in URL: {}", foundId);
-
-                            if(foundId.equals("8082")){
-                                continue;
-                            }
-
-                            if (!foundId.equals(userId) && !foundId.equals(accountId)
-                                    && !foundId.equals(customerId) && !foundId.equals(savingAccountId)) {
-                                logger.error("The ID found in the URL does not match any of the IDs from the token.");
-                                ErrorResponseHandler.setErrorResponse(response, HttpStatus.FORBIDDEN.value(),
-                                        "Unauthorized: You not have access to the resource!");
-                                return false;
-                            }
+                        if (foundId.equals("8082")) {
+                            continue;
                         }
-                        break;
-                    }
-                }
 
-//            if (targetUrl != null) {
-//                url = targetUrl + url;
-//                logger.info("Processed URL: {}", url);
-//
-//                if (!request.getRequestURI().equals(url)) {
-//                    logger.info("Redirecting to: {}", url);
-//                    response.sendRedirect(url);
-//                    return false;
-//                }
-//            } else {
-//                logger.error("No matching URL found in urlMappings.");
-//            }
-//        } else {
-//            logger.warn("No Authorization header found for request URI: {}", request.getRequestURI());
+                        if (!foundId.equals(userId) && !foundId.equals(accountId)
+                                && !foundId.equals(customerId) && !foundId.equals(savingAccountId)) {
+                            logger.error("The ID found in the URL does not match any of the IDs from the token.");
+                            ErrorResponseHandler.setErrorResponse(response, HttpStatus.FORBIDDEN.value(),
+                                    "Unauthorized: You not have access to the resource!");
+                            return false;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            // if (targetUrl != null) {
+            // url = targetUrl + url;
+            // logger.info("Processed URL: {}", url);
+            //
+            // if (!request.getRequestURI().equals(url)) {
+            // logger.info("Redirecting to: {}", url);
+            // response.sendRedirect(url);
+            // return false;
+            // }
+            // } else {
+            // logger.error("No matching URL found in urlMappings.");
+            // }
+            // } else {
+            // logger.warn("No Authorization header found for request URI: {}",
+            // request.getRequestURI());
             if (targetUrl != null) {
                 String queryString = request.getQueryString();
                 if (queryString != null && !queryString.isEmpty()) {
@@ -212,7 +210,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                 return false;
             }
-       }
+        }
 
         return true;
     }
@@ -230,6 +228,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     private boolean isValidReferer(String referer) {
-        return referer != null && referer.startsWith("http://localhost:9999");
+        return (referer != null && referer.startsWith("http://localhost:9999"))
+                || (referer != null && referer.startsWith("http://localhost:5173"));
     }
 }

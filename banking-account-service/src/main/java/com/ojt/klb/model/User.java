@@ -31,11 +31,11 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "created_at", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    // @ColumnDefault("CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    // @ColumnDefault("CURRENT_TIMESTAMP")
     @org.hibernate.annotations.UpdateTimestamp
     private Timestamp updatedAt;
 
