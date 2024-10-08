@@ -31,7 +31,7 @@ public class HandleFetchResponse<T> {
         throw new InvalidExceptionCustomize(
             Collections.singletonList(
                 ErrorDetailDTO.builder()
-                    .message(fetchResponseDTO.getMessage())
+                    .message(fetchResponseDTO.toString())
                     .build()));
       } else {
         throw new FetchErrorResponseExceptionCustomize(fetchResponseDTO);
