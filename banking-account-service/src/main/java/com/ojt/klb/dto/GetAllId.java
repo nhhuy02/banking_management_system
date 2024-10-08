@@ -8,4 +8,5 @@ public class GetAllId {
     private Long accountId;
     private Long customerId;
     private Long savingAccountId;
+    private String accountNumber;
 }

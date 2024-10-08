@@ -28,9 +28,11 @@ public class AuthServiceHelper {
 
     static String getString(DataForJwt dataForJwt, Client client, JwtService jwtService) {
         ResponseEntity<ApiResponse<IdDto>> dataResponse = client.getAllId(dataForJwt.getId());
-        AuthServiceHelper.logger.info("Received response for user ID: {} from account service: {}", dataForJwt.getId(), dataResponse);
+        AuthServiceHelper.logger.info("Received response for user ID: {} from account service: {}", dataForJwt.getId(),
+                dataResponse);
 
         if (dataResponse.getBody() != null && dataResponse.getBody().isSuccess()) {
+
             IdDto idDto = dataResponse.getBody().getData();
             String token = jwtService.createToken(
                     dataForJwt.getUsername(),
@@ -38,8 +40,8 @@ public class AuthServiceHelper {
                     idDto.getAccountId(),
                     dataForJwt.getRole(),
                     idDto.getCustomerId(),
-                    idDto.getSavingAccountId()
-            );
+                    idDto.getSavingAccountId(),
+                    idDto.getAccountNumber());
             AuthServiceHelper.logger.info("JWT token created successfully for username: {}", dataForJwt.getUsername());
             return token;
         } else {

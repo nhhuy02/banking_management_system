@@ -131,10 +131,10 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic loanTopic() {
-        return new NewTopic("loan-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
+        return new NewTopic("repayment_due_notification", 1, (short) 1);  // 1 partition, 1 replication-factor
     }
     @Bean
     public NewTopic accountTopic() {
-        return new NewTopic("account-topic", 1, (short) 1);  // 1 partition, 1 replication-factor
+        return new NewTopic("repayment_overdue_notification", 1, (short) 1);  // 1 partition, 1 replication-factor
     }
 }

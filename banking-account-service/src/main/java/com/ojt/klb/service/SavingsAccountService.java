@@ -8,5 +8,8 @@ import java.util.Optional;
 @Service
 public interface SavingsAccountService {
     Optional<SavingsAccountResponseDto> findBySavingAccountId(Long savingAccountId);
+
+    public Optional<SavingsAccountResponseDto> findByUserId(Long userId);
+
     void createSavingsAccount(Long userID);
 }

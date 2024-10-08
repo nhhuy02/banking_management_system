@@ -3,8 +3,8 @@ package com.ojt.klb.banking_notification_service.service.impl;
 import com.ojt.klb.banking_notification_service.core.Status;
 import com.ojt.klb.banking_notification_service.core.StringUtils;
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
-import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
-import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
+import com.ojt.klb.banking_notification_service.dto.response.ListResponse;
+import com.ojt.klb.banking_notification_service.dto.response.ResponseMessage;
 import com.ojt.klb.banking_notification_service.dto.consumer.*;
 import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
@@ -83,6 +83,8 @@ public class NotificationImpl implements NotificationService {
         mailConfig.send(email, subject, "otp_template", variables);
     }
 
+
+
     @Override
     public ListResponse<NotificationDTO> findByCustomerId(Long id, Pageable pageable) {
         Page<NotificationDTO> notificationDTOS = notificationRepository.findNotification(id,pageable);
@@ -112,6 +114,7 @@ public class NotificationImpl implements NotificationService {
         variables1.put("recipientName", transactionData.getRecipientName());
         variables1.put("amount", StringUtils.convertVND(transactionData.getAmounts()));
         variables1.put("content", transactionData.getDescription());
+        variables1.put("bankName", "EIGHT BANK");
 
         mailConfig.send(emailCustomerSend, subject1, "payment_receipt", variables1);
         notificationRepository.save(notification1);
@@ -139,6 +142,36 @@ public class NotificationImpl implements NotificationService {
         notificationRepository.save(notification2);
 
     }
+
+    @Override
+    @KafkaListener(topics = "externalTransfer-topic", groupId = "trans_group",containerFactory = "transactionInternalDataConcurrentKafkaListenerContainerFactory")
+    public void sendMailPaymentReceiptExternal(TransactionInternalData transactionData) {
+        String emailCustomerSend = transactionData.getEmailCustomerSend();
+        log.warn("email trans: {}", emailCustomerSend);
+        NotificationTemplate notificationTemplate1 = notificationTemplateRepository.getByTemplateName(ResponseMessage.PAYMENT_RECEIPT.statusCodeValue());
+        String subject1 =ResponseMessage.NO_REPLY.statusCodeValue()+ notificationTemplate1.getSubjectTemplate();
+
+        Notification notification1 = new Notification();
+        notification1.setCreatedAt(LocalDateTime.now());
+        notification1.setSendDate(LocalDateTime.now());
+        notification1.setNotificationTemplateId(notificationTemplate1.getId());
+        notification1.setCustomerId(transactionData.getCustomerSendId());
+        notification1.setContent(StringUtils.convertContentDecreaseBalance(transactionData.getSenderBankAccount(),transactionData.getAmounts(), transactionData.getBalanceAccountSend()));
+
+        Map<String, Object> variables1  = new HashMap<>();
+        variables1.put("transactionDate", StringUtils.convertDateTime(transactionData.getTransactionDate()));
+        variables1.put("transId", transactionData.getTransactionId());
+        variables1.put("sendAccount", transactionData.getSenderBankAccount());
+        variables1.put("receiveAccount", transactionData.getReceiveBankAccount());
+        variables1.put("recipientName", transactionData.getRecipientName());
+        variables1.put("amount", StringUtils.convertVND(transactionData.getAmounts()));
+        variables1.put("content", transactionData.getDescription());
+        variables1.put("bankName", transactionData.getBankName());
+
+        mailConfig.send(emailCustomerSend, subject1, "payment_receipt", variables1);
+        notificationRepository.save(notification1);
+    }
+
     @Override
     @KafkaListener(topics = "transaction-topic", groupId = "trans_group",containerFactory = "transactionDataKafkaListenerContainerFactory")
     public void sendMailTrans(TransData transData) {
@@ -201,17 +234,14 @@ public class NotificationImpl implements NotificationService {
         if (loanDto.getStatus().equalsIgnoreCase(ResponseMessage.REVIEWING.statusCodeValue())) {
             status = Status.REVIEWING.getText();
             content = StringUtils.convertContentLoanApplication(loanDto.getLoanApplicationId(),status);
-//            variables.put("type",ResponseMessage.PENDING.statusCodeValue() );
         }
         if (loanDto.getStatus().equalsIgnoreCase(ResponseMessage.APPROVED.statusCodeValue())) {
             status = Status.APPROVED.getText();
             content = StringUtils.convertContentLoanApplication(loanDto.getLoanApplicationId(),status);
-//            variables.put("type",ResponseMessage.PENDING.statusCodeValue() );
         }
         if (loanDto.getStatus().equalsIgnoreCase(ResponseMessage.CANCELLED.statusCodeValue())) {
             status = Status.CANCELLED.getText();
             content = StringUtils.convertContentLoanApplication(loanDto.getLoanApplicationId(),status);
-//            variables.put("type",ResponseMessage.PENDING.statusCodeValue() );
         }
 
         variables.put("status", status);
@@ -284,10 +314,10 @@ public class NotificationImpl implements NotificationService {
         variables.put("customerName", loanOverdue.getCustomerName());
         variables.put("contractNumber", loanOverdue.getLoanContractNo());
         variables.put("deadline", loanOverdue.getDueDate());
-        variables.put("overdue",StringUtils.calculateDaysBetween(loanOverdue.getOverdueDate(),loanOverdue.getDueDate()));
+        variables.put("overdue",StringUtils.calculateDaysBetween(loanOverdue.getDueDate(),loanOverdue.getOverdueDate()));
         variables.put("overdueDate", loanOverdue.getOverdueDate());
-        variables.put("latePayment", loanOverdue.getLateInterestAmount());
-        variables.put("amounts", loanOverdue.getTotalAmountDue());
+        variables.put("latePayment", StringUtils.convertVND(loanOverdue.getLateInterestAmount()));
+        variables.put("amounts", StringUtils.convertVND(loanOverdue.getTotalAmountDue()));
 
         Notification notification = new Notification();
         notification.setCreatedAt(LocalDateTime.now());

@@ -3,25 +3,22 @@ package com.ctv_it.customer_service.controller;
 import com.ctv_it.customer_service.dto.VerificationCodeDto;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.VerificationCodeService;
-import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/customer/verificode")
+@RequestMapping("/api/v1/customer/verify-code")
 @Validated
 public class VerificationCodeController {
 
     private static final Logger logger = LoggerFactory.getLogger(VerificationCodeController.class);
 
-    @Autowired
-    private VerificationCodeService verificationCodeService;
+    private final VerificationCodeService verificationCodeService;
 
     public VerificationCodeController(VerificationCodeService verificationCodeService) {
         this.verificationCodeService = verificationCodeService;

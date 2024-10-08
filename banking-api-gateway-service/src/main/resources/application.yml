@@ -56,7 +56,7 @@ spring:
 
 resilience4j.ratelimiter:
   instances:
-    ipRateLimiter:
+    default:
       limitForPeriod: 5         # max request form 1 ip
       limitRefreshPeriod: 1s     # refresh
       timeoutDuration: 0         # time waiting

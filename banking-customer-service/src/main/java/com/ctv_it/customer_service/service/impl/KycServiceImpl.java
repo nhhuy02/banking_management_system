@@ -22,7 +22,6 @@ public class KycServiceImpl implements KycService {
 
     private static final Logger logger = LoggerFactory.getLogger(KycServiceImpl.class);
 
-
     private final KycRepository kycRepository;
     private final KycMapper kycMapper;
     private final CustomerRepository customerRepository;
@@ -95,7 +94,7 @@ public class KycServiceImpl implements KycService {
     @Override
     public Optional<KycResponseDto> getKycByCustomerId(Long customerId) {
         return customerRepository.findById(customerId)
-                .map(customer -> customer.getKyc())
+                .map(Customer::getKyc)
                 .flatMap(kyc -> kycRepository.findById(kyc.getId()))
                 .map(kycMapper::toKycResponseDto);
     }
