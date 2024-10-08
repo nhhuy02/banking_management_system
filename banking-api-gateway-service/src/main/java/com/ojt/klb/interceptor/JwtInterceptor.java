@@ -2,9 +2,8 @@ package com.ojt.klb.interceptor;
 
 import com.ojt.klb.exception.ErrorResponseHandler;
 import com.ojt.klb.security.JwtUtil;
+import com.ojt.klb.service.IpRateLimiterService;
 import com.ojt.klb.service.impl.LoginServiceImpl;
-import io.github.resilience4j.ratelimiter.RateLimiter;
-import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,26 +24,20 @@ public class JwtInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 
     private final JwtUtil jwtUtil;
-    private final RateLimiter rateLimiter;
     private final LoginServiceImpl loginService;
+    private final IpRateLimiterService ipRateLimiterService;
 
-    public JwtInterceptor(JwtUtil jwtUtil, LoginServiceImpl loginService) {
+    public JwtInterceptor(JwtUtil jwtUtil, LoginServiceImpl loginService, IpRateLimiterService ipRateLimiterService) {
         this.jwtUtil = jwtUtil;
         this.loginService = loginService;
-
-        RateLimiterConfig config = RateLimiterConfig.custom()
-                .limitForPeriod(5)
-                .limitRefreshPeriod(Duration.ofSeconds(1))
-                .timeoutDuration(Duration.ZERO)
-                .build();
-
-        this.rateLimiter = RateLimiter.of("serviceRateLimiter", config);
+        this.ipRateLimiterService = ipRateLimiterService;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorizationHeader = request.getHeader("Authorization");
         String referer = request.getHeader("Referer");
+        String clientIp = getClientIp(request);
 
 
         if (!isValidReferer(referer)) {
@@ -56,8 +48,8 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         logger.info("Processing request for URI: {}", request.getRequestURI());
 
-        if (!rateLimiter.acquirePermission()) {
-            logger.warn("Too many requests from IP: {}", request.getRemoteAddr());
+        if (!ipRateLimiterService.tryAcquirePermission(clientIp)) {
+            logger.warn("Too many requests from IP: {}", clientIp);
             ErrorResponseHandler.setErrorResponse(response, HttpStatus.TOO_MANY_REQUESTS.value(), "Too many requests");
             return false;
         }
@@ -231,5 +223,22 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     private boolean isValidReferer(String referer) {
         return referer != null && referer.startsWith("http://localhost:9999");
+    }
+
+
+    private String getClientIp(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        String ip;
+
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            ip = xForwardedFor.split(",")[0];
+            logger.info("IP from X-Forwarded-For: {}", ip);
+        } else {
+            ip = request.getRemoteAddr();
+            logger.info("IP from RemoteAddr: {}", ip);
+        }
+
+        logger.info("Client IP: {}", ip);
+        return ip;
     }
 }
