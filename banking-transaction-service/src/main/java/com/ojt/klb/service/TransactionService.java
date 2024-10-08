@@ -27,4 +27,6 @@ public interface TransactionService {
             TransactionStatus status
     );
     UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest);
+
+    SearchDataDto findLastTransactionByAccountNumberBeforeDate(String accountNumber, LocalDate dateBefore);
 }

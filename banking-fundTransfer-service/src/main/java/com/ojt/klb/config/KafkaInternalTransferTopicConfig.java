@@ -13,4 +13,12 @@ public class KafkaInternalTransferTopicConfig {
                 .name("internalTransfer-topic")
                 .build();
     }
+
+
+    @Bean
+    public NewTopic externalTransfer() {
+        return TopicBuilder
+                .name("externalTransfer-topic")
+                .build();
+    }
 }

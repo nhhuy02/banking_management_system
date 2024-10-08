@@ -1,6 +1,6 @@
 package com.ojt.klb.banking_notification_service.core;
 
-import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
+import com.ojt.klb.banking_notification_service.dto.response.ResponseMessage;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

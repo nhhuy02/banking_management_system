@@ -32,8 +32,8 @@ public class AccountReportServiceImpl implements ReportTypeService<AccountReport
     AccountFilterDTO accountFilters = (AccountFilterDTO) reportFilterDTO;
 
     return AccountReportDTO.builder()
-        .customer(fetchCustomerServiceFC.fetchCustomerByAccountId(accountId))
-        .accounts(fetchAccountServiceFC.fetchAccounts(accountId, accountFilters))
+        .customer(fetchCustomerServiceFC.findByAccountIdMapped(accountId))
+        .accounts(fetchAccountServiceFC.findAccountsMapped(accountId, accountFilters))
         .build();
   }
 }

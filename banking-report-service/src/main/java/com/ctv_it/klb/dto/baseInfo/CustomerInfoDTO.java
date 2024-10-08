@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Builder
-@Setter
+//@Setter
 @Getter
 @ToString
 public class CustomerInfoDTO {

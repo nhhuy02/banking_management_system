@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.Response;
+package com.ojt.klb.banking_notification_service.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;

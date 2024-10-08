@@ -34,11 +34,14 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Lo
     @Query("SELECT lr FROM LoanRepayment lr " +
             "JOIN lr.loan l " +
             "WHERE lr.accountId = :accountId " +
-            "AND l.status = :loanStatus")
-    List<LoanRepayment> findByAccountIdAndLoanStatus(
+            "AND lr.paymentStatus = :paymentStatus")
+    List<LoanRepayment> findByAccountIdAndPaymentStatus(
             @Param("accountId") Long accountId,
-            @Param("loanStatus") LoanStatus loanStatus
+            @Param("paymentStatus") PaymentStatus paymentStatus
     );
+
+    @Query("SELECT lr FROM LoanRepayment lr JOIN lr.loan l WHERE lr.accountId = :accountId")
+    List<LoanRepayment> findByAccountId(@Param("accountId") Long accountId);
 
     /**
      * Finds loan repayments that are eligible for payment within the payment window for a given account.
