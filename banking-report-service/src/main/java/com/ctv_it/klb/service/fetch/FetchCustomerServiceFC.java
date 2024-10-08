@@ -46,7 +46,7 @@ public class FetchCustomerServiceFC {
         .build();
   }
 
-  public CustomerInfoDTO fetchCustomerByAccountId(long accountId) {
+  public CustomerInfoDTO findByAccountIdMapped(long accountId) {
     return map(findByAccountId(accountId));
   }
 }

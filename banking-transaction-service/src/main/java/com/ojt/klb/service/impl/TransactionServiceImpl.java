@@ -1,6 +1,10 @@
 package com.ojt.klb.service.impl;
 
-import com.ojt.klb.exception.*;
+import com.ojt.klb.exception.AccountStatusException;
+import com.ojt.klb.exception.GlobalErrorCode;
+import com.ojt.klb.exception.InsufficientBalance;
+import com.ojt.klb.exception.ResourceNotFound;
+import com.ojt.klb.exception.TransactionException;
 import com.ojt.klb.external.AccountClient;
 import com.ojt.klb.kafka.TransactionNotification;
 import com.ojt.klb.kafka.TransactionProducer;
@@ -19,12 +23,6 @@ import com.ojt.klb.model.response.UtilityPaymentResponse;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.repository.UtilityAccountRepository;
 import com.ojt.klb.service.TransactionService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,249 +31,252 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-    private final TransactionRepository repository;
-    private final AccountClient accountClient;
-    private final TransactionMapper mapper = new TransactionMapper();
-    private final TransactionProducer transactionProducer;
-    private final UtilityAccountRepository utilityAccountRepository;
 
-    @Override
-    public ApiResponse handleTransaction(TransactionDto transactionDto) {
-        Account account;
-        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(transactionDto.getAccountNumber()).getBody();
-        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
-            log.error("requested account " + transactionDto.getAccountNumber() + " is not found on the server");
-            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
-        }
-        account = apiResponse.getData();
+  private final TransactionRepository repository;
+  private final AccountClient accountClient;
+  private final TransactionMapper mapper = new TransactionMapper();
+  private final TransactionProducer transactionProducer;
+  private final UtilityAccountRepository utilityAccountRepository;
 
-        Transaction transaction = mapper.convertToEntity(transactionDto);
+  @Override
+  public ApiResponse handleTransaction(TransactionDto transactionDto) {
+    Account account;
+    ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(
+        transactionDto.getAccountNumber()).getBody();
+    if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
+      log.error(
+          "requested account " + transactionDto.getAccountNumber() + " is not found on the server");
+      throw new ResourceNotFound("Requested account not found on the server",
+          GlobalErrorCode.NOT_FOUND);
+    }
+    account = apiResponse.getData();
 
-        BigDecimal accountBalanceBeforeTransaction = account.getBalance();
+    Transaction transaction = mapper.convertToEntity(transactionDto);
 
-        if (transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
-            if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
-                throw new TransactionException("The minimum deposit amount is 50,000 VND.");
-            }
+    BigDecimal accountBalanceBeforeTransaction = account.getBalance();
 
-            account.setBalance(account.getBalance().add(transactionDto.getAmount()));
+    if (transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
+      if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
+        throw new TransactionException("The minimum deposit amount is 50,000 VND.");
+      }
 
-        } else if (transactionDto.getTransactionType().equals(TransactionType.WITHDRAWAL.toString())) {
-            if (!account.getStatus().equals(Account.Status.active)) {
-                log.error("account is either inactive/closed, cannot process the transaction");
-                throw new AccountStatusException("account is inactive or closed");
-            }
-            if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
-                throw new TransactionException("The minimum withdraw amount is 50,000 VND.");
-            }
-            if (account.getBalance().compareTo(transactionDto.getAmount()) < 0) {
-                log.error("insufficient balance in the account");
-                throw new InsufficientBalance("Insufficient balance in the account");
-            }
+      account.setBalance(account.getBalance().add(transactionDto.getAmount()));
 
-            account.setBalance(account.getBalance().subtract(transactionDto.getAmount()));
-            transaction.setAmount(transactionDto.getAmount().negate());
-        }
+    } else if (transactionDto.getTransactionType().equals(TransactionType.WITHDRAWAL.toString())) {
+      if (!account.getStatus().equals(Account.Status.active)) {
+        log.error("account is either inactive/closed, cannot process the transaction");
+        throw new AccountStatusException("account is inactive or closed");
+      }
+      if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
+        throw new TransactionException("The minimum withdraw amount is 50,000 VND.");
+      }
+      if (account.getBalance().compareTo(transactionDto.getAmount()) < 0) {
+        log.error("insufficient balance in the account");
+        throw new InsufficientBalance("Insufficient balance in the account");
+      }
 
-        BigDecimal accountBalanceAfterTransaction = account.getBalance();
-
-        String referenceNumber = generateUniqueReferenceNumber();
-        transaction.setTransactionType(TransactionType.valueOf(transactionDto.getTransactionType()));
-        transaction.setDescription(transactionDto.getDescription());
-        transaction.setBalanceBeforeTransaction(accountBalanceBeforeTransaction);
-        transaction.setBalanceAfterTransaction(accountBalanceAfterTransaction);
-        transaction.setFee(BigDecimal.valueOf(0));
-        transaction.setStatus(TransactionStatus.COMPLETED);
-        transaction.setReferenceNumber(referenceNumber);
-
-        accountClient.updateAccount(transactionDto.getAccountNumber(), account);
-        repository.save(transaction);
-
-        BigDecimal balance = accountClient.accountBalance(account.getAccountNumber()).getBody();
-
-        transactionProducer.sendTransactionNotification(
-                new TransactionNotification(
-                        apiResponse.getData().getEmail(),
-                        referenceNumber,
-                        account.getCustomerId(),
-                        apiResponse.getData().getAccountNumber(),
-                        apiResponse.getData().getFullName(),
-                        balance,
-                        transactionDto.getTransactionType(),
-                        transactionDto.getAmount(),
-                        LocalDateTime.now(),
-                        transactionDto.getDescription()
-                )
-        );
-
-
-        return ApiResponse.builder()
-                .message("Transaction completed successfully")
-                .status(200)
-                .success(true)
-                .build();
+      account.setBalance(account.getBalance().subtract(transactionDto.getAmount()));
+      transaction.setAmount(transactionDto.getAmount().negate());
     }
 
+    BigDecimal accountBalanceAfterTransaction = account.getBalance();
+
+    String referenceNumber = generateUniqueReferenceNumber();
+    transaction.setTransactionType(TransactionType.valueOf(transactionDto.getTransactionType()));
+    transaction.setDescription(transactionDto.getDescription());
+    transaction.setBalanceBeforeTransaction(accountBalanceBeforeTransaction);
+    transaction.setBalanceAfterTransaction(accountBalanceAfterTransaction);
+    transaction.setFee(BigDecimal.valueOf(0));
+    transaction.setStatus(TransactionStatus.COMPLETED);
+    transaction.setReferenceNumber(referenceNumber);
+
+    accountClient.updateAccount(transactionDto.getAccountNumber(), account);
+    repository.save(transaction);
+
+    BigDecimal balance = accountClient.accountBalance(account.getAccountNumber()).getBody();
+
+    transactionProducer.sendTransactionNotification(
+        new TransactionNotification(apiResponse.getData().getEmail(), referenceNumber,
+            account.getCustomerId(), apiResponse.getData().getAccountNumber(),
+            apiResponse.getData().getFullName(), balance, transactionDto.getTransactionType(),
+            transactionDto.getAmount(), LocalDateTime.now(), transactionDto.getDescription()));
+
+    return ApiResponse.builder().message("Transaction completed successfully").status(200)
+        .success(true).build();
+  }
 
 
-    private String generateUniqueReferenceNumber() {
-        return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+  private String generateUniqueReferenceNumber() {
+    return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+  }
+
+  @Override
+  public List<TransactionResponse> getTransaction(String accountNumber) {
+    return repository.findByAccountNumber(accountNumber).stream().map(transaction -> {
+      TransactionResponse transactionResponse = new TransactionResponse();
+      BeanUtils.copyProperties(transaction, transactionResponse);
+      transactionResponse.setTransactionStatus(transaction.getStatus().toString());
+      transactionResponse.setLocalDateTime(transaction.getTransactionDate());
+      transactionResponse.setTransactionType(transaction.getTransactionType().toString());
+      return transactionResponse;
+    }).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<TransactionResponse> getTransactionByTransactionReference(
+      String transactionReference) {
+    return repository.findByReferenceNumber(transactionReference).stream().map(transaction -> {
+      TransactionResponse transactionResponse = new TransactionResponse();
+      BeanUtils.copyProperties(transaction, transactionResponse);
+      transactionResponse.setTransactionStatus(transaction.getStatus().toString());
+      transactionResponse.setLocalDateTime(transaction.getTransactionDate());
+      transactionResponse.setTransactionType(transaction.getTransactionType().toString());
+      return transactionResponse;
+    }).collect(Collectors.toList());
+  }
+
+
+  @Override
+  public List<SearchDataDto> findTransactions(String accountNumber, TransactionType transactionType,
+      LocalDate fromDate, LocalDate toDate, TransactionStatus status) {
+
+    Specification<Transaction> spec = (root, query, cb) -> {
+      query.distinct(false);
+      return null;
+    };
+
+    if (accountNumber != null) {
+      spec = spec.and((root, query, cb) -> cb.equal(root.get("accountNumber"), accountNumber));
     }
 
-    @Override
-    public List<TransactionResponse> getTransaction(String accountNumber) {
-        return repository.findByAccountNumber(accountNumber)
-                .stream().map(transaction -> {
-                    TransactionResponse transactionResponse = new TransactionResponse();
-                    BeanUtils.copyProperties(transaction, transactionResponse);
-                    transactionResponse.setTransactionStatus(transaction.getStatus().toString());
-                    transactionResponse.setLocalDateTime(transaction.getTransactionDate());
-                    transactionResponse.setTransactionType(transaction.getTransactionType().toString());
-                    return transactionResponse;
-                }).collect(Collectors.toList());
+    if (transactionType != null) {
+      spec = spec.and((root, query, cb) -> cb.equal(root.get("transactionType"), transactionType));
     }
 
-    @Override
-    public List<TransactionResponse> getTransactionByTransactionReference(String transactionReference) {
-        return repository.findByReferenceNumber(transactionReference)
-                .stream().map(transaction -> {
-                    TransactionResponse transactionResponse = new TransactionResponse();
-                    BeanUtils.copyProperties(transaction, transactionResponse);
-                    transactionResponse.setTransactionStatus(transaction.getStatus().toString());
-                    transactionResponse.setLocalDateTime(transaction.getTransactionDate());
-                    transactionResponse.setTransactionType(transaction.getTransactionType().toString());
-                    return transactionResponse;
-                }).collect(Collectors.toList());
+    if (fromDate != null) {
+      LocalDateTime fromDateTime = fromDate.atStartOfDay();
+      spec = spec.and(
+          (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("transactionDate"), fromDateTime));
     }
 
-
-    @Override
-    public List<SearchDataDto> findTransactions(
-            String accountNumber,
-            TransactionType transactionType,
-            LocalDate fromDate,
-            LocalDate toDate,
-            TransactionStatus status) {
-
-        Specification<Transaction> spec = (root, query, cb) -> {
-            query.distinct(false);
-            return null;
-        };
-
-        if (accountNumber != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("accountNumber"), accountNumber));
-        }
-
-        if (transactionType != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("transactionType"), transactionType));
-        }
-
-        if (fromDate != null) {
-            LocalDateTime fromDateTime = fromDate.atStartOfDay();
-            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("transactionDate"), fromDateTime));
-        }
-
-        if (toDate != null) {
-            LocalDateTime toDateTime = toDate.plusDays(1).atStartOfDay().minusNanos(1);
-            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("transactionDate"), toDateTime));
-        }
-
-        if (status != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
-        }
-
-        List<Transaction> transactions = repository.findAll(spec);
-
-        return transactions.stream()
-                .map(transaction -> {
-                    SearchDataDto dto = new SearchDataDto();
-                    dto.setAccountNumber(transaction.getAccountNumber());
-                    dto.setTransactionType(transaction.getTransactionType().name());
-                    dto.setAmount(transaction.getAmount());
-                    dto.setDescription(transaction.getDescription());
-                    dto.setTransactionDate(transaction.getTransactionDate());
-                    dto.setBalanceBeforeTransaction(transaction.getBalanceBeforeTransaction());
-                    dto.setBalanceAfterTransaction(transaction.getBalanceAfterTransaction());
-                    dto.setFee(transaction.getFee());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+    if (toDate != null) {
+      LocalDateTime toDateTime = toDate.plusDays(1).atStartOfDay().minusNanos(1);
+      spec = spec.and(
+          (root, query, cb) -> cb.lessThanOrEqualTo(root.get("transactionDate"), toDateTime));
     }
 
-
-    @Override
-    public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {
-        String referenceNumber = generateUniqueReferenceNumber();
-
-        Account fromAccount;
-        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(utilityPaymentRequest.getAccount()).getBody();
-        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
-            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
-        }
-        fromAccount = apiResponse.getData();
-
-        if(fromAccount.getBalance().compareTo(utilityPaymentRequest.getAmount()) < 0){
-            log.error("insufficient balance in the account");
-            throw new InsufficientBalance("Insufficient balance in the account");
-        }
-
-        Optional<UtilityAccount> utilityAccount = utilityAccountRepository.findById(utilityPaymentRequest.getProviderId());
-        if(utilityAccount.isEmpty()){
-            throw new ResourceNotFound("Utility account not found", GlobalErrorCode.NOT_FOUND);
-        }
-
-        fromAccount.setBalance(fromAccount.getBalance().subtract(utilityPaymentRequest.getAmount()));
-        accountClient.updateAccount(utilityPaymentRequest.getAccount(), fromAccount);
-
-        repository.save(
-                Transaction.builder()
-                        .accountNumber(utilityPaymentRequest.getAccount())
-                        .transactionType(TransactionType.UTILITY_PAYMENT)
-                        .referenceNumber(referenceNumber)
-                        .amount(utilityPaymentRequest.getAmount().negate())
-                        .build());
-        return UtilityPaymentResponse.builder().message("Utility payment successfully completed")
-                .referenceNumber(referenceNumber).build();
+    if (status != null) {
+      spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
     }
 
-    @Override
-    public ApiResponse saveInternalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
-        List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
+    List<Transaction> transactions = repository.findAll(spec);
 
-        transactions.forEach(transaction -> {
-            transaction.setTransactionType(TransactionType.INTERNAL_TRANSFER);
-            transaction.setStatus(TransactionStatus.COMPLETED);
-            transaction.setReferenceNumber(transactionReference);
-        });
+    return transactions.stream().map(this::map).collect(Collectors.toList());
+  }
 
-        repository.saveAll(transactions);
-        return ApiResponse.builder()
-                .status(200)
-                .success(true)
-                .message("Transaction completed successfully").build();
+
+  @Override
+  public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {
+    String referenceNumber = generateUniqueReferenceNumber();
+
+    Account fromAccount;
+    ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(
+        utilityPaymentRequest.getAccount()).getBody();
+    if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
+      throw new ResourceNotFound("Requested account not found on the server",
+          GlobalErrorCode.NOT_FOUND);
+    }
+    fromAccount = apiResponse.getData();
+
+    if (fromAccount.getBalance().compareTo(utilityPaymentRequest.getAmount()) < 0) {
+      log.error("insufficient balance in the account");
+      throw new InsufficientBalance("Insufficient balance in the account");
     }
 
-    @Override
-    public ApiResponse saveExternalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
-        List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
-
-        transactions.forEach(transaction -> {
-            transaction.setTransactionType(TransactionType.EXTERNAL_TRANSFER);
-            transaction.setStatus(TransactionStatus.COMPLETED);
-            transaction.setReferenceNumber(transactionReference);
-        });
-
-        repository.saveAll(transactions);
-        return ApiResponse.builder()
-                .status(200)
-                .success(true)
-                .message("Transaction completed successfully").build();
+    Optional<UtilityAccount> utilityAccount = utilityAccountRepository.findById(
+        utilityPaymentRequest.getProviderId());
+    if (utilityAccount.isEmpty()) {
+      throw new ResourceNotFound("Utility account not found", GlobalErrorCode.NOT_FOUND);
     }
+
+    fromAccount.setBalance(fromAccount.getBalance().subtract(utilityPaymentRequest.getAmount()));
+    accountClient.updateAccount(utilityPaymentRequest.getAccount(), fromAccount);
+
+    repository.save(Transaction.builder().accountNumber(utilityPaymentRequest.getAccount())
+        .transactionType(TransactionType.UTILITY_PAYMENT).referenceNumber(referenceNumber)
+        .amount(utilityPaymentRequest.getAmount().negate()).build());
+    return UtilityPaymentResponse.builder().message("Utility payment successfully completed")
+        .referenceNumber(referenceNumber).build();
+  }
+
+  @Override
+  public SearchDataDto findLastTransactionByAccountNumberBeforeDate(String accountNumber,
+      LocalDate dateBefore) {
+
+    return map(repository.findTopByAccountNumberAndTransactionDateBeforeOrderByTransactionDateDesc(
+        accountNumber, dateBefore.atStartOfDay()));
+  }
+
+  @Override
+  public ApiResponse saveInternalTransaction(List<TransactionDto> transactionDtos,
+      String transactionReference) {
+    List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
+
+    transactions.forEach(transaction -> {
+      transaction.setTransactionType(TransactionType.INTERNAL_TRANSFER);
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transaction.setReferenceNumber(transactionReference);
+    });
+
+    repository.saveAll(transactions);
+    return ApiResponse.builder().status(200).success(true)
+        .message("Transaction completed successfully").build();
+  }
+
+  @Override
+  public ApiResponse saveExternalTransaction(List<TransactionDto> transactionDtos,
+      String transactionReference) {
+    List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
+
+    transactions.forEach(transaction -> {
+      transaction.setTransactionType(TransactionType.EXTERNAL_TRANSFER);
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transaction.setReferenceNumber(transactionReference);
+    });
+
+    repository.saveAll(transactions);
+    return ApiResponse.builder().status(200).success(true)
+        .message("Transaction completed successfully").build();
+  }
+
+  private SearchDataDto map(Transaction transaction) {
+    if (transaction == null) {
+      return null;
+    }
+
+    SearchDataDto dto = new SearchDataDto();
+    dto.setId(transaction.getId());
+    dto.setReferenceNumber(transaction.getReferenceNumber());
+    dto.setAccountNumber(transaction.getAccountNumber());
+    dto.setTransactionType(transaction.getTransactionType().name());
+    dto.setAmount(transaction.getAmount());
+    dto.setDescription(transaction.getDescription());
+    dto.setTransactionDate(transaction.getTransactionDate());
+    dto.setBalanceBeforeTransaction(transaction.getBalanceBeforeTransaction());
+    dto.setBalanceAfterTransaction(transaction.getBalanceAfterTransaction());
+    dto.setFee(transaction.getFee());
+    return dto;
+  }
 
 }
