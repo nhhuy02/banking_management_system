@@ -1,5 +1,6 @@
 package com.ojt.klb.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,4 +31,14 @@ public class TransactionDto {
 
     @Size(max = 200, message = "Description cannot exceed 200 characters")
     private String description;
+
+    @Schema(hidden = true)
+    private BigDecimal balanceBeforeTransaction;
+
+    @Schema(hidden = true)
+    private BigDecimal balanceAfterTransaction;
+
+    @Schema(hidden = true)
+    private BigDecimal fee;
+
 }
