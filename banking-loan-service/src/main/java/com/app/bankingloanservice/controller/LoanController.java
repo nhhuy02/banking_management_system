@@ -53,7 +53,7 @@ public class LoanController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /** Revised Loan Repayment endpoint
+    /**
      * Get all loans by Account ID without pagination.
      *
      * @param accountId the ID of the account whose loans to retrieve
