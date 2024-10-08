@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.fetch.response.data;
+package com.ctv_it.klb.dto.fetch.response.data.transaction;
 
 import com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO;
 import java.util.List;
