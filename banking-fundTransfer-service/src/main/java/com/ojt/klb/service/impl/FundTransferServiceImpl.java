@@ -161,56 +161,85 @@ public class FundTransferServiceImpl implements FundTransferService {
     }
 
     private String internalTransfer(Account fromAccount, Account toAccount, BigDecimal amount, String description) {
+        BigDecimal fromAccountBalanceBeforeTransaction = fromAccount.getBalance();
+        BigDecimal toAccountBalanceBeforeTransaction = toAccount.getBalance();
+
         fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
         accountClient.updateAccount(fromAccount.getAccountNumber(), fromAccount);
 
         toAccount.setBalance(toAccount.getBalance().add(amount));
         accountClient.updateAccount(toAccount.getAccountNumber(), toAccount);
 
+        BigDecimal fromAccountBalanceAfterTransaction = fromAccount.getBalance();
+        BigDecimal toAccountBalanceAfterTransaction = toAccount.getBalance();
+
         List<Transaction> transactions = List.of(
                 Transaction.builder()
                         .accountNumber(fromAccount.getAccountNumber())
                         .transactionType("INTERNAL_TRANSFER")
-                        .amount(amount)
+                        .amount(amount.negate())
+                        .balanceBeforeTransaction(fromAccountBalanceBeforeTransaction)
+                        .balanceAfterTransaction(fromAccountBalanceAfterTransaction)
+                        .fee(BigDecimal.valueOf(0))
                         .description(description)
                         .build(),
                 Transaction.builder()
                         .accountNumber(toAccount.getAccountNumber())
                         .transactionType("INTERNAL_TRANSFER")
                         .amount(amount)
+                        .balanceBeforeTransaction(toAccountBalanceBeforeTransaction)
+                        .balanceAfterTransaction(toAccountBalanceAfterTransaction)
+                        .fee(BigDecimal.valueOf(0))
                         .description(description)
                         .build());
 
         String transactionReference = generateUniqueTransactionReference();
-        transactionClient.saveTransaction(transactions, transactionReference);
+        transactionClient.saveInternalTransaction(transactions, transactionReference);
         return transactionReference;
     }
 
-    private String interTransfer(Account fromAccount, BankAccount toAccount, BigDecimal amount, String description){
+
+    private String interTransfer(Account fromAccount, BankAccount toAccount, BigDecimal amount, String description) {
+        BigDecimal fromAccountBalanceBeforeTransaction = fromAccount.getBalance();
+        BigDecimal toAccountBalanceBeforeTransaction = toAccount.getBalance();
+
         fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
         accountClient.updateAccount(fromAccount.getAccountNumber(), fromAccount);
 
         toAccount.setBalance(toAccount.getBalance().add(amount));
         simulatorApiClient.updateAccount(toAccount.getAccountNumber(), toAccount);
 
+        BigDecimal fromAccountBalanceAfterTransaction = fromAccount.getBalance();
+        BigDecimal toAccountBalanceAfterTransaction = toAccount.getBalance();
+
         List<Transaction> transactions = List.of(
                 Transaction.builder()
                         .accountNumber(fromAccount.getAccountNumber())
-                        .transactionType("EXTERNAL_TRANSFER")
-                        .amount(amount)
+                        .transactionType(TransferType.EXTERNAL.toString())
+                        .amount(amount.negate())
+                        .balanceBeforeTransaction(fromAccountBalanceBeforeTransaction)
+                        .balanceAfterTransaction(fromAccountBalanceAfterTransaction)
+                        .fee(BigDecimal.valueOf(0))
                         .description(description)
                         .build(),
                 Transaction.builder()
                         .accountNumber(toAccount.getAccountNumber())
-                        .transactionType("EXTERNAL_TRANSFER")
+                        .transactionType(TransferType.EXTERNAL.toString())
                         .amount(amount)
+                        .balanceBeforeTransaction(toAccountBalanceBeforeTransaction)
+                        .balanceAfterTransaction(toAccountBalanceAfterTransaction)
+                        .fee(BigDecimal.valueOf(0))
                         .description(description)
                         .build());
 
         String transactionReference = generateUniqueTransactionReference();
-        transactionClient.saveTransaction(transactions, transactionReference);
+        transactionClient.saveExternalTransaction(transactions, transactionReference);
+
         return transactionReference;
     }
+
+
+
 
     private Account validateFromAccount(String fromAccountNumber, BigDecimal transferAmount) {
         ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(fromAccountNumber).getBody();
@@ -268,11 +297,11 @@ public class FundTransferServiceImpl implements FundTransferService {
         return transfers.stream()
                 .map(transfer -> {
                     FundTransferDto dto = fundTransferMapper.convertToDto(transfer);
-                    if (transfer.getFromAccount().equals(accountNumber)) {
-                        dto.setTransferType(TransferType.valueOf("OUTGOING"));
-                    } else {
-                        dto.setTransferType(TransferType.valueOf("INCOMING"));
-                    }
+//                    if (transfer.getFromAccount().equals(accountNumber)) {
+//                        dto.setTransferType(TransferType.valueOf("OUTGOING"));
+//                    } else {
+//                        dto.setTransferType(TransferType.valueOf("INCOMING"));
+//                    }
                     return dto;
                 })
                 .collect(Collectors.toList());

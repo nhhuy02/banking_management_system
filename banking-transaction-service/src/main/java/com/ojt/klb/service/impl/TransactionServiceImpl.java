@@ -12,9 +12,9 @@ import com.ojt.klb.model.entity.Transaction;
 import com.ojt.klb.model.entity.UtilityAccount;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
-import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
+import com.ojt.klb.model.response.TransactionResponse;
 import com.ojt.klb.model.response.UtilityPaymentResponse;
 import com.ojt.klb.repository.TransactionRepository;
 import com.ojt.klb.repository.UtilityAccountRepository;
@@ -54,37 +54,47 @@ public class TransactionServiceImpl implements TransactionService {
             throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
         }
         account = apiResponse.getData();
-        System.out.println(account);
+
         Transaction transaction = mapper.convertToEntity(transactionDto);
-        if(transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
+
+        BigDecimal accountBalanceBeforeTransaction = account.getBalance();
+
+        if (transactionDto.getTransactionType().equals(TransactionType.DEPOSIT.toString())) {
             if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
                 throw new TransactionException("The minimum deposit amount is 50,000 VND.");
             }
+
             account.setBalance(account.getBalance().add(transactionDto.getAmount()));
+
         } else if (transactionDto.getTransactionType().equals(TransactionType.WITHDRAWAL.toString())) {
-            if(!account.getStatus().equals(Account.Status.active)){
+            if (!account.getStatus().equals(Account.Status.active)) {
                 log.error("account is either inactive/closed, cannot process the transaction");
                 throw new AccountStatusException("account is inactive or closed");
             }
             if (transactionDto.getAmount().compareTo(BigDecimal.valueOf(50000)) < 0) {
                 throw new TransactionException("The minimum withdraw amount is 50,000 VND.");
             }
-            if(account.getBalance().compareTo(transactionDto.getAmount()) < 0){
+            if (account.getBalance().compareTo(transactionDto.getAmount()) < 0) {
                 log.error("insufficient balance in the account");
                 throw new InsufficientBalance("Insufficient balance in the account");
             }
-            transaction.setAmount(transactionDto.getAmount().negate());
+
             account.setBalance(account.getBalance().subtract(transactionDto.getAmount()));
+            transaction.setAmount(transactionDto.getAmount().negate());
         }
+
+        BigDecimal accountBalanceAfterTransaction = account.getBalance();
 
         String referenceNumber = generateUniqueReferenceNumber();
         transaction.setTransactionType(TransactionType.valueOf(transactionDto.getTransactionType()));
         transaction.setDescription(transactionDto.getDescription());
+        transaction.setBalanceBeforeTransaction(accountBalanceBeforeTransaction);
+        transaction.setBalanceAfterTransaction(accountBalanceAfterTransaction);
+        transaction.setFee(BigDecimal.valueOf(0));
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setReferenceNumber(referenceNumber);
 
         accountClient.updateAccount(transactionDto.getAccountNumber(), account);
-
         repository.save(transaction);
 
         BigDecimal balance = accountClient.accountBalance(account.getAccountNumber()).getBody();
@@ -104,6 +114,7 @@ public class TransactionServiceImpl implements TransactionService {
                 )
         );
 
+
         return ApiResponse.builder()
                 .message("Transaction completed successfully")
                 .status(200)
@@ -112,33 +123,34 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+
     private String generateUniqueReferenceNumber() {
         return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
     }
 
     @Override
-    public List<TransactionRequest> getTransaction(String accountNumber) {
+    public List<TransactionResponse> getTransaction(String accountNumber) {
         return repository.findByAccountNumber(accountNumber)
                 .stream().map(transaction -> {
-                    TransactionRequest transactionRequest = new TransactionRequest();
-                    BeanUtils.copyProperties(transaction, transactionRequest);
-                    transactionRequest.setTransactionStatus(transaction.getStatus().toString());
-                    transactionRequest.setLocalDateTime(transaction.getTransactionDate());
-                    transactionRequest.setTransactionType(transaction.getTransactionType().toString());
-                    return transactionRequest;
+                    TransactionResponse transactionResponse = new TransactionResponse();
+                    BeanUtils.copyProperties(transaction, transactionResponse);
+                    transactionResponse.setTransactionStatus(transaction.getStatus().toString());
+                    transactionResponse.setLocalDateTime(transaction.getTransactionDate());
+                    transactionResponse.setTransactionType(transaction.getTransactionType().toString());
+                    return transactionResponse;
                 }).collect(Collectors.toList());
     }
 
     @Override
-    public List<TransactionRequest> getTransactionByTransactionReference(String transactionReference) {
+    public List<TransactionResponse> getTransactionByTransactionReference(String transactionReference) {
         return repository.findByReferenceNumber(transactionReference)
                 .stream().map(transaction -> {
-                    TransactionRequest transactionRequest = new TransactionRequest();
-                    BeanUtils.copyProperties(transaction, transactionRequest);
-                    transactionRequest.setTransactionStatus(transaction.getStatus().toString());
-                    transactionRequest.setLocalDateTime(transaction.getTransactionDate());
-                    transactionRequest.setTransactionType(transaction.getTransactionType().toString());
-                    return transactionRequest;
+                    TransactionResponse transactionResponse = new TransactionResponse();
+                    BeanUtils.copyProperties(transaction, transactionResponse);
+                    transactionResponse.setTransactionStatus(transaction.getStatus().toString());
+                    transactionResponse.setLocalDateTime(transaction.getTransactionDate());
+                    transactionResponse.setTransactionType(transaction.getTransactionType().toString());
+                    return transactionResponse;
                 }).collect(Collectors.toList());
     }
 
@@ -188,6 +200,9 @@ public class TransactionServiceImpl implements TransactionService {
                     dto.setAmount(transaction.getAmount());
                     dto.setDescription(transaction.getDescription());
                     dto.setTransactionDate(transaction.getTransactionDate());
+                    dto.setBalanceBeforeTransaction(transaction.getBalanceBeforeTransaction());
+                    dto.setBalanceAfterTransaction(transaction.getBalanceAfterTransaction());
+                    dto.setFee(transaction.getFee());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -230,7 +245,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public ApiResponse saveTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
+    public ApiResponse saveInternalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
         List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
 
         transactions.forEach(transaction -> {
@@ -245,4 +260,22 @@ public class TransactionServiceImpl implements TransactionService {
                 .success(true)
                 .message("Transaction completed successfully").build();
     }
+
+    @Override
+    public ApiResponse saveExternalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
+        List<Transaction> transactions = mapper.convertToEntityList(transactionDtos);
+
+        transactions.forEach(transaction -> {
+            transaction.setTransactionType(TransactionType.EXTERNAL_TRANSFER);
+            transaction.setStatus(TransactionStatus.COMPLETED);
+            transaction.setReferenceNumber(transactionReference);
+        });
+
+        repository.saveAll(transactions);
+        return ApiResponse.builder()
+                .status(200)
+                .success(true)
+                .message("Transaction completed successfully").build();
+    }
+
 }

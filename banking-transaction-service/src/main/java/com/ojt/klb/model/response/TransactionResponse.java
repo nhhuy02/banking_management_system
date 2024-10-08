@@ -1,4 +1,4 @@
-package com.ojt.klb.model.request;
+package com.ojt.klb.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionRequest {
+public class TransactionResponse {
 
     private String referenceNumber;
 
