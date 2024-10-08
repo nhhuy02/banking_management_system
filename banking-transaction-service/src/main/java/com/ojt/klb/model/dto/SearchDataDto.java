@@ -22,9 +22,13 @@ public class SearchDataDto {
 
     private BigDecimal amount;
 
+    private BigDecimal balanceBeforeTransaction;
+
+    private BigDecimal balanceAfterTransaction;
+
+    private BigDecimal fee;
+
     private String description;
 
     private LocalDateTime transactionDate;
-
-    private BigDecimal balance;
 }
