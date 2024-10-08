@@ -1,6 +1,6 @@
 package com.ctv_it.klb.service.fetch;
 
-import com.ctv_it.klb.dto.fetch.response.data.FetchTransactionDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.transaction.FetchTransactionDataResponseDTO;
 import com.ctv_it.klb.feignClient.TransactionServiceFC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

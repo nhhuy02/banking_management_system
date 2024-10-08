@@ -2,7 +2,7 @@ package com.ctv_it.klb.service.fetch;
 
 import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchAccountDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.account.FetchAccountDataResponseDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.enumeration.BaseStatus;
 import com.ctv_it.klb.feignClient.AccountServiceFC;

@@ -2,7 +2,7 @@ package com.ctv_it.klb.service.fetch;
 
 import com.ctv_it.klb.dto.baseInfo.CustomerInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.customer.FetchCustomerDataResponseDTO;
 import com.ctv_it.klb.feignClient.CustomerServiceFC;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;

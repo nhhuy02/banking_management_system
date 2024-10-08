@@ -2,7 +2,7 @@ package com.ctv_it.klb.service.fetch;
 
 import com.ctv_it.klb.dto.baseInfo.LoanInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchLoanDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.loan.FetchLoanDataResponseDTO;
 import com.ctv_it.klb.feignClient.LoanServiceFC;
 import java.time.LocalDate;
 import java.util.List;
