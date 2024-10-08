@@ -33,7 +33,8 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
     private final RestTemplate restTemplate;
     private final AccountRepository accountRepository;
 
-    public SavingsAccountServiceImpl(SavingsAccountRepository savingsAccountRepository, UserRepository userRepository, RestTemplate restTemplate, AccountRepository accountRepository) {
+    public SavingsAccountServiceImpl(SavingsAccountRepository savingsAccountRepository, UserRepository userRepository,
+            RestTemplate restTemplate, AccountRepository accountRepository) {
         this.savingsAccountRepository = savingsAccountRepository;
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
@@ -122,4 +123,23 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             return new SavingsAccountResponseDto();
         }
     }
+
+    @Override
+    public Optional<SavingsAccountResponseDto> findByUserId(Long userId) {
+        return savingsAccountRepository.findByUserId(userId)
+                .map(savingsAccount -> {
+                    User user = savingsAccount.getUser();
+                    return accountRepository.findByUserId(user.getId())
+                            .map(account -> fetchCustomerData(account.getId(), savingsAccount))
+                            .orElseGet(() -> {
+                                logger.warn("No account found for userId: {}", user.getId());
+                                return Optional.empty();
+                            });
+                })
+                .orElseGet(() -> {
+                    logger.warn("No savings account found for userId: {}", userId);
+                    return Optional.empty();
+                });
+    }
+
 }

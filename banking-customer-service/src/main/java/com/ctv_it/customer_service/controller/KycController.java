@@ -29,7 +29,8 @@ public class KycController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<String>> updateKyc(@PathVariable Long customerId, @Valid @RequestBody KycDto updatedKyc) {
+    public ResponseEntity<ApiResponse<String>> updateKyc(@PathVariable Long customerId,
+            @Valid @RequestBody KycDto updatedKyc) {
         try {
             KycDto kyc = kycService.updateKycbyAccountId(customerId, updatedKyc);
             String successMessage = "KYC with customerId " + customerId + " updated successfully.";
@@ -61,19 +62,24 @@ public class KycController {
         if (kycResponseDtoOptional.isPresent()) {
             KycResponseDto kycResponseDto = kycResponseDtoOptional.get();
 
-            if ("pending".equals(kycResponseDto.getVerificationStatus()) &&
-                    kycResponseDto.getDocumentType() == null && kycResponseDto.getDocumentNumber() == null) {
-                logger.warn("KYC details for id: {} are incomplete, requires update.", customerId);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "KYC details are incomplete. Please update your KYC information.", false, null));
-            } else {
-                logger.info("Successfully fetched KYC details for CustomerId: {}", customerId);
-                return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "KYC details retrieved successfully", true, kycResponseDto));
-            }
+            // if ("pending".equals(kycResponseDto.getVerificationStatus()) &&
+            // kycResponseDto.getDocumentType() == null &&
+            // kycResponseDto.getDocumentNumber() == null) {
+            // logger.warn("KYC details for id: {} are incomplete, requires update.",
+            // customerId);
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            // .body(new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "KYC details are
+            // incomplete. Please update your KYC information.", false, null));
+            // } else {
+            logger.info("Successfully fetched KYC details for CustomerId: {}", customerId);
+            return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "KYC details retrieved successfully",
+                    true, kycResponseDto));
+            // }
         } else {
             logger.warn("KYC not found for customerId: {}", customerId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "KYC not found with id: " + customerId, false, null));
+                    .body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "KYC not found with id: " + customerId, false,
+                            null));
         }
     }
 }

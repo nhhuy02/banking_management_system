@@ -14,15 +14,14 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-
     @Value("${spring.jwt.secret-key}")
-    private String SECRET_KEY ;
+    private String SECRET_KEY;
 
     @Value("${spring.jwt.expiration}")
     private long expiration;
 
-
-    public String createToken(String username, String userId, String accountId, String role, String customerId, String savingAccountId) {
+    public String createToken(String username, String userId, String accountId, String role, String customerId,
+            String savingAccountId, String accountNumber) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
         claims.put("userId", userId);
@@ -30,6 +29,7 @@ public class JwtService {
         claims.put("customerId", customerId);
         claims.put("role", "ROLE_" + role);
         claims.put("savingAccountId", savingAccountId);
+        claims.put("accountNumber", accountNumber);
 
         return Jwts.builder()
                 .setClaims(claims)

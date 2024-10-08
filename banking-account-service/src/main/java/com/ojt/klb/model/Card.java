@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-
 @Getter
 @Setter
 @Entity
@@ -48,11 +47,11 @@ public class Card {
     private String imageUrl;
 
     @Column(name = "opened_at", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    // @ColumnDefault("CURRENT_TIMESTAMP")
     private Timestamp openedAt;
 
     @Column(name = "closed_at", nullable = false)
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    // @ColumnDefault("CURRENT_TIMESTAMP")
     private Timestamp closedAt;
 
 }

@@ -8,4 +8,5 @@ public class IdDto {
     private String accountId;
     private String customerId;
     private String savingAccountId;
+    private String accountNumber;
 }
