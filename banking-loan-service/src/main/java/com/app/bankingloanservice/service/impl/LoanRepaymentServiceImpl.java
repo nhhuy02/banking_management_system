@@ -20,19 +20,20 @@ import com.app.bankingloanservice.util.LatePaymentInterestCalculator;
 import com.app.bankingloanservice.util.RepaymentCalculator;
 import com.app.bankingloanservice.util.RepaymentCalculatorFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class LoanRepaymentServiceImpl implements LoanRepaymentService {
 
     private final LoanRepaymentRepository loanRepaymentRepository;
@@ -59,7 +60,6 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
      * @param repaymentId ID of the repayment schedule
      * @return LoanRepaymentResponse containing repayment details and transaction reference
      */
-    @Transactional
     @Override
     public LoanRepaymentResponse makeRepayment(Long loanId, Long repaymentId) {
         // 1. Retrieve and validate the loan
@@ -84,8 +84,8 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         LocalDate now = LocalDate.now();
         LocalDate paymentDueDate = repayment.getPaymentDueDate();
 
-        // Check if the repayment due date is for the next month
-        if (now.isBefore(paymentDueDate.minusMonths(1).plusDays(1))) {
+        // Check if repayment is within a valid payment period
+        if (!isWithinPaymentWindow(repayment, now)) {
             throw new InvalidRepaymentException("Repayment can only be made for the current period.");
         }
 
@@ -94,11 +94,11 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         BigDecimal latePaymentInterest = BigDecimal.ZERO;
         if (isLate) {
             latePaymentInterest = LatePaymentInterestCalculator.calculateLatePaymentInterest(loan, repayment);
-            repayment.setLatePaymentInterestAmount(latePaymentInterest);
             // Update late payment status and save
             repayment.setPaymentStatus(PaymentStatus.OVERDUE);
             loanRepaymentRepository.save(repayment);
         }
+        repayment.setLatePaymentInterestAmount(latePaymentInterest);
 
         // 5. Calculate the total amount due
         BigDecimal totalAmountDue = repayment.getTotalAmount();
@@ -140,53 +140,118 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         }
 
         // 11. Map repayment to response and include transaction reference, account info
-        LoanRepaymentResponse repaymentResponse = loanRepaymentMapper.toResponse(repayment);
+        LoanRepaymentResponse repaymentResponse = mapToResponse(repayment, borrowerAccount);
         repaymentResponse.setTransactionReference(fundTransferResponse.getTransactionReference());
-        repaymentResponse.setAccountNumber(borrowerAccount.getAccountNumber());
-        repaymentResponse.setCustomerFullName(borrowerAccount.getFullName());
 
         return repaymentResponse;
     }
 
 
     /**
-     * Retrieves the repayment schedule for a loan, with pagination and sorting.
-     * Handles sorting direction and any exceptions related to invalid direction values.
+     * Retrieves the repayment schedule for a loan, ordered by paymentDueDate.
      *
-     * @param loanId    The ID of the loan.
-     * @param page      The current page number.
-     * @param size      The page size.
-     * @param sortBy    The field to sort by.
-     * @param direction The sorting direction (asc/desc).
-     * @return Page of LoanRepaymentResponse.
+     * @param loanId The ID of the loan.
+     * @return List of LoanRepaymentResponse.
      */
     @Override
-    public Page<LoanRepaymentResponse> getRepaymentSchedule(Long loanId, int page, int size, String sortBy, String direction) {
-        Sort.Direction sortDirection;
+    @Transactional(readOnly = true)
+    public List<LoanRepaymentResponse> getRepaymentSchedule(Long loanId) {
 
-        // Try to convert the direction string to Sort.Direction
+        List<LoanRepayment> repayments;
         try {
-            sortDirection = Sort.Direction.fromString(direction); // Handles both uppercase and lowercase
-        } catch (IllegalArgumentException e) {
-            // Log and throw exception if the sort direction is invalid
-            throw new IllegalArgumentException("Invalid sort direction value: " + direction);
+            // Get all payments by loanId and sort by paymentDueDate
+            repayments = loanRepaymentRepository.findByLoanLoanIdOrderByPaymentDueDateAsc(loanId);
+        } catch (Exception e) {
+            log.error("Error fetching loan repayments for loan ID: {}", loanId, e);
+            throw new LoanRepaymentFetchException("Failed to fetch loan repayments", e);
         }
 
-        // Build pageable with sorting
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
-
-        // Fetch loan repayments with pagination
-        Page<LoanRepayment> repayments = loanRepaymentRepository.findByLoanLoanId(loanId, pageable);
-
-        // Get Account information and map to response:
+        // Get account information and map to LoanRepaymentResponse
         Loan loan = loanService.getLoanEntityById(loanId);
         AccountDto accountInfo = accountClientService.getAccountInfoById(loan.getAccountId());
-        return repayments.map(repayment -> {
-            LoanRepaymentResponse repaymentResponse = loanRepaymentMapper.toResponse(repayment);
-            repaymentResponse.setAccountNumber(accountInfo.getAccountNumber());
-            repaymentResponse.setCustomerFullName(accountInfo.getFullName());
-            return repaymentResponse;
-        });
+
+        return repayments.stream()
+                .map(repayment -> mapToResponse(repayment, accountInfo))
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LoanRepaymentResponse> getAvailableLoanRepayments(Long accountId) {
+        log.info("Fetching available loan repayments for account ID: {}", accountId);
+
+        // Ensure accountId is not null to avoid invalid operations
+        if (accountId == null) {
+            throw new IllegalArgumentException("Account ID cannot be null.");
+        }
+
+        // Fetch current date for comparing payment windows
+        LocalDate now = LocalDate.now();
+
+        // Calculate payment cutoff date (current date + 1 month)
+        LocalDate paymentCutOffDate = now.plusMonths(1);
+
+        // Fetch loan repayments that are eligible for payment
+        List<LoanRepayment> repayments = fetchEligibleRepayments(accountId, paymentCutOffDate);
+
+        // Fetch account information from external service
+        AccountDto accountInfo = accountClientService.getAccountInfoById(accountId);
+
+        // Map to response object and sort by paymentDueDate in ascending order
+        List<LoanRepaymentResponse> availableRepayments = repayments.stream()
+                .sorted(Comparator.comparing(LoanRepayment::getPaymentDueDate)) // Sort by paymentDueDate
+                .map(repayment -> mapToResponse(repayment, accountInfo))
+                .toList();
+
+        // Log the number of available repayments found
+        log.info("Found {} available loan repayments for account ID: {}", availableRepayments.size(), accountId);
+
+        return availableRepayments;
+    }
+
+    private List<LoanRepayment> fetchEligibleRepayments(Long accountId, LocalDate paymentCutOffDate) {
+        try {
+            // Retrieve repayments that are eligible for payment
+            return loanRepaymentRepository.findByAccountIdAndWithinPaymentWindowAndUnpaid(
+                    accountId,
+                    LoanStatus.ACTIVE,
+                    PaymentStatus.PAID,
+                    paymentCutOffDate
+            );
+        } catch (Exception e) {
+            // Log and wrap exception to provide more context
+            log.error("Error fetching eligible loan repayments for account ID: {}", accountId, e);
+            throw new LoanRepaymentFetchException("Failed to fetch loan repayments", e);
+        }
+    }
+
+
+    /**
+     * Checks if the repayment is within the valid payment window.
+     *
+     * @param repayment the LoanRepayment object
+     * @param now       the current date
+     * @return true if the repayment is within the allowed payment window
+     */
+    private boolean isWithinPaymentWindow(LoanRepayment repayment, LocalDate now) {
+        // Check if the current date is after the allowed window (1 month before due date)
+        // (paymentDueDate - 30) < now <=> paymentDueDate < (now + 30)
+        return now.isAfter(repayment.getPaymentDueDate().minusMonths(1));
+    }
+
+    /**
+     * Map LoanRepayment entity to LoanRepaymentResponse DTO.
+     *
+     * @param repayment   the LoanRepayment entity
+     * @param accountInfo the account information associated with the repayment
+     * @return the mapped LoanRepaymentResponse object
+     */
+    private LoanRepaymentResponse mapToResponse(LoanRepayment repayment, AccountDto accountInfo) {
+        LoanRepaymentResponse response = loanRepaymentMapper.toResponse(repayment);
+        // Set additional account information from the external service
+        response.setAccountNumber(accountInfo.getAccountNumber());
+        response.setCustomerFullName(accountInfo.getFullName());
+        return response;
     }
 
 }
