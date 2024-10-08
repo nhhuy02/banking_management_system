@@ -1,6 +1,6 @@
 package com.ojt.klb.banking_notification_service.exception;
 
-import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
+import com.ojt.klb.banking_notification_service.dto.response.ResponseMessage;
 
 public class ValidateException  extends RuntimeException{
     private ResponseMessage msg;

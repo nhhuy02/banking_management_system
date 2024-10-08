@@ -2,7 +2,7 @@ package com.ojt.klb.banking_notification_service.service;
 
 
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
-import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
+import com.ojt.klb.banking_notification_service.dto.response.ListResponse;
 import com.ojt.klb.banking_notification_service.dto.consumer.*;
 import com.ojt.klb.banking_notification_service.dto.consumer.account.AccountData;
 import com.ojt.klb.banking_notification_service.dto.consumer.loan.LoanDueDate;
@@ -24,4 +24,5 @@ public interface NotificationService {
     void sendMailLoanDisbursement(LoanDisbursementNotification loanDisbursementNotification);
     void sendMailLoanOverdue(LoanOverdue loanOverdue);
     void sendMailVerifyPassword(OtpEmailRequestDto otpEmailRequestDto);
+    void sendMailPaymentReceiptExternal(TransactionInternalData transactionData);
 }
