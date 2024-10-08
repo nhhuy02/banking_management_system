@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("REDUCING_BALANCE")
+@Component("reducingBalance")
 @RequiredArgsConstructor
 public class ReducingBalanceRepaymentCalculator implements RepaymentCalculator {
 

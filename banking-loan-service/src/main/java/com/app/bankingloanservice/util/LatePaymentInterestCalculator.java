@@ -11,16 +11,19 @@ public class LatePaymentInterestCalculator {
 
     /**
      * Calculates the late payment interest for a given repayment.
+     * The result is rounded to the nearest VND (no decimal places).
      *
      * @param loan       The loan associated with the repayment.
      * @param repayment  The repayment for which to calculate interest.
-     * @return The calculated late payment interest.
+     * @return The calculated late payment interest rounded to the nearest VND.
      */
     public static BigDecimal calculateLatePaymentInterest(Loan loan, LoanRepayment repayment) {
         BigDecimal latePaymentInterestRate = loan.getCurrentInterestRate().getLatePaymentInterestRate();
+
+        // Calculate the interest and round it to nearest VND (no decimals)
         return repayment.getInterestAmount()
                 .multiply(latePaymentInterestRate)
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_UP); // Rounds to 0 decimal places
     }
 
     /**
