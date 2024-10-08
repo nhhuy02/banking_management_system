@@ -19,7 +19,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
   @Override
   public Exception decode(String methodKey, Response response) {
-    log.info("Processing decode error response: {}", response.toString());
+    log.info("Decode error response is processing: {}", response);
     return new FetchErrorResponseExceptionCustomize(parseResponse(response));
   }
 

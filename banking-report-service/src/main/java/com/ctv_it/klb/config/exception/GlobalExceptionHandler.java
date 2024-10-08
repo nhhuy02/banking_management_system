@@ -103,8 +103,9 @@ public class GlobalExceptionHandler {
 
     String fieldName = ex.getPropertyName();
     JsonParser parser = (JsonParser) ex.getProcessor();
-    String rejectedValue = parser != null && parser.getCurrentToken() != null ?
-        parser.getCurrentToken().toString() : "null";
+    String rejectedValue =
+        parser != null && parser.getCurrentToken() != null ? parser.getCurrentToken().toString()
+            : "null";
 
     String message = String.format(
         Translator.toLocale("error.invalid.unrecognized-2", fieldName, rejectedValue));
@@ -142,8 +143,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponseDTO> handleFetchErrorResponseExceptionCustomize(
       FetchErrorResponseExceptionCustomize ex, HttpServletRequest request) {
     FetchResponseDTO<?> fetchResponseDTO = ex.getFetchResponseDTO();
-    return buildErrorResponse(HttpStatus.valueOf(fetchResponseDTO.getStatus()),
-        fetchResponseDTO.getMessage(), null, request);
+    return buildErrorResponse(
+        HttpStatus.valueOf(fetchResponseDTO.getStatus()),
+        fetchResponseDTO.toString(), null, request);
   }
 
   // Helper: Build error response

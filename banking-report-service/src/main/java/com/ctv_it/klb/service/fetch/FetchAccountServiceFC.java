@@ -46,8 +46,7 @@ public class FetchAccountServiceFC {
 
       return handleFetchResponse.handle(fetchResponseDTO);
     } catch (Exception ex) {
-      log.error("Fetch account(savingAccountId={}) failed: \n{}", savingAccountId,
-          ex.toString());
+      log.error("Fetch account(savingAccountId={}) failed", savingAccountId);
       throw ex;
     }
   }
