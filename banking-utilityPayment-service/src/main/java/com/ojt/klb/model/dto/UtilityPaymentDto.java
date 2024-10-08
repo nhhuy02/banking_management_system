@@ -12,4 +12,5 @@ public class UtilityPaymentDto {
     private String referenceNumber;
     private String account;
     private TransactionStatus status;
+    private String description;
 }
