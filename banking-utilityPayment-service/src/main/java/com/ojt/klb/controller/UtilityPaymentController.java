@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class UtilityPaymentController {
     private final UtilityPaymentService utilityPaymentService;
 
-    @GetMapping
-    public ResponseEntity readPayments(Pageable pageable) {
-        return ResponseEntity.ok(utilityPaymentService.readPayments(pageable));
-    }
-
     @PostMapping
     public ResponseEntity processPayment(@RequestBody UtilityPaymentRequest paymentRequest) {
         return ResponseEntity.ok(utilityPaymentService.utilPayment(paymentRequest));
