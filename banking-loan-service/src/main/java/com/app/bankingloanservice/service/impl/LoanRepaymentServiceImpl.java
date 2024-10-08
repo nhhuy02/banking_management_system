@@ -56,28 +56,25 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
     /**
      * Make a repayment and return the repayment response including transaction reference.
      *
-     * @param loanId      ID of the loan
      * @param repaymentId ID of the repayment schedule
      * @return LoanRepaymentResponse containing repayment details and transaction reference
      */
     @Override
-    public LoanRepaymentResponse makeRepayment(Long loanId, Long repaymentId) {
-        // 1. Retrieve and validate the loan
-        Loan loan = loanService.getLoanEntityById(loanId);
-        if (loan.getStatus() != LoanStatus.ACTIVE) {
-            throw new InvalidLoanException("Loan is not active for repayment.");
-        }
+    public LoanRepaymentResponse makeRepayment(Long repaymentId) {
 
-        // 2. Retrieve and validate the repayment schedule
+        // 1. Retrieve and validate the repayment schedule
         LoanRepayment repayment = loanRepaymentRepository.findById(repaymentId)
                 .orElseThrow(() -> new RepaymentNotFoundException("Repayment with ID " + repaymentId + " not found"));
 
-        if (!repayment.getLoan().getLoanId().equals(loanId)) {
-            throw new InvalidRepaymentException("Repayment does not belong to the specified loan.");
-        }
-
         if (repayment.getPaymentStatus() == PaymentStatus.PAID) {
             throw new InvalidRepaymentException("This repayment has already been paid.");
+        }
+
+        // 2. Retrieve and validate the loan
+        Long loanId = repayment.getLoan().getLoanId();
+        Loan loan = loanService.getLoanEntityById(loanId);
+        if (loan.getStatus() != LoanStatus.ACTIVE) {
+            throw new InvalidLoanException("Loan is not active for repayment.");
         }
 
         // 3. Check if the repayment is for the current period
@@ -170,6 +167,33 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         Loan loan = loanService.getLoanEntityById(loanId);
         AccountDto accountInfo = accountClientService.getAccountInfoById(loan.getAccountId());
 
+        return repayments.stream()
+                .map(repayment -> mapToResponse(repayment, accountInfo))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<LoanRepaymentResponse> getRepaymentsByAccountIdAndStatus(Long accountId, PaymentStatus paymentStatus) {
+        log.info("Fetching loan repayments for account ID: {} with payment status: {}", accountId, paymentStatus);
+
+        // Validate input accountId
+        if (accountId == null) {
+            log.error("Failed to fetch loan repayments: Account ID cannot be null");
+            throw new IllegalArgumentException("Account ID cannot be null.");
+        }
+
+        // Query loan repayments by accountId and optional paymentStatus
+        log.info("Querying loan repayments for account ID: {} with payment status: {}", accountId, paymentStatus);
+        List<LoanRepayment> repayments = paymentStatus != null
+                ? loanRepaymentRepository.findByAccountIdAndPaymentStatus(accountId, paymentStatus)
+                : loanRepaymentRepository.findByAccountId(accountId);
+
+        // Get account information from Account Service
+        AccountDto accountInfo = accountClientService.getAccountInfoById(accountId);
+
+        // Map LoanRepayments to LoanRepaymentResponses
+        log.info("Mapping loan repayments to LoanRepaymentResponse DTOs for account ID: {}", accountId);
         return repayments.stream()
                 .map(repayment -> mapToResponse(repayment, accountInfo))
                 .toList();
