@@ -1,9 +1,8 @@
 package com.ojt.klb.banking_notification_service.controller;
 
 import com.ojt.klb.banking_notification_service.dto.NotificationDTO;
-import com.ojt.klb.banking_notification_service.dto.NotificationTemplateRequest;
-import com.ojt.klb.banking_notification_service.dto.Response.ListResponse;
-import com.ojt.klb.banking_notification_service.dto.Response.Response;
+import com.ojt.klb.banking_notification_service.dto.response.ListResponse;
+import com.ojt.klb.banking_notification_service.dto.response.Response;
 import com.ojt.klb.banking_notification_service.entity.NotificationTemplate;
 import com.ojt.klb.banking_notification_service.service.NotificationService;
 import com.ojt.klb.banking_notification_service.service.NotificationTemplateService;
@@ -29,21 +28,15 @@ public class NotificationController {
     @Autowired
     private NotificationTemplateService notificationTemplateService;
 
-    @Operation(summary = "API thêm mới, cập nhật thông báo")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
 
-    @PostMapping("/createOrUpdateNotificationTemplate")
-    public Response<Long> createOrUpdateNotificationTemplate(HttpServletRequest httpRequest,
-                                                             @RequestParam(required = false) Long notificationTemplateId,
-                                                             @RequestBody NotificationTemplateRequest request){
-        Response<Long> response = notificationTemplateService.createOrUpdateNotificationTemplate(notificationTemplateId,request);
-        return  response;
-
-    }
+//    @PostMapping("/createOrUpdateNotificationTemplate")
+//    public Response<Long> createOrUpdateNotificationTemplate(HttpServletRequest httpRequest,
+//                                                             @RequestParam(required = false) Long notificationTemplateId,
+//                                                             @RequestBody NotificationTemplateRequest request){
+//        Response<Long> response = notificationTemplateService.createOrUpdateNotificationTemplate(notificationTemplateId,request);
+//        return  response;
+//
+//    }
 
     @PostMapping("/findById")
     public Response<NotificationTemplate> find(HttpServletRequest httpRequest,
@@ -54,6 +47,12 @@ public class NotificationController {
 
     }
 
+    @Operation(summary = "API truy vấn lịch sử thông báo theo từng customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
 
     @GetMapping(value = {"/getAllNotification"})
     public Response<ListResponse<NotificationDTO>> getAll(HttpServletRequest httpRequest,
