@@ -1,6 +1,5 @@
 package com.ojt.klb.controller;
 
-import com.ojt.klb.model.dto.FundTransferDto;
 import com.ojt.klb.model.request.FundTransferRequest;
 import com.ojt.klb.model.request.InterFundTransferRequest;
 import com.ojt.klb.model.response.FundTransferResponse;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +25,13 @@ public class FundTransferController {
         return new ResponseEntity<>(fundTransferService.interTransfer(interFundTransferRequest), HttpStatus.CREATED);
     }
 
-
-    @GetMapping("/{referenceNumber}")
-    public ResponseEntity<FundTransferDto> getTransferDetailsFromReferenceNumber(@PathVariable String referenceNumber) {
-        return new ResponseEntity<>(fundTransferService.getTransferDetailsFromReferenceNumber(referenceNumber), HttpStatus.OK);
-    }
-    @GetMapping
-    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountNumber(@RequestParam String accountNumber) {
-        return new ResponseEntity<>(fundTransferService.getAllTransferByAccountNumber(accountNumber), HttpStatus.OK);
-    }
+//    @GetMapping("/{referenceNumber}")
+//    public ResponseEntity<FundTransferDto> getTransferDetailsFromReferenceNumber(@PathVariable String referenceNumber) {
+//        return new ResponseEntity<>(fundTransferService.getTransferDetailsFromReferenceNumber(referenceNumber), HttpStatus.OK);
+//    }
+//    @GetMapping
+//    public ResponseEntity<List<FundTransferDto>> getAllTransfersByAccountNumber(@RequestParam String accountNumber) {
+//        return new ResponseEntity<>(fundTransferService.getAllTransferByAccountNumber(accountNumber), HttpStatus.OK);
+//    }
 
 }

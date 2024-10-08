@@ -28,6 +28,12 @@ public class Transaction {
 
     private BigDecimal amount;
 
+    private BigDecimal balanceBeforeTransaction;
+
+    private BigDecimal balanceAfterTransaction;
+
+    private BigDecimal fee;
+
     @CreationTimestamp
     private LocalDateTime transactionDate;
 

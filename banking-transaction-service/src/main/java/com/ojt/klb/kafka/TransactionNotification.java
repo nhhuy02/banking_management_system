@@ -31,6 +31,4 @@ public class TransactionNotification {
 
     private String description;
 
-    public TransactionNotification(String referenceNumber, Long customerId, Account account, String accountName, BigDecimal balance, String transactionType, BigDecimal amount, LocalDateTime now, String description) {
-    }
 }

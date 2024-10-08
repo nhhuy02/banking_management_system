@@ -4,9 +4,9 @@ import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.SearchDataDto;
 import com.ojt.klb.model.dto.TransactionDto;
-import com.ojt.klb.model.request.TransactionRequest;
 import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
+import com.ojt.klb.model.response.TransactionResponse;
 import com.ojt.klb.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +30,21 @@ public class TransactionController {
 
     @PostMapping("/internal")
     public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.saveTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.saveInternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/external")
+    public ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
+        return new ResponseEntity<>(service.saveExternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionRequest>> getTransactions(@RequestParam String accountNumber) {
+    public ResponseEntity<List<TransactionResponse>> getTransactions(@RequestParam String accountNumber) {
         return new ResponseEntity<>(service.getTransaction(accountNumber), HttpStatus.OK);
     }
 
     @GetMapping("/{referenceNumber}")
-    public ResponseEntity<List<TransactionRequest>> getTransactionByTransactionReference(@PathVariable String referenceNumber) {
+    public ResponseEntity<List<TransactionResponse>> getTransactionByTransactionReference(@PathVariable String referenceNumber) {
         return new ResponseEntity<>(service.getTransactionByTransactionReference(referenceNumber), HttpStatus.OK);
     }
 

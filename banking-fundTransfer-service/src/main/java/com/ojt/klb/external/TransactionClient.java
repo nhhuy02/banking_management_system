@@ -14,5 +14,8 @@ import java.util.List;
 public interface TransactionClient {
 
     @PostMapping("/internal")
-    ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
+    ResponseEntity<ApiResponse> saveInternalTransaction(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
+
+    @PostMapping("/external")
+    ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<Transaction> transactions, @RequestParam String transactionReference);
 }
