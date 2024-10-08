@@ -106,7 +106,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+/loans",
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
                     "/api/v1/loan-service/loan-applications/\\d+/documents",
-                    "/api/v1/loan-service/loan-applications/\\d+ ",
+                    "/api/v1/loan-service/loan-applications/\\d+",
                     "/api/v1/loan-service/loan-types/\\d+",
                     "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+",
                     "/api/v1/account/card-types/update/\\d+"
