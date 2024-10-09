@@ -78,6 +78,41 @@ public class LoanRepaymentController {
     }
 
 
+    @GetMapping("/loans/{loanId}/repayments/history")
+    @Operation(summary = "Get repayment history up to now", description = "Retrieve the repayment history for a loan up to the current date.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Repayment history retrieved successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseWrapper.class))),
+            @ApiResponse(responseCode = "404", description = "Loan not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
+    })
+    public ResponseEntity<ApiResponseWrapper<List<LoanRepaymentResponse>>> getRepaymentHistoryUpToNow(
+            @Parameter(description = "ID of the loan", required = true)
+            @PathVariable Long loanId) {
+
+        log.info("Fetching repayment history up to now for loan ID: {}", loanId);
+
+        // Get repayment history up to the current date
+        List<LoanRepaymentResponse> repaymentHistory = loanRepaymentService.getRepaymentHistoryUpToNow(loanId);
+
+        // Log if no repayments found
+        if (repaymentHistory.isEmpty()) {
+            log.warn("No repayment history found for loan ID: {}", loanId);
+        }
+
+        // Create ApiResponseWrapper to return as response
+        ApiResponseWrapper<List<LoanRepaymentResponse>> response = new ApiResponseWrapper<>(
+                HttpStatus.OK.value(),
+                true,
+                repaymentHistory.isEmpty() ? "No repayment history found for this loan." : "Repayment history retrieved successfully.",
+                repaymentHistory // Return the list of repayments (can be empty)
+        );
+
+        // Return wrapped response with HTTP 200 status
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @GetMapping("/accounts/{accountId}/repayments")
     @Operation(summary = "Get Loan Repayments by Account and Optional Status",
             description = "Retrieve loan repayments for a specific account, optionally filtered by payment status.")

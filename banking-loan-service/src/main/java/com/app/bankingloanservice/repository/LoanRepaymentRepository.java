@@ -3,8 +3,6 @@ package com.app.bankingloanservice.repository;
 import com.app.bankingloanservice.constant.LoanStatus;
 import com.app.bankingloanservice.entity.LoanRepayment;
 import com.app.bankingloanservice.constant.PaymentStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,7 +22,7 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Lo
      */
     List<LoanRepayment> findByLoanLoanIdOrderByPaymentDueDateAsc(Long loanId);
 
-    Page<LoanRepayment> findByLoanLoanId(Long loanId, Pageable pageable);
+    List<LoanRepayment> findByLoanLoanIdAndPaymentDueDateLessThanEqualOrderByPaymentDueDateAsc(Long loanId, LocalDate paymentDueDate);
 
     @Query("SELECT lr FROM LoanRepayment lr WHERE lr.paymentDueDate = :dueDate AND lr.paymentStatus = :status")
     List<LoanRepayment> findByPaymentDueDate(LocalDate dueDate, PaymentStatus status);

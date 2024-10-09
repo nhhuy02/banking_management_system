@@ -10,10 +10,10 @@ public class COSRConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Áp dụng cho tất cả các đường dẫn
-                .allowedOrigins("http://localhost:5173") // Nguồn được phép
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // Các phương thức được phép
-                .allowedHeaders("*") // Tất cả các header được phép
-                .allowCredentials(true); // Cho phép gửi cookie
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
