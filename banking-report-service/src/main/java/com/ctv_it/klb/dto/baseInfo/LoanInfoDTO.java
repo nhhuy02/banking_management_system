@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.poi.hpsf.Decimal;
 
 @Builder
 @Setter
@@ -34,4 +33,22 @@ public class LoanInfoDTO {
   private String badDebtReason;
   private String debtClassification;
   private String status;
+
+  @Builder
+  @Setter
+  @Getter
+  @ToString
+  public static class LoanRepaymentInfoDTO {
+
+    private long loanPaymentId;
+    private BigDecimal principalAmount;
+    private BigDecimal interestAmount;
+    private BigDecimal latePaymentInterestAmount;
+    private BigDecimal totalAmount;
+    private LocalDate paymentDueDate;
+    private LocalDate actualPaymentDate;
+    private String transactionReference;
+    private boolean isLate;
+    private String paymentStatus;
+  }
 }

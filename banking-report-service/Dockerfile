@@ -12,3 +12,4 @@ EXPOSE 8086
 
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/banking-report-service.jar"]
+

@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.fetch.response.data;
+package com.ctv_it.klb.dto.fetch.response.data.customer;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

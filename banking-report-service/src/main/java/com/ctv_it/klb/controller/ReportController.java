@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ public class ReportController {
   @PostMapping("/account/{accountId}")
   public ResponseEntity<?> report(HttpServletRequest request,
       @PathVariable @Schema(description = "Id of account") Long accountId,
-      @RequestBody @Schema(description = "Report request body", implementation = ReportRequestDTO.class) ReportRequestDTO reportRequestDTO)
+      @RequestBody @Schema(description = "Report request body", implementation = ReportRequestDTO.class) @Valid ReportRequestDTO reportRequestDTO)
       throws IOException {
 
     log.info("Received ReportRequestDTO: {}", reportRequestDTO);

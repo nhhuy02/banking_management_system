@@ -80,8 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 List<String> allowedRoles = List.of("ROLE_customer", "ROLE_employee", "ROLE_admin");
 
                 if (role == null || !allowedRoles.contains(role)) {
-                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN,
-                            "Forbidden: You don't have permission to access this resource");
+                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this resource");
                     return;
                 }
 
@@ -96,24 +95,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority(role));
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        username, null, authorities);
+                        username, null, authorities
+                );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } catch (ExpiredJwtException e) {
             logger.error("JWT Token has expired");
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token has expired");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token has expired");
             return;
         } catch (SignatureException e) {
             logger.error("JWT Token signature validation failed");
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token Signature Validation failed");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token Signature Validation failed");
             return;
         } catch (Exception e) {
             logger.error("JWT Token validation failed: " + e.getMessage());
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token Validation failed");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token Validation failed");
             return;
         }
 
@@ -121,3 +118,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 }
+

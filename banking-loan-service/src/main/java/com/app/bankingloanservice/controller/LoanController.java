@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -89,10 +90,10 @@ public class LoanController {
             log.warn("No loans found for accountId: {}", accountId);
             message = "No loans found for the given accountId.";
             return new ResponseEntity<>(new ApiResponseWrapper<>(
-                    HttpStatus.NO_CONTENT.value(),
+                    HttpStatus.OK.value(),
                     true,
                     message,
-                    null), HttpStatus.NO_CONTENT);
+                    null), HttpStatus.OK);
         } else {
             log.info("Successfully retrieved loans for accountId: {}", accountId);
             message = "Loans retrieved successfully.";
@@ -131,7 +132,7 @@ public class LoanController {
                     description = "LoanRequest containing the loan details",
                     required = true,
                     content = @Content(schema = @Schema(implementation = LoanRequest.class)))
-            @RequestBody LoanRequest loanRequest) {
+            @Valid @RequestBody LoanRequest loanRequest) {
 
         LoanResponse loanResponse = loanService.createLoan(loanRequest);
 

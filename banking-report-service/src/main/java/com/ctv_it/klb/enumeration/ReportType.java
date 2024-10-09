@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReportType {
-  ACCOUNT(), TRANSACTION(), LOAN();
+  ACCOUNT, TRANSACTION, LOAN, LOAN_REPAYMENT;
 
   public static ReportType fromString(String value) {
     try {

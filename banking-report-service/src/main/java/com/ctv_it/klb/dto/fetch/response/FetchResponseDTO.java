@@ -20,5 +20,4 @@ public class FetchResponseDTO<T> {
   private String message;
   private T data;
   private Object details;
-
 }
