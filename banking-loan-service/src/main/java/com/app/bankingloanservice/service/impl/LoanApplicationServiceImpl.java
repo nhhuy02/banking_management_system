@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +54,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
         // Get Account info from Account Service, throws exception if does not exist:
         AccountDto accountInfo = accountClientService.getAccountInfoById(loanApplication.getAccountId());
+
+        // Check if there are any pending, reviewing, document_required, or approved loan applications for this account
+        checkExistingApplications(loanApplicationRequest.getAccountId());
 
         // Get LoanType
         LoanType loanType = loanTypeService.getLoanTypeById(loanApplicationRequest.getLoanTypeId());
@@ -117,6 +121,21 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
         kafkaTemplate.send(TOPIC, loanApplicationProducer);
 
         return loanApplicationResponse;
+    }
+
+    private void checkExistingApplications(Long accountId) {
+        List<ApplicationStatus> pendingStatuses = Arrays.asList(
+                ApplicationStatus.PENDING,
+                ApplicationStatus.DOCUMENT_REQUIRED,
+                ApplicationStatus.REVIEWING
+        );
+
+        boolean hasExistingApplication = loanApplicationRepository.existsByAccountIdAndApplicationStatusIn(accountId, pendingStatuses);
+
+        if (hasExistingApplication) {
+            log.error("Account {} already has a pending loan application", accountId);
+            throw new InvalidLoanApplicationException("You already have a pending loan application. Please wait for it to be processed before submitting a new one.");
+        }
     }
 
     @Override
