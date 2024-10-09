@@ -19,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "Filter for loan reports")
 public class LoanFilterDTO extends ReportFilterDTO {
 
+  @Schema(description = "Id of loan's type")
   private Long loanTypeId;
 
   @Schema(description = "Loan repayment schedule date range")

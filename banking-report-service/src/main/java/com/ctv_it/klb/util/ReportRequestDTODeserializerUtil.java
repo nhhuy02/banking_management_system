@@ -5,6 +5,7 @@ import com.ctv_it.klb.config.i18n.Translator;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.LoanFilterDTO;
+import com.ctv_it.klb.dto.filter.extend.LoanRepaymentFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO;
 import com.ctv_it.klb.dto.request.ReportRequestDTO;
 import com.ctv_it.klb.dto.response.ErrorDetailDTO;
@@ -117,6 +118,7 @@ public class ReportRequestDTODeserializerUtil extends JsonDeserializer<ReportReq
       filters = switch (reportType) {
         case ACCOUNT -> p.getCodec().treeToValue(filtersNode, AccountFilterDTO.class);
         case LOAN -> p.getCodec().treeToValue(filtersNode, LoanFilterDTO.class);
+        case LOAN_REPAYMENT -> p.getCodec().treeToValue(filtersNode, LoanRepaymentFilterDTO.class);
         case TRANSACTION -> p.getCodec().treeToValue(filtersNode, TransactionFilterDTO.class);
       };
 
