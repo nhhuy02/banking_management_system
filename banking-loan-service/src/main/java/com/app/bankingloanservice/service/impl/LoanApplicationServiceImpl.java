@@ -252,6 +252,11 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private void validateStatusTransition(LoanApplication loanApplication, ApplicationStatus newStatus) {
         ApplicationStatus currentStatus = loanApplication.getApplicationStatus();
 
+        // Check if the new status is the same as the current status
+        if (currentStatus == newStatus) {
+            throw new InvalidLoanApplicationException("New status cannot be the same as the current status.");
+        }
+
         // Check the validity of the transition
         if (currentStatus == ApplicationStatus.PENDING) {
             if (newStatus != ApplicationStatus.REVIEWING && newStatus != ApplicationStatus.DOCUMENT_REQUIRED) {
@@ -267,6 +272,8 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
             if (newStatus != ApplicationStatus.REVIEWING) {
                 throw new InvalidLoanApplicationException("Can only move from DOCUMENT_REQUIRED back to REVIEWING.");
             }
+        } else if (currentStatus == ApplicationStatus.APPROVED) {
+            throw new InvalidLoanApplicationException("Cannot change status from APPROVED.");
         } else if (currentStatus == ApplicationStatus.EXPIRED) {
             throw new InvalidLoanApplicationException("Cannot change status from EXPIRED.");
         }
