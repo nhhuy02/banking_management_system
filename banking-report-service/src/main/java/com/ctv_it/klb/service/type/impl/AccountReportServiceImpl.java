@@ -1,12 +1,15 @@
 package com.ctv_it.klb.service.type.impl;
 
 import com.ctv_it.klb.dto.AccountReportDTO;
+import com.ctv_it.klb.dto.baseInfo.AccountInfoDTO;
 import com.ctv_it.klb.dto.filter.ReportFilterDTO;
 import com.ctv_it.klb.dto.filter.extend.AccountFilterDTO;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.fetch.FetchAccountServiceFC;
 import com.ctv_it.klb.service.fetch.FetchCustomerServiceFC;
 import com.ctv_it.klb.service.type.ReportTypeService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
