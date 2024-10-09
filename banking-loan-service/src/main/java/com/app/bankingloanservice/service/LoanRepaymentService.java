@@ -17,6 +17,9 @@ public interface LoanRepaymentService {
     List<LoanRepaymentResponse> getRepaymentSchedule(Long loanId);
 
     @Transactional(readOnly = true)
+    List<LoanRepaymentResponse> getRepaymentHistoryUpToNow(Long loanId);
+
+    @Transactional(readOnly = true)
     List<LoanRepaymentResponse> getRepaymentsByAccountIdAndStatus(Long accountId, PaymentStatus paymentStatus);
 
     List<LoanRepaymentResponse> getAvailableLoanRepayments(Long accountId);

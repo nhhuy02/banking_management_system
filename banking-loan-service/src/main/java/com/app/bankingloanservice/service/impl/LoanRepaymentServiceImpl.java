@@ -172,6 +172,36 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
                 .toList();
     }
 
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<LoanRepaymentResponse> getRepaymentHistoryUpToNow(Long loanId) {
+        log.info("Fetching repayment history up to now for loan ID: {}", loanId);
+
+        if (loanId == null || loanId <= 0) {
+            log.error("Invalid loan ID: {}", loanId);
+            throw new IllegalArgumentException("Loan ID must be a positive number.");
+        }
+
+        LocalDate now = LocalDate.now();
+
+        // Fetch repayments up to the current date, excluding future payments
+        List<LoanRepayment> repayments = loanRepaymentRepository.findByLoanLoanIdAndPaymentDueDateLessThanEqualOrderByPaymentDueDateAsc(loanId, now);
+
+        // Fetch loan entity
+        Loan loan = loanService.getLoanEntityById(loanId);
+
+        // Fetch account information
+        AccountDto accountInfo = accountClientService.getAccountInfoById(loan.getAccountId());
+
+        // Map to LoanRepaymentResponse and return
+        return repayments.stream()
+                .map(repayment -> mapToResponse(repayment, accountInfo))
+                .toList();
+    }
+
+
+
     @Transactional(readOnly = true)
     @Override
     public List<LoanRepaymentResponse> getRepaymentsByAccountIdAndStatus(Long accountId, PaymentStatus paymentStatus) {
