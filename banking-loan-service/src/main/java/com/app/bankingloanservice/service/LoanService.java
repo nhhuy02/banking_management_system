@@ -4,7 +4,7 @@ import com.app.bankingloanservice.constant.LoanStatus;
 import com.app.bankingloanservice.dto.LoanRequest;
 import com.app.bankingloanservice.dto.LoanResponse;
 import com.app.bankingloanservice.entity.Loan;
-import com.app.bankingloanservice.entity.LoanType;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
