@@ -17,60 +17,60 @@ import java.math.BigDecimal;
 @Schema(description = "Payload for creating or updating a loan type.")
 public class LoanTypeRequest {
 
-    @NotBlank(message = "Loan type name is required.")
-    @Size(max = 100, message = "Loan type name must not exceed 100 characters.")
+    @NotBlank(message = "{loan.type.name.required}")
+    @Size(max = 100, message = "{loan.type.name.size}")
     @Schema(description = "Name of the loan type (e.g., Personal Loan, Commercial Loan)", example = "Personal Loan")
     private String loanTypeName;
 
-    @NotNull(message = "Annual interest rate is required.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Annual interest rate must be greater than 0.")
-    @Digits(integer = 3, fraction = 2, message = "Annual interest rate must be a valid decimal number with up to two decimal places.")
+    @NotNull(message = "{annual.interest.rate.required}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{annual.interest.rate.min}")
+    @Digits(integer = 3, fraction = 2, message = "{annual.interest.rate.digits}")
     @Schema(description = "Annual interest rate for the loan type (%)", example = "5.50")
     private BigDecimal annualInterestRate;
 
-    @NotNull(message = "Past due interest rate is required.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Past due interest rate must be greater than 0.")
-    @Digits(integer = 3, fraction = 2, message = "Past due interest rate must be a valid decimal number with up to two decimal places.")
+    @NotNull(message = "{past.due.interest.rate.required}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{past.due.interest.rate.min}")
+    @Digits(integer = 3, fraction = 2, message = "{past.due.interest.rate.digits}")
     @Schema(description = "Interest rate applied to past due amounts (%)", example = "2.00")
     private BigDecimal pastDueInterestRate;
 
-    @NotNull(message = "Late payment interest rate is required.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Late payment interest rate must be greater than 0.")
-    @Digits(integer = 3, fraction = 2, message = "Late payment interest rate must be a valid decimal number with up to two decimal places.")
+    @NotNull(message = "{late.payment.interest.rate.required}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{late.payment.interest.rate.min}")
+    @Digits(integer = 3, fraction = 2, message = "{late.payment.interest.rate.digits}")
     @Schema(description = "Interest rate applied to late payments (%)", example = "1.50")
     private BigDecimal latePaymentInterestRate;
 
-    @NotNull(message = "Prepayment penalty rate is required.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Prepayment penalty rate must be greater than 0.")
-    @Digits(integer = 3, fraction = 2, message = "Prepayment penalty rate must be a valid decimal number with up to two decimal places.")
+    @NotNull(message = "{prepayment.penalty.rate.required}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{prepayment.penalty.rate.min}")
+    @Digits(integer = 3, fraction = 2, message = "{prepayment.penalty.rate.digits}")
     @Schema(description = "Penalty rate for early repayment (%)", example = "0.50")
     private BigDecimal prepaymentPenaltyRate;
 
-    @NotNull(message = "Maximum loan amount is required.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Maximum loan amount must be greater than 0.")
-    @Digits(integer = 15, fraction = 2, message = "Maximum loan amount must be a valid decimal number.")
+    @NotNull(message = "{max.loan.amount.required}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{max.loan.amount.min}")
+    @Digits(integer = 15, fraction = 2, message = "{max.loan.amount.digits}")
     @Schema(description = "Maximum loan amount that can be borrowed for this loan type (VND)", example = "500000000.00")
     private BigDecimal maxLoanAmount;
 
-    @NotNull(message = "Maximum loan term (months) is required.")
-    @Min(value = 1, message = "Maximum loan term must be at least 1 month.")
+    @NotNull(message = "{max.loan.term.required}")
+    @Min(value = 1, message = "{max.loan.term.min}")
     @Schema(description = "Maximum term for the loan in months", example = "60")
     private Integer maxLoanTermMonths;
 
-    @NotNull(message = "Collateral requirement is mandatory.")
+    @NotNull(message = "{collateral.requirement.required}")
     @Schema(description = "Indicates whether collateral is required for this loan type", example = "true")
     private Boolean requiresCollateral;
 
-    @NotNull(message = "Review time is required.")
-    @Min(value = 1, message = "Review time must be at least 1 day.")
+    @NotNull(message = "{review.time.required}")
+    @Min(value = 1, message = "{review.time.min}")
     @Schema(description = "Time required for loan review (in days)", example = "3")
     private Integer reviewTimeDays;
 
-    @Size(max = 1000, message = "Description must not exceed 1000 characters.")
+    @Size(max = 1000, message = "{description.size}")
     @Schema(description = "Detailed description of the loan type", example = "This loan type is suitable for personal use.")
     private String description;
 
-    @NotNull(message = "Active status is required.")
+    @NotNull(message = "{active.status.required}")
     @Schema(description = "Indicates whether this loan type is currently active and available", example = "true")
     private Boolean isActive;
 }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class CollateralController {
     @PostMapping(value = "/{collateralId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseWrapper<DocumentResponse>> uploadCollateralDocument(
             @PathVariable("collateralId") Long collateralId,
-            @ModelAttribute DocumentUploadRequest documentUploadRequest) {
+            @Valid @ModelAttribute DocumentUploadRequest documentUploadRequest) {
 
         log.info("Uploading document for collateral with ID: {}", collateralId);
 
