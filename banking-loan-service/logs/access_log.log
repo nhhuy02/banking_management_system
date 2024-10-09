@@ -159,3 +159,171 @@
 2024-10-09T16:27:29.390+07:00  INFO 52118 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-10-09T16:32:29.394+07:00  INFO 52118 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2024-10-09T16:37:29.398+07:00  INFO 52118 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T16:42:29.402+07:00  INFO 52118 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T16:44:01.740+07:00  INFO 52118 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - Re-registering apps/BANKING-LOAN-SERVICE
+2024-10-09T16:44:01.741+07:00  INFO 52118 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060: registering service...
+2024-10-09T16:44:01.748+07:00  INFO 52118 --- [banking-loan-service] [DiscoveryClient-HeartbeatExecutor-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - registration status: 204
+2024-10-09T16:44:43.202+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application BANKING-LOAN-SERVICE with eureka with status DOWN
+2024-10-09T16:44:43.204+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728467083204, current=DOWN, previous=UP]
+2024-10-09T16:44:43.205+07:00  INFO 52118 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060: registering service...
+2024-10-09T16:44:43.244+07:00  INFO 52118 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - registration status: 204
+2024-10-09T16:44:43.251+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T16:44:43.253+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-10-09T16:44:43.265+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-10-09T16:44:43.266+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2024-10-09T16:44:46.271+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2024-10-09T16:44:46.285+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - deregister  status: 200
+2024-10-09T16:44:46.286+07:00  INFO 52118 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2024-10-09T16:44:51.141+07:00  INFO 54022 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 21.0.4 with PID 54022 (/Users/nvs/Downloads/Work/KLB/microservices-core-banking/banking-loan-service/build/classes/java/main started by nvs in /Users/nvs/Downloads/Work/KLB/microservices-core-banking)
+2024-10-09T16:44:51.142+07:00  INFO 54022 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-10-09T16:44:51.161+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2024-10-09T16:44:51.161+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
+2024-10-09T16:44:51.530+07:00  INFO 54022 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-09T16:44:51.607+07:00  INFO 54022 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 74 ms. Found 7 JPA repository interfaces.
+2024-10-09T16:44:51.726+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=2997d07b-2cad-3b8e-9203-607cbcfaf9a9
+2024-10-09T16:44:51.846+07:00  WARN 54022 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-09T16:44:51.848+07:00  WARN 54022 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-09T16:44:51.942+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
+2024-10-09T16:44:51.948+07:00  INFO 54022 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-09T16:44:51.948+07:00  INFO 54022 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-09T16:44:51.976+07:00  INFO 54022 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-09T16:44:51.976+07:00  INFO 54022 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 815 ms
+2024-10-09T16:44:51.996+07:00 DEBUG 54022 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
+2024-10-09T16:44:52.044+07:00  INFO 54022 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-09T16:44:52.065+07:00  INFO 54022 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-09T16:44:52.078+07:00  INFO 54022 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-09T16:44:52.181+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-09T16:44:52.191+07:00  INFO 54022 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-09T16:44:52.342+07:00  INFO 54022 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@336e17be
+2024-10-09T16:44:52.343+07:00  INFO 54022 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-09T16:44:52.883+07:00  INFO 54022 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-09T16:44:53.013+07:00  INFO 54022 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T16:44:53.090+07:00  WARN 54022 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-09T16:44:53.321+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-09T16:44:53.979+07:00  INFO 54022 --- [banking-loan-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2024-10-09T16:44:53.987+07:00  WARN 54022 --- [banking-loan-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-09T16:44:54.003+07:00  INFO 54022 --- [banking-loan-service] [main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-admin-0
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2024-10-09T16:44:54.065+07:00  INFO 54022 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-09T16:44:54.065+07:00  INFO 54022 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-09T16:44:54.066+07:00  INFO 54022 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1728467094065
+2024-10-09T16:44:54.191+07:00  INFO 54022 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for banking-loan-service-admin-0 unregistered
+2024-10-09T16:44:54.193+07:00  INFO 54022 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-10-09T16:44:54.193+07:00  INFO 54022 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-10-09T16:44:54.193+07:00  INFO 54022 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-10-09T16:44:54.200+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2024-10-09T16:44:54.210+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2024-10-09T16:44:54.211+07:00  INFO 54022 --- [banking-loan-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2024-10-09T16:44:54.214+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2024-10-09T16:44:54.319+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2024-10-09T16:44:54.319+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2024-10-09T16:44:54.320+07:00  INFO 54022 --- [banking-loan-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-09T16:44:54.320+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1728467094320 with initial instances count: 5
+2024-10-09T16:44:54.323+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application BANKING-LOAN-SERVICE with eureka with status UP
+2024-10-09T16:44:54.323+07:00  INFO 54022 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728467094323, current=UP, previous=STARTING]
+2024-10-09T16:44:54.323+07:00  INFO 54022 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060: registering service...
+2024-10-09T16:44:54.329+07:00  INFO 54022 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8060 (http) with context path '/'
+2024-10-09T16:44:54.330+07:00  INFO 54022 --- [banking-loan-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8060
+2024-10-09T16:44:54.342+07:00  INFO 54022 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/192.168.1.70:banking-loan-service:8060 - registration status: 204
+2024-10-09T16:44:54.342+07:00  INFO 54022 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Started BankingLoanServiceApplication in 3.576 seconds (process running for 3.75)
+2024-10-09T16:49:54.220+07:00  INFO 54022 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T16:54:54.225+07:00  INFO 54022 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T16:59:54.233+07:00  INFO 54022 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T17:00:05.121+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-09T17:00:05.122+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-10-09T17:00:05.124+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-10-09T17:00:05.129+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /api/v1/loan-service/loans/filters?accountId=1, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:00:05.150+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.controller.LoanController          : Received request to filters loan(accountId=1, loanTypeId=null, loanRepaymentScheduleFrom=null, loanRepaymentScheduleTo=null, loanStatus=null)
+2024-10-09T17:00:05.263+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 1
+2024-10-09T17:00:05.289+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 1
+2024-10-09T17:00:05.305+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /api/v1/loan-service/loans/filters?accountId=1, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:00:22.229+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /api/v1/loan-service/loans/1, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:00:22.232+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.service.impl.LoanServiceImpl       : Attempting to get loan with ID: 1
+2024-10-09T17:00:22.244+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 1
+2024-10-09T17:00:22.262+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 1
+2024-10-09T17:00:22.266+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /api/v1/loan-service/loans/1, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:00:22.268+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /api/v1/loan-service/loans/1/repayments, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:00:22.270+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.LoanRepaymentController          : Fetching repayment schedule for loanId: 1
+2024-10-09T17:00:22.307+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.service.impl.LoanServiceImpl       : Attempting to get loan with ID: 1
+2024-10-09T17:00:22.309+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 1
+2024-10-09T17:00:22.326+07:00  INFO 54022 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 1
+2024-10-09T17:00:22.333+07:00 DEBUG 54022 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /api/v1/loan-service/loans/1/repayments, client=127.0.0.1, headers=[accept:"*/*", user-agent:"Java/21.0.4", host:"localhost:8060", connection:"keep-alive"]]
+2024-10-09T17:04:54.233+07:00  INFO 54022 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
