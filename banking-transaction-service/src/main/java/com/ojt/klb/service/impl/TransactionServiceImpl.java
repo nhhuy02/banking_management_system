@@ -188,7 +188,9 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.stream()
                 .map(transaction -> {
                     SearchDataDto dto = new SearchDataDto();
+                    dto.setId(transaction.getId());
                     dto.setAccountNumber(transaction.getAccountNumber());
+                    dto.setReferenceNumber(transaction.getReferenceNumber());
                     dto.setTransactionType(transaction.getTransactionType().name());
                     dto.setAmount(transaction.getAmount());
                     dto.setDescription(transaction.getDescription());
