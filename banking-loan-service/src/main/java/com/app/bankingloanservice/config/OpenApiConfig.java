@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class OpenApiConfig implements WebMvcConfigurer {
+public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -18,15 +18,6 @@ public class OpenApiConfig implements WebMvcConfigurer {
                         .version("1.0")
                         .description("This is the Loan Service API of the Bank Account Management System.")
                 );
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
     }
 
 }

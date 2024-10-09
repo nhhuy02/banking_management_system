@@ -41,3 +41,5 @@ out/
 .vscode/
 
 ./docker-volumes/
+
+.DS_Store

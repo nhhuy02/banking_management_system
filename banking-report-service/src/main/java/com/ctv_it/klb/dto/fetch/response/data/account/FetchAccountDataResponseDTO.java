@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.fetch.response.data;
+package com.ctv_it.klb.dto.fetch.response.data.account;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

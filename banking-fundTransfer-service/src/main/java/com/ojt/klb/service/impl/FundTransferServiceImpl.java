@@ -301,7 +301,7 @@ public class FundTransferServiceImpl implements FundTransferService {
 
 
     private String generateUniqueTransactionReference() {
-        return "INT" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+        return "FT" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
     }
 
 

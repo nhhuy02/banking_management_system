@@ -9,15 +9,11 @@ import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.SearchDataDto;
 import com.ojt.klb.model.dto.TransactionDto;
 import com.ojt.klb.model.entity.Transaction;
-import com.ojt.klb.model.entity.UtilityAccount;
 import com.ojt.klb.model.external.Account;
 import com.ojt.klb.model.mapper.TransactionMapper;
-import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.model.response.TransactionResponse;
-import com.ojt.klb.model.response.UtilityPaymentResponse;
 import com.ojt.klb.repository.TransactionRepository;
-import com.ojt.klb.repository.UtilityAccountRepository;
 import com.ojt.klb.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +26,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,7 +38,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final AccountClient accountClient;
     private final TransactionMapper mapper = new TransactionMapper();
     private final TransactionProducer transactionProducer;
-    private final UtilityAccountRepository utilityAccountRepository;
 
     @Override
     public ApiResponse handleTransaction(TransactionDto transactionDto) {
@@ -123,9 +117,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-
     private String generateUniqueReferenceNumber() {
-        return "TRX" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+        return "TRN" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
     }
 
     @Override
@@ -164,7 +157,7 @@ public class TransactionServiceImpl implements TransactionService {
             TransactionStatus status) {
 
         Specification<Transaction> spec = (root, query, cb) -> {
-            query.distinct(false);
+            query.distinct(true);
             return null;
         };
 
@@ -195,7 +188,9 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.stream()
                 .map(transaction -> {
                     SearchDataDto dto = new SearchDataDto();
+                    dto.setId(transaction.getId());
                     dto.setAccountNumber(transaction.getAccountNumber());
+                    dto.setReferenceNumber(transaction.getReferenceNumber());
                     dto.setTransactionType(transaction.getTransactionType().name());
                     dto.setAmount(transaction.getAmount());
                     dto.setDescription(transaction.getDescription());
@@ -208,41 +203,26 @@ public class TransactionServiceImpl implements TransactionService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ApiResponse saveUtilityPaymentTransaction(TransactionDto transactionDto, String referenceNumber) {
+        Transaction transaction = mapper.convertToEntity(transactionDto);
+
+        transaction.setTransactionType(TransactionType.UTILITY_PAYMENT);
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setReferenceNumber(referenceNumber);
+
+        repository.save(transaction);
+        return ApiResponse.builder()
+                .status(200)
+                .success(true)
+                .message("Transaction completed successfully").build();
+    }
 
     @Override
-    public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {
-        String referenceNumber = generateUniqueReferenceNumber();
-
-        Account fromAccount;
-        ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(utilityPaymentRequest.getAccount()).getBody();
-        if (Objects.isNull(apiResponse) || !apiResponse.isSuccess()) {
-            throw new ResourceNotFound("Requested account not found on the server", GlobalErrorCode.NOT_FOUND);
-        }
-        fromAccount = apiResponse.getData();
-
-        if(fromAccount.getBalance().compareTo(utilityPaymentRequest.getAmount()) < 0){
-            log.error("insufficient balance in the account");
-            throw new InsufficientBalance("Insufficient balance in the account");
-        }
-
-        Optional<UtilityAccount> utilityAccount = utilityAccountRepository.findById(utilityPaymentRequest.getProviderId());
-        if(utilityAccount.isEmpty()){
-            throw new ResourceNotFound("Utility account not found", GlobalErrorCode.NOT_FOUND);
-        }
-
-        fromAccount.setBalance(fromAccount.getBalance().subtract(utilityPaymentRequest.getAmount()));
-        accountClient.updateAccount(utilityPaymentRequest.getAccount(), fromAccount);
-
-        repository.save(
-                Transaction.builder()
-                        .accountNumber(utilityPaymentRequest.getAccount())
-                        .transactionType(TransactionType.UTILITY_PAYMENT)
-                        .referenceNumber(referenceNumber)
-                        .amount(utilityPaymentRequest.getAmount().negate())
-                        .build());
-        return UtilityPaymentResponse.builder().message("Utility payment successfully completed")
-                .referenceNumber(referenceNumber).build();
+    public SearchDataDto findLastTransactionByAccountNumberBeforeDate(String accountNumber, LocalDate dateBefore) {
+        return null;
     }
+
 
     @Override
     public ApiResponse saveInternalTransaction(List<TransactionDto> transactionDtos, String transactionReference) {
