@@ -31,9 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> employeeEndpoints = List.of(
             "/api/v1/account/card-registration/pending-requests",
             // "/api/v1/notification/getAllNotification",
-            "/api/v1/account/card-types/**",
-            "/api/v1/loan-service/loans/{loanId}/disburse",
-            "/api/v1/loan-service/loan-applications/{applicationId}/status"
+            "/api/v1/account/card-types/",
+            "/api/v1/loan-service/loans/\\d+/disburse",
+            "/api/v1/loan-service/loan-applications/\\d+/status"
     );
 
     @Override
@@ -81,8 +81,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                if (role.equals("ROLE_customer") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)) {
-                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this employee resource");
+                if (role.equals("ROLE_customer") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)
+                    || role.equals("ROLE_admin") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)) {
+                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN,
+                            "Forbidden: You don't have permission to access this employee resource");
                     return;
                 }
 

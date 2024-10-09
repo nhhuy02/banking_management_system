@@ -3,7 +3,7 @@ package com.ctv_it.customer_service.service.impl;
 import com.ctv_it.customer_service.client.AccountClient;
 import com.ctv_it.customer_service.dto.AccountData;
 import com.ctv_it.customer_service.dto.OtpRequestDto;
-import com.ctv_it.customer_service.dto.VerificationCodeDto;
+import com.ctv_it.customer_service.dto.VerificationCodeRequestDto;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.VerificationCode;
 import com.ctv_it.customer_service.repository.CustomerRepository;
@@ -46,7 +46,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public VerificationCodeDto generateCode(Long customerId, String email) {
+    public VerificationCodeRequestDto generateCode(Long customerId, String email) {
         logger.info("Generating verification code for customer ID: {} and email: {}", customerId, email);
 
         Optional<Customer> customer = customerRepository.findById(customerId);
@@ -87,8 +87,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         kafkaTemplate.send(TOPIC, otpEmailRequestDto);
         logger.info("Sent otp email to Kafka topic {}", TOPIC);
 
-        VerificationCodeDto dto = new VerificationCodeDto();
-        dto.setCode(code);
+        VerificationCodeRequestDto dto = new VerificationCodeRequestDto();
         dto.setEmail(email);
         return dto;
     }
@@ -96,58 +95,67 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean verifyCode(Long customerId, String code) {
+        Optional<VerificationCode> verificationCodeOptional = verifyCodeAndCheckExpiry(customerId, code);
+        if (verificationCodeOptional.isEmpty()) {
+            return false;
+        }
+
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            ResponseEntity<ApiResponse<AccountData>> responseEntity = accountClient.getAccountData(customer.getAccountId());
+
+            if (responseEntity.getBody() != null && responseEntity.getBody().isSuccess()) {
+                AccountData accountData = responseEntity.getBody().getData();
+                if (accountData != null) {
+                    accountData.setCustomerId(customerId);
+                    accountData.setCustomerName(customer.getFullName());
+                    accountData.setEmail(customer.getEmail());
+                    accountData.setPhoneNumber(customer.getPhoneNumber());
+
+                    kafkaTemplate1.send(TOPIC1, accountData);
+                    logger.info("Sent OTP email to Kafka topic: {}", TOPIC1);
+                    return true;
+                }
+            }
+            logger.error("Failed to fetch customer data from external service for accountId: {}", customer.getAccountId());
+        } else {
+            throw new IllegalArgumentException("Customer not found");
+        }
+
+        return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean verifyOtpResetPassword(Long customerId, String code) {
+        return verifyCodeAndCheckExpiry(customerId, code).isPresent();
+    }
+
+    private Optional<VerificationCode> verifyCodeAndCheckExpiry(Long customerId, String code) {
         logger.info("Verifying code for customer ID: {}", customerId);
 
         Optional<VerificationCode> verificationCodeOptional = verificationCodeRepository.findByCustomerIdAndCode(customerId, code);
 
         if (verificationCodeOptional.isEmpty()) {
             logger.warn("Verification failed: Code not found or invalid for customer ID: {}", customerId);
-            return false;
+            return Optional.empty();
         }
 
         VerificationCode verificationCode = verificationCodeOptional.get();
 
         if (verificationCode.getExpiresAt().isBefore(Instant.now())) {
             logger.warn("Verification failed: Code expired for customer ID: {}", customerId);
-            return false;
+            return Optional.empty();
         }
 
         verificationCode.setIsVerified(true);
         verificationCode.setUsedAt(Instant.now());
         verificationCodeRepository.save(verificationCode);
+
         logger.info("Code verified successfully for customer ID: {}", customerId);
-
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-
-            ResponseEntity<ApiResponse<AccountData>> responseEntity = accountClient.getAccountData(customer.getAccountId());
-            if (responseEntity.getBody() != null && responseEntity.getBody().isSuccess()) {
-                AccountData accountData = responseEntity.getBody().getData();
-
-                if (accountData != null) {
-
-                    accountData.setCustomerId(customerId);
-                    accountData.setCustomerName(customer.getFullName());
-                    accountData.setEmail(customer.getEmail());
-                    accountData.setPhoneNumber(customer.getPhoneNumber());
-                    accountData.setAccountNumber(accountData.getAccountNumber());
-                    accountData.setAccountName(accountData.getAccountName());
-
-                    kafkaTemplate1.send(TOPIC1, accountData);
-                    logger.info("Sent OTP email to Kafka topic: {}", TOPIC1);
-                    logger.info("Data sent: {}", accountData);
-                } else {
-                    logger.error("xFailed to fetch customer data from external service for accountId: {}", customer.getAccountId());
-                }
-            } else {
-                logger.error("Failed to fetch customer data from external service for accountId: {}", customer.getAccountId());
-            }
-
-        } else {
-            throw new IllegalArgumentException("Customer not found");
-        }
-        return true;
+        return Optional.of(verificationCode);
     }
+
 }
 
