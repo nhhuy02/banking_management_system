@@ -28,25 +28,37 @@ public class TransactionController {
     }
 
     @PostMapping("/internal")
-    public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.saveInternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveTransaction(@RequestBody List<TransactionDto> transactionDtos,
+            @RequestParam String transactionReference) {
+        return new ResponseEntity<>(service.saveInternalTransaction(transactionDtos, transactionReference),
+                HttpStatus.CREATED);
     }
 
     @PostMapping("/external")
-    public ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<TransactionDto> transactionDtos, @RequestParam String transactionReference) {
-        return new ResponseEntity<>(service.saveExternalTransaction(transactionDtos, transactionReference), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveExternalTransaction(@RequestBody List<TransactionDto> transactionDtos,
+            @RequestParam String transactionReference) {
+        return new ResponseEntity<>(service.saveExternalTransaction(transactionDtos, transactionReference),
+                HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionResponse>> getTransactions(@RequestParam String accountNumber) {
-        return new ResponseEntity<>(service.getTransaction(accountNumber), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getTransactions(@RequestParam String accountNumber) {
+        List<TransactionResponse> transactions = service.getTransaction(accountNumber);
+        return ResponseEntity.ok(
+                new ApiResponse<>(HttpStatus.OK.value(), "Transactions retrieved successfully", true, transactions));
     }
 
     @GetMapping("/{referenceNumber}")
-    public ResponseEntity<List<TransactionResponse>> getTransactionByTransactionReference(@PathVariable String referenceNumber) {
-        return new ResponseEntity<>(service.getTransactionByTransactionReference(referenceNumber), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getTransactionByTransactionReference(
+            @PathVariable String referenceNumber) {
+        List<TransactionResponse> transactions = service.getTransactionByTransactionReference(referenceNumber);
+        if (transactions.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+                    "No transactions found for the provided reference number", false, null));
+        }
+        return ResponseEntity.ok(
+                new ApiResponse<>(HttpStatus.OK.value(), "Transactions retrieved successfully", true, transactions));
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<List<SearchDataDto>> findTransactions(
@@ -56,12 +68,15 @@ public class TransactionController {
             @RequestParam(required = false) LocalDate toDate,
             @RequestParam(required = false) TransactionStatus status) {
 
-        List<SearchDataDto> transactions = service.findTransactions(accountNumber, transactionType, fromDate, toDate, status);
+        List<SearchDataDto> transactions = service.findTransactions(accountNumber, transactionType, fromDate, toDate,
+                status);
         return ResponseEntity.ok(transactions);
     }
 
     @PostMapping("/util-payment")
-    public ResponseEntity<ApiResponse> saveUtilityPaymentTransaction(@RequestBody TransactionDto transactionDto, @RequestParam String referenceNumber) {
-        return new ResponseEntity<>(service.saveUtilityPaymentTransaction(transactionDto, referenceNumber), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> saveUtilityPaymentTransaction(@RequestBody TransactionDto transactionDto,
+            @RequestParam String referenceNumber) {
+        return new ResponseEntity<>(service.saveUtilityPaymentTransaction(transactionDto, referenceNumber),
+                HttpStatus.CREATED);
     }
 }
