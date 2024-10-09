@@ -126,24 +126,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void forgetPasswordGetCode(String identifier) {
-        Optional<User> user;
-
-        // Kiểm tra xem identifier có phải là số điện thoại hay email
-        if (identifier.matches("\\d{10}")) { // Giả sử số điện thoại có 10 chữ số
-            user = userRepository.findByPhoneNumber(identifier);
-        } else {
-            user = userRepository.findByEmail(identifier);
-        }
-
+    public void forgetPasswordGetCode(String phoneNumber) {
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
             Optional<Account> account = accountRepository.findByUserId(user.get().getId());
             ResponseEntity<ApiResponse<AccountDto>> data = accountClient.getData(account.get().getId());
-
             if (data.getBody() != null && data.getBody().isSuccess()) {
                 AccountDto accountDto = data.getBody().getData();
                 accountDto.setAccountId(account.get().getId());
-                if (accountDto.getPhoneNumber().equals(identifier)) {
+                if (accountDto.getPhoneNumber().equals(phoneNumber)) {
                     accountDto.setAccountId(account.get().getId());
                     kafkaTemplateSMS.send(TOPIC_SMS, accountDto);
                     logger.info("Send messages to: {}", TOPIC_SMS);
@@ -153,8 +144,8 @@ public class UserServiceImpl implements UserService {
                 }
             }
         } else {
-            logger.warn("User not found: {} ", identifier);
-            throw new UserNotFoundException("User with identifier " + identifier + " not found.");
+            logger.warn("User not found: {} ", phoneNumber);
+            throw new UserNotFoundException("User with phoneNumber " + phoneNumber + " not found.");
         }
     }
 

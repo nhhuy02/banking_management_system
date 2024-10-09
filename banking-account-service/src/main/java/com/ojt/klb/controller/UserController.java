@@ -88,11 +88,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/forgetPassword/code")
-    public ResponseEntity<ApiResponse<String>> forgetPasswordGetCode(@RequestParam String identifier) {
-        logger.info("Forget password code request received for identifier: {}", identifier);
+    @PostMapping("/forgetPassword/code/{phoneNumber}")
+    public ResponseEntity<ApiResponse<String>> forgetPasswordGetCode(@PathVariable String phoneNumber) {
+        logger.info("Forget password code request received for phone number: {}", phoneNumber);
         try {
-            userService.forgetPasswordGetCode(identifier);
+            userService.forgetPasswordGetCode(phoneNumber);
 
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.OK.value(),
@@ -102,7 +102,7 @@ public class UserController {
             return ResponseEntity.ok(response);
 
         } catch (UserNotFoundException e) {
-            logger.warn("User not found with identifier: {}", identifier);
+            logger.warn("User not found with phone number: {}", phoneNumber);
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.NOT_FOUND.value(),
                     "User not found",
@@ -111,7 +111,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
         } catch (Exception e) {
-            logger.error("Error sending password reset code for identifier: {}", identifier, e);
+            logger.error("Error sending password reset code for phone number: {}", phoneNumber, e);
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "An error occurred while sending the password reset code",
