@@ -54,9 +54,6 @@ public class FetchLoanDataResponseDTO {
     private BigDecimal prepaymentPenaltyRate;
     private LocalDate effectiveFrom;
   }
-//
-
-//    }
 
   @NoArgsConstructor
   @AllArgsConstructor

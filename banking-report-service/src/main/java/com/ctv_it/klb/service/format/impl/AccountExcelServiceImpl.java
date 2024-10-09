@@ -5,6 +5,8 @@ import com.ctv_it.klb.enumeration.ReportFormat;
 import com.ctv_it.klb.enumeration.ReportType;
 import com.ctv_it.klb.service.format.ReportFormatService;
 import com.ctv_it.klb.util.FileUtil;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,9 @@ public class AccountExcelServiceImpl implements ReportFormatService<AccountRepor
   }
 
   private Map<String, Object> customData(AccountReportDTO accountReportDTO) {
-    return Map.of("customer", accountReportDTO.getCustomer(), "accounts",
-        accountReportDTO.getAccounts());
+    return Map.of(
+        "reportDate", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+        "customer", accountReportDTO.getCustomer(),
+        "accounts", accountReportDTO.getAccounts());
   }
 }

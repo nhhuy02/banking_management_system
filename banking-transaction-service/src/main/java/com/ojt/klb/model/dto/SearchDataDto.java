@@ -19,7 +19,6 @@ public class SearchDataDto {
 
   private String referenceNumber;
 
-  @NotNull
   private String accountNumber;
 
   private String transactionType;

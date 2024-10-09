@@ -14,8 +14,8 @@ public interface TransactionService {
     ApiResponse handleTransaction(TransactionDto transactionDto);
     ApiResponse saveInternalTransaction(List<TransactionDto> transactionDtos, String referenceNumber);
     ApiResponse saveExternalTransaction(List<TransactionDto> transactionDtos, String referenceNumber);
-    List<TransactionResponse> getTransaction(String accountId);
-    List<TransactionResponse> getTransactionByTransactionReference(String transactionReference);
+    ApiResponse<List<TransactionResponse>> getTransaction(String accountId);
+    ApiResponse<List<TransactionResponse>> getTransactionByTransactionReference(String transactionReference);
 
     List<SearchDataDto> findTransactions(
             String accountNumber,
@@ -27,5 +27,5 @@ public interface TransactionService {
 
     ApiResponse saveUtilityPaymentTransaction(TransactionDto transactionDto, String referenceNumber);
 
-    SearchDataDto findLastTransactionByAccountNumberBeforeDate(String accountNumber, LocalDate dateBefore);
+    SearchDataDto findLastTransactionByAccountNumberBeforeDate(String debitAccount, LocalDate dateBefore);
 }

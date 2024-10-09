@@ -1,6 +1,8 @@
 package com.ojt.klb.controller;
 
 import com.ojt.klb.dto.*;
+import com.ojt.klb.exception.AccountClosedException;
+import com.ojt.klb.exception.AccountSuspendedException;
 import com.ojt.klb.exception.PhoneNumberAlreadyExistsException;
 import com.ojt.klb.exception.UserNotFoundException;
 import com.ojt.klb.service.UserService;
@@ -32,26 +34,40 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginDto>> login(@RequestParam String username, @RequestParam String password) {
         logger.info("Login request received for username: {}", username);
-        Optional<LoginDto> loginDto = userService.login(username, password);
 
-        if (loginDto.isPresent()) {
+        try {
+            Optional<LoginDto> loginDto = userService.login(username, password);
+
+            if (loginDto.isPresent()) {
+                ApiResponse<LoginDto> response = new ApiResponse<>(
+                        HttpStatus.OK.value(),
+                        "Login successful",
+                        true,
+                        loginDto.get()
+                );
+                return ResponseEntity.ok(response);
+            } else {
+                ApiResponse<LoginDto> response = new ApiResponse<>(
+                        HttpStatus.UNAUTHORIZED.value(),
+                        "Invalid username or password",
+                        false,
+                        null
+                );
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+
+        } catch (AccountSuspendedException | AccountClosedException e) {
             ApiResponse<LoginDto> response = new ApiResponse<>(
-                    HttpStatus.OK.value(),
-                    "Login successful",
-                    true,
-                    loginDto.get()
-            );
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse<LoginDto> response = new ApiResponse<>(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    "Invalid username or password",
+                    HttpStatus.FORBIDDEN.value(),
+                    e.getMessage(),
                     false,
                     null
             );
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+
         }
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponseDto>> createUser(@Valid @RequestBody RegisterDto registerDto) {

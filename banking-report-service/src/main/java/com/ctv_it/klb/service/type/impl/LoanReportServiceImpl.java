@@ -34,8 +34,8 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
   @Override
   public LoanReportDTO search(Long accountId, ReportFilterDTO reportFilterDTO) {
-    log.info("Search(type={}, accountId={}, filters={}) is processing",
-        getType(), accountId, reportFilterDTO);
+    log.info("Search(type={}, accountId={}, filters={}) is processing", getType(), accountId,
+        reportFilterDTO);
 
     LoanFilterDTO filters = (LoanFilterDTO) reportFilterDTO;
 
@@ -44,11 +44,7 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
 
     List<LoanInfoDTO> loans = filters(accountId, filters);
 
-    return LoanReportDTO.builder()
-        .customer(customer)
-        .account(account)
-        .loans(loans)
-        .build();
+    return LoanReportDTO.builder().customer(customer).account(account).loans(loans).build();
   }
 
   private List<LoanInfoDTO> filters(long accountId, LoanFilterDTO loanFilterDTO) {
@@ -59,6 +55,7 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
     Set<String> loanStatus = null;
 
     if (loanFilterDTO != null) {
+
       loanTypeId = loanFilterDTO.getLoanTypeId();
       if (loanFilterDTO.getLoanRepaymentScheduleRange() != null) {
         loanRepaymentScheduleFrom = loanFilterDTO.getLoanRepaymentScheduleRange().getMin();
@@ -67,11 +64,7 @@ public class LoanReportServiceImpl implements ReportTypeService<LoanReportDTO> {
       loanStatus = loanFilterDTO.getLoanStatus();
     }
 
-    return fetchLoanServiceFC.fetchLoanByAccountId(
-        accountId,
-        loanTypeId,
-        loanRepaymentScheduleFrom,
-        loanRepaymentScheduleTo,
-        loanStatus);
+    return fetchLoanServiceFC.fetchLoanByAccountIdMapped(accountId, loanTypeId,
+        loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
   }
 }

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.poi.hpsf.Decimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,12 +20,13 @@ public class FetchLoanRepaymentDataResponseDTO {
   private long loanId;
   private long loanPaymentId;
   private BigDecimal principalAmount;
-  private Decimal interestAmount;
-  private Decimal latePaymentInterestAmount;
+  private BigDecimal interestAmount;
+  private BigDecimal latePaymentInterestAmount;
   private BigDecimal totalAmount;
   private LocalDate paymentDueDate;
   private LocalDate actualPaymentDate;
   private String transactionReference;
   private boolean isLate;
-  private LocalDate paymentStatus;
+  private String paymentStatus;
 }
+
