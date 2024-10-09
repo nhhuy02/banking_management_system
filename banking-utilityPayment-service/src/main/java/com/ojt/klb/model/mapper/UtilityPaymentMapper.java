@@ -1,13 +1,13 @@
 package com.ojt.klb.model.mapper;
 
 import com.ojt.klb.model.dto.UtilityPaymentDto;
-import com.ojt.klb.model.entity.UtilityPayment;
+import com.ojt.klb.model.entity.UtilityAccount;
 import org.springframework.beans.BeanUtils;
 
-public class UtilityPaymentMapper extends BaseMapper<UtilityPayment, UtilityPaymentDto> {
+public class UtilityPaymentMapper extends BaseMapper<UtilityAccount, UtilityPaymentDto> {
     @Override
-    public UtilityPayment convertToEntity(UtilityPaymentDto dto, Object... args) {
-        UtilityPayment entity = new UtilityPayment();
+    public UtilityAccount convertToEntity(UtilityPaymentDto dto, Object... args) {
+        UtilityAccount entity = new UtilityAccount();
         if (dto != null) {
             BeanUtils.copyProperties(dto, entity);
         }
@@ -15,7 +15,7 @@ public class UtilityPaymentMapper extends BaseMapper<UtilityPayment, UtilityPaym
     }
 
     @Override
-    public UtilityPaymentDto convertToDto(UtilityPayment entity, Object... args) {
+    public UtilityPaymentDto convertToDto(UtilityAccount entity, Object... args) {
         UtilityPaymentDto dto = new UtilityPaymentDto();
         if (entity != null) {
             BeanUtils.copyProperties(entity, dto);

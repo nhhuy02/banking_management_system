@@ -20,6 +20,8 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     // Find Loan applications by Account ID
     List<LoanApplication> findByAccountId(Long accountId);
 
+    boolean existsByAccountIdAndApplicationStatusIn(Long accountId, List<ApplicationStatus> statuses);
+
     /**
      * Find all loan applications by their application status.
      *

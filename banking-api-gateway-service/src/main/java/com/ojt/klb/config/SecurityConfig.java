@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/swagger-ui/**",
                                 "/v3/api-docs/**","/api/v1/account/users/forgetPassword/code/{phoneNumber}",
-                                "/api/v1/account/users/change-password").permitAll()
+                                "/api/v1/account/users/change-password","/api/v1/customer/verify-code/verify-reset-password/{customerId}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

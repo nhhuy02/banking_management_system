@@ -31,11 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> employeeEndpoints = List.of(
             "/api/v1/account/card-registration/pending-requests",
             // "/api/v1/notification/getAllNotification",
-            "/api/v1/account/card-types/**",
-            "/api/v1/loan-service/loans/",
-            "/api/v1/loan-service/loans/{loanId}/disburse",
-            "/api/v1/loan-service/loan-applications/{applicationId}/status",
-            "/api/v1/loan-service/loan-applications/{loanApplicationId}/loans");
+            "/api/v1/account/card-types/",
+            "/api/v1/loan-service/loans/\\d+/disburse",
+            "/api/v1/loan-service/loan-applications/\\d+/status"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -78,12 +77,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 List<String> allowedRoles = List.of("ROLE_customer", "ROLE_employee", "ROLE_admin");
 
                 if (role == null || !allowedRoles.contains(role)) {
-                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN,
-                            "Forbidden: You don't have permission to access this resource");
+                    ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this resource");
                     return;
                 }
 
-                if (role.equals("ROLE_customer") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)) {
+                if (role.equals("ROLE_customer") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)
+                    || role.equals("ROLE_admin") && employeeEndpoints.stream().anyMatch(requestURI::startsWith)) {
                     ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN,
                             "Forbidden: You don't have permission to access this employee resource");
                     return;
@@ -93,24 +92,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority(role));
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        username, null, authorities);
+                        username, null, authorities
+                );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } catch (ExpiredJwtException e) {
             logger.error("JWT Token has expired");
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token has expired");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token has expired");
             return;
         } catch (SignatureException e) {
             logger.error("JWT Token signature validation failed");
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token Signature Validation failed");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token Signature Validation failed");
             return;
         } catch (Exception e) {
             logger.error("JWT Token validation failed: " + e.getMessage());
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "JWT Token Validation failed");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT Token Validation failed");
             return;
         }
 
@@ -118,3 +115,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 }
+

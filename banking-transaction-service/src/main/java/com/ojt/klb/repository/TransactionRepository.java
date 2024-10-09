@@ -1,7 +1,6 @@
 package com.ojt.klb.repository;
 
 import com.ojt.klb.model.entity.Transaction;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
