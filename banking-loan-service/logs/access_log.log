@@ -948,3 +948,1029 @@
 2024-10-09T10:44:30.074+07:00  INFO 27617 --- [banking-loan-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8060
 2024-10-09T10:44:30.091+07:00  INFO 27617 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
 2024-10-09T10:44:30.114+07:00  INFO 27617 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Started BankingLoanServiceApplication in 5.674 seconds (process running for 6.138)
+2024-10-09T10:49:29.916+07:00  INFO 27617 --- [banking-loan-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T10:50:16.222+07:00  INFO 27617 --- [banking-loan-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application BANKING-LOAN-SERVICE with eureka with status DOWN
+2024-10-09T10:50:16.222+07:00  INFO 27617 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728445816222, current=DOWN, previous=UP]
+2024-10-09T10:50:16.223+07:00  INFO 27617 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060: registering service...
+2024-10-09T10:50:16.383+07:00  INFO 27617 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
+2024-10-09T10:50:31.724+07:00  INFO 28478 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 21.0.4 with PID 28478 (/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main started by admin-klb in /home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking)
+2024-10-09T10:50:31.725+07:00  INFO 28478 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-10-09T10:50:31.762+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2024-10-09T10:50:31.762+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
+2024-10-09T10:50:33.500+07:00  INFO 28478 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-09T10:50:33.802+07:00  INFO 28478 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 295 ms. Found 7 JPA repository interfaces.
+2024-10-09T10:50:34.456+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=2694efda-79f2-3091-a15d-3cdbc3e507f9
+2024-10-09T10:50:34.640+07:00  WARN 28478 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-09T10:50:34.643+07:00  WARN 28478 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-09T10:50:34.834+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
+2024-10-09T10:50:34.843+07:00  INFO 28478 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-09T10:50:34.843+07:00  INFO 28478 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-09T10:50:34.881+07:00  INFO 28478 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-09T10:50:34.882+07:00  INFO 28478 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3118 ms
+2024-10-09T10:50:34.912+07:00 DEBUG 28478 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
+2024-10-09T10:50:34.994+07:00  INFO 28478 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-09T10:50:35.064+07:00  INFO 28478 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-09T10:50:35.097+07:00  INFO 28478 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-09T10:50:35.324+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-09T10:50:35.341+07:00  INFO 28478 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-09T10:50:35.841+07:00  INFO 28478 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2681185e
+2024-10-09T10:50:35.843+07:00  INFO 28478 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-09T10:50:36.647+07:00  INFO 28478 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-09T10:50:38.644+07:00  INFO 28478 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T10:50:38.794+07:00  WARN 28478 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-09T10:50:39.353+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-09T10:50:40.600+07:00  INFO 28478 --- [banking-loan-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2024-10-09T10:50:40.627+07:00  WARN 28478 --- [banking-loan-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-09T10:50:40.673+07:00  INFO 28478 --- [banking-loan-service] [main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-admin-0
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2024-10-09T10:50:40.717+07:00  INFO 28478 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-09T10:50:40.717+07:00  INFO 28478 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-09T10:50:40.718+07:00  INFO 28478 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1728445840717
+2024-10-09T10:50:41.093+07:00  INFO 28478 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for banking-loan-service-admin-0 unregistered
+2024-10-09T10:50:41.095+07:00  INFO 28478 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-10-09T10:50:41.095+07:00  INFO 28478 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-10-09T10:50:41.095+07:00  INFO 28478 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-10-09T10:50:41.104+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2024-10-09T10:50:41.121+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2024-10-09T10:50:41.123+07:00  INFO 28478 --- [banking-loan-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2024-10-09T10:50:41.127+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2024-10-09T10:50:41.279+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2024-10-09T10:50:41.280+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2024-10-09T10:50:41.281+07:00  INFO 28478 --- [banking-loan-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-09T10:50:41.282+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1728445841281 with initial instances count: 3
+2024-10-09T10:50:41.285+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application BANKING-LOAN-SERVICE with eureka with status UP
+2024-10-09T10:50:41.285+07:00  INFO 28478 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728445841285, current=UP, previous=STARTING]
+2024-10-09T10:50:41.285+07:00  INFO 28478 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060: registering service...
+2024-10-09T10:50:41.292+07:00  INFO 28478 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8060 (http) with context path '/'
+2024-10-09T10:50:41.293+07:00  INFO 28478 --- [banking-loan-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8060
+2024-10-09T10:50:41.313+07:00  INFO 28478 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
+2024-10-09T10:50:41.326+07:00  INFO 28478 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Started BankingLoanServiceApplication in 11.104 seconds (process running for 11.867)
+2024-10-09T10:50:42.206+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-09T10:50:42.206+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-10-09T10:50:42.207+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-10-09T10:50:42.214+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /swagger-ui/index.html, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", cache-control:"max-age=0", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-ch-ua-platform:""Linux"", upgrade-insecure-requests:"1", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7", sec-fetch-site:"same-origin", sec-fetch-mode:"navigate", sec-fetch-user:"?1", sec-fetch-dest:"document", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", if-modified-since:"Mon, 12 Aug 2024 08:14:16 GMT"]]
+2024-10-09T10:50:42.228+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /swagger-ui/index.html, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", cache-control:"max-age=0", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-ch-ua-platform:""Linux"", upgrade-insecure-requests:"1", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7", sec-fetch-site:"same-origin", sec-fetch-mode:"navigate", sec-fetch-user:"?1", sec-fetch-dest:"document", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", if-modified-since:"Mon, 12 Aug 2024 08:14:16 GMT"]]
+2024-10-09T10:50:42.279+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /swagger-ui/swagger-initializer.js, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", accept:"*/*", sec-fetch-site:"same-origin", sec-fetch-mode:"no-cors", sec-fetch-dest:"script", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:42.296+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /swagger-ui/swagger-initializer.js, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", accept:"*/*", sec-fetch-site:"same-origin", sec-fetch-mode:"no-cors", sec-fetch-dest:"script", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:42.691+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /v3/api-docs/swagger-config, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", accept:"*/*", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:42.726+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /v3/api-docs/swagger-config, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", accept:"*/*", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:43.029+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /v3/api-docs, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json,*/*", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:43.408+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-4] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 369 ms
+2024-10-09T10:50:43.418+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /v3/api-docs, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json,*/*", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:52.872+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-5] o.s.w.f.CommonsRequestLoggingFilter      : Before request [GET /api/v1/loan-service/loan-applications?accountId=66, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:50:52.929+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.LoanApplicationController        : Received request to fetch loan applications for accountId: 66
+2024-10-09T10:50:53.228+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.706+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.706+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.747+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.749+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.769+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.769+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.789+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.789+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.807+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.807+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.827+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.827+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.848+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.848+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.869+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.869+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.886+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.886+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.904+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.904+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.915+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.915+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.927+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.927+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.939+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.939+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.951+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.951+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.962+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.963+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.974+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.974+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:00.985+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:00.985+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:01.318+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:01.318+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:01.335+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:01.336+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:51:01.347+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:51:01.362+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-5] c.a.b.c.LoanApplicationController        : Successfully retrieved loan applications for accountId: 66
+2024-10-09T10:51:01.367+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-5] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : GET /api/v1/loan-service/loan-applications?accountId=66, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550"]]
+2024-10-09T10:52:12.868+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-8] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:52:13.121+07:00 ERROR 28478 --- [banking-loan-service] [http-nio-8060-exec-8] c.a.b.exception.GlobalExceptionHandler   : Invalid loan application: Can only move from PENDING to REVIEWING or DOCUMENT_REQUIRED.
+
+com.app.bankingloanservice.exception.InvalidLoanApplicationException: Can only move from PENDING to REVIEWING or DOCUMENT_REQUIRED.
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.validateStatusTransition(LoanApplicationServiceImpl.java:263) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:213) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:52:13.125+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-8] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "APPROVED",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:52:21.370+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:52:21.543+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] c.a.b.s.impl.LoanApplicationServiceImpl  : Loan application with ID 27 updated to status REVIEWING
+2024-10-09T10:52:21.544+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:52:22.310+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:52:22.717+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:9092]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
+
+2024-10-09T10:52:22.880+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2024-10-09T10:52:22.935+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=banking-loan-service-producer-1] Instantiated an idempotent producer.
+2024-10-09T10:52:22.989+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-09T10:52:22.989+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-09T10:52:22.989+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1728445942989
+2024-10-09T10:52:23.042+07:00  INFO 28478 --- [banking-loan-service] [kafka-producer-network-thread | banking-loan-service-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=banking-loan-service-producer-1] Cluster ID: 61xh4CeLR6qVA4l2p2MPVQ
+2024-10-09T10:52:23.102+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:52:23.155+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-9] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:52:23.266+07:00  INFO 28478 --- [banking-loan-service] [kafka-producer-network-thread | banking-loan-service-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=banking-loan-service-producer-1] ProducerId set to 6001 with epoch 0
+2024-10-09T10:52:23.377+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-9] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:52:26.018+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-10] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:52:26.023+07:00 ERROR 28478 --- [banking-loan-service] [http-nio-8060-exec-10] c.a.b.exception.GlobalExceptionHandler   : Invalid loan application: New status cannot be the same as the current status.
+
+com.app.bankingloanservice.exception.InvalidLoanApplicationException: New status cannot be the same as the current status.
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.validateStatusTransition(LoanApplicationServiceImpl.java:257) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:213) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:52:26.025+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-10] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:52:34.374+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:52:34.382+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.s.impl.LoanApplicationServiceImpl  : Loan application with ID 27 updated to status APPROVED
+2024-10-09T10:52:34.382+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:52:34.396+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:52:34.398+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:52:34.407+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:52:34.416+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "APPROVED",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:52:50.357+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/66/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:52:50.360+07:00 ERROR 28478 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.s.impl.LoanApplicationServiceImpl  : Loan Application not found for ID: 66
+2024-10-09T10:52:50.361+07:00 ERROR 28478 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.exception.GlobalExceptionHandler   : Loan application not found: Loan Application not found for ID: 66
+
+com.app.bankingloanservice.exception.LoanApplicationNotFoundException: Loan Application not found for ID: 66
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.lambda$getEntityById$0(LoanApplicationServiceImpl.java:147) ~[main/:na]
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403) ~[na:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.getEntityById(LoanApplicationServiceImpl.java:145) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:200) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:52:50.362+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/66/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:53:06.913+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:53:06.918+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.s.impl.LoanApplicationServiceImpl  : Loan application with ID 27 updated to status REVIEWING
+2024-10-09T10:53:06.918+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:53:06.935+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:53:06.937+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:53:06.951+07:00  INFO 28478 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:53:06.963+07:00 DEBUG 28478 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:54:53.325+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application BANKING-LOAN-SERVICE with eureka with status DOWN
+2024-10-09T10:54:53.325+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728446093325, current=DOWN, previous=UP]
+2024-10-09T10:54:53.325+07:00  INFO 28478 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060: registering service...
+2024-10-09T10:54:53.395+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=banking-loan-service-producer-1] Closing the Kafka producer with timeoutMillis = 30000 ms.
+2024-10-09T10:54:53.399+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-10-09T10:54:53.400+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-10-09T10:54:53.400+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2024-10-09T10:54:53.400+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-10-09T10:54:53.401+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for banking-loan-service-producer-1 unregistered
+2024-10-09T10:54:53.419+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T10:54:53.433+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-10-09T10:54:53.467+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-10-09T10:54:53.469+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2024-10-09T10:54:53.574+07:00  INFO 28478 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
+2024-10-09T10:54:53.576+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2024-10-09T10:54:53.592+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - deregister  status: 200
+2024-10-09T10:54:53.592+07:00  INFO 28478 --- [banking-loan-service] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2024-10-09T10:55:06.777+07:00  INFO 29161 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 21.0.4 with PID 29161 (/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main started by admin-klb in /home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking)
+2024-10-09T10:55:06.779+07:00  INFO 29161 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-10-09T10:55:06.810+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2024-10-09T10:55:06.810+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
+2024-10-09T10:55:07.399+07:00  INFO 29161 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-09T10:55:07.496+07:00  INFO 29161 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 7 JPA repository interfaces.
+2024-10-09T10:55:07.721+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=2694efda-79f2-3091-a15d-3cdbc3e507f9
+2024-10-09T10:55:07.871+07:00  WARN 29161 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-09T10:55:07.872+07:00  WARN 29161 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-09T10:55:07.996+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
+2024-10-09T10:55:08.003+07:00  INFO 29161 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-09T10:55:08.003+07:00  INFO 29161 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-09T10:55:08.032+07:00  INFO 29161 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-09T10:55:08.033+07:00  INFO 29161 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1222 ms
+2024-10-09T10:55:08.056+07:00 DEBUG 29161 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
+2024-10-09T10:55:08.119+07:00  INFO 29161 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-09T10:55:08.161+07:00  INFO 29161 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-09T10:55:08.213+07:00  INFO 29161 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-09T10:55:08.393+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-09T10:55:08.411+07:00  INFO 29161 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-09T10:55:08.758+07:00  INFO 29161 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5daa621b
+2024-10-09T10:55:08.759+07:00  INFO 29161 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-09T10:55:09.536+07:00  INFO 29161 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-09T10:55:09.941+07:00  INFO 29161 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T10:55:10.034+07:00  WARN 29161 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-09T10:55:10.341+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-09T10:55:11.141+07:00  INFO 29161 --- [banking-loan-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2024-10-09T10:55:11.155+07:00  WARN 29161 --- [banking-loan-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-09T10:55:11.193+07:00  INFO 29161 --- [banking-loan-service] [main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-admin-0
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+
+2024-10-09T10:55:11.240+07:00  INFO 29161 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-09T10:55:11.240+07:00  INFO 29161 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-09T10:55:11.240+07:00  INFO 29161 --- [banking-loan-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1728446111239
+2024-10-09T10:55:11.463+07:00  INFO 29161 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.a.kafka.common.utils.AppInfoParser     : App info kafka.admin.client for banking-loan-service-admin-0 unregistered
+2024-10-09T10:55:11.466+07:00  INFO 29161 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2024-10-09T10:55:11.466+07:00  INFO 29161 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2024-10-09T10:55:11.466+07:00  INFO 29161 --- [banking-loan-service] [kafka-admin-client-thread | banking-loan-service-admin-0] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2024-10-09T10:55:11.472+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2024-10-09T10:55:11.486+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2024-10-09T10:55:11.487+07:00  INFO 29161 --- [banking-loan-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2024-10-09T10:55:11.491+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2024-10-09T10:55:11.492+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2024-10-09T10:55:11.629+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2024-10-09T10:55:11.630+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2024-10-09T10:55:11.631+07:00  INFO 29161 --- [banking-loan-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-09T10:55:11.632+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1728446111632 with initial instances count: 2
+2024-10-09T10:55:11.634+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application BANKING-LOAN-SERVICE with eureka with status UP
+2024-10-09T10:55:11.634+07:00  INFO 29161 --- [banking-loan-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1728446111634, current=UP, previous=STARTING]
+2024-10-09T10:55:11.635+07:00  INFO 29161 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060: registering service...
+2024-10-09T10:55:11.642+07:00  INFO 29161 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8060 (http) with context path '/'
+2024-10-09T10:55:11.642+07:00  INFO 29161 --- [banking-loan-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8060
+2024-10-09T10:55:11.656+07:00  INFO 29161 --- [banking-loan-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_BANKING-LOAN-SERVICE/10.3.245.15:banking-loan-service:8060 - registration status: 204
+2024-10-09T10:55:11.681+07:00  INFO 29161 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Started BankingLoanServiceApplication in 6.223 seconds (process running for 7.048)
+2024-10-09T10:55:33.481+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-09T10:55:33.481+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-10-09T10:55:33.482+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-10-09T10:55:33.487+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:55:34.410+07:00 ERROR 29161 --- [banking-loan-service] [http-nio-8060-exec-1] c.a.b.exception.GlobalExceptionHandler   : Invalid loan application: New status cannot be the same as the current status.
+
+com.app.bankingloanservice.exception.InvalidLoanApplicationException: New status cannot be the same as the current status.
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.validateStatusTransition(LoanApplicationServiceImpl.java:257) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:213) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:55:34.421+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-1] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:55:45.956+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:55:45.966+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.s.impl.LoanApplicationServiceImpl  : Loan application with ID 27 updated to status APPROVED
+2024-10-09T10:55:45.967+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:55:46.120+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:55:46.229+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:9092]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
+
+2024-10-09T10:55:46.306+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2024-10-09T10:55:46.370+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=banking-loan-service-producer-1] Instantiated an idempotent producer.
+2024-10-09T10:55:46.379+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.7.1
+2024-10-09T10:55:46.379+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: e2494e6ffb89f828
+2024-10-09T10:55:46.379+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1728446146379
+2024-10-09T10:55:46.480+07:00  INFO 29161 --- [banking-loan-service] [kafka-producer-network-thread | banking-loan-service-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=banking-loan-service-producer-1] Cluster ID: 61xh4CeLR6qVA4l2p2MPVQ
+2024-10-09T10:55:46.542+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Calling Account Service to retrieve information for Account ID: 66
+2024-10-09T10:55:46.846+07:00  INFO 29161 --- [banking-loan-service] [kafka-producer-network-thread | banking-loan-service-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=banking-loan-service-producer-1] ProducerId set to 6002 with epoch 0
+2024-10-09T10:55:47.609+07:00  INFO 29161 --- [banking-loan-service] [http-nio-8060-exec-2] c.a.b.c.account.AccountClientService     : Successfully retrieved account information for Account ID: 66
+2024-10-09T10:55:47.960+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-2] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "APPROVED",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:55:53.971+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:55:53.977+07:00 ERROR 29161 --- [banking-loan-service] [http-nio-8060-exec-3] c.a.b.exception.GlobalExceptionHandler   : Invalid loan application: New status cannot be the same as the current status.
+
+com.app.bankingloanservice.exception.InvalidLoanApplicationException: New status cannot be the same as the current status.
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.validateStatusTransition(LoanApplicationServiceImpl.java:257) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:213) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:55:53.978+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-3] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"82", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "APPROVED",
+  "reviewNotes": "Approved with conditions"
+}]
+2024-10-09T10:56:06.260+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : Before request [PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"]]
+2024-10-09T10:56:06.265+07:00 ERROR 29161 --- [banking-loan-service] [http-nio-8060-exec-4] c.a.b.exception.GlobalExceptionHandler   : Invalid loan application: Cannot change status from APPROVED.
+
+com.app.bankingloanservice.exception.InvalidLoanApplicationException: Cannot change status from APPROVED.
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.validateStatusTransition(LoanApplicationServiceImpl.java:276) ~[main/:na]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl.updateStatus(LoanApplicationServiceImpl.java:213) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.12.jar:6.1.12]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.12.jar:6.1.12]
+	at com.app.bankingloanservice.service.impl.LoanApplicationServiceImpl$$SpringCGLIB$$0.updateStatus(<generated>) ~[main/:na]
+	at com.app.bankingloanservice.controller.LoanApplicationController.updateStatus(LoanApplicationController.java:302) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.1.12.jar:6.1.12]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.28.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.AbstractRequestLoggingFilter.doFilterInternal(AbstractRequestLoggingFilter.java:289) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.12.jar:6.1.12]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:904) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.28.jar:10.1.28]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-10-09T10:56:06.267+07:00 DEBUG 29161 --- [banking-loan-service] [http-nio-8060-exec-4] o.s.w.f.CommonsRequestLoggingFilter      : REQUEST DATA : PATCH /api/v1/loan-service/loan-applications/27/status, client=0:0:0:0:0:0:0:1, headers=[host:"localhost:8060", connection:"keep-alive", content-length:"83", sec-ch-ua-platform:""Linux"", user-agent:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36", accept:"application/json", sec-ch-ua:""Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"", sec-ch-ua-mobile:"?0", origin:"http://localhost:8060", sec-fetch-site:"same-origin", sec-fetch-mode:"cors", sec-fetch-dest:"empty", referer:"http://localhost:8060/swagger-ui/index.html", accept-encoding:"gzip, deflate, br, zstd", accept-language:"vi", cookie:"JSESSIONID=E2E5E9CA2D27B527F5E8C98E666E7550", Content-Type:"application/json;charset=UTF-8"], payload={
+  "applicationStatus": "REVIEWING",
+  "reviewNotes": "Approved with conditions"
+}]
