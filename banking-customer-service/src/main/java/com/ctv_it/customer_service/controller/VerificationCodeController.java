@@ -40,41 +40,34 @@ public class VerificationCodeController {
     public ResponseEntity<ApiResponse<String>> verifyCode(
             @PathVariable Long customerId, @Valid @RequestBody VerifyCodeDto dto) {
 
-        return handleVerification(
-                customerId,
-                dto.getCode(),
-                (id) -> verificationCodeService.verifyCode(id, dto.getCode()),
-                "Code verified successfully",
-                "Invalid or expired code"
-        );
-    }
-
-    @PostMapping("/verify-reset-password/{customerId}")
-    public ResponseEntity<ApiResponse<String>> verifyOtpResetPassword(
-            @PathVariable Long customerId, @Valid @RequestBody VerifyCodeDto dto) {
-
-        return handleVerification(
-                customerId,
-                dto.getCode(),
-                (id) -> verificationCodeService.verifyOtpResetPassword(id, dto.getCode()),
-                "Reset password code verified successfully",
-                "Invalid or expired reset password code"
-        );
-    }
-
-    private ResponseEntity<ApiResponse<String>> handleVerification(
-            Long customerId, String code, Function<Long, Boolean> verificationFunction,
-            String successMessage, String failureMessage) {
-
-        logger.info("Request to verify code for customer ID: {} with code: {}", customerId, code);
-        boolean isVerified = verificationFunction.apply(customerId);
+        logger.info("Request to verify code for customer ID: {} with code: {}", customerId, dto.getCode());
+        boolean isVerified = verificationCodeService.verifyCode(customerId, dto.getCode());
 
         if (isVerified) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), successMessage, true, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Code verified successfully", true, null);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), failureMessage, false, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "Invalid or expired code", false, null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+
+    @PostMapping("/verify-reset-password/{phoneNumber}")
+    public ResponseEntity<ApiResponse<String>> verifyOtpResetPassword(
+            @PathVariable String phoneNumber, @Valid @RequestBody VerifyCodeDto dto) {
+
+        logger.info("Request to verify OTP for phone number: {} with code: {}", phoneNumber, dto.getCode());
+
+        boolean isVerified = verificationCodeService.verifyOtpResetPassword(phoneNumber, dto.getCode());
+
+        if (isVerified) {
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "OTP verified successfully", true, null);
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "OTP verification failed or already verified", false, null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+
 }

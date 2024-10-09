@@ -9,6 +9,6 @@ public interface VerificationCodeService {
     VerificationCodeRequestDto generateCode(Long customerId, String email);
 
     boolean verifyCode(Long customerId, String code);
-    boolean verifyOtpResetPassword(Long customerId, String code);
+    boolean verifyOtpResetPassword(String phoneNumber, String code);
 }
 

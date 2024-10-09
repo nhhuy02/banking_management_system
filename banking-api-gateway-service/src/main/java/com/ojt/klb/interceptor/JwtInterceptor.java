@@ -109,7 +109,9 @@ public class JwtInterceptor implements HandlerInterceptor {
                     "/api/v1/loan-service/loan-applications/\\d+",
                     "/api/v1/loan-service/loan-types/\\d+",
                     "/api/v1/notification/getAllNotification?customerId=\\d+&page=\\d+&size=\\d+",
-                    "/api/v1/account/card-types/update/\\d+"
+                    "/api/v1/account/card-types/update/\\d+",
+                    "/api/v1/customer/verify-code/verify-reset-password/\\d+",
+                    "/api/v1/account/users/forgetPassword/code/\\d+"
             );
 
             Map<String, String> urlMappingPrefixes = getUrlMappingPrefixes();
