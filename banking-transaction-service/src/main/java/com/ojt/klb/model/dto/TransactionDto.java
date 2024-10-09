@@ -12,14 +12,13 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class TransactionDto {
 
-    @NotNull
+    @NotNull(message = "Account number cannot be null")
     private String accountNumber;
 
     @NotBlank(message = "Transaction type cannot be blank")
