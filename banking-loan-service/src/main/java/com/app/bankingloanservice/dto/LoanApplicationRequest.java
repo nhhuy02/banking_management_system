@@ -5,8 +5,7 @@ import com.app.bankingloanservice.constant.RepaymentMethod;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 @Getter
@@ -17,56 +16,53 @@ import java.time.LocalDate;
 @Schema(description = "Data Transfer Object for loan application")
 public class LoanApplicationRequest {
 
-    // Account ID for receiving disbursement and making repayments
     @Schema(description = "Account Number for receiving disbursement and making repayments", example = "98765")
-    @NotNull(message = "Account Number cannot be null")
+    @NotNull(message = "{loanApplicationRequest.accountId.notNull}")
     private Long accountId;
 
-    // Customer's monthly income
-    @NotNull(message = "Monthly income cannot be null")
+    @NotNull(message = "{loanApplicationRequest.monthlyIncome.notNull}")
+    @Min(value = 1000, message = "{loanApplicationRequest.monthlyIncome.min}")
     @Schema(description = "Customer's monthly income", example = "20000000")
     private Long monthlyIncome;
 
-    // Customer's occupation
-    @NotNull(message = "Occupation cannot be null")
+    @NotBlank(message = "{loanApplicationRequest.occupation.notBlank}")
+    @Size(min = 2, max = 100, message = "{loanApplicationRequest.occupation.size}")
     @Schema(description = "Customer's occupation", example = "Software Engineer")
     private String occupation;
 
-    // Loan type ID (reference to the LoanType entity)
-    @NotNull(message = "Loan type ID cannot be null")
+    @NotNull(message = "{loanApplicationRequest.loanTypeId.notNull}")
+    @Min(value = 1, message = "{loanApplicationRequest.loanTypeId.min}")
     @Schema(description = "Loan type ID (reference to the LoanType entity)", example = "1")
     private Long loanTypeId;
 
-    // Desired loan amount
-    @NotNull(message = "Desired loan amount cannot be null")
+    @NotNull(message = "{loanApplicationRequest.desiredLoanAmount.notNull}")
+    @Min(value = 1000000, message = "{loanApplicationRequest.desiredLoanAmount.min}")
     @Schema(description = "Desired loan amount", example = "50000000")
     private Long desiredLoanAmount;
 
-    // Desired loan term in months
-    @NotNull(message = "Desired loan term months cannot be null")
+    @NotNull(message = "{loanApplicationRequest.desiredLoanTermMonths.notNull}")
+    @Min(value = 1, message = "{loanApplicationRequest.desiredLoanTermMonths.min}")
+    @Max(value = 480, message = "{loanApplicationRequest.desiredLoanTermMonths.max}")
     @Schema(description = "Desired loan term in months", example = "12")
     private Integer desiredLoanTermMonths;
 
-    // Repayment method (e.g., EQUAL_INSTALLMENTS, REDUCING_BALANCE)
-    @NotNull(message = "Repayment method cannot be null")
+    @NotNull(message = "{loanApplicationRequest.repaymentMethod.notNull}")
     @Schema(description = "Repayment method (e.g., EQUAL_INSTALLMENTS, REDUCING_BALANCE)", example = "EQUAL_INSTALLMENTS")
     private RepaymentMethod repaymentMethod;
 
-    // Desired disbursement date
-    @NotNull(message = "Desired disbursement date cannot be null")
+    @NotNull(message = "{loanApplicationRequest.desiredDisbursementDate.notNull}")
+    @FutureOrPresent(message = "{loanApplicationRequest.desiredDisbursementDate.futureOrPresent}")
     @Schema(description = "Desired disbursement date", example = "2024-10-01")
     private LocalDate desiredDisbursementDate;
 
-    // Interest rate type (FIXED or FLOATING)
-    @NotNull(message = "Interest rate type cannot be null")
+    @NotNull(message = "{loanApplicationRequest.interestRateType.notNull}")
     @Schema(description = "Interest rate type (FIXED or FLOATING)", example = "FIXED")
     private InterestRateType interestRateType;
 
-    // Customer's loan purpose
+    @Size(max = 255, message = "{loanApplicationRequest.loanPurpose.size}")
     @Schema(description = "Customer's loan purpose", example = "Home Renovation")
     private String loanPurpose;
 
-    // Collateral details associated with the loan application
     @Schema(description = "Collateral details associated with the loan application")
     private CollateralRequest collateralRequest;
 }

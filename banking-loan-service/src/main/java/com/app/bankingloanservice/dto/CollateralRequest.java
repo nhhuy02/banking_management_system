@@ -22,14 +22,13 @@ public class CollateralRequest {
     private DocumentUploadRequest documentUploadRequest;
 
     @Schema(description = "Type of collateral (e.g., Property, Vehicle, etc.)")
-    @NotBlank(message = "Collateral type is required")
+    @NotBlank(message = "{collateral.type.required}")
     private String collateralType;
 
     @Schema(description = "Value of the collateral in currency")
-    @NotNull(message = "Collateral value is required")
+    @NotNull(message = "{collateral.value.required}")
     private Long collateralValue;
 
     @Schema(description = "Optional description of the collateral")
     private String description;
-
 }

@@ -32,10 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/account/card-registration/pending-requests",
             "/api/v1/notification/getAllNotification",
             "/api/v1/account/card-types/**",
-            "/api/v1/loan-service/loans/",
             "/api/v1/loan-service/loans/{loanId}/disburse",
-            "/api/v1/loan-service/loan-applications/{applicationId}/status",
-            "/api/v1/loan-service/loan-applications/{loanApplicationId}/loans"
+            "/api/v1/loan-service/loan-applications/{applicationId}/status"
     );
 
     @Override
@@ -74,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = (String) claims.get("role");
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                List<String> allowedRoles = List.of("ROLE_customer","ROLE_employee", "ROLE_admin");
+                List<String> allowedRoles = List.of("ROLE_customer", "ROLE_employee", "ROLE_admin");
 
                 if (role == null || !allowedRoles.contains(role)) {
                     ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission to access this resource");
