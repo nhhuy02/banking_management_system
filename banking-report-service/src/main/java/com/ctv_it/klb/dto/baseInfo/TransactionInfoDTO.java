@@ -8,28 +8,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Setter
 @Getter
 @ToString
 public class TransactionInfoDTO {
 
   private Long id;
-  private Long sourceAccountId;
-  private Long destinationAccountId;
-  private LocalDateTime date;
+  private String referenceNumber;
+  private Long accountNumber;
+  private LocalDateTime transactionDate;
+  private String transactionType;
   private BigDecimal balanceBeforeTransaction;
   private BigDecimal amount;
   private BigDecimal balanceAfterTransaction;
-  private String type;  // deposit, withdraw...
-  private String category; // shopping, education, sport...
-  private String description;
-  private String status;
-  private LocalDateTime updatedAt;
-  private String note;
   private BigDecimal fee;
-  private String transactionChanel;
+  private String description;
 }

@@ -41,4 +41,7 @@ public class TransactionInternalData {
     private BigDecimal balanceAccountSend;
     @Schema(description = "Số dư tài khoản nhận")
     private BigDecimal balanceAccountReceive;
+    @Schema(description = "Tên ngân hàng")
+    private String bankName;
+
 }

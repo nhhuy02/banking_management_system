@@ -7,7 +7,6 @@ import com.ctv_it.customer_service.repository.CustomersStatusHistoryRepository;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,13 @@ public class CustomersStatusHistoryServiceImpl implements CustomersStatusHistory
 
     private static final Logger logger = LoggerFactory.getLogger(CustomersStatusHistoryServiceImpl.class);
 
-    @Autowired
-    private CustomersStatusHistoryRepository repository;
+    private final CustomersStatusHistoryRepository repository;
+    private final CustomersStatusHistoryMapper mapper;
 
-    @Autowired
-    private CustomersStatusHistoryMapper mapper;
+    public CustomersStatusHistoryServiceImpl(CustomersStatusHistoryRepository repository, CustomersStatusHistoryMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public Optional<CustomersStatusHistoryDto> getLatestStatusByCustomerId(Long customerId) {

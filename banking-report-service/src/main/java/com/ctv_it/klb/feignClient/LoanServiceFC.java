@@ -2,7 +2,7 @@ package com.ctv_it.klb.feignClient;
 
 import com.ctv_it.klb.config.feignClient.FeignClientConfiguration;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchLoanDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.loan.FetchLoanDataResponseDTO;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;

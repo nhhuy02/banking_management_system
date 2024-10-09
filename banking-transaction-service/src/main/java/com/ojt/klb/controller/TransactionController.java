@@ -4,7 +4,6 @@ import com.ojt.klb.model.TransactionStatus;
 import com.ojt.klb.model.TransactionType;
 import com.ojt.klb.model.dto.SearchDataDto;
 import com.ojt.klb.model.dto.TransactionDto;
-import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.model.response.ApiResponse;
 import com.ojt.klb.model.response.TransactionResponse;
 import com.ojt.klb.service.TransactionService;
@@ -62,7 +61,7 @@ public class TransactionController {
     }
 
     @PostMapping("/util-payment")
-    public ResponseEntity utilPayment(@RequestBody UtilityPaymentRequest utilityPaymentRequest) {
-        return ResponseEntity.ok(service.utilPayment(utilityPaymentRequest));
+    public ResponseEntity<ApiResponse> saveUtilityPaymentTransaction(@RequestBody TransactionDto transactionDto, @RequestParam String referenceNumber) {
+        return new ResponseEntity<>(service.saveUtilityPaymentTransaction(transactionDto, referenceNumber), HttpStatus.CREATED);
     }
 }

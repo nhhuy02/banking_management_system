@@ -1,13 +1,12 @@
 package com.ojt.klb.model.dto;
 
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 
 @Data
@@ -15,16 +14,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class SearchDataDto {
-    @NotNull
-    private String accountNumber;
 
-    private String transactionType;
+  private Long id;
 
-    private BigDecimal amount;
+  private String referenceNumber;
 
-    private String description;
+  @NotNull
+  private String accountNumber;
 
-    private LocalDateTime transactionDate;
+  private String transactionType;
 
-    private BigDecimal balance;
+  private BigDecimal amount;
+
+  private BigDecimal balanceBeforeTransaction;
+
+  private BigDecimal balanceAfterTransaction;
+
+  private BigDecimal fee;
+
+  private String description;
+
+  private LocalDateTime transactionDate;
 }

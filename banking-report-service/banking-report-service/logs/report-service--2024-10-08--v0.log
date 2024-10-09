@@ -1,0 +1,846 @@
+2024-10-08 14:39:44,075 INFO  [background-preinit] o.h.v.i.u.Version: HV000001: Hibernate Validator 8.0.1.Final
+2024-10-08 14:39:44,119 INFO  [main] o.s.b.StartupInfoLogger: Starting BankingReportServiceApplication using Java 21.0.4 with PID 527675 (/home/NguyenQuocDuy/Documents/GitHub/microservices-core-banking/banking-report-service/build/classes/java/main started by NguyenQuocDuy in /home/NguyenQuocDuy/Documents/GitHub/microservices-core-banking/banking-report-service)
+2024-10-08 14:39:44,119 INFO  [main] o.s.b.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2024-10-08 14:39:44,151 INFO  [main] o.s.b.l.DeferredLog: Fetching config from server at : http://localhost:8888
+2024-10-08 14:39:44,151 INFO  [main] o.s.b.l.DeferredLog: Located environment: name=banking-report-service, profiles=[default], label=null, version=null, state=null
+2024-10-08 14:39:44,941 INFO  [main] o.s.c.c.s.GenericScope: BeanFactory id=c8c8c1ba-a5fd-39a5-80af-3f059ddab417
+2024-10-08 14:39:45,021 WARN  [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-08 14:39:45,023 WARN  [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-08 14:39:45,206 INFO  [main] o.s.b.w.e.t.TomcatWebServer: Tomcat initialized with port 8086 (http)
+2024-10-08 14:39:45,223 INFO  [main] o.a.j.l.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8086"]
+2024-10-08 14:39:45,229 INFO  [main] o.a.j.l.DirectJDKLog: Starting service [Tomcat]
+2024-10-08 14:39:45,229 INFO  [main] o.a.j.l.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-08 14:39:45,285 INFO  [main] o.a.j.l.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2024-10-08 14:39:45,286 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 1133 ms
+2024-10-08 14:39:46,025 WARN  [main] o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration: Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-10-08 14:39:46,054 INFO  [main] o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration: Eureka HTTP Client uses RestTemplate.
+2024-10-08 14:39:46,074 WARN  [main] o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger: Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-08 14:39:46,092 INFO  [main] o.s.c.n.e.InstanceInfoFactory: Setting initial instance status as: STARTING
+2024-10-08 14:39:46,109 INFO  [main] c.n.d.DiscoveryClient: Initializing Eureka in region us-east-1
+2024-10-08 14:39:46,110 INFO  [main] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 14:39:46,116 INFO  [main] c.n.d.DiscoveryClient: Disable delta property : false
+2024-10-08 14:39:46,116 INFO  [main] c.n.d.DiscoveryClient: Single vip registry refresh property : null
+2024-10-08 14:39:46,117 INFO  [main] c.n.d.DiscoveryClient: Force full registry fetch : false
+2024-10-08 14:39:46,117 INFO  [main] c.n.d.DiscoveryClient: Application is null : false
+2024-10-08 14:39:46,117 INFO  [main] c.n.d.DiscoveryClient: Registered Applications size is zero : true
+2024-10-08 14:39:46,117 INFO  [main] c.n.d.DiscoveryClient: Application version is -1: true
+2024-10-08 14:39:46,117 INFO  [main] c.n.d.DiscoveryClient: Getting all instance registry info from the eureka server
+2024-10-08 14:39:46,304 INFO  [main] c.n.d.DiscoveryClient: The response status is 200
+2024-10-08 14:39:46,305 INFO  [main] c.n.d.DiscoveryClient: Starting heartbeat executor: renew interval is: 30
+2024-10-08 14:39:46,306 INFO  [main] c.n.d.InstanceInfoReplicator: InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-08 14:39:46,306 INFO  [main] c.n.d.DiscoveryClient: Discovery Client initialized at timestamp 1728373186306 with initial instances count: 6
+2024-10-08 14:39:46,308 INFO  [main] o.s.c.n.e.s.EurekaServiceRegistry: Registering application BANKING-REPORT-SERVICE with eureka with status UP
+2024-10-08 14:39:46,308 INFO  [main] c.n.d.DiscoveryClient$6: Saw local status change event StatusChangeEvent [timestamp=1728373186308, current=UP, previous=STARTING]
+2024-10-08 14:39:46,309 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086: registering service...
+2024-10-08 14:39:46,309 INFO  [main] o.a.j.l.DirectJDKLog: Starting ProtocolHandler ["http-nio-8086"]
+2024-10-08 14:39:46,322 INFO  [main] o.s.b.w.e.t.TomcatWebServer: Tomcat started on port 8086 (http) with context path '/'
+2024-10-08 14:39:46,323 INFO  [main] o.s.c.n.e.s.EurekaAutoServiceRegistration: Updating port to 8086
+2024-10-08 14:39:46,336 INFO  [main] o.s.b.StartupInfoLogger: Started BankingReportServiceApplication in 4.352 seconds (process running for 5.928)
+2024-10-08 14:39:46,429 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086 - registration status: 204
+2024-10-08 14:44:46,126 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 14:49:46,141 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 14:54:46,155 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 14:59:46,159 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:03:12,090 INFO  [http-nio-8086-exec-1] o.a.j.l.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-08 15:03:12,093 INFO  [http-nio-8086-exec-1] o.s.w.s.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2024-10-08 15:03:12,173 INFO  [http-nio-8086-exec-1] o.s.w.s.FrameworkServlet: Completed initialization in 79 ms
+2024-10-08 15:03:12,215 INFO  [http-nio-8086-exec-1] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728374592211
+[PATH]: /api/v1/reports/account/3
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---accept : */*
+---access-control-request-method : POST
+---access-control-request-headers : authorization,content-type
+---origin : http://localhost:5173
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---sec-fetch-mode : cors
+---sec-fetch-site : same-site
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:03:18,420 INFO  [http-nio-8086-exec-2] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728374598420
+[PATH]: /api/v1/reports/account/3
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---accept : */*
+---access-control-request-method : POST
+---access-control-request-headers : authorization,content-type
+---origin : http://localhost:5173
+---user-agent : Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36
+---sec-fetch-mode : cors
+---sec-fetch-site : same-site
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:04:46,210 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:09:46,221 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:14:46,263 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:19:46,271 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:20:51,570 INFO  [http-nio-8086-exec-4] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375651569
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---accept : */*
+---access-control-request-method : POST
+---access-control-request-headers : authorization,content-type
+---origin : http://localhost:5173
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---sec-fetch-mode : cors
+---sec-fetch-site : same-site
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:21:14,380 INFO  [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry: Unregistering application BANKING-REPORT-SERVICE with eureka with status DOWN
+2024-10-08 15:21:14,386 INFO  [SpringApplicationShutdownHook] c.n.d.DiscoveryClient$6: Saw local status change event StatusChangeEvent [timestamp=1728375674385, current=DOWN, previous=UP]
+2024-10-08 15:21:14,391 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086: registering service...
+2024-10-08 15:21:15,027 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086 - registration status: 204
+2024-10-08 15:21:15,107 INFO  [SpringApplicationShutdownHook] c.n.d.DiscoveryClient: Shutting down DiscoveryClient ...
+2024-10-08 15:21:18,110 INFO  [SpringApplicationShutdownHook] c.n.d.DiscoveryClient: Unregistering ...
+2024-10-08 15:21:18,113 WARN  [DiscoveryClient-%d] c.n.d.TimedSupervisorTask: task supervisor shutting down, can't accept the task
+2024-10-08 15:21:18,134 INFO  [SpringApplicationShutdownHook] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086 - deregister  status: 200
+2024-10-08 15:21:18,136 INFO  [SpringApplicationShutdownHook] c.n.d.DiscoveryClient: Completed shut down of DiscoveryClient
+2024-10-08 15:21:32,858 INFO  [background-preinit] o.h.v.i.u.Version: HV000001: Hibernate Validator 8.0.1.Final
+2024-10-08 15:21:33,054 INFO  [main] o.s.b.StartupInfoLogger: Starting BankingReportServiceApplication using Java 21.0.4 with PID 650781 (/home/NguyenQuocDuy/Documents/GitHub/microservices-core-banking/banking-report-service/build/classes/java/main started by NguyenQuocDuy in /home/NguyenQuocDuy/Documents/GitHub/microservices-core-banking/banking-report-service)
+2024-10-08 15:21:33,055 INFO  [main] o.s.b.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2024-10-08 15:21:33,094 INFO  [main] o.s.b.l.DeferredLog: Fetching config from server at : http://localhost:8888
+2024-10-08 15:21:33,095 INFO  [main] o.s.b.l.DeferredLog: Located environment: name=banking-report-service, profiles=[default], label=null, version=null, state=null
+2024-10-08 15:21:35,221 INFO  [main] o.s.c.c.s.GenericScope: BeanFactory id=c654f7fa-dac7-359d-b3cc-0b7704b3be5e
+2024-10-08 15:21:35,374 WARN  [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-08 15:21:35,379 WARN  [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-08 15:21:35,810 INFO  [main] o.s.b.w.e.t.TomcatWebServer: Tomcat initialized with port 8086 (http)
+2024-10-08 15:21:35,849 INFO  [main] o.a.j.l.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8086"]
+2024-10-08 15:21:35,862 INFO  [main] o.a.j.l.DirectJDKLog: Starting service [Tomcat]
+2024-10-08 15:21:35,862 INFO  [main] o.a.j.l.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-08 15:21:36,052 INFO  [main] o.a.j.l.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2024-10-08 15:21:36,054 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 2953 ms
+2024-10-08 15:21:37,202 WARN  [main] o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration: Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-10-08 15:21:37,229 INFO  [main] o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration: Eureka HTTP Client uses RestTemplate.
+2024-10-08 15:21:37,256 WARN  [main] o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger: Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-08 15:21:37,291 INFO  [main] o.s.c.n.e.InstanceInfoFactory: Setting initial instance status as: STARTING
+2024-10-08 15:21:37,363 INFO  [main] c.n.d.DiscoveryClient: Initializing Eureka in region us-east-1
+2024-10-08 15:21:37,369 INFO  [main] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:21:37,390 INFO  [main] c.n.d.DiscoveryClient: Disable delta property : false
+2024-10-08 15:21:37,391 INFO  [main] c.n.d.DiscoveryClient: Single vip registry refresh property : null
+2024-10-08 15:21:37,392 INFO  [main] c.n.d.DiscoveryClient: Force full registry fetch : false
+2024-10-08 15:21:37,392 INFO  [main] c.n.d.DiscoveryClient: Application is null : false
+2024-10-08 15:21:37,392 INFO  [main] c.n.d.DiscoveryClient: Registered Applications size is zero : true
+2024-10-08 15:21:37,392 INFO  [main] c.n.d.DiscoveryClient: Application version is -1: true
+2024-10-08 15:21:37,392 INFO  [main] c.n.d.DiscoveryClient: Getting all instance registry info from the eureka server
+2024-10-08 15:21:38,985 INFO  [main] c.n.d.DiscoveryClient: The response status is 200
+2024-10-08 15:21:38,986 INFO  [main] c.n.d.DiscoveryClient: Starting heartbeat executor: renew interval is: 30
+2024-10-08 15:21:38,987 INFO  [main] c.n.d.InstanceInfoReplicator: InstanceInfoReplicator onDemand update allowed rate per min is 4
+2024-10-08 15:21:38,988 INFO  [main] c.n.d.DiscoveryClient: Discovery Client initialized at timestamp 1728375698988 with initial instances count: 6
+2024-10-08 15:21:38,993 INFO  [main] o.s.c.n.e.s.EurekaServiceRegistry: Registering application BANKING-REPORT-SERVICE with eureka with status UP
+2024-10-08 15:21:38,998 INFO  [main] c.n.d.DiscoveryClient$6: Saw local status change event StatusChangeEvent [timestamp=1728375698997, current=UP, previous=STARTING]
+2024-10-08 15:21:39,002 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086: registering service...
+2024-10-08 15:21:39,003 INFO  [main] o.a.j.l.DirectJDKLog: Starting ProtocolHandler ["http-nio-8086"]
+2024-10-08 15:21:39,075 INFO  [main] o.s.b.w.e.t.TomcatWebServer: Tomcat started on port 8086 (http) with context path '/'
+2024-10-08 15:21:39,079 INFO  [main] o.s.c.n.e.s.EurekaAutoServiceRegistration: Updating port to 8086
+2024-10-08 15:21:39,097 INFO  [main] o.s.b.StartupInfoLogger: Started BankingReportServiceApplication in 8.073 seconds (process running for 9.422)
+2024-10-08 15:21:39,140 INFO  [DiscoveryClient-InstanceInfoReplicator-%d] c.n.d.DiscoveryClient: DiscoveryClient_BANKING-REPORT-SERVICE/192.168.1.88:banking-report-service:8086 - registration status: 204
+2024-10-08 15:22:11,884 INFO  [http-nio-8086-exec-1] o.a.j.l.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-08 15:22:11,884 INFO  [http-nio-8086-exec-1] o.s.w.s.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2024-10-08 15:22:11,886 INFO  [http-nio-8086-exec-1] o.s.w.s.FrameworkServlet: Completed initialization in 2 ms
+2024-10-08 15:22:11,891 INFO  [http-nio-8086-exec-1] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375731890
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---accept : */*
+---access-control-request-method : POST
+---access-control-request-headers : authorization,content-type
+---origin : http://localhost:5173
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---sec-fetch-mode : cors
+---sec-fetch-site : same-site
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:22:11,923 INFO  [http-nio-8086-exec-2] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375731923
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 65
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:22:11,950 INFO  [http-nio-8086-exec-2] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:22:11,954 INFO  [http-nio-8086-exec-2] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 15:22:11,954 INFO  [http-nio-8086-exec-2] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 15:22:11,955 INFO  [http-nio-8086-exec-2] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:22:11,958 INFO  [http-nio-8086-exec-2] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@3f63c61d, savingAccountId=null)
+2024-10-08 15:22:11,967 INFO  [http-nio-8086-exec-2] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375731923]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:22:11,970 INFO  [http-nio-8086-exec-2] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=NONE, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@3f63c61d, savingAccountId=null))
+2024-10-08 15:22:11,970 INFO  [http-nio-8086-exec-2] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:22:11,970 INFO  [http-nio-8086-exec-2] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 15:22:11,971 INFO  [http-nio-8086-exec-2] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=7, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@3f63c61d, savingAccountId=null)) is processing
+2024-10-08 15:22:11,971 INFO  [http-nio-8086-exec-2] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:22:13,171 INFO  [http-nio-8086-exec-2] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=null, dateOfBirth=null, gender=null, email=null, phoneNumber=0706605004, currentAddress=null, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:22:13,180 INFO  [http-nio-8086-exec-2] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=null, dateOfBirth=null, gender=null, email=null, phoneNumber=0706605004, currentAddress=null, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:22:13,181 INFO  [http-nio-8086-exec-2] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=null, dateOfBirth=null, gender=null, email=null, phoneNumber=0706605004, currentAddress=null, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=null, dateOfBirth=null, gender=null, email=null, phoneNumber=0706605004, currentAddress=null, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:22:13,185 ERROR [http-nio-8086-exec-2] c.c.k.c.e.GlobalExceptionHandler: Internal server error exception: java.lang.NullPointerException: Cannot invoke "java.time.LocalDate.format(java.time.format.DateTimeFormatter)" because the return value of "com.ctv_it.klb.dto.fetch.response.data.FetchCustomerDataResponseDTO.getDateOfBirth()" is null
+2024-10-08 15:22:13,197 ERROR [http-nio-8086-exec-2] c.c.k.c.e.GlobalExceptionHandler: Error occurred at URL /api/v1/reports/account/7: null
+2024-10-08 15:22:13,220 INFO  [http-nio-8086-exec-2] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375731923]: POST : /api/v1/reports/account/7
+ {
+  "message": "Internal server error",
+  "success": false,
+  "status": 500,
+  "timestamp": "2024-10-08T15:22:13.197423383",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:23:39,308 INFO  [http-nio-8086-exec-3] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375819307
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 65
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:23:39,370 INFO  [http-nio-8086-exec-3] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:23:39,377 INFO  [http-nio-8086-exec-3] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 15:23:39,377 INFO  [http-nio-8086-exec-3] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 15:23:39,378 INFO  [http-nio-8086-exec-3] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:23:39,379 INFO  [http-nio-8086-exec-3] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@68fe82c7, savingAccountId=null)
+2024-10-08 15:23:39,385 INFO  [http-nio-8086-exec-3] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375819307]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:23:39,390 INFO  [http-nio-8086-exec-3] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=NONE, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@68fe82c7, savingAccountId=null))
+2024-10-08 15:23:39,394 INFO  [http-nio-8086-exec-3] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:23:39,395 INFO  [http-nio-8086-exec-3] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 15:23:39,396 INFO  [http-nio-8086-exec-3] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=7, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@68fe82c7, savingAccountId=null)) is processing
+2024-10-08 15:23:39,398 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:23:39,536 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:23:39,542 INFO  [http-nio-8086-exec-3] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:23:39,544 INFO  [http-nio-8086-exec-3] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:23:39,545 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Fetch accounts(accountId: 7, accountFilterDTO: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@68fe82c7, savingAccountId=null)) is processing
+2024-10-08 15:23:39,547 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:39,548 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:41,052 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:23:41,076 INFO  [http-nio-8086-exec-3] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:23:41,077 INFO  [http-nio-8086-exec-3] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:41,078 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:41,089 INFO  [http-nio-8086-exec-3] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:23:41,264 INFO  [http-nio-8086-exec-3] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375819307]: POST : /api/v1/reports/account/7
+ {
+  "data": {
+    "customer": {
+      "id": 7,
+      "fullName": "NGUYEN QUOC DUY",
+      "phoneNumber": "0706605004",
+      "dateOfBirth": "03-10-2024",
+      "address": "117 Nguyễn Văn Trỗi",
+      "email": "duynguyenquoc92@gmail.com"
+    },
+    "accounts": [
+      {
+        "no": 1,
+        "id": 7,
+        "type": "Tài khoản thanh toán",
+        "name": "TKTT KHACH HANG ",
+        "number": "1067358004",
+        "currency": "VND",
+        "availableBalance": 0.00,
+        "status": "Đang hoạt động",
+        "openingDate": "08-10-2024"
+      }
+    ]
+  },
+  "success": true,
+  "status": 200,
+  "timestamp": "2024-10-08T15:23:41.242142431",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:23:45,243 INFO  [http-nio-8086-exec-4] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375825242
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 66
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:23:45,248 INFO  [http-nio-8086-exec-4] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"EXCEL"}
+2024-10-08 15:23:45,249 INFO  [http-nio-8086-exec-4] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 15:23:45,250 INFO  [http-nio-8086-exec-4] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 15:23:45,250 INFO  [http-nio-8086-exec-4] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:23:45,251 INFO  [http-nio-8086-exec-4] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@11a9349d, savingAccountId=null)
+2024-10-08 15:23:45,252 INFO  [http-nio-8086-exec-4] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375825242]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "EXCEL",
+  "reportFilters": {}
+}
+2024-10-08 15:23:45,253 INFO  [http-nio-8086-exec-4] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=EXCEL, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@11a9349d, savingAccountId=null))
+2024-10-08 15:23:45,254 INFO  [http-nio-8086-exec-4] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:23:45,254 INFO  [http-nio-8086-exec-4] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 15:23:45,255 INFO  [http-nio-8086-exec-4] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=7, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@11a9349d, savingAccountId=null)) is processing
+2024-10-08 15:23:45,255 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:23:45,332 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:23:45,334 INFO  [http-nio-8086-exec-4] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:23:45,335 INFO  [http-nio-8086-exec-4] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:23:45,337 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Fetch accounts(accountId: 7, accountFilterDTO: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@11a9349d, savingAccountId=null)) is processing
+2024-10-08 15:23:45,338 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:45,339 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:45,483 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:23:45,484 INFO  [http-nio-8086-exec-4] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:23:45,485 INFO  [http-nio-8086-exec-4] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:45,485 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:45,486 INFO  [http-nio-8086-exec-4] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:23:45,486 INFO  [http-nio-8086-exec-4] c.c.k.s.f.i.AccountExcelServiceImpl: Export(type=ACCOUNT, format=EXCEL) is processing for data: AccountReportDTO(customer=CustomerInfoDTO(id=7, fullName=NGUYEN QUOC DUY, phoneNumber=0706605004, dateOfBirth=03-10-2024, address=117 Nguyễn Văn Trỗi, email=duynguyenquoc92@gmail.com, kycDocumentType=null, kycDocumentNumber=null), accounts=[AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)])
+2024-10-08 15:23:45,499 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: Directories checked or created: ./banking-report-service/file for file: ./banking-report-service/file/account_excel_2024-10-08T15:23:45.495204545.xlsx
+2024-10-08 15:23:45,502 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: File export in progress for format: EXCEL
+2024-10-08 15:23:45,504 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: Generating Excel for template: /template/excel/account.xlsx
+2024-10-08 15:23:45,539 INFO  [http-nio-8086-exec-4] o.j.u.ServiceFactoryDefaultImpl: you may change the SPI on file: META-INF/services/org.jxls.util.ServiceFactory
+2024-10-08 15:23:45,549 INFO  [http-nio-8086-exec-4] o.j.u.ServiceFactoryDefaultImpl: you may change the SPI on file: META-INF/services/org.jxls.util.JxlsConfigProvider
+2024-10-08 15:23:45,574 INFO  [http-nio-8086-exec-4] o.j.u.TransformerFactory: Loading transformer by class org.jxls.transform.poi.PoiTransformer
+2024-10-08 15:23:46,418 INFO  [http-nio-8086-exec-4] o.j.u.ServiceFactoryDefaultImpl: you may change the SPI on file: META-INF/services/org.jxls.expression.ExpressionEvaluatorFactory
+2024-10-08 15:23:46,614 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: Excel generation completed for template: /template/excel/account.xlsx
+2024-10-08 15:23:46,614 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: File export completed successfully
+2024-10-08 15:23:46,614 INFO  [http-nio-8086-exec-4] c.c.k.u.FileUtil: File read successfully: ./banking-report-service/file/account_excel_2024-10-08T15:23:45.495204545.xlsx
+2024-10-08 15:23:46,615 INFO  [http-nio-8086-exec-4] c.c.k.c.ReportController: FileName: account_excel_2024-10-08T15:23:45.495204545.xlsx
+2024-10-08 15:23:46,681 INFO  [http-nio-8086-exec-4] c.c.k.c.ReportController: MediaType: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+2024-10-08 15:23:46,683 INFO  [http-nio-8086-exec-4] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375825242]: POST : /api/v1/reports/account/7
+ Binary content is truncated (size: 9733 bytes): {[50, 4b, 03, 04, 14, 00, 08, 08, 08, 00,...]}
+2024-10-08 15:23:57,145 INFO  [http-nio-8086-exec-5] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375837145
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 65
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:23:57,153 INFO  [http-nio-8086-exec-5] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:23:57,154 INFO  [http-nio-8086-exec-5] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 15:23:57,155 INFO  [http-nio-8086-exec-5] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 15:23:57,155 INFO  [http-nio-8086-exec-5] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:23:57,156 INFO  [http-nio-8086-exec-5] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@23fae9a5, savingAccountId=null)
+2024-10-08 15:23:57,156 INFO  [http-nio-8086-exec-5] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375837145]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:23:57,157 INFO  [http-nio-8086-exec-5] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=NONE, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@23fae9a5, savingAccountId=null))
+2024-10-08 15:23:57,158 INFO  [http-nio-8086-exec-5] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:23:57,158 INFO  [http-nio-8086-exec-5] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 15:23:57,158 INFO  [http-nio-8086-exec-5] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=7, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@23fae9a5, savingAccountId=null)) is processing
+2024-10-08 15:23:57,158 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:23:57,218 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:23:57,220 INFO  [http-nio-8086-exec-5] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:23:57,221 INFO  [http-nio-8086-exec-5] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:23:57,222 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Fetch accounts(accountId: 7, accountFilterDTO: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@23fae9a5, savingAccountId=null)) is processing
+2024-10-08 15:23:57,222 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:57,223 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:23:57,361 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:23:57,363 INFO  [http-nio-8086-exec-5] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:23:57,365 INFO  [http-nio-8086-exec-5] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:57,365 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:23:57,366 INFO  [http-nio-8086-exec-5] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:23:57,370 INFO  [http-nio-8086-exec-5] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375837145]: POST : /api/v1/reports/account/7
+ {
+  "data": {
+    "customer": {
+      "id": 7,
+      "fullName": "NGUYEN QUOC DUY",
+      "phoneNumber": "0706605004",
+      "dateOfBirth": "03-10-2024",
+      "address": "117 Nguyễn Văn Trỗi",
+      "email": "duynguyenquoc92@gmail.com"
+    },
+    "accounts": [
+      {
+        "no": 1,
+        "id": 7,
+        "type": "Tài khoản thanh toán",
+        "name": "TKTT KHACH HANG ",
+        "number": "1067358004",
+        "currency": "VND",
+        "availableBalance": 0.00,
+        "status": "Đang hoạt động",
+        "openingDate": "08-10-2024"
+      }
+    ]
+  },
+  "success": true,
+  "status": 200,
+  "timestamp": "2024-10-08T15:23:57.367869788",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:24:03,815 INFO  [http-nio-8086-exec-6] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375843814
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 69
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:24:03,818 INFO  [http-nio-8086-exec-6] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"TRANSACTION","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:24:03,819 INFO  [http-nio-8086-exec-6] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: TRANSACTION
+2024-10-08 15:24:03,819 INFO  [http-nio-8086-exec-6] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: TRANSACTION
+2024-10-08 15:24:03,819 INFO  [http-nio-8086-exec-6] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:24:03,829 INFO  [http-nio-8086-exec-6] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@76dd8652, transactionType=null, transactionDateRange=null, transactionStatus=null)
+2024-10-08 15:24:03,832 INFO  [http-nio-8086-exec-6] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375843814]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "TRANSACTION",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:24:03,833 INFO  [http-nio-8086-exec-6] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=TRANSACTION, reportFormat=NONE, reportFilters=TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@76dd8652, transactionType=null, transactionDateRange=null, transactionStatus=null))
+2024-10-08 15:24:03,834 INFO  [http-nio-8086-exec-6] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:24:03,834 INFO  [http-nio-8086-exec-6] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=TRANSACTION) is processing
+2024-10-08 15:24:03,834 INFO  [http-nio-8086-exec-6] c.c.k.s.t.i.TransactionReportServiceImpl: Search(type=TRANSACTION, accountId=7, filters=TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@76dd8652, transactionType=null, transactionDateRange=null, transactionStatus=null)) is processing
+2024-10-08 15:24:03,834 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:24:03,904 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:24:03,908 INFO  [http-nio-8086-exec-6] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:24:03,909 INFO  [http-nio-8086-exec-6] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:24:03,909 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:24:03,909 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:24:04,027 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:24:04,028 INFO  [http-nio-8086-exec-6] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:24:04,028 INFO  [http-nio-8086-exec-6] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:24:04,028 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:24:04,029 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:24:04,029 INFO  [http-nio-8086-exec-6] c.c.k.s.f.FetchTransactionServiceFC: Fetch transaction(accountNumber=1067358004, transactionType=null, fromDate=null, toDate=null, status=null) is processing
+2024-10-08 15:24:04,620 ERROR [http-nio-8086-exec-6] c.c.k.s.f.FetchTransactionServiceFC: Fetch transaction(accountNumber=1067358004, transactionType=null, fromDate=null, toDate=null, status=null) failed: 
+feign.codec.DecodeException: Error while extracting response for type [java.util.List<com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO>] and content type [application/json]
+2024-10-08 15:24:04,622 ERROR [http-nio-8086-exec-6] c.c.k.c.e.GlobalExceptionHandler: Internal server error exception: feign.codec.DecodeException: Error while extracting response for type [java.util.List<com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO>] and content type [application/json]
+2024-10-08 15:24:04,624 ERROR [http-nio-8086-exec-6] c.c.k.c.e.GlobalExceptionHandler: Error occurred at URL /api/v1/reports/account/7: null
+2024-10-08 15:24:04,627 INFO  [http-nio-8086-exec-6] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375843814]: POST : /api/v1/reports/account/7
+ {
+  "message": "Internal server error",
+  "success": false,
+  "status": 500,
+  "timestamp": "2024-10-08T15:24:04.624844117",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:25:26,661 INFO  [http-nio-8086-exec-7] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375926661
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 65
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:25:26,668 INFO  [http-nio-8086-exec-7] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:25:26,669 INFO  [http-nio-8086-exec-7] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 15:25:26,669 INFO  [http-nio-8086-exec-7] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 15:25:26,670 INFO  [http-nio-8086-exec-7] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:25:26,670 INFO  [http-nio-8086-exec-7] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@6bc35fea, savingAccountId=null)
+2024-10-08 15:25:26,670 INFO  [http-nio-8086-exec-7] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375926661]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:25:26,671 INFO  [http-nio-8086-exec-7] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=NONE, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@6bc35fea, savingAccountId=null))
+2024-10-08 15:25:26,672 INFO  [http-nio-8086-exec-7] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:25:26,672 INFO  [http-nio-8086-exec-7] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 15:25:26,673 INFO  [http-nio-8086-exec-7] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=7, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@6bc35fea, savingAccountId=null)) is processing
+2024-10-08 15:25:26,673 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:25:26,740 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:25:26,742 INFO  [http-nio-8086-exec-7] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:25:26,744 INFO  [http-nio-8086-exec-7] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:25:26,745 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Fetch accounts(accountId: 7, accountFilterDTO: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@6bc35fea, savingAccountId=null)) is processing
+2024-10-08 15:25:26,745 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:25:26,746 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:25:26,880 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:25:26,881 INFO  [http-nio-8086-exec-7] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:25:26,882 INFO  [http-nio-8086-exec-7] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:25:26,882 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:25:26,883 INFO  [http-nio-8086-exec-7] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:25:26,885 INFO  [http-nio-8086-exec-7] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375926661]: POST : /api/v1/reports/account/7
+ {
+  "data": {
+    "customer": {
+      "id": 7,
+      "fullName": "NGUYEN QUOC DUY",
+      "phoneNumber": "0706605004",
+      "dateOfBirth": "03-10-2024",
+      "address": "117 Nguyễn Văn Trỗi",
+      "email": "duynguyenquoc92@gmail.com"
+    },
+    "accounts": [
+      {
+        "no": 1,
+        "id": 7,
+        "type": "Tài khoản thanh toán",
+        "name": "TKTT KHACH HANG ",
+        "number": "1067358004",
+        "currency": "VND",
+        "availableBalance": 0.00,
+        "status": "Đang hoạt động",
+        "openingDate": "08-10-2024"
+      }
+    ]
+  },
+  "success": true,
+  "status": 200,
+  "timestamp": "2024-10-08T15:25:26.88429152",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:25:33,172 INFO  [http-nio-8086-exec-8] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728375933172
+[PATH]: /api/v1/reports/account/7
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 69
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiI3Iiwic3ViIjoiNyIsInJvbGUiOiJST0xFX2N1c3RvbWVyIiwic2F2aW5nQWNjb3VudElkIjpudWxsLCJjdXN0b21lcklkIjoiNyIsImFjY291bnROdW1iZXIiOiIxMDY3MzU4MDA0IiwiZXhwIjoxNzI4Mzc4NjY4LCJ1c2VySWQiOiI3IiwiaWF0IjoxNzI4Mzc1MDY4LCJ1c2VybmFtZSI6IjA3MDY2MDUwMDQifQ.lYUnXx8FAjz8MJUKUix5Nq3QPRgrSOsrOliJz6B6s7Q
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 15:25:33,177 INFO  [http-nio-8086-exec-8] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"TRANSACTION","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 15:25:33,178 INFO  [http-nio-8086-exec-8] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: TRANSACTION
+2024-10-08 15:25:33,178 INFO  [http-nio-8086-exec-8] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: TRANSACTION
+2024-10-08 15:25:33,179 INFO  [http-nio-8086-exec-8] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 15:25:33,179 INFO  [http-nio-8086-exec-8] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@3a1fd7b7, transactionType=null, transactionDateRange=null, transactionStatus=null)
+2024-10-08 15:25:33,180 INFO  [http-nio-8086-exec-8] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728375933172]: POST : /api/v1/reports/account/7
+ {
+  "reportType": "TRANSACTION",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 15:25:33,182 INFO  [http-nio-8086-exec-8] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=TRANSACTION, reportFormat=NONE, reportFilters=TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@3a1fd7b7, transactionType=null, transactionDateRange=null, transactionStatus=null))
+2024-10-08 15:25:33,182 INFO  [http-nio-8086-exec-8] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 15:25:33,183 INFO  [http-nio-8086-exec-8] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=TRANSACTION) is processing
+2024-10-08 15:25:33,183 INFO  [http-nio-8086-exec-8] c.c.k.s.t.i.TransactionReportServiceImpl: Search(type=TRANSACTION, accountId=7, filters=TransactionFilterDTO(super=com.ctv_it.klb.dto.filter.extend.TransactionFilterDTO@3a1fd7b7, transactionType=null, transactionDateRange=null, transactionStatus=null)) is processing
+2024-10-08 15:25:33,183 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) is processing
+2024-10-08 15:25:33,260 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)
+2024-10-08 15:25:33,262 INFO  [http-nio-8086-exec-8] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) is processing
+2024-10-08 15:25:33,263 INFO  [http-nio-8086-exec-8] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 7, data=FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=7, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-03, gender=MALE, email=duynguyenquoc92@gmail.com, phoneNumber=0706605004, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=null, documentNumber=null), kycStatus=pending)
+2024-10-08 15:25:33,264 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:25:33,264 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) is processing
+2024-10-08 15:25:33,432 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)
+2024-10-08 15:25:33,434 INFO  [http-nio-8086-exec-8] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) is processing
+2024-10-08 15:25:33,434 INFO  [http-nio-8086-exec-8] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:25:33,434 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=7) completed successfully: 
+FetchAccountDataResponseDTO(accountId=7, customerId=7, accountName=TKTT KHACH HANG , accountNumber=1067358004, balance=0.00, status=active, openingDate=2024-10-08T08:11:07)
+2024-10-08 15:25:33,435 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=7, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=1067358004, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 15:25:33,435 INFO  [http-nio-8086-exec-8] c.c.k.s.f.FetchTransactionServiceFC: Fetch transaction(accountNumber=1067358004, transactionType=null, fromDate=null, toDate=null, status=null) is processing
+2024-10-08 15:25:33,493 ERROR [http-nio-8086-exec-8] c.c.k.s.f.FetchTransactionServiceFC: Fetch transaction(accountNumber=1067358004, transactionType=null, fromDate=null, toDate=null, status=null) failed: 
+feign.codec.DecodeException: Error while extracting response for type [java.util.List<com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO>] and content type [application/json]
+2024-10-08 15:25:33,494 ERROR [http-nio-8086-exec-8] c.c.k.c.e.GlobalExceptionHandler: Internal server error exception: feign.codec.DecodeException: Error while extracting response for type [java.util.List<com.ctv_it.klb.dto.baseInfo.TransactionInfoDTO>] and content type [application/json]
+2024-10-08 15:25:33,495 ERROR [http-nio-8086-exec-8] c.c.k.c.e.GlobalExceptionHandler: Error occurred at URL /api/v1/reports/account/7: null
+2024-10-08 15:25:33,497 INFO  [http-nio-8086-exec-8] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728375933172]: POST : /api/v1/reports/account/7
+ {
+  "message": "Internal server error",
+  "success": false,
+  "status": 500,
+  "timestamp": "2024-10-08T15:25:33.495431718",
+  "url": "/api/v1/reports/account/7"
+}
+2024-10-08 15:26:37,425 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:31:37,477 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:36:37,522 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:41:37,541 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:46:37,576 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:51:37,633 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 15:56:37,694 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:01:37,759 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:01:59,029 INFO  [http-nio-8086-exec-9] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728378119027
+[PATH]: /api/v1/reports/account/10
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---accept : */*
+---access-control-request-method : POST
+---access-control-request-headers : authorization,content-type
+---origin : http://localhost:5173
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---sec-fetch-mode : cors
+---sec-fetch-site : same-site
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 16:01:59,091 INFO  [http-nio-8086-exec-9] c.c.k.c.l.CustomURLFilter: 
+LOGGING REQUEST-----------------------------------
+[REQUEST-ID]: 1728378119090
+[PATH]: /api/v1/reports/account/10
+[QUERIES]: null
+[HEADERS]: 
+---host : localhost:8086
+---connection : keep-alive
+---content-length : 65
+---sec-ch-ua : "Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"
+---accept : application/json, text/plain, */*
+---sec-ch-ua-platform : "Linux"
+---sec-ch-ua-mobile : ?0
+---authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiIxMCIsInN1YiI6IjEwIiwicm9sZSI6IlJPTEVfY3VzdG9tZXIiLCJzYXZpbmdBY2NvdW50SWQiOm51bGwsImN1c3RvbWVySWQiOiIxMCIsImFjY291bnROdW1iZXIiOiI2MDc5OTE2NDA2IiwiZXhwIjoxNzI4MzgxMzE2LCJ1c2VySWQiOiIxMCIsImlhdCI6MTcyODM3NzcxNiwidXNlcm5hbWUiOiIwNTY1NjcxODAzIn0.TUYdS1zuoTs8B_NdjGDaKavtDMe23965nxRWiycgJ4g
+---user-agent : Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+---content-type : application/json
+---origin : http://localhost:5173
+---sec-fetch-site : same-site
+---sec-fetch-mode : cors
+---sec-fetch-dest : empty
+---referer : http://localhost:5173/
+---accept-encoding : gzip, deflate, br, zstd
+---accept-language : en-US,en;q=0.9,vi;q=0.8
+LOGGING REQUEST-----------------------------------
+
+2024-10-08 16:01:59,177 INFO  [http-nio-8086-exec-9] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing request: {"reportType":"ACCOUNT","reportFilters":{},"reportFormat":"NONE"}
+2024-10-08 16:01:59,198 INFO  [http-nio-8086-exec-9] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportType complete successfully: ACCOUNT
+2024-10-08 16:01:59,199 INFO  [http-nio-8086-exec-9] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFormat complete successfully: ACCOUNT
+2024-10-08 16:01:59,200 INFO  [http-nio-8086-exec-9] c.c.k.u.ReportRequestDTODeserializerUtil: Deserializing reportFilters
+2024-10-08 16:01:59,203 INFO  [http-nio-8086-exec-9] c.c.k.u.ReportRequestDTODeserializerUtil: Deserialize reportFilters complete successfully: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@644fbc34, savingAccountId=null)
+2024-10-08 16:01:59,216 INFO  [http-nio-8086-exec-9] c.c.k.c.l.LoggingService: LOGGING REQUEST [1728378119090]: POST : /api/v1/reports/account/10
+ {
+  "reportType": "ACCOUNT",
+  "reportFormat": "NONE",
+  "reportFilters": {}
+}
+2024-10-08 16:01:59,232 INFO  [http-nio-8086-exec-9] c.c.k.c.ReportController: Received ReportRequestDTO: ReportRequestDTO(reportType=ACCOUNT, reportFormat=NONE, reportFilters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@644fbc34, savingAccountId=null))
+2024-10-08 16:01:59,235 INFO  [http-nio-8086-exec-9] c.c.k.c.ReportController: Accept Header: application/json, text/plain, */*
+2024-10-08 16:01:59,236 INFO  [http-nio-8086-exec-9] c.c.k.f.ReportTypeServiceFactory: Get reportTypeService(reportType=ACCOUNT) is processing
+2024-10-08 16:01:59,238 INFO  [http-nio-8086-exec-9] c.c.k.s.t.i.AccountReportServiceImpl: Search(type=ACCOUNT, accountId=10, filters=AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@644fbc34, savingAccountId=null)) is processing
+2024-10-08 16:01:59,239 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=10) is processing
+2024-10-08 16:01:59,395 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchCustomerServiceFC: Fetch customer(accountId=10) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 10, data=FetchCustomerDataResponseDTO(customerId=10, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-10, gender=MALE, email=duynguyenquoc912@gmail.com, phoneNumber=0565671803, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=id_card, documentNumber=6767645456), kycStatus=verified), details=null)
+2024-10-08 16:01:59,400 INFO  [http-nio-8086-exec-9] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 10, data=FetchCustomerDataResponseDTO(customerId=10, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-10, gender=MALE, email=duynguyenquoc912@gmail.com, phoneNumber=0565671803, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=id_card, documentNumber=6767645456), kycStatus=verified), details=null)) is processing
+2024-10-08 16:01:59,401 INFO  [http-nio-8086-exec-9] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Customer found for account ID: 10, data=FetchCustomerDataResponseDTO(customerId=10, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-10, gender=MALE, email=duynguyenquoc912@gmail.com, phoneNumber=0565671803, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=id_card, documentNumber=6767645456), kycStatus=verified), details=null)) completed successfully: 
+FetchCustomerDataResponseDTO(customerId=10, fullName=NGUYEN QUOC DUY, dateOfBirth=2024-10-10, gender=MALE, email=duynguyenquoc912@gmail.com, phoneNumber=0565671803, currentAddress=117 Nguyễn Văn Trỗi, kyc=FetchCustomerDataResponseDTO.Kyc(documentType=id_card, documentNumber=6767645456), kycStatus=verified)
+2024-10-08 16:01:59,402 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Fetch accounts(accountId: 10, accountFilterDTO: AccountFilterDTO(super=com.ctv_it.klb.dto.filter.extend.AccountFilterDTO@644fbc34, savingAccountId=null)) is processing
+2024-10-08 16:01:59,403 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=10) is processing
+2024-10-08 16:01:59,403 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=10) is processing
+2024-10-08 16:01:59,475 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=10) completed successfully: 
+FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=10, customerId=10, accountName=TKTT KHACH HANG , accountNumber=6079916406, balance=0.00, status=active, openingDate=2024-10-08T08:55:14), details=null)
+2024-10-08 16:01:59,478 INFO  [http-nio-8086-exec-9] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=10, customerId=10, accountName=TKTT KHACH HANG , accountNumber=6079916406, balance=0.00, status=active, openingDate=2024-10-08T08:55:14), details=null)) is processing
+2024-10-08 16:01:59,478 INFO  [http-nio-8086-exec-9] c.c.k.s.f.HandleFetchResponse: Handle fetch response(fetchResponseDTO=FetchResponseDTO(success=true, status=200, message=Account data fetched successfully, data=FetchAccountDataResponseDTO(accountId=10, customerId=10, accountName=TKTT KHACH HANG , accountNumber=6079916406, balance=0.00, status=active, openingDate=2024-10-08T08:55:14), details=null)) completed successfully: 
+FetchAccountDataResponseDTO(accountId=10, customerId=10, accountName=TKTT KHACH HANG , accountNumber=6079916406, balance=0.00, status=active, openingDate=2024-10-08T08:55:14)
+2024-10-08 16:01:59,478 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Fetch account(accountId=10) completed successfully: 
+FetchAccountDataResponseDTO(accountId=10, customerId=10, accountName=TKTT KHACH HANG , accountNumber=6079916406, balance=0.00, status=active, openingDate=2024-10-08T08:55:14)
+2024-10-08 16:01:59,479 INFO  [http-nio-8086-exec-9] c.c.k.s.f.FetchAccountServiceFC: Mapped account data: AccountInfoDTO(no=1, id=10, type=Tài khoản thanh toán, name=TKTT KHACH HANG , number=6079916406, currency=VND, accountingBalance=null, availableBalance=0.00, branch=null, status=Đang hoạt động, openingDate=08-10-2024)
+2024-10-08 16:01:59,499 INFO  [http-nio-8086-exec-9] c.c.k.c.l.LoggingService: LOGGING RESPONSE [1728378119090]: POST : /api/v1/reports/account/10
+ {
+  "data": {
+    "customer": {
+      "id": 10,
+      "fullName": "NGUYEN QUOC DUY",
+      "phoneNumber": "0565671803",
+      "dateOfBirth": "10-10-2024",
+      "address": "117 Nguyễn Văn Trỗi",
+      "email": "duynguyenquoc912@gmail.com",
+      "kycDocumentType": "id_card",
+      "kycDocumentNumber": "6767645456"
+    },
+    "accounts": [
+      {
+        "no": 1,
+        "id": 10,
+        "type": "Tài khoản thanh toán",
+        "name": "TKTT KHACH HANG ",
+        "number": "6079916406",
+        "currency": "VND",
+        "availableBalance": 0.00,
+        "status": "Đang hoạt động",
+        "openingDate": "08-10-2024"
+      }
+    ]
+  },
+  "success": true,
+  "status": 200,
+  "timestamp": "2024-10-08T16:01:59.483477824",
+  "url": "/api/v1/reports/account/10"
+}
+2024-10-08 16:06:38,287 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:11:38,329 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:16:38,366 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:21:38,413 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:26:38,452 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:31:38,516 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:36:38,573 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:41:38,575 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:46:38,576 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:51:38,578 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 16:56:38,580 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 17:01:38,582 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 17:06:38,584 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 17:11:38,587 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 17:16:38,611 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration
+2024-10-08 17:21:38,651 INFO  [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.a.ConfigClusterResolver: Resolving eureka endpoints via configuration

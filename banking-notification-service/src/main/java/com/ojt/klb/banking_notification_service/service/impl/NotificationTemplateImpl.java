@@ -2,8 +2,8 @@ package com.ojt.klb.banking_notification_service.service.impl;
 
 
 import com.ojt.klb.banking_notification_service.dto.NotificationTemplateRequest;
-import com.ojt.klb.banking_notification_service.dto.Response.Response;
-import com.ojt.klb.banking_notification_service.dto.Response.ResponseMessage;
+import com.ojt.klb.banking_notification_service.dto.response.Response;
+import com.ojt.klb.banking_notification_service.dto.response.ResponseMessage;
 import com.ojt.klb.banking_notification_service.entity.NotificationTemplate;
 
 import com.ojt.klb.banking_notification_service.repository.NotificationTemplateRepository;

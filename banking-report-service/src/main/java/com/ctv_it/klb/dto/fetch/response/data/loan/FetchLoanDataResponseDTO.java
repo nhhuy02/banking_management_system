@@ -1,4 +1,4 @@
-package com.ctv_it.klb.dto.fetch.response.data;
+package com.ctv_it.klb.dto.fetch.response.data.loan;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -55,22 +55,7 @@ public class FetchLoanDataResponseDTO {
     private LocalDate effectiveFrom;
   }
 //
-//    @Builder
-//    @Setter
-//    @Getter
-//    @ToString
-//    public static class LoanRepayment {
-//
-//      private int loanPaymentId;
-//      private BigDecimal principalAmount;
-//      private Decimal interestAmount;
-//      private Decimal latePaymentInterestAmount;
-//      private BigDecimal totalAmount;
-//      private LocalDate paymentDueDate;
-//      private LocalDate actualPaymentDate;
-//      private int accountId;
-//      private LocalDate paymentStatus;
-//      private boolean isLate;
+
 //    }
 
   @NoArgsConstructor

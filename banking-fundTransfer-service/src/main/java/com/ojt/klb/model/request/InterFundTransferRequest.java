@@ -29,7 +29,6 @@ public class InterFundTransferRequest {
     @Positive(message = "Amount must be a positive value")
     private BigDecimal amount;
 
-    @NotBlank(message = "Description cannot be blank")
     @Size(max = 255, message = "Description cannot exceed 255 characters")
     String description;
 }

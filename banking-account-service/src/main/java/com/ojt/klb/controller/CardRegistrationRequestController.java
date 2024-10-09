@@ -6,6 +6,8 @@ import com.ojt.klb.dto.CardRegistrationRequestUpdateDto;
 import com.ojt.klb.exception.CardNotFoundException;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.CardRegistrationRequestService;
+
+// import org.hibernate.engine.internal.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/account/card-registration")
@@ -40,8 +43,7 @@ public class CardRegistrationRequestController {
                         HttpStatus.CREATED.value(),
                         "Card registration request created successfully.",
                         true,
-                        result.get()
-                );
+                        result.get());
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
                 logger.error("Failed to create card registration request for accountId: {}", accountId);
@@ -49,8 +51,7 @@ public class CardRegistrationRequestController {
                         HttpStatus.BAD_REQUEST.value(),
                         "Failed to create card registration request. Please check the provided details.",
                         false,
-                        null
-                );
+                        null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         } catch (Exception e) {
@@ -59,31 +60,29 @@ public class CardRegistrationRequestController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "You already have a request to register for this card",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @GetMapping("/pending-requests")
     public ResponseEntity<ApiResponse<List<CardRegistrationRequestResponseDto>>> getAllPendingCardRequests() {
-        Optional<List<CardRegistrationRequestResponseDto>> optionalCardRequests = cardRegistrationRequestService.getAllCardRegistrationRequestsStatusPending();
+        Optional<List<CardRegistrationRequestResponseDto>> optionalCardRequests = cardRegistrationRequestService
+                .getAllCardRegistrationRequestsStatusPending();
 
         if (optionalCardRequests.isPresent() && !optionalCardRequests.get().isEmpty()) {
             ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
                     HttpStatus.OK.value(),
                     "Pending card registration requests retrieved successfully",
                     true,
-                    optionalCardRequests.get()
-            );
+                    optionalCardRequests.get());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
                     HttpStatus.NOT_FOUND.value(),
                     "No pending card registration requests found, please check the provided details.",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -100,8 +99,7 @@ public class CardRegistrationRequestController {
                     HttpStatus.CREATED.value(),
                     "Update data success",
                     true,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (CardNotFoundException e) {
             logger.error("Card not found for accountId: {}", accountId, e);
@@ -121,28 +119,34 @@ public class CardRegistrationRequestController {
     public ResponseEntity<ApiResponse<List<CardRegistrationRequestResponseDto>>> getAllCardRegistrationRequestsByAccountId(
             @PathVariable Long accountId) {
         try {
-            Optional<List<CardRegistrationRequestResponseDto>> optionalDtoList = cardRegistrationRequestService.getAllCardRegistrationRequestsByAccountId(accountId);
+            Optional<List<CardRegistrationRequestResponseDto>> optionalDtoList = cardRegistrationRequestService
+                    .getAllCardRegistrationRequestsByAccountId(accountId);
 
-            if (optionalDtoList.isPresent() && !optionalDtoList.get().isEmpty()) {
+            if (optionalDtoList.isPresent()) {
                 ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
                         HttpStatus.OK.value(),
                         "Fetch successful",
                         true,
-                        optionalDtoList.get()
+                        optionalDtoList.get() // Can be an empty list
                 );
                 return ResponseEntity.ok(response);
             } else {
                 ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
-                        HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.OK.value(),
                         "No requests found for this accountId",
-                        false,
-                        null
+                        true,
+                        Collections.emptyList() // Return an empty list
                 );
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.ok(response);
             }
         } catch (Exception e) {
             logger.error("Error fetching card registration requests for accountId: {}", accountId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            ApiResponse<List<CardRegistrationRequestResponseDto>> response = new ApiResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Internal server error",
+                    false,
+                    null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

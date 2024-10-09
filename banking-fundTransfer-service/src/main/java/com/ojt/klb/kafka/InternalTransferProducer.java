@@ -14,6 +14,7 @@ import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 @Slf4j
 public class InternalTransferProducer {
     private final KafkaTemplate<String, InternalTransferNotification> kafkaTemplate;
+    private final KafkaTemplate<String, InternalTransferNotification> kafkaTemplate1;
 
     public void sendInternalTransferNotification(InternalTransferNotification internalTransferNotification) {
         log.info("Sending internal transfer notification");
@@ -23,5 +24,17 @@ public class InternalTransferProducer {
                 .build();
 
         kafkaTemplate.send(message);
+    }
+
+
+
+    public void sendExternalTransferNotification(InternalTransferNotification internalTransferNotification) {
+        log.info("Sending external transfer notification");
+        Message<InternalTransferNotification> message = MessageBuilder
+                .withPayload(internalTransferNotification)
+                .setHeader(TOPIC, "externalTransfer-topic")
+                .build();
+
+        kafkaTemplate1.send(message);
     }
 }

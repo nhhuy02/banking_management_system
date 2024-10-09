@@ -30,14 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final List<String> employeeEndpoints = List.of(
             "/api/v1/account/card-registration/pending-requests",
-            "/api/v1/notification/getAllNotification",
+            // "/api/v1/notification/getAllNotification",
             "/api/v1/account/card-types/**",
             "/api/v1/loan-service/loans/{loanId}/disburse",
             "/api/v1/loan-service/loan-applications/{applicationId}/status"
     );
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
         if (requestURI.contains("/login") || requestURI.contains("/register")
@@ -50,7 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             logger.error("Authorization header missing or does not start with Bearer");
-            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+            ErrorResponseHandler.setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Missing or invalid Authorization header");
             return;
         }
 

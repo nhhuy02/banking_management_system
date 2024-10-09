@@ -1,4 +1,4 @@
-package com.ojt.klb.banking_notification_service.dto.Response;
+package com.ojt.klb.banking_notification_service.dto.response;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

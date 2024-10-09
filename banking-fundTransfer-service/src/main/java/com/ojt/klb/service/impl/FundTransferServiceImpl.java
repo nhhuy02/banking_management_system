@@ -94,7 +94,8 @@ public class FundTransferServiceImpl implements FundTransferService {
                         fundTransferRequest.getAmount(),
                         fundTransfer.getDescription(),
                         fromAccountBalance,
-                        toAccountBalance
+                        toAccountBalance,
+                        null
                 )
         );
         return FundTransferResponse.builder()
@@ -143,6 +144,26 @@ public class FundTransferServiceImpl implements FundTransferService {
         var fromAccountBalance  = accountClient.accountBalance(fromAccount.getAccountNumber()).getBody();
         var toAccountBalance = simulatorApiClient.accountBalance(toAccount.getAccountNumber()).getBody();
 
+
+        internalTransferProducer.sendExternalTransferNotification(
+                new InternalTransferNotification(
+                        fromAccount.getEmail(),
+                        null,
+                        fromAccount.getCustomerId(),
+                        null,
+                        transactionReference,
+                        TransferType.EXTERNAL.toString(),
+                        transferredOn,
+                        fromAccount.getAccountNumber(),
+                        toAccount.getAccountNumber(),
+                        toAccount.getAccountName(),
+                        fundTransfer.getAmount(),
+                        fundTransfer.getDescription(),
+                        fromAccountBalance,
+                        null,
+                        toAccount.getBankName()
+                )
+        );
         return FundTransferResponse.builder()
                 .transactionReference(transactionReference)
                 .message("Fund transfer was successful").build();
@@ -280,7 +301,7 @@ public class FundTransferServiceImpl implements FundTransferService {
 
 
     private String generateUniqueTransactionReference() {
-        return "INT" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+        return "FT" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
     }
 
 

@@ -2,7 +2,6 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.client.AccountClient;
 import com.ojt.klb.dto.*;
-import com.ojt.klb.exception.AccountNotFoundException;
 import com.ojt.klb.exception.ResourceNotFound;
 import com.ojt.klb.mapper.AccountMapper;
 import com.ojt.klb.model.Account;
@@ -33,9 +32,9 @@ public class AccountServiceImpl implements AccountService {
     private final KafkaTemplate<String, ChangeStatusDto> kafkaTemplate;
     private final AccountMapper accountMapper;
 
-
-    public AccountServiceImpl(AccountClient accountClient, AccountRepository accountRepository, SavingsAccountRepository savingsAccountRepository,
-                              KafkaTemplate<String, ChangeStatusDto> kafkaTemplate, AccountMapper accountMapper) {
+    public AccountServiceImpl(AccountClient accountClient, AccountRepository accountRepository,
+            SavingsAccountRepository savingsAccountRepository,
+            KafkaTemplate<String, ChangeStatusDto> kafkaTemplate, AccountMapper accountMapper) {
         this.accountClient = accountClient;
         this.accountRepository = accountRepository;
         this.savingsAccountRepository = savingsAccountRepository;
@@ -71,7 +70,8 @@ public class AccountServiceImpl implements AccountService {
 
                     return Optional.of(customerData);
                 } else {
-                    logger.error("Failed to fetch customer data from external service for account id: {}", account.getId());
+                    logger.error("Failed to fetch customer data from external service for account id: {}",
+                            account.getId());
                     return Optional.empty();
                 }
             }
@@ -126,13 +126,15 @@ public class AccountServiceImpl implements AccountService {
     public Optional<GetAllId> getAccountIdCustomerIdUserId(Long userId) {
         Optional<Account> account = accountRepository.findByUserId(userId);
         if (account.isPresent()) {
-            ResponseEntity<ApiResponse<GetAllId>> getAccountIdAndCustomerId = accountClient.getAllId(account.get().getId());
+            ResponseEntity<ApiResponse<GetAllId>> getAccountIdAndCustomerId = accountClient
+                    .getAllId(account.get().getId());
             if (getAccountIdAndCustomerId.getBody() != null && getAccountIdAndCustomerId.getBody().isSuccess()) {
-                GetAllId data  = getAccountIdAndCustomerId.getBody().getData();
+                GetAllId data = getAccountIdAndCustomerId.getBody().getData();
                 Optional<SavingsAccount> savingsAccount = savingsAccountRepository.findByUserId(userId);
                 data.setAccountId(account.get().getId());
                 data.setCustomerId(data.getCustomerId());
                 data.setUserId(account.get().getUser().getId());
+                data.setAccountNumber(account.get().getAccountNumber());
                 if (savingsAccount.isPresent()) {
                     data.setSavingAccountId(savingsAccount.get().getId());
                 } else {
@@ -162,9 +164,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BigDecimal getBalance(String accountNumber) {
         return accountRepository.findAccountByAccountNumber(accountNumber)
-                .map(account -> account.getBalance())
+                .map(Account::getBalance)
                 .orElseThrow(() -> new ResourceNotFound("Account not found on the server"));
     }
-
 
 }

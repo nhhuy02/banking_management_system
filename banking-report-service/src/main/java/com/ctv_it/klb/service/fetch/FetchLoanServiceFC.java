@@ -2,7 +2,7 @@ package com.ctv_it.klb.service.fetch;
 
 import com.ctv_it.klb.dto.baseInfo.LoanInfoDTO;
 import com.ctv_it.klb.dto.fetch.response.FetchResponseDTO;
-import com.ctv_it.klb.dto.fetch.response.data.FetchLoanDataResponseDTO;
+import com.ctv_it.klb.dto.fetch.response.data.loan.FetchLoanDataResponseDTO;
 import com.ctv_it.klb.feignClient.LoanServiceFC;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,8 +30,7 @@ public class FetchLoanServiceFC {
           accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
 
       FetchResponseDTO<List<FetchLoanDataResponseDTO>> fetchResponseDTO = loanServiceFC.filters(
-          accountId,
-          loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
+          accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo, loanStatus);
 
       log.info(
           "Fetch loan(accountId={}, loanTypeId={}, loanRepaymentScheduleFrom={}, loanRepaymentScheduleTo={}, loanStatus={}) completed successfully: \n{}",
@@ -49,21 +48,21 @@ public class FetchLoanServiceFC {
     }
   }
 
-
   public List<LoanInfoDTO> fetchLoanByAccountId(long accountId, Long loanTypeId,
       LocalDate loanRepaymentScheduleFrom, LocalDate loanRepaymentScheduleTo,
       Set<String> loanStatus) {
 
-    return filters(accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo,
-        loanStatus).stream()
-        .map(this::map)
-        .toList();
+    return map(filters(accountId, loanTypeId, loanRepaymentScheduleFrom, loanRepaymentScheduleTo,
+        loanStatus));
+  }
+
+  public List<LoanInfoDTO> map(List<FetchLoanDataResponseDTO> fetchDataResponses) {
+    return fetchDataResponses.stream().map(this::map).toList();
   }
 
   public LoanInfoDTO map(FetchLoanDataResponseDTO fetchDataResponse) {
     return LoanInfoDTO.builder().id(fetchDataResponse.getLoanId())
-        .loanType(fetchDataResponse.getLoanTypeName())
-        .amount(fetchDataResponse.getLoanAmount())
+        .loanType(fetchDataResponse.getLoanTypeName()).amount(fetchDataResponse.getLoanAmount())
         .interestRate(fetchDataResponse.getCurrentInterestRate().getAnnualInterestRate())
         .loanTerm(fetchDataResponse.getLoanTermMonths())
         .disbursementDate(fetchDataResponse.getDisbursementDate())
@@ -72,10 +71,9 @@ public class FetchLoanServiceFC {
         .repaymentSchedule(fetchDataResponse.getDisbursementDate())
         .repaymentMethod(fetchDataResponse.getRepaymentMethod())
         .amountPaid(fetchDataResponse.getTotalPaidAmount())
-        .remainingBalance(fetchDataResponse.getRemainingBalance()).latePaymentPenalty(
-            fetchDataResponse.getCurrentInterestRate().getPrepaymentPenaltyRate())
-        .isBadDebt(fetchDataResponse.isBadDebt())
-        .badDebtDate(fetchDataResponse.getBadDebtDate())
+        .remainingBalance(fetchDataResponse.getRemainingBalance())
+        .latePaymentPenalty(fetchDataResponse.getCurrentInterestRate().getPrepaymentPenaltyRate())
+        .isBadDebt(fetchDataResponse.isBadDebt()).badDebtDate(fetchDataResponse.getBadDebtDate())
         .badDebtReason(fetchDataResponse.getBadDebtReason())
         .debtClassification(fetchDataResponse.getDebtClassification())
         .status(fetchDataResponse.getStatus()).build();
