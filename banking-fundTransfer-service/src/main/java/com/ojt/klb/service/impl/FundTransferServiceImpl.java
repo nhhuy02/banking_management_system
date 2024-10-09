@@ -260,8 +260,6 @@ public class FundTransferServiceImpl implements FundTransferService {
     }
 
 
-
-
     private Account validateFromAccount(String fromAccountNumber, BigDecimal transferAmount) {
         ApiResponse<Account> apiResponse = accountClient.getDataAccountNumber(fromAccountNumber).getBody();
 
@@ -274,7 +272,7 @@ public class FundTransferServiceImpl implements FundTransferService {
 
         if (!fromAccount.getStatus().equals(Account.Status.active)) {
             log.error("Account status is pending or inactive, please update the account status");
-            throw new AccountUpdateException("Account status is pending", GlobalErrorCode.NOT_ACCEPTABLE);
+            throw new AccountUpdateException("Account status is pending/closed", GlobalErrorCode.NOT_ACCEPTABLE);
         }
 
         BigDecimal minimumAmount = new BigDecimal("2000");
