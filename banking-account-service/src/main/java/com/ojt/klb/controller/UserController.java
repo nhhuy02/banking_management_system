@@ -22,7 +22,6 @@ public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -39,16 +38,14 @@ public class UserController {
                     HttpStatus.OK.value(),
                     "Login successful",
                     true,
-                    loginDto.get()
-            );
+                    loginDto.get());
             return ResponseEntity.ok(response);
         } else {
             ApiResponse<LoginDto> response = new ApiResponse<>(
                     HttpStatus.UNAUTHORIZED.value(),
                     "Invalid username or password",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
@@ -63,24 +60,21 @@ public class UserController {
                     HttpStatus.CREATED.value(),
                     "User created successfully",
                     true,
-                    userResponse
-            );
+                    userResponse);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (PhoneNumberAlreadyExistsException e) {
             ApiResponse<RegisterResponseDto> response = new ApiResponse<>(
                     HttpStatus.BAD_REQUEST.value(),
                     "Phone number already exists",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (IllegalArgumentException e) {
             ApiResponse<RegisterResponseDto> response = new ApiResponse<>(
                     HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
         } catch (Exception e) {
@@ -89,44 +83,40 @@ public class UserController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error creating user",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
-    @PostMapping("/forgetPassword/code/{phoneNumber}")
-    public ResponseEntity<ApiResponse<String>> forgetPasswordGetCode(@PathVariable String phoneNumber) {
-        logger.info("Forget password code request received for phone number: {}", phoneNumber);
+    @PostMapping("/forgetPassword/code")
+    public ResponseEntity<ApiResponse<String>> forgetPasswordGetCode(@RequestParam String identifier) {
+        logger.info("Forget password code request received for identifier: {}", identifier);
         try {
-            userService.forgetPasswordGetCode(phoneNumber);
+            userService.forgetPasswordGetCode(identifier);
 
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.OK.value(),
                     "Password reset code sent successfully",
                     true,
-                    null
-            );
+                    null);
             return ResponseEntity.ok(response);
 
         } catch (UserNotFoundException e) {
-            logger.warn("User not found with phone number: {}", phoneNumber);
+            logger.warn("User not found with identifier: {}", identifier);
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.NOT_FOUND.value(),
                     "User not found",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
         } catch (Exception e) {
-            logger.error("Error sending password reset code for phone number: {}", phoneNumber, e);
+            logger.error("Error sending password reset code for identifier: {}", identifier, e);
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "An error occurred while sending the password reset code",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -140,8 +130,7 @@ public class UserController {
                     HttpStatus.CREATED.value(),
                     "Change password success",
                     true,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (UserNotFoundException e) {
@@ -149,8 +138,7 @@ public class UserController {
                     HttpStatus.NOT_FOUND.value(),
                     "PhoneNumber not found",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
         } catch (IllegalArgumentException e) {
@@ -158,18 +146,15 @@ public class UserController {
                     HttpStatus.BAD_REQUEST.value(),
                     e.getMessage(),
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (Exception e) {
             ApiResponse<String> response = new ApiResponse<>(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "An error occurred while updating the password.",
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
-

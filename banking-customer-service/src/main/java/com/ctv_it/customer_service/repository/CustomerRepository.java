@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository  extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByAccountId(Long accountId);
+
+    // Truy vấn để tìm khách hàng có email nhưng ID khác với customerId hiện tại
+    Optional<Customer> findByEmailAndIdNot(String email, Long customerId);
 }

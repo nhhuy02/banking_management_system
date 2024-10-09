@@ -39,7 +39,9 @@ public class UserServiceImpl implements UserService {
     private final KafkaTemplate<String, CustomerDto> kafkaTemplate;
     private final KafkaTemplate<String, AccountDto> kafkaTemplateSMS;
 
-    public UserServiceImpl(AccountClient accountClient, UserRepository userRepository, PasswordEncoder passwordEncoder, AccountRepository accountRepository, GenerateUniqueNumber generateUniqueAccountNumber, KafkaTemplate<String, CustomerDto> kafkaTemplate, KafkaTemplate<String, AccountDto> kafkaTemplateSMS) {
+    public UserServiceImpl(AccountClient accountClient, UserRepository userRepository, PasswordEncoder passwordEncoder,
+            AccountRepository accountRepository, GenerateUniqueNumber generateUniqueAccountNumber,
+            KafkaTemplate<String, CustomerDto> kafkaTemplate, KafkaTemplate<String, AccountDto> kafkaTemplateSMS) {
         this.accountClient = accountClient;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -72,7 +74,6 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RegisterResponseDto createUser(RegisterDto registerDto) {
@@ -82,7 +83,8 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!isValidPassword(registerDto.getPassword())) {
-            logger.warn("Password must be at least 8 characters long and contain a special character: {}", registerDto.getPassword());
+            logger.warn("Password must be at least 8 characters long and contain a special character: {}",
+                    registerDto.getPassword());
             throw new IllegalArgumentException("Password does not meet security requirements.");
         }
 
@@ -110,13 +112,11 @@ public class UserServiceImpl implements UserService {
         newAccount.setCreatedAt(Timestamp.from(Instant.now()));
         accountRepository.save(newAccount);
 
-
         CustomerDto customerDto = new CustomerDto();
         customerDto.setAccountId(newAccount.getId());
         customerDto.setPhoneNumber(newUser.getPhoneNumber());
         kafkaTemplate.send(TOPIC, customerDto);
         logger.info("Sent customer information to Kafka topic: {}", TOPIC);
-
 
         RegisterResponseDto response = new RegisterResponseDto();
         response.setId(newUser.getId());
@@ -125,28 +125,36 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-
     @Override
-    public void forgetPasswordGetCode (String phoneNumber) {
-        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+    public void forgetPasswordGetCode(String identifier) {
+        Optional<User> user;
+
+        // Kiểm tra xem identifier có phải là số điện thoại hay email
+        if (identifier.matches("\\d{10}")) { // Giả sử số điện thoại có 10 chữ số
+            user = userRepository.findByPhoneNumber(identifier);
+        } else {
+            user = userRepository.findByEmail(identifier);
+        }
+
         if (user.isPresent()) {
             Optional<Account> account = accountRepository.findByUserId(user.get().getId());
-                ResponseEntity<ApiResponse<AccountDto>> data = accountClient.getData(account.get().getId());
-                if (data.getBody() != null && data.getBody().isSuccess()) {
-                    AccountDto accountDto = data.getBody().getData();
+            ResponseEntity<ApiResponse<AccountDto>> data = accountClient.getData(account.get().getId());
+
+            if (data.getBody() != null && data.getBody().isSuccess()) {
+                AccountDto accountDto = data.getBody().getData();
+                accountDto.setAccountId(account.get().getId());
+                if (accountDto.getPhoneNumber().equals(identifier)) {
                     accountDto.setAccountId(account.get().getId());
-                    if (accountDto.getPhoneNumber().equals(phoneNumber)) {
-                        accountDto.setAccountId(account.get().getId());
-                        kafkaTemplateSMS.send(TOPIC_SMS, accountDto);
-                        logger.info("Send messages to: {}", TOPIC_SMS);
-                        logger.info("Data: {}", accountDto);
-                    } else {
-                        logger.info("Phone number does not match");
-                    }
+                    kafkaTemplateSMS.send(TOPIC_SMS, accountDto);
+                    logger.info("Send messages to: {}", TOPIC_SMS);
+                    logger.info("Data: {}", accountDto);
+                } else {
+                    logger.info("Phone number does not match");
                 }
+            }
         } else {
-            logger.warn("User not found: {} ", phoneNumber);
-            throw new UserNotFoundException("User with phoneNumber " + phoneNumber + " not found.");
+            logger.warn("User not found: {} ", identifier);
+            throw new UserNotFoundException("User with identifier " + identifier + " not found.");
         }
     }
 
