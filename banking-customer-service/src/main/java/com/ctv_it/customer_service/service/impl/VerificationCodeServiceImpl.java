@@ -95,10 +95,26 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean verifyCode(Long customerId, String code) {
-        Optional<VerificationCode> verificationCodeOptional = verifyCodeAndCheckExpiry(customerId, code);
+        logger.info("Verifying code for customer ID: {}", customerId);
+
+        Optional<VerificationCode> verificationCodeOptional = verificationCodeRepository.findByCustomerIdAndCode(customerId, code);
+
         if (verificationCodeOptional.isEmpty()) {
+            logger.warn("Verification failed: Code not found or invalid for customer ID: {}", customerId);
             return false;
         }
+
+        VerificationCode verificationCode = verificationCodeOptional.get();
+        if (verificationCode.getExpiresAt().isBefore(Instant.now())) {
+            logger.warn("Verification failed: Code expired for customer ID: {}", customerId);
+            return false;
+        }
+
+        verificationCode.setIsVerified(true);
+        verificationCode.setUsedAt(Instant.now());
+        verificationCodeRepository.save(verificationCode);
+
+        logger.info("Code verified successfully for customer ID: {}", customerId);
 
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
         if (customerOptional.isPresent()) {
@@ -126,35 +142,44 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         return false;
     }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean verifyOtpResetPassword(Long customerId, String code) {
-        return verifyCodeAndCheckExpiry(customerId, code).isPresent();
-    }
+    public boolean verifyOtpResetPassword(String phoneNumber, String code) {
+        Optional<Customer> customerOptional = customerRepository.findByPhoneNumber(phoneNumber);
 
-    private Optional<VerificationCode> verifyCodeAndCheckExpiry(Long customerId, String code) {
-        logger.info("Verifying code for customer ID: {}", customerId);
+        if (customerOptional.isEmpty()) {
+            logger.warn("Customer not found for phone number: {}", phoneNumber);
+            return false;
+        }
 
-        Optional<VerificationCode> verificationCodeOptional = verificationCodeRepository.findByCustomerIdAndCode(customerId, code);
+        Customer customer = customerOptional.get();
+
+        Optional<VerificationCode> verificationCodeOptional = verificationCodeRepository.findByCustomerIdAndCode(customer.getId(), code);
 
         if (verificationCodeOptional.isEmpty()) {
-            logger.warn("Verification failed: Code not found or invalid for customer ID: {}", customerId);
-            return Optional.empty();
+            logger.warn("Verification failed: Code not found or invalid for phone number: {}", phoneNumber);
+            return false;
         }
 
         VerificationCode verificationCode = verificationCodeOptional.get();
 
         if (verificationCode.getExpiresAt().isBefore(Instant.now())) {
-            logger.warn("Verification failed: Code expired for customer ID: {}", customerId);
-            return Optional.empty();
+            logger.warn("Verification failed: Code expired for phone number: {}", phoneNumber);
+            return false;
+        }
+
+        if (verificationCode.getIsVerified()) {
+            logger.warn("Verification failed: Code already verified for phone number: {}", phoneNumber);
+            return false;
         }
 
         verificationCode.setIsVerified(true);
         verificationCode.setUsedAt(Instant.now());
         verificationCodeRepository.save(verificationCode);
 
-        logger.info("Code verified successfully for customer ID: {}", customerId);
-        return Optional.of(verificationCode);
+        logger.info("Code verified successfully for phone number: {}", phoneNumber);
+        return true;
     }
 
 }

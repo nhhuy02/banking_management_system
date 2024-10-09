@@ -41,8 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        if (requestURI.contains("/login") || requestURI.contains("/register")
-                || requestURI.contains("/forgetPassword/code") || requestURI.contains("/users/change-password")) {
+        if (requestURI.contains("/login")
+                || requestURI.contains("/register")
+                || requestURI.contains("/forgetPassword/code")
+                || requestURI.contains("/users/change-password")
+                || requestURI.contains("/verify-code/verify-reset-password")) {
             filterChain.doFilter(request, response);
             return;
         }
