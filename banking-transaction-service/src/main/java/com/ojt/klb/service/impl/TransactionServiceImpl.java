@@ -157,7 +157,7 @@ public class TransactionServiceImpl implements TransactionService {
             TransactionStatus status) {
 
         Specification<Transaction> spec = (root, query, cb) -> {
-            query.distinct(false);
+            query.distinct(true);
             return null;
         };
 
