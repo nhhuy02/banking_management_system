@@ -1,5 +1,6 @@
 package com.app.bankingloanservice.client.fundtransfer;
 
+import com.app.bankingloanservice.client.fundtransfer.dto.ApiResponse;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferRequest;
 import com.app.bankingloanservice.client.fundtransfer.dto.FundTransferResponse;
 import com.app.bankingloanservice.exception.FundTransferException;
@@ -17,17 +18,17 @@ public class FundTransferService {
     public FundTransferResponse performFundTransfer(FundTransferRequest fundTransferRequest) {
         log.info("Initiating fund transfer for account: {}", fundTransferRequest.getFromAccount());
         try {
-            FundTransferResponse response = fundTransferClient.transferFunds(fundTransferRequest).getBody();
+            ApiResponse<FundTransferResponse> response = fundTransferClient.internalFundTransfer(fundTransferRequest);
 
-            // Check the results from FundTransferClient
-            if (response == null || response.getTransactionReference() == null) {
+            // Check the results from ApiResponse
+            if (!response.isSuccess()) {
                 String message = "Fund transfer failed from account number " + fundTransferRequest.getFromAccount() + " to account number " + fundTransferRequest.getToAccount() + " with amount: " + fundTransferRequest.getAmount() + ". No valid response from Fund Transaction Service: {}" + response.getMessage();
                 log.error("Fund transfer error: {}", message);
                 throw new FundTransferException(message);
             }
 
-            log.info("Fund transfer successful. Transaction reference: {}", response.getTransactionReference());
-            return response;
+            log.info("Fund transfer successful. Transaction reference: {}", response.getData().getTransactionReference());
+            return response.getData();
         } catch (Exception e) {
             log.error("Error performing fund transfer for account: {}", fundTransferRequest.getFromAccount(), e);
             throw new FundTransferException(e.getMessage(), e);
