@@ -2,6 +2,8 @@ package com.ojt.klb.service.impl;
 
 import com.ojt.klb.client.AccountClient;
 import com.ojt.klb.dto.*;
+import com.ojt.klb.exception.AccountClosedException;
+import com.ojt.klb.exception.AccountSuspendedException;
 import com.ojt.klb.exception.PhoneNumberAlreadyExistsException;
 import com.ojt.klb.exception.UserNotFoundException;
 import com.ojt.klb.model.Account;
@@ -51,26 +53,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<LoginDto> login(String username, String password) {
-        logger.info("Login with username: {} ", username);
-        Optional<User> login = userRepository.findByUsername(username);
+        logger.info("Login attempt for username: {}", username);
 
-        if (login.isPresent()) {
-            User user = login.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                logger.info("Login successful for username: {} ", username);
-                LoginDto loginDto = new LoginDto();
-                loginDto.setId(user.getId());
-                loginDto.setUsername(user.getUsername());
-                loginDto.setRole(String.valueOf(user.getRole()));
-                return Optional.of(loginDto);
-            } else {
-                logger.warn("Login failed for username: {} ", username);
-            }
-        } else {
-            logger.warn("Username not found: {} ", username);
+        Optional<User> loginOpt = userRepository.findByUsername(username);
+
+        if (loginOpt.isEmpty()) {
+            logger.warn("Username not found: {}", username);
+            return Optional.empty();
         }
+
+        User user = loginOpt.get();
+
+        Optional<Account> accountOpt = accountRepository.findByUserId(user.getId());
+
+        if (accountOpt.isPresent()) {
+            Account account = accountOpt.get();
+            if (account.getStatus() == Account.Status.suspended) {
+                logger.warn("Account is suspended for username: {}", username);
+                throw new AccountSuspendedException("Your account is suspended.");
+            }
+            if (account.getStatus() == Account.Status.closed) {
+                logger.warn("Account is closed for username: {}", username);
+                throw new AccountClosedException("Your account is closed.");
+            }
+        }
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            logger.info("Login successful for username: {}", username);
+
+            LoginDto loginDto = new LoginDto();
+            loginDto.setId(user.getId());
+            loginDto.setUsername(user.getUsername());
+            loginDto.setRole(String.valueOf(user.getRole()));
+            return Optional.of(loginDto);
+        } else {
+            logger.warn("Incorrect password for username: {}", username);
+        }
+
         return Optional.empty();
     }
+
 
 
     @Override
