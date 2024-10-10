@@ -60,24 +60,29 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
      * @return LoanRepaymentResponse containing repayment details and transaction reference
      */
     @Override
-    public LoanRepaymentResponse makeRepayment(Long repaymentId) {
+    public LoanRepaymentResponse makeRepayment(Long accountId, Long repaymentId) {
 
         // 1. Retrieve and validate the repayment schedule
         LoanRepayment repayment = loanRepaymentRepository.findById(repaymentId)
                 .orElseThrow(() -> new RepaymentNotFoundException("Repayment with ID " + repaymentId + " not found"));
 
+        // 2. Check if the Repayment belongs to the current Account
+        if (!repayment.getAccountId().equals(accountId)) {
+            throw new IllegalStateException("You do not have permission to access this repayment");
+        }
+
         if (repayment.getPaymentStatus() == PaymentStatus.PAID) {
             throw new InvalidRepaymentException("This repayment has already been paid.");
         }
 
-        // 2. Retrieve and validate the loan
+        // 3. Retrieve and validate the loan
         Long loanId = repayment.getLoan().getLoanId();
         Loan loan = loanService.getLoanEntityById(loanId);
         if (loan.getStatus() != LoanStatus.ACTIVE) {
             throw new InvalidLoanException("Loan is not active for repayment.");
         }
 
-        // 3. Check if the repayment is for the current period
+        // 4. Check if the repayment is for the current period
         LocalDate now = LocalDate.now();
         LocalDate paymentDueDate = repayment.getPaymentDueDate();
 
@@ -86,7 +91,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
             throw new InvalidRepaymentException("Repayment can only be made for the current period.");
         }
 
-        // 4. Check and calculate late payment interest
+        // 5. Check and calculate late payment interest
         boolean isLate = now.isAfter(paymentDueDate);
         BigDecimal latePaymentInterest = BigDecimal.ZERO;
         if (isLate) {
@@ -97,13 +102,13 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
         }
         repayment.setLatePaymentInterestAmount(latePaymentInterest);
 
-        // 5. Calculate the total amount due
+        // 6. Calculate the total amount due
         BigDecimal totalAmountDue = repayment.getTotalAmount();
 
-        // 6. Retrieve customer account information from Account Service
+        // 7. Retrieve customer account information from Account Service
         AccountDto borrowerAccount = accountClientService.getAccountInfoById(loan.getAccountId());
 
-        // 7. Perform fund transfer from customer account to loan collection account
+        // 8. Perform fund transfer from customer account to loan collection account
         FundTransferRequest fundTransferRequest = FundTransferRequest.builder()
                 .fromAccount(borrowerAccount.getAccountNumber()) // Customer's account
                 .toAccount(collectionAccountNumber) // Bank's loan collection account
@@ -112,18 +117,18 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
                 .build();
         FundTransferResponse fundTransferResponse = fundTransferService.performFundTransfer(fundTransferRequest);
 
-        // 8. Update repayment information
+        // 9. Update repayment information
         repayment.setActualPaymentDate(LocalDate.now());
         repayment.setPaymentStatus(PaymentStatus.PAID);
         repayment.setIsLate(isLate);
         loanRepaymentRepository.save(repayment);
 
-        // 9. Update loan information
+        // 10. Update loan information
         loan.setTotalPaidAmount(loan.getTotalPaidAmount().add(totalAmountDue));
         loan.setRemainingBalance(loan.getRemainingBalance().subtract(repayment.getPrincipalAmount()));
         loanRepository.save(loan);
 
-        // 10. Check and update loan settlement status
+        // 11. Check and update loan settlement status
         if (loan.getRemainingBalance().compareTo(BigDecimal.ZERO) <= 0) {
             loan.setSettlementDate(LocalDate.now());
             if (isLate) {
@@ -136,7 +141,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
             loanRepository.save(loan);
         }
 
-        // 11. Map repayment to response and include transaction reference, account info
+        // 12. Map repayment to response and include transaction reference, account info
         LoanRepaymentResponse repaymentResponse = mapToResponse(repayment, borrowerAccount);
         repaymentResponse.setTransactionReference(fundTransferResponse.getTransactionReference());
 
@@ -185,8 +190,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
 
         LocalDate now = LocalDate.now();
 
-        // Fetch repayments up to the current date, excluding future payments
-        List<LoanRepayment> repayments = loanRepaymentRepository.findByLoanLoanIdAndPaymentDueDateLessThanEqualOrderByPaymentDueDateAsc(loanId, now);
+        List<LoanRepayment> repayments = loanRepaymentRepository.findByLoanIdAndPaymentStatusOrDueDate(loanId, now);
 
         // Fetch loan entity
         Loan loan = loanService.getLoanEntityById(loanId);
@@ -199,7 +203,6 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService {
                 .map(repayment -> mapToResponse(repayment, accountInfo))
                 .toList();
     }
-
 
 
     @Transactional(readOnly = true)

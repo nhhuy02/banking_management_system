@@ -52,4 +52,9 @@ values  (1, 'admin', '$2a$10$ijEH1raoeHkKFs2t17hDse3JdKHC5MMf22GGLEPAvB5SVR4Bnim
         (68, '0987654321', '$2a$10$uqC5c2IauYbpj9MjWyqKOeZQB.DsX0nPZyyrymfy4Isvc64zAiCkC', 'customer', '0987654321', '2024-10-03 17:18:00', '2024-10-03 17:18:00'),
         (69, '0123456780', '$2a$10$dB71ewmffX1sIJyCpxl5D.063Uz00rSMu07ZVC0LfqrSkliNTCRpC', 'customer', '0123456780', '2024-10-03 10:25:38', '2024-10-03 10:25:38'),
         (70, '0123456678', '$2a$10$JVMEHWzebruilnVJvIjOyuwgVnV44nKNfLWutrG3eGZQvFohHahkW', 'customer', '0123456678', '2024-10-03 17:32:16', '2024-10-03 17:32:16'),
-        (71, '0101010101', '$2a$10$p5bv00Yc8dkys7X4FZ/v4uCGE.MisoATfU4JFiLN9jr.4sdhBppD6', 'customer', '0101010101', '2024-10-03 18:26:49', '2024-10-03 18:26:49');
+        (71, '0101010101', '$2a$10$p5bv00Yc8dkys7X4FZ/v4uCGE.MisoATfU4JFiLN9jr.4sdhBppD6', 'customer', '0101010101', '2024-10-03 18:26:49', '2024-10-03 18:26:49'),
+        (72, '02345626456', '$2a$10$Wvzym4RfsRRKGRkwwJ8HJ.puwWpeGCOof/Y4XeJOxppJy1IERekiq', 'customer', '02345626456', '2024-10-08 16:48:46', '2024-10-08 16:48:47'),
+        (73, '0582937110', '$2a$10$rRO9phjcbJxevYm3aedVl.5t4dsWYP3AvFkgI2P/aft8qB9MoaFfa', 'customer', '0582937110', '2024-10-09 14:50:44', '2024-10-09 14:50:44'),
+        (74, '0303953819', '$2a$10$p7MoPwRfB109aenUOp9/5OyW95s9/u0p4qKPdtpbKXAPR7z89bI0C', 'customer', '0303953819', '2024-10-09 14:52:54', '2024-10-09 14:52:54'),
+        (75, '0879005054', '$2a$10$MALO0h.uERoHTkoYRWrvHOH3vgSrIobCL2UX/CReQOWj3orcwj1ta', 'customer', '0879005054', '2024-10-09 14:57:00', '2024-10-09 14:57:00'),
+        (76, '0987452608', '$2a$10$pkHMpujGtn4enFzfUZ2vuu6.5bK8kMrNEFJhuarW4bSfkCWdX61UC', 'customer', '0987452608', '2024-10-09 16:39:40', '2024-10-09 16:39:40');

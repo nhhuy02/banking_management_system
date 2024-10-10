@@ -22,7 +22,8 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Lo
      */
     List<LoanRepayment> findByLoanLoanIdOrderByPaymentDueDateAsc(Long loanId);
 
-    List<LoanRepayment> findByLoanLoanIdAndPaymentDueDateLessThanEqualOrderByPaymentDueDateAsc(Long loanId, LocalDate paymentDueDate);
+    @Query("SELECT lr FROM LoanRepayment lr WHERE lr.loan.loanId = :loanId AND (lr.paymentStatus = 'PAID' OR lr.paymentDueDate <= :now) ORDER BY COALESCE(lr.actualPaymentDate, lr.paymentDueDate) ASC")
+    List<LoanRepayment> findByLoanIdAndPaymentStatusOrDueDate(@Param("loanId") Long loanId, @Param("now") LocalDate now);
 
     @Query("SELECT lr FROM LoanRepayment lr WHERE lr.paymentDueDate = :dueDate AND lr.paymentStatus = :status")
     List<LoanRepayment> findByPaymentDueDate(LocalDate dueDate, PaymentStatus status);

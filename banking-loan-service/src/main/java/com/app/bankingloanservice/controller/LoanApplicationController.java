@@ -25,7 +25,7 @@ import java.util.List;
  * Controller for managing loan applications.
  */
 @RestController
-@RequestMapping("/api/v1/loan-service/loan-applications")
+@RequestMapping("/api/v1/loan-service")
 @AllArgsConstructor
 @Tag(name = "Loan Application Controller", description = "APIs related to Loan Application operations")
 @Slf4j
@@ -102,7 +102,7 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PostMapping
+    @PostMapping("/loan-applications")
     public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> createLoanApplication(
             @Parameter(description = "Loan application request data", required = true)
             @Valid @RequestBody LoanApplicationRequest loanApplicationRequest) {
@@ -157,7 +157,7 @@ public class LoanApplicationController {
                     )
             }
     )
-    @GetMapping("/{loanApplicationId}")
+    @GetMapping("/loan-applications/{loanApplicationId}")
     public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> getLoanApplicationById(
             @Parameter(description = "ID of the loan application", required = true)
             @PathVariable Long loanApplicationId) {
@@ -219,10 +219,10 @@ public class LoanApplicationController {
                     )
             }
     )
-    @GetMapping
+    @GetMapping("/accounts/{accountId}/loan-applications")
     public ResponseEntity<ApiResponseWrapper<List<LoanApplicationResponse>>> getLoanApplicationsByAccountId(
             @Parameter(description = "The ID of the account to fetch loan applications", required = true)
-            @RequestParam @Min(value = 1, message = "accountId must be a positive number") Long accountId) {
+            @PathVariable @Min(value = 1, message = "accountId must be a positive number") Long accountId) {
 
         log.info("Received request to fetch loan applications for accountId: {}", accountId);
 
@@ -252,7 +252,6 @@ public class LoanApplicationController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 
     @Operation(
@@ -293,7 +292,7 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PatchMapping("/{applicationId}/status")
+    @PatchMapping("/loan-applications/{applicationId}/status")
     public ResponseEntity<ApiResponseWrapper<LoanApplicationResponse>> updateStatus(
             @Parameter(description = "ID of the loan application to update status", required = true)
             @PathVariable Long applicationId,
@@ -350,7 +349,7 @@ public class LoanApplicationController {
                     )
             }
     )
-    @PostMapping(value = "/{applicationId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/loan-applications/{applicationId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseWrapper<DocumentResponse>> uploadDocument(
             @PathVariable("applicationId") Long loanApplicationId,
             @ModelAttribute DocumentUploadRequest documentUploadRequest) {
@@ -378,7 +377,7 @@ public class LoanApplicationController {
      * @param loanApplicationId the ID of the loan application to create the loan from
      * @return the created loan entity wrapped in ApiResponseWrapper
      */
-    @PostMapping("/{loanApplicationId}/loans")
+    @PostMapping("/loan-applications/{loanApplicationId}/loans")
     @Operation(summary = "Create Loan from Loan Application", description = "Create a new loan based on a loan application ID.")
     public ResponseEntity<ApiResponseWrapper<LoanResponse>> createLoanFromApplication(
             @PathVariable Long loanApplicationId) {
