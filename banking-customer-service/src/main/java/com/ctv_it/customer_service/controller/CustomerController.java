@@ -2,8 +2,8 @@ package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
-import com.ctv_it.customer_service.dto.EmailCheckRequest;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
+import com.ctv_it.customer_service.exception.EmailAlreadyExistsException;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomerService;
 import jakarta.validation.Valid;
@@ -83,13 +83,19 @@ public class CustomerController {
                 ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+        } catch (EmailAlreadyExistsException e) {
+            String errorMessage = "Email already exists: " + customerUpdateDto.getEmail();
+            logger.warn(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (Exception ex) {
             String errorMessage = "An error occurred while updating the customer.";
-            logger.warn("Error updating customer with accountId {}", accountId);
+            logger.error("Error updating customer with accountId {}", accountId, ex);
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, false, null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
     @GetMapping("/{accountId}/customer-info-for-account-service")
     public ResponseEntity<ApiResponse<GetAccountIdAndCustomerId>> getAccountAndCustomerId(
@@ -130,23 +136,4 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
-    @PostMapping("/check")
-    public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplicate(
-            @Valid @RequestBody EmailCheckRequest request) {
-
-        logger.info("Checking email: {}", request.getEmail());
-        boolean isDuplicate = customerService.checkDuplicateEmail(request.getEmail(), request.getCustomerId());
-
-        if (isDuplicate) {
-            logger.warn("Email {} is already taken", request.getEmail());
-            ApiResponse<Boolean> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), "Email already taken", false,
-                    true);
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-        } else {
-            ApiResponse<Boolean> response = new ApiResponse<>(HttpStatus.OK.value(), "Email is available", true, false);
-            return ResponseEntity.ok(response);
-        }
-    }
-
 }

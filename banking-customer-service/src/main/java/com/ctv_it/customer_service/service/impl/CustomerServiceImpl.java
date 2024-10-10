@@ -5,6 +5,7 @@ import com.ctv_it.customer_service.dto.CustomerUpdateDto;
 import com.ctv_it.customer_service.dto.CustomersStatusHistoryDto;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
 import com.ctv_it.customer_service.exception.CustomException;
+import com.ctv_it.customer_service.exception.EmailAlreadyExistsException;
 import com.ctv_it.customer_service.mapper.CustomerMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.CustomersStatusHistory;
@@ -111,6 +112,13 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             Customer customer = customerOptional.get();
+
+            if (customerUpdateDto.getEmail() != null &&
+                    customerRepository.existsByEmailAndIdNot(customerUpdateDto.getEmail(), customer.getId())) {
+                logger.warn("Email already exists: {}", customerUpdateDto.getEmail());
+                throw new EmailAlreadyExistsException("Email already exists: " + customerUpdateDto.getEmail());
+            }
+
             customer.setUpdatedAt(Instant.now());
             customerMapper.updateCustomerFromDto(customerUpdateDto, customer);
 
@@ -121,7 +129,6 @@ public class CustomerServiceImpl implements CustomerService {
             logger.info("Customer updated successfully with accountId: {}", accountId);
             logger.info("Updated customer ID: {}", updatedCustomer.getId());
 
-            // Create and save status history
             CustomersStatusHistory statusHistory = new CustomersStatusHistory();
             statusHistory.setCustomer(updatedCustomer);
             statusHistory.setStatus(CustomersStatusHistory.Status.active);
@@ -194,20 +201,4 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<CustomersStatusHistoryDto> latestStatus = customersStatusHistoryService.getLatestStatusByCustomerId(customer.getId());
         latestStatus.ifPresent(dto::setLatestStatus);
     }
-
-    @Override
-    public boolean checkDuplicateEmail(String email, Long customerId) {
-        logger.info("Checking for duplicate email: {} for customerId: {}", email, customerId);
-
-        Optional<Customer> customerOptional = customerRepository.findByEmailAndIdNot(email, customerId);
-
-        logger.info("Found customer: {}", customerOptional);
-
-        if (customerOptional.isPresent()) {
-            logger.warn("Duplicate email found: {} for customerId: {}", email, customerId);
-            return true;
-        }
-        return false;
-    }
-
 }
