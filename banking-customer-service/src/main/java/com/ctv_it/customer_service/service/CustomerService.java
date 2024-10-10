@@ -19,5 +19,6 @@ public interface CustomerService {
     Optional<CustomerDto> updateCustomer(Long accountId, CustomerUpdateDto customerUpdateDto);
 
     Optional<GetAccountIdAndCustomerId> getAccountIdAndCustomerId(Long accountId);
-
+    void createCustomer(CustomerDto customerDto);
 }
+

@@ -3,12 +3,12 @@ package com.ctv_it.customer_service.controller;
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
+import com.ctv_it.customer_service.exception.EmailAlreadyExistsException;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomerService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -90,14 +90,19 @@ public class CustomerController {
                         null);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
+        } catch (EmailAlreadyExistsException e) {
+            String errorMessage = "Email already exists: " + customerUpdateDto.getEmail();
+            logger.warn(errorMessage);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), errorMessage, false, null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (Exception ex) {
             String errorMessage = "An error occurred while updating the customer.";
-            logger.warn("Error updating customer with accountId {}", accountId);
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage,
-                    false, null);
+            logger.error("Error updating customer with accountId {}", accountId, ex);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, false, null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
     @GetMapping("/{accountId}/customer-info-for-account-service")
     public ResponseEntity<ApiResponse<GetAccountIdAndCustomerId>> getAccountAndCustomerId(
@@ -122,4 +127,18 @@ public class CustomerController {
         }
     }
 
+    @PostMapping("/create-customer")
+    public ResponseEntity<ApiResponse<String>> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
+        logger.info("Request to create a new customer with account ID: {}", customerDto.getAccountId());
+
+        try {
+            customerService.createCustomer(customerDto);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Customer created successfully", true, null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            logger.error("Error creating customer: {}", e.getMessage());
+            ApiResponse<String> errorResponse = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to create customer", false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }

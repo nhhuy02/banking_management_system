@@ -4,6 +4,8 @@ import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
 import com.ctv_it.customer_service.dto.CustomersStatusHistoryDto;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
+import com.ctv_it.customer_service.exception.CustomException;
+import com.ctv_it.customer_service.exception.EmailAlreadyExistsException;
 import com.ctv_it.customer_service.mapper.CustomerMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.CustomersStatusHistory;
@@ -12,6 +14,7 @@ import com.ctv_it.customer_service.repository.CustomerRepository;
 import com.ctv_it.customer_service.service.CustomerService;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import com.ctv_it.customer_service.service.KycService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,25 +112,27 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             Customer customer = customerOptional.get();
+
+            if (customerUpdateDto.getEmail() != null &&
+                    customerRepository.existsByEmailAndIdNot(customerUpdateDto.getEmail(), customer.getId())) {
+                logger.warn("Email already exists: {}", customerUpdateDto.getEmail());
+                throw new EmailAlreadyExistsException("Email already exists: " + customerUpdateDto.getEmail());
+            }
+
             customer.setUpdatedAt(Instant.now());
             customerMapper.updateCustomerFromDto(customerUpdateDto, customer);
 
-            // Save customer with the updated KYC reference
             Customer updatedCustomer = customerRepository.save(customer);
             logger.info("Updated Customer with ID: {}", updatedCustomer.getId());
 
-            // Reload the customer from the database to ensure we have the latest state
-            updatedCustomer = customerRepository.findById(updatedCustomer.getId())
-                    .orElseThrow(() -> new RuntimeException("Customer not found after save"));
+            updatedCustomer = customerRepository.findById(updatedCustomer.getId()).orElseThrow(() -> new RuntimeException("Customer not found after save"));
             logger.info("Customer updated successfully with accountId: {}", accountId);
             logger.info("Updated customer ID: {}", updatedCustomer.getId());
 
-            // Create and save status history
             CustomersStatusHistory statusHistory = new CustomersStatusHistory();
             statusHistory.setCustomer(updatedCustomer);
             statusHistory.setStatus(CustomersStatusHistory.Status.active);
 
-            // Log the customer ID before saving status history
             logger.info("Saving status history with customer ID: {}", statusHistory.getCustomer().getId());
 
             CustomersStatusHistory savedStatusHistory = customersStatusHistoryService.saveStatusHistory(statusHistory);
@@ -136,7 +141,7 @@ public class CustomerServiceImpl implements CustomerService {
             return Optional.of(customerMapper.toDto(updatedCustomer));
         } catch (Exception e) {
             logger.error("Error updating customer with accountId: {}", accountId, e);
-            throw e; // Rethrow the exception to trigger rollback
+            throw e;
         }
     }
 
@@ -154,6 +159,39 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createCustomer(CustomerDto customerDto) {
+        try {
+            Customer customer = customerMapper.toEntity(customerDto);
+            customer.setAccountId(customerDto.getAccountId());
+            customer.setPhoneNumber(customerDto.getPhoneNumber());
+            customer.setCreatedAt(Instant.now());
+
+            Kyc newKyc = new Kyc();
+            newKyc.setVerificationStatus(Kyc.VerificationStatus.pending);
+            newKyc.setCreatedAt(Instant.now());
+            Kyc savedKyc = kycService.saveKyc(newKyc);
+            logger.info("Saved KYC with ID: {}", savedKyc.getId());
+            customer.setKyc(savedKyc);
+            logger.info("Set Kyc with ID: {}", customer.getKyc().getId());
+            customerRepository.save(customer);
+
+            logger.info("Customer created successfully with account ID: {}", customer.getAccountId());
+
+        } catch (DataIntegrityViolationException e) {
+            logger.error("Failed to create customer due to data integrity violation. Account ID: {}, Phone: {}. Error: {}",
+                    customerDto.getAccountId(), customerDto.getPhoneNumber(), e.getMessage());
+            throw new CustomException("Data integrity violation. Please ensure unique account ID and phone number.", e);
+
+        } catch (Exception e) {
+            logger.error("Error occurred while creating customer with account ID: {}, phone number: {}. Error: {}",
+                    customerDto.getAccountId(), customerDto.getPhoneNumber(), e.getMessage());
+            throw new CustomException("An unexpected error occurred while creating the customer.", e);
+        }
+    }
+
+
     private void populateAdditionalCustomerInfo(CustomerDto dto, Customer customer) {
         // Get status KYC
         Optional<Kyc.VerificationStatus> kycStatus = kycService.getKycStatusById(customer.getKyc().getId());
@@ -164,22 +202,4 @@ public class CustomerServiceImpl implements CustomerService {
                 .getLatestStatusByCustomerId(customer.getId());
         latestStatus.ifPresent(dto::setLatestStatus);
     }
-
-    @Override
-    public boolean checkDuplicateEmail(String email, Long customerId) {
-        logger.info("Checking for duplicate email: {} for customerId: {}", email, customerId);
-
-        // Tìm các customer khác có email giống nhau trừ chính customer với customerId
-        // hiện tại
-        Optional<Customer> customerOptional = customerRepository.findByEmailAndIdNot(email, customerId);
-
-        logger.info("Found customer: {}", customerOptional);
-
-        if (customerOptional.isPresent()) {
-            logger.warn("Duplicate email found: {} for customerId: {}", email, customerId);
-            return true; // Email đã tồn tại
-        }
-        return false; // Email không trùng
-    }
-
 }
