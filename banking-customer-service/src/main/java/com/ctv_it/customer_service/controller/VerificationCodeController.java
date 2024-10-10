@@ -28,8 +28,10 @@ public class VerificationCodeController {
     }
 
     @PostMapping("/generate/{customerId}")
-    public ResponseEntity<ApiResponse<String>> generateCode(@PathVariable Long customerId, @Valid @RequestBody VerificationCodeRequestDto dto) {
-        logger.info("Request to generate verification code for customer ID: {} with email: {}", customerId, dto.getEmail());
+    public ResponseEntity<ApiResponse<String>> generateCode(@PathVariable Long customerId,
+            @Valid @RequestBody VerificationCodeRequestDto dto) {
+        logger.info("Request to generate verification code for customer ID: {} with email: {}", customerId,
+                dto.getEmail());
         VerificationCodeRequestDto codeDto = verificationCodeService.generateCode(customerId, dto.getEmail());
         String successMessage = "Created code successfully, please check your email!";
         ApiResponse<String> response = new ApiResponse<>(HttpStatus.CREATED.value(), successMessage, true, null);
@@ -44,10 +46,12 @@ public class VerificationCodeController {
         boolean isVerified = verificationCodeService.verifyCode(customerId, dto.getCode());
 
         if (isVerified) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Code verified successfully", true, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "Code verified successfully", true,
+                    null);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "Invalid or expired code", false, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "Invalid or expired code",
+                    false, null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
@@ -61,13 +65,14 @@ public class VerificationCodeController {
         boolean isVerified = verificationCodeService.verifyOtpResetPassword(phoneNumber, dto.getCode());
 
         if (isVerified) {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "OTP verified successfully", true, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.value(), "OTP verified successfully", true,
+                    null);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "OTP verification failed or already verified", false, null);
+            ApiResponse<String> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+                    "OTP verification failed or already verified", false, null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
-
 
 }

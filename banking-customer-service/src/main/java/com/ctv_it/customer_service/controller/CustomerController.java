@@ -35,11 +35,13 @@ public class CustomerController {
         logger.info("Get customer by account id {}", accountId);
         Optional<CustomerDto> customerDto = customerService.getCustomerByAccountId(accountId);
         if (customerDto.isPresent()) {
-            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Customer found for account ID: " + accountId , true, customerDto.get());
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Customer found for account ID: " + accountId, true, customerDto.get());
             return ResponseEntity.ok(response);
         } else {
             logger.warn("Not found for account ID: {}", accountId);
-            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Not found for account ID: " + accountId, false, null);
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+                    "Not found for account ID: " + accountId, false, null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -49,11 +51,13 @@ public class CustomerController {
         logger.info("Get customer by id {}", Id);
         Optional<CustomerDto> customerDto = customerService.getCustomerById(Id);
         if (customerDto.isPresent()) {
-            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Customer found for customer ID: " + Id, true, customerDto.get());
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.OK.value(),
+                    "Customer found for customer ID: " + Id, true, customerDto.get());
             return ResponseEntity.ok(response);
         } else {
             logger.warn("Not found for customer ID: {}", Id);
-            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Not found for customer ID: " + Id, false, null);
+            ApiResponse<CustomerDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+                    "Not found for customer ID: " + Id, false, null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -61,7 +65,8 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<CustomerDto>>> getAllCustomers() {
         List<CustomerDto> customers = customerService.getAllCustomers();
-        ApiResponse<List<CustomerDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Customers retrieved", true, customers);
+        ApiResponse<List<CustomerDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Customers retrieved", true,
+                customers);
         return ResponseEntity.ok(response);
     }
 
@@ -70,7 +75,8 @@ public class CustomerController {
             @PathVariable Long accountId,
             @Valid @RequestBody CustomerUpdateDto customerUpdateDto) {
         try {
-            Optional<CustomerDto> updatedCustomerOptional = customerService.updateCustomer(accountId, customerUpdateDto);
+            Optional<CustomerDto> updatedCustomerOptional = customerService.updateCustomer(accountId,
+                    customerUpdateDto);
 
             if (updatedCustomerOptional.isPresent()) {
                 String successMessage = "Customer with accountId " + accountId + " updated successfully.";
@@ -80,7 +86,8 @@ public class CustomerController {
             } else {
                 String errorMessage = "Customer with accountId " + accountId + " not found.";
                 logger.warn(errorMessage);
-                ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false, null);
+                ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), errorMessage, false,
+                        null);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } catch (EmailAlreadyExistsException e) {
@@ -108,16 +115,14 @@ public class CustomerController {
                     HttpStatus.OK.value(),
                     "Customer found for account ID: " + accountId,
                     true,
-                    data.get()
-            );
+                    data.get());
             return ResponseEntity.ok(response);
         } else {
             ApiResponse<GetAccountIdAndCustomerId> response = new ApiResponse<>(
                     HttpStatus.NOT_FOUND.value(),
                     "Not found for account ID: " + accountId,
                     false,
-                    null
-            );
+                    null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }

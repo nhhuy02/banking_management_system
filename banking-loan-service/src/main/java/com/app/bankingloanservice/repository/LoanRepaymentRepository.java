@@ -3,8 +3,6 @@ package com.app.bankingloanservice.repository;
 import com.app.bankingloanservice.constant.LoanStatus;
 import com.app.bankingloanservice.entity.LoanRepayment;
 import com.app.bankingloanservice.constant.PaymentStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,7 +22,8 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Lo
      */
     List<LoanRepayment> findByLoanLoanIdOrderByPaymentDueDateAsc(Long loanId);
 
-    Page<LoanRepayment> findByLoanLoanId(Long loanId, Pageable pageable);
+    @Query("SELECT lr FROM LoanRepayment lr WHERE lr.loan.loanId = :loanId AND (lr.paymentStatus = 'PAID' OR lr.paymentDueDate <= :now) ORDER BY COALESCE(lr.actualPaymentDate, lr.paymentDueDate) ASC")
+    List<LoanRepayment> findByLoanIdAndPaymentStatusOrDueDate(@Param("loanId") Long loanId, @Param("now") LocalDate now);
 
     @Query("SELECT lr FROM LoanRepayment lr WHERE lr.paymentDueDate = :dueDate AND lr.paymentStatus = :status")
     List<LoanRepayment> findByPaymentDueDate(LocalDate dueDate, PaymentStatus status);
@@ -34,11 +33,14 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Lo
     @Query("SELECT lr FROM LoanRepayment lr " +
             "JOIN lr.loan l " +
             "WHERE lr.accountId = :accountId " +
-            "AND l.status = :loanStatus")
-    List<LoanRepayment> findByAccountIdAndLoanStatus(
+            "AND lr.paymentStatus = :paymentStatus")
+    List<LoanRepayment> findByAccountIdAndPaymentStatus(
             @Param("accountId") Long accountId,
-            @Param("loanStatus") LoanStatus loanStatus
+            @Param("paymentStatus") PaymentStatus paymentStatus
     );
+
+    @Query("SELECT lr FROM LoanRepayment lr JOIN lr.loan l WHERE lr.accountId = :accountId")
+    List<LoanRepayment> findByAccountId(@Param("accountId") Long accountId);
 
     /**
      * Finds loan repayments that are eligible for payment within the payment window for a given account.

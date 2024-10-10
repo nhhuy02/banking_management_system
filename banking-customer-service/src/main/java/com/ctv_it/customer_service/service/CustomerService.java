@@ -11,8 +11,11 @@ import java.util.Optional;
 @Service
 public interface CustomerService {
     Optional<CustomerDto> getCustomerByAccountId(Long id);
+
     Optional<CustomerDto> getCustomerById(Long id);
+
     List<CustomerDto> getAllCustomers();
+
     Optional<CustomerDto> updateCustomer(Long accountId, CustomerUpdateDto customerUpdateDto);
 
     Optional<GetAccountIdAndCustomerId> getAccountIdAndCustomerId(Long accountId);

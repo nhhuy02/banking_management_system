@@ -30,13 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
     private final KycService kycService;
     private final CustomersStatusHistoryService customersStatusHistoryService;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, KycService kycService, CustomersStatusHistoryService customersStatusHistoryService) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,
+            KycService kycService, CustomersStatusHistoryService customersStatusHistoryService) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.kycService = kycService;
@@ -198,7 +198,8 @@ public class CustomerServiceImpl implements CustomerService {
         kycStatus.ifPresent(dto::setKycStatus);
 
         // Get status customer
-        Optional<CustomersStatusHistoryDto> latestStatus = customersStatusHistoryService.getLatestStatusByCustomerId(customer.getId());
+        Optional<CustomersStatusHistoryDto> latestStatus = customersStatusHistoryService
+                .getLatestStatusByCustomerId(customer.getId());
         latestStatus.ifPresent(dto::setLatestStatus);
     }
 }

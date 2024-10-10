@@ -1,97 +1,104 @@
-2024-10-08T09:18:20.870+07:00  INFO 15163 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 21.0.4 with PID 15163 (/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main started by admin-klb in /home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking)
-2024-10-08T09:18:20.875+07:00  INFO 15163 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
-2024-10-08T09:18:20.900+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
-2024-10-08T09:18:20.900+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
-2024-10-08T09:18:21.486+07:00  INFO 15163 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-10-08T09:18:21.559+07:00  INFO 15163 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 70 ms. Found 7 JPA repository interfaces.
-2024-10-08T09:18:21.707+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=425c756b-d109-3d89-8691-d1fb22231aa2
-2024-10-08T09:18:21.912+07:00  WARN 15163 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
-2024-10-08T09:18:21.914+07:00  WARN 15163 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
-2024-10-08T09:18:22.010+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
-2024-10-08T09:18:22.017+07:00  INFO 15163 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2024-10-08T09:18:22.018+07:00  INFO 15163 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
-2024-10-08T09:18:22.047+07:00  INFO 15163 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2024-10-08T09:18:22.047+07:00  INFO 15163 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1146 ms
-2024-10-08T09:18:22.069+07:00 DEBUG 15163 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
-2024-10-08T09:18:22.137+07:00  INFO 15163 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-10-08T09:18:22.183+07:00  INFO 15163 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
-2024-10-08T09:18:22.205+07:00  INFO 15163 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-10-08T09:18:22.390+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-10-08T09:18:22.408+07:00  INFO 15163 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-10-08T09:18:22.821+07:00  INFO 15163 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4c599679
-2024-10-08T09:18:22.822+07:00  INFO 15163 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-10-08T09:18:23.766+07:00  INFO 15163 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-10-08T09:18:24.967+07:00  INFO 15163 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-10-08T09:18:25.223+07:00  WARN 15163 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-10-08T09:18:25.931+07:00  INFO 15163 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-10-08T09:18:26.495+07:00  WARN 15163 --- [banking-loan-service] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'loanController' defined in file [/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main/com/app/bankingloanservice/controller/LoanController.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'loanDisbursementServiceImpl' defined in file [/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main/com/app/bankingloanservice/service/impl/LoanDisbursementServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 4: Error creating bean with name 'loanRepaymentServiceImpl' defined in file [/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main/com/app/bankingloanservice/service/impl/LoanRepaymentServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'loanRepaymentRepository' defined in com.app.bankingloanservice.repository.LoanRepaymentRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract java.util.List com.app.bankingloanservice.repository.LoanRepaymentRepository.findByAccountIdAndWithinPaymentWindowAndUnpaid(java.lang.Long,com.app.bankingloanservice.constant.LoanStatus,com.app.bankingloanservice.constant.PaymentStatus,java.time.LocalDate); Reason: Using named parameters for method public abstract java.util.List com.app.bankingloanservice.repository.LoanRepaymentRepository.findByAccountIdAndWithinPaymentWindowAndUnpaid(java.lang.Long,com.app.bankingloanservice.constant.LoanStatus,com.app.bankingloanservice.constant.PaymentStatus,java.time.LocalDate) but parameter 'Optional[paymentEligibleDate]' not found in annotated query 'SELECT lr FROM LoanRepayment lr WHERE lr.accountId = :accountId AND lr.loan.status = :loanStatus AND lr.paymentStatus != :paymentStatus AND lr.paymentDueDate < :paymentCutOffDate'
-2024-10-08T09:18:26.497+07:00  WARN 15163 --- [banking-loan-service] [main] s.c.a.AnnotationConfigApplicationContext : Exception thrown from ApplicationListener handling ContextClosedEvent
-
-org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'applicationTaskExecutor': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:220) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.AbstractApplicationEventMulticaster.retrieveApplicationListeners(AbstractApplicationEventMulticaster.java:265) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.AbstractApplicationEventMulticaster.getApplicationListeners(AbstractApplicationEventMulticaster.java:222) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:145) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:452) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:458) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:385) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1139) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1102) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.cloud.context.named.NamedContextFactory.destroy(NamedContextFactory.java:114) ~[spring-cloud-context-4.1.4.jar:4.1.4]
-	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:587) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:559) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1202) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:520) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1195) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1195) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:638) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.3.jar:3.3.3]
-	at com.app.bankingloanservice.BankingLoanServiceApplication.main(BankingLoanServiceApplication.java:16) ~[main/:na]
-
-2024-10-08T09:18:26.500+07:00  WARN 15163 --- [banking-loan-service] [main] s.c.a.AnnotationConfigApplicationContext : Exception thrown from ApplicationListener handling ContextClosedEvent
-
-org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'applicationTaskExecutor': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:220) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.AbstractApplicationEventMulticaster.retrieveApplicationListeners(AbstractApplicationEventMulticaster.java:265) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.AbstractApplicationEventMulticaster.getApplicationListeners(AbstractApplicationEventMulticaster.java:222) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:145) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:452) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:458) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:385) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1139) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1102) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.cloud.context.named.NamedContextFactory.destroy(NamedContextFactory.java:114) ~[spring-cloud-context-4.1.4.jar:4.1.4]
-	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:211) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:587) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:559) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1202) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:520) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1195) ~[spring-beans-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1195) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:638) ~[spring-context-6.1.12.jar:6.1.12]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363) ~[spring-boot-3.3.3.jar:3.3.3]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.3.jar:3.3.3]
-	at com.app.bankingloanservice.BankingLoanServiceApplication.main(BankingLoanServiceApplication.java:16) ~[main/:na]
-
-2024-10-08T09:18:26.500+07:00  INFO 15163 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-10-08T09:18:26.501+07:00  INFO 15163 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2024-10-08T09:18:26.510+07:00  INFO 15163 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2024-10-08T09:18:26.510+07:00  INFO 15163 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2024-10-08T09:18:26.526+07:00  INFO 15163 --- [banking-loan-service] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+2024-10-09T08:35:07.279+07:00  INFO 9740 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : Starting BankingLoanServiceApplication using Java 21.0.4 with PID 9740 (/home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking/banking-loan-service/build/classes/java/main started by admin-klb in /home/admin-klb/Dropbox/Project/Bank Account Management System Project/microservices-core-banking)
+2024-10-09T08:35:07.287+07:00  INFO 9740 --- [banking-loan-service] [main] c.a.b.BankingLoanServiceApplication      : No active profile set, falling back to 1 default profile: "default"
+2024-10-09T08:35:07.323+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2024-10-09T08:35:07.323+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=banking-loan-service, profiles=[default], label=null, version=null, state=null
+2024-10-09T08:35:08.089+07:00  INFO 9740 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-09T08:35:08.160+07:00  INFO 9740 --- [banking-loan-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 7 JPA repository interfaces.
+2024-10-09T08:35:08.296+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=425c756b-d109-3d89-8691-d1fb22231aa2
+2024-10-09T08:35:08.445+07:00  WARN 9740 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-10-09T08:35:08.446+07:00  WARN 9740 --- [banking-loan-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-10-09T08:35:08.555+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8060 (http)
+2024-10-09T08:35:08.563+07:00  INFO 9740 --- [banking-loan-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-09T08:35:08.563+07:00  INFO 9740 --- [banking-loan-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-09T08:35:08.591+07:00  INFO 9740 --- [banking-loan-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-09T08:35:08.591+07:00  INFO 9740 --- [banking-loan-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1267 ms
+2024-10-09T08:35:08.615+07:00 DEBUG 9740 --- [banking-loan-service] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'logFilter' configured for use
+2024-10-09T08:35:08.672+07:00  INFO 9740 --- [banking-loan-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-09T08:35:08.697+07:00  INFO 9740 --- [banking-loan-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-09T08:35:08.712+07:00  INFO 9740 --- [banking-loan-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-09T08:35:08.879+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-09T08:35:08.892+07:00  INFO 9740 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-09T08:35:09.056+07:00  INFO 9740 --- [banking-loan-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@15fd3088
+2024-10-09T08:35:09.057+07:00  INFO 9740 --- [banking-loan-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-09T08:35:09.904+07:00  INFO 9740 --- [banking-loan-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-09T08:35:10.145+07:00  INFO 9740 --- [banking-loan-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-09T08:35:10.246+07:00  WARN 9740 --- [banking-loan-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-09T08:35:10.541+07:00  INFO 9740 --- [banking-loan-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-10-09T08:35:11.411+07:00  INFO 9740 --- [banking-loan-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2024-10-09T08:35:11.423+07:00  WARN 9740 --- [banking-loan-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-10-09T08:35:11.479+07:00  INFO 9740 --- [banking-loan-service] [main] o.a.k.clients.admin.AdminClientConfig    : AdminClientConfig values:
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [localhost:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = banking-loan-service-admin-0
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
 2024-10-08T09:18:26.537+07:00 ERROR 15163 --- [banking-loan-service] [main] o.s.boot.SpringApplication               : Application run failed
