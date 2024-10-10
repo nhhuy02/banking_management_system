@@ -17,4 +17,7 @@ public interface CustomerService {
 
     Optional<GetAccountIdAndCustomerId> getAccountIdAndCustomerId(Long accountId);
     void createCustomer(CustomerDto customerDto);
+
+    boolean checkDuplicateEmail(String email, Long customerId);
 }
+

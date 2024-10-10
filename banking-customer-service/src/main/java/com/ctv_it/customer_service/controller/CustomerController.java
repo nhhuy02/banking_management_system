@@ -2,6 +2,7 @@ package com.ctv_it.customer_service.controller;
 
 import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
+import com.ctv_it.customer_service.dto.EmailCheckRequest;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
 import com.ctv_it.customer_service.response.ApiResponse;
 import com.ctv_it.customer_service.service.CustomerService;
@@ -129,4 +130,23 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    @PostMapping("/check")
+    public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplicate(
+            @Valid @RequestBody EmailCheckRequest request) {
+
+        logger.info("Checking email: {}", request.getEmail());
+        boolean isDuplicate = customerService.checkDuplicateEmail(request.getEmail(), request.getCustomerId());
+
+        if (isDuplicate) {
+            logger.warn("Email {} is already taken", request.getEmail());
+            ApiResponse<Boolean> response = new ApiResponse<>(HttpStatus.CONFLICT.value(), "Email already taken", false,
+                    true);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        } else {
+            ApiResponse<Boolean> response = new ApiResponse<>(HttpStatus.OK.value(), "Email is available", true, false);
+            return ResponseEntity.ok(response);
+        }
+    }
+
 }

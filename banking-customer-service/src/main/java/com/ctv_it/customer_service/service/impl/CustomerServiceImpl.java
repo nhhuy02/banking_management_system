@@ -114,11 +114,9 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setUpdatedAt(Instant.now());
             customerMapper.updateCustomerFromDto(customerUpdateDto, customer);
 
-            // Save customer with the updated KYC reference
             Customer updatedCustomer = customerRepository.save(customer);
             logger.info("Updated Customer with ID: {}", updatedCustomer.getId());
 
-            // Reload the customer from the database to ensure we have the latest state
             updatedCustomer = customerRepository.findById(updatedCustomer.getId()).orElseThrow(() -> new RuntimeException("Customer not found after save"));
             logger.info("Customer updated successfully with accountId: {}", accountId);
             logger.info("Updated customer ID: {}", updatedCustomer.getId());
@@ -128,7 +126,6 @@ public class CustomerServiceImpl implements CustomerService {
             statusHistory.setCustomer(updatedCustomer);
             statusHistory.setStatus(CustomersStatusHistory.Status.active);
 
-            // Log the customer ID before saving status history
             logger.info("Saving status history with customer ID: {}", statusHistory.getCustomer().getId());
 
             CustomersStatusHistory savedStatusHistory = customersStatusHistoryService.saveStatusHistory(statusHistory);
@@ -137,7 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
             return Optional.of(customerMapper.toDto(updatedCustomer));
         } catch (Exception e) {
             logger.error("Error updating customer with accountId: {}", accountId, e);
-            throw e; // Rethrow the exception to trigger rollback
+            throw e;
         }
     }
 
@@ -196,6 +193,21 @@ public class CustomerServiceImpl implements CustomerService {
         // Get status customer
         Optional<CustomersStatusHistoryDto> latestStatus = customersStatusHistoryService.getLatestStatusByCustomerId(customer.getId());
         latestStatus.ifPresent(dto::setLatestStatus);
+    }
+
+    @Override
+    public boolean checkDuplicateEmail(String email, Long customerId) {
+        logger.info("Checking for duplicate email: {} for customerId: {}", email, customerId);
+
+        Optional<Customer> customerOptional = customerRepository.findByEmailAndIdNot(email, customerId);
+
+        logger.info("Found customer: {}", customerOptional);
+
+        if (customerOptional.isPresent()) {
+            logger.warn("Duplicate email found: {} for customerId: {}", email, customerId);
+            return true;
+        }
+        return false;
     }
 
 }
