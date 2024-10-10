@@ -14,26 +14,25 @@ public class  CustomerDto {
 
 //    @JsonIgnore
     private Long customerId;
-
     private Long accountId;
 
     @Size(max = 255)
-    @NotNull
+//    @NotNull
     private String fullName;
 
-    @NotNull
+//    @NotNull
     private LocalDate dateOfBirth;
 
-    @NotNull
+//    @NotNull
     private Gender gender;
 
     @Size(max = 255)
     @Email
-    @NotNull
+//    @NotNull
     private String email;
 
     @Size(max = 20)
-    @NotNull
+//    @NotNull
     private String phoneNumber;
 
     @Size(max = 150)

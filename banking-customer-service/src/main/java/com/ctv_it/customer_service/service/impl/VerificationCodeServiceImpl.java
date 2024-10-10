@@ -105,8 +105,14 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         }
 
         VerificationCode verificationCode = verificationCodeOptional.get();
+
         if (verificationCode.getExpiresAt().isBefore(Instant.now())) {
             logger.warn("Verification failed: Code expired for customer ID: {}", customerId);
+            return false;
+        }
+
+        if (verificationCode.getIsVerified()) {
+            logger.warn("Verification failed: Code already verified for customer Id: {}", customerId);
             return false;
         }
 

@@ -13,6 +13,7 @@ import com.ojt.klb.repository.UserRepository;
 import com.ojt.klb.response.ApiResponse;
 import com.ojt.klb.service.UserService;
 import com.ojt.klb.utils.GenerateUniqueNumber;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -136,9 +137,17 @@ public class UserServiceImpl implements UserService {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setAccountId(newAccount.getId());
         customerDto.setPhoneNumber(newUser.getPhoneNumber());
-        kafkaTemplate.send(TOPIC, customerDto);
-        logger.info("Sent customer information to Kafka topic: {}", TOPIC);
+        logger.info("Data customer: {}", customerDto);
+//        kafkaTemplate.send(TOPIC, customerDto);
+//        logger.info("Sent customer information to Kafka topic: {}", TOPIC);
 
+        try {
+            accountClient.createCustomer(customerDto);
+            logger.info("Successfully posted customer information to account service.");
+        } catch (FeignException e) {
+            logger.error("Error occurred while posting customer information to account service: {}", e.getMessage());
+            throw new RuntimeException("Failed to create customer in account service, rolling back transaction", e);
+        }
 
         RegisterResponseDto response = new RegisterResponseDto();
         response.setId(newUser.getId());

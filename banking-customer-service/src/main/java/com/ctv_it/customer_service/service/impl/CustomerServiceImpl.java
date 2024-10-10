@@ -4,6 +4,7 @@ import com.ctv_it.customer_service.dto.CustomerDto;
 import com.ctv_it.customer_service.dto.CustomerUpdateDto;
 import com.ctv_it.customer_service.dto.CustomersStatusHistoryDto;
 import com.ctv_it.customer_service.dto.GetAccountIdAndCustomerId;
+import com.ctv_it.customer_service.exception.CustomException;
 import com.ctv_it.customer_service.mapper.CustomerMapper;
 import com.ctv_it.customer_service.model.Customer;
 import com.ctv_it.customer_service.model.CustomersStatusHistory;
@@ -12,6 +13,7 @@ import com.ctv_it.customer_service.repository.CustomerRepository;
 import com.ctv_it.customer_service.service.CustomerService;
 import com.ctv_it.customer_service.service.CustomersStatusHistoryService;
 import com.ctv_it.customer_service.service.KycService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -152,6 +154,39 @@ public class CustomerServiceImpl implements CustomerService {
             return Optional.empty();
         }
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createCustomer(CustomerDto customerDto) {
+        try {
+            Customer customer = customerMapper.toEntity(customerDto);
+            customer.setAccountId(customerDto.getAccountId());
+            customer.setPhoneNumber(customerDto.getPhoneNumber());
+            customer.setCreatedAt(Instant.now());
+
+            Kyc newKyc = new Kyc();
+            newKyc.setVerificationStatus(Kyc.VerificationStatus.pending);
+            newKyc.setCreatedAt(Instant.now());
+            Kyc savedKyc = kycService.saveKyc(newKyc);
+            logger.info("Saved KYC with ID: {}", savedKyc.getId());
+            customer.setKyc(savedKyc);
+            logger.info("Set Kyc with ID: {}", customer.getKyc().getId());
+            customerRepository.save(customer);
+
+            logger.info("Customer created successfully with account ID: {}", customer.getAccountId());
+
+        } catch (DataIntegrityViolationException e) {
+            logger.error("Failed to create customer due to data integrity violation. Account ID: {}, Phone: {}. Error: {}",
+                    customerDto.getAccountId(), customerDto.getPhoneNumber(), e.getMessage());
+            throw new CustomException("Data integrity violation. Please ensure unique account ID and phone number.", e);
+
+        } catch (Exception e) {
+            logger.error("Error occurred while creating customer with account ID: {}, phone number: {}. Error: {}",
+                    customerDto.getAccountId(), customerDto.getPhoneNumber(), e.getMessage());
+            throw new CustomException("An unexpected error occurred while creating the customer.", e);
+        }
+    }
+
 
     private void populateAdditionalCustomerInfo(CustomerDto dto, Customer customer) {
         // Get status KYC
