@@ -316,15 +316,8 @@ public class FundTransferServiceImpl implements FundTransferService {
         return transfers.stream()
                 .map(transfer -> {
                     FundTransferDto dto = fundTransferMapper.convertToDto(transfer);
-//                    if (transfer.getFromAccount().equals(accountNumber)) {
-//                        dto.setTransferType(TransferType.valueOf("OUTGOING"));
-//                    } else {
-//                        dto.setTransferType(TransferType.valueOf("INCOMING"));
-//                    }
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
-
-
 }

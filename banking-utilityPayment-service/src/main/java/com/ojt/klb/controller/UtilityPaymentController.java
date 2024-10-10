@@ -2,8 +2,8 @@ package com.ojt.klb.controller;
 
 import com.ojt.klb.model.request.UtilityPaymentRequest;
 import com.ojt.klb.service.UtilityPaymentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ public class UtilityPaymentController {
     private final UtilityPaymentService utilityPaymentService;
 
     @PostMapping
-    public ResponseEntity processPayment(@RequestBody UtilityPaymentRequest paymentRequest) {
+    public ResponseEntity processPayment(@Valid @RequestBody UtilityPaymentRequest paymentRequest) {
         return ResponseEntity.ok(utilityPaymentService.utilPayment(paymentRequest));
     }
 }
