@@ -24,37 +24,33 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class CollateralController {
 
-    private final CollateralService collateralService;
+        private final CollateralService collateralService;
 
-    @Operation(
-            summary = "Upload a document to collateral",
-            description = "Uploads a document and links it to the specified collateral using the collateralId.",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Document uploaded successfully", content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid collateralId or document data", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Collateral not found", content = @Content),
-                    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
-            }
-    )
-    @PostMapping(value = "/{collateralId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseWrapper<DocumentResponse>> uploadCollateralDocument(
-            @PathVariable("collateralId") Long collateralId,
-            @Valid @ModelAttribute DocumentUploadRequest documentUploadRequest) {
+        @Operation(summary = "Upload a document to collateral", description = "Uploads a document and links it to the specified collateral using the collateralId.", responses = {
+                        @ApiResponse(responseCode = "201", description = "Document uploaded successfully", content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
+                        @ApiResponse(responseCode = "400", description = "Invalid collateralId or document data", content = @Content),
+                        @ApiResponse(responseCode = "404", description = "Collateral not found", content = @Content),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        })
+        @PostMapping(value = "/{collateralId}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<ApiResponseWrapper<DocumentResponse>> uploadCollateralDocument(
+                        @PathVariable("collateralId") Long collateralId,
+                        @Valid @ModelAttribute DocumentUploadRequest documentUploadRequest) {
 
-        log.info("Uploading document for collateral with ID: {}", collateralId);
+                log.info("Uploading document for collateral with ID: {}", collateralId);
 
-        // Call the collateral service to create and link the document to the collateral
-        DocumentResponse documentResponse = collateralService.uploadCollateralDocument(collateralId, documentUploadRequest);
+                // Call the collateral service to create and link the document to the collateral
+                DocumentResponse documentResponse = collateralService.uploadCollateralDocument(collateralId,
+                                documentUploadRequest);
 
-        // Create the API response wrapper
-        ApiResponseWrapper<DocumentResponse> response = new ApiResponseWrapper<>(
-                HttpStatus.CREATED.value(),
-                true,
-                "Document uploaded successfully!",
-                documentResponse
-        );
+                // Create the API response wrapper
+                ApiResponseWrapper<DocumentResponse> response = new ApiResponseWrapper<>(
+                                HttpStatus.CREATED.value(),
+                                true,
+                                "Document uploaded successfully!",
+                                documentResponse);
 
-        // Return the response with HTTP status 201 CREATED
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
+                // Return the response with HTTP status 201 CREATED
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }
 }

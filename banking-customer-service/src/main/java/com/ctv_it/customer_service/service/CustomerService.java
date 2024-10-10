@@ -20,6 +20,4 @@ public interface CustomerService {
 
     Optional<GetAccountIdAndCustomerId> getAccountIdAndCustomerId(Long accountId);
 
-    // Thêm hàm check duplicate email
-    boolean checkDuplicateEmail(String email, Long customerId);
 }
