@@ -12,7 +12,7 @@ public interface LoanRepaymentService {
     void createRepaymentSchedule(Loan loan);
 
     @Transactional
-    LoanRepaymentResponse makeRepayment(Long repaymentId);
+    LoanRepaymentResponse makeRepayment(Long accountId, Long repaymentId);
 
     List<LoanRepaymentResponse> getRepaymentSchedule(Long loanId);
 

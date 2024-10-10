@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -169,7 +170,7 @@ public class LoanRepaymentController {
     })
     public ResponseEntity<ApiResponseWrapper<List<LoanRepaymentResponse>>> getAvailableLoanRepayments(
             @Parameter(description = "ID of the account", required = true)
-            @PathVariable Long accountId) {
+            @PathVariable @Min(value = 1, message = "accountId must be a positive number") Long accountId) {
 
         log.info("Fetching available loan repayments for accountId: {}", accountId);
 
@@ -202,10 +203,11 @@ public class LoanRepaymentController {
     /**
      * Endpoint to make a payment for a specific repayment schedule.
      *
+     * @param accountId   ID of the account
      * @param repaymentId ID of the repayment schedule
      * @return Repayment details including transaction reference
      */
-    @PostMapping("/repayments/{repaymentId}/pay")
+    @PostMapping("/accounts/{accountId}/repayments/pay")
     @Operation(summary = "Make a Repayment", description = "Make a payment for a specific repayment schedule.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Repayment made successfully",
@@ -219,14 +221,16 @@ public class LoanRepaymentController {
                     content = @Content)
     })
     public ResponseEntity<ApiResponseWrapper<LoanRepaymentResponse>> makeRepayment(
-
+            @Parameter(description = "ID of the account", required = true)
+            @PathVariable @Min(value = 1, message = "accountId must be a positive number") Long accountId,
             @Parameter(description = "ID of the repayment schedule", required = true)
-            @PathVariable Long repaymentId) {
+            @RequestParam @Min(value = 1, message = "repaymentId must be a positive number") Long repaymentId) {
 
-        log.info("Making repayment for repaymentId: {}", repaymentId);
+        // Log the accountId and repaymentId for debugging
+        log.info("Making repayment for accountId: {}, repaymentId: {}", accountId, repaymentId);
 
         // Process loan payments
-        LoanRepaymentResponse repaymentResponse = loanRepaymentService.makeRepayment(repaymentId);
+        LoanRepaymentResponse repaymentResponse = loanRepaymentService.makeRepayment(accountId, repaymentId);
 
         // Return response
         ApiResponseWrapper<LoanRepaymentResponse> response = new ApiResponseWrapper<>(

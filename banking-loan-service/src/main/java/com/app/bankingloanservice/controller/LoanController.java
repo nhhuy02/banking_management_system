@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/loan-service/loans")
+@RequestMapping("/api/v1/loan-service")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Loan Controller", description = "APIs related to loan operations")
@@ -41,7 +42,7 @@ public class LoanController {
      * @param loanId the ID of the loan to retrieve
      * @return the loan entity wrapped in ApiResponseWrapper
      */
-    @GetMapping("/{loanId}")
+    @GetMapping("/loans/{loanId}")
     @Operation(summary = "Get Loan by ID", description = "Retrieve loan details by its ID.")
     public ResponseEntity<ApiResponseWrapper<LoanResponse>> getLoanById(@PathVariable Long loanId) {
 
@@ -75,10 +76,10 @@ public class LoanController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    @GetMapping
+    @GetMapping("/accounts/{accountId}/loans")
     public ResponseEntity<ApiResponseWrapper<List<LoanResponse>>> getLoansByAccountId(
             @Parameter(description = "ID of the account to retrieve loans for", required = true)
-            @RequestParam Long accountId) {
+            @PathVariable @Min(value = 1, message = "accountId must be a positive number") Long accountId) {
 
         log.info("Received request to fetch loans for accountId: {}", accountId);
 
@@ -116,7 +117,7 @@ public class LoanController {
      * @param loanRequest the DTO containing loan details to create a new loan
      * @return the created loan entity wrapped in ApiResponseWrapper
      */
-    @PostMapping
+    @PostMapping("/loans")
     @Operation(summary = "Create Loan", description = "Create a new loan using LoanRequest.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Loan created successfully",
@@ -152,7 +153,7 @@ public class LoanController {
      * @param loanId ID of the loan to be disbursed
      * @return ApiResponseWrapper with LoanDisbursementResponse
      */
-    @PostMapping("/{loanId}/disburse")
+    @PostMapping("/loans/{loanId}/disburse")
     @Operation(summary = "Disburse Loan", description = "Disburse the loan with the given ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Loan disbursed successfully",
@@ -184,7 +185,7 @@ public class LoanController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/filters")
+    @GetMapping("/loans/filters")
     public ResponseEntity<ApiResponseWrapper<List<LoanResponse>>> filters(
             @RequestParam long accountId,
             @RequestParam(required = false) Long loanTypeId,
