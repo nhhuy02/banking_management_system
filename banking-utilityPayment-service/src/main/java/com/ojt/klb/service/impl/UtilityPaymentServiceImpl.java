@@ -34,8 +34,7 @@ public class UtilityPaymentServiceImpl implements UtilityPaymentService {
     private final TransactionClient transactionClient;
     private final UtilityAccountRepository utilityAccountRepository;
     private final AccountClient accountClient;
-
-    private UtilityPaymentMapper utilityPaymentMapper = new UtilityPaymentMapper();
+    private final UtilityPaymentMapper utilityPaymentMapper = new UtilityPaymentMapper();
 
     @Override
     public UtilityPaymentResponse utilPayment(UtilityPaymentRequest utilityPaymentRequest) {

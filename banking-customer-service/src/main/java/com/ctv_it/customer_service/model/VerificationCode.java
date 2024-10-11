@@ -26,9 +26,8 @@ public class VerificationCode {
     @Column(name = "code", nullable = false, length = 10)
     private String code;
 
-//    @ColumnDefault("CURRENT_TIMESTAMP")
-    @CreationTimestamp
     @Column(name = "created_at")
+    @CreationTimestamp
     private Instant createdAt;
 
     @Column(name = "expires_at")

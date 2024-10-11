@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
 
 @Getter
 @Setter
@@ -47,11 +49,11 @@ public class Card {
     private String imageUrl;
 
     @Column(name = "opened_at", nullable = false)
-    // @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private Timestamp openedAt;
 
     @Column(name = "closed_at", nullable = false)
-    // @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private Timestamp closedAt;
 
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -37,12 +39,11 @@ public class SavingsAccount {
     private Status status = Status.active;
 
     @Column(name = "created_at", nullable = false)
-    // @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private Timestamp createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    // @ColumnDefault("CURRENT_TIMESTAMP")
-    @org.hibernate.annotations.UpdateTimestamp
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
     public enum Status {

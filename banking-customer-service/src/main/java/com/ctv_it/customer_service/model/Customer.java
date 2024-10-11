@@ -54,12 +54,10 @@ public class Customer {
     @JoinColumn(name = "kyc_id")
     private Kyc kyc;
 
-//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Instant updatedAt;
