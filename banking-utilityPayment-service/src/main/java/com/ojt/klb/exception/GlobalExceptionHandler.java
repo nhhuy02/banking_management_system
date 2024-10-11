@@ -19,7 +19,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<Object> handleGlobalException(GlobalException globalException) {
-
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.builder()

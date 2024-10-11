@@ -2,12 +2,16 @@ package com.ojt.klb.model.request;
 
 import java.math.BigDecimal;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class UtilityPaymentRequest {
+    @NotBlank(message = "Customer code can not be not blank")
+    private String customerCode;
+
     @NotNull(message = "provider id can not be not blank")
     private Long providerId;
 

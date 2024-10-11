@@ -22,5 +22,5 @@ public class UtilityPayment {
     private String account;
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
-
+    private String customerCode;
 }

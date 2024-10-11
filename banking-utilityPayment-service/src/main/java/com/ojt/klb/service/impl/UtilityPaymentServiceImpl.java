@@ -76,6 +76,7 @@ public class UtilityPaymentServiceImpl implements UtilityPaymentService {
         transactionClient.saveUtilityPaymentTransaction(transaction, referenceNumber);
 
         UtilityPayment utilityPayment = UtilityPayment.builder()
+                .customerCode(utilityPaymentRequest.getCustomerCode())
                 .referenceNumber(referenceNumber)
                 .providerId(utilityPaymentRequest.getProviderId())
                 .amount(utilityPaymentRequest.getAmount())

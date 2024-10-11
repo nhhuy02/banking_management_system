@@ -13,4 +13,5 @@ public class UtilityPaymentDto {
     private String account;
     private TransactionStatus status;
     private String description;
+    private String customerCode;
 }
